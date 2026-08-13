@@ -1,0 +1,13 @@
+node_modules/
+dist/
+demo-dist/
+coverage/
+*.tsbuildinfo
+.DS_Store
+.omo/
+.codegraph/
+.playwright-mcp/
+*.local
+*.log
+playwright-report/
+test-results/

@@ -1,0 +1,7 @@
+node_modules
+dist
+demo-dist
+pnpm-lock.yaml
+.codegraph
+.omo
+.playwright-mcp
