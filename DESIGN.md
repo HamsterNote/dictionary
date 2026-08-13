@@ -20,7 +20,9 @@ A quiet reading companion that feels like a small sheet of reference paper float
 | Text secondary  | `--dictionary-text-secondary` | `#66635f`                | `#b8b5ae`               | Pronunciation and labels |
 | Border          | `--dictionary-border`         | `#dedcd7`                | `#454541`               | Quiet structure          |
 | Accent          | `--dictionary-accent`         | `#146ebe`                | `#62aef0`               | Actions and focus        |
+| Accent soft     | `--dictionary-accent-soft`    | `#e8f2fb`                | `#223c52`               | Selected option surface  |
 | Accent strong   | `--dictionary-accent-strong`  | `#0c5799`                | `#91c9f7`               | Hover state              |
+| Error           | `--dictionary-error`          | `#b42318`                | `#ffb4ab`               | Recoverable load errors  |
 | Focus           | `--dictionary-focus`          | `#097fe8`                | `#91c9f7`               | Keyboard focus           |
 | Popover shadow  | `--dictionary-shadow-high`    | `rgb(68 62 50 / 14%)`    | `rgb(0 0 0 / 28%)`      | Ambient floating depth   |
 | Popover contact | `--dictionary-shadow-low`     | `rgb(68 62 50 / 8%)`     | `rgb(0 0 0 / 18%)`      | Contact shadow           |
@@ -60,19 +62,39 @@ The base unit is `4px`. Component spacing uses `4, 8, 12, 16, 20, 24, 32, 48, 64
 
 - Demo max width: `1120px`.
 - Popover width: fluid from the viewport edge up to `380px`.
-- Breakpoints: mobile below `640px`, tablet `640–1023px`, desktop from `1024px`.
+- Breakpoints: compact layout below `900px`, with tighter mobile sizing below `560px`.
 - The Demo uses one editorial text column and one live component stage; it collapses to one column on mobile.
 
 ## 5. Components
 
 ### DictionaryPopover
 
-- **Structure**: semantic `aside` with header, pronunciation, definition list, optional source, and close button.
+- **Structure**: semantic `aside` with a dedicated drag handle, search field, header, pronunciation, definition list or empty result, optional source, and close button.
 - **Variants**: controlled open state; light and dark color schemes via media query.
 - **Spacing**: `12–24px` from the spacing scale.
-- **States**: open, closed, hover, active, focus-visible; empty meanings are prevented by the public type.
-- **Accessibility**: labelled complementary landmark, real button, inset visible focus ring that cannot clip at viewport edges, minimum 44px close target.
-- **Motion**: opacity and translate only; disabled under reduced motion.
+- **States**: open, closed, searching, result, no result, hover, active, focus-visible, and dragging.
+- **Accessibility**: labelled complementary landmark, labelled search field, polite result-count announcements, real close button, visible focus rings, and minimum 44px controls. The drag handle supports pointer dragging, arrow-key movement, and Home/Escape reset; positioning must never be required to search, read, or close the popover.
+- **Motion**: entry and drag use composited transforms; entry motion is disabled under reduced motion while direct manipulation remains available without easing.
+- **Drag contract**: only the 44px-high region above the search field starts a pointer drag. The input, close button, definitions, and source remain fully selectable and interactive.
+
+### Dictionary Search
+
+- **Structure**: a controlled combobox inside the popover; consumers own the query, suggestions, and local or remote resolution.
+- **Interaction**: typing updates results and opens a frequency-ranked suggestion list. Pointer selection or Arrow Up/Down followed by Enter jumps directly to that entry; Escape dismisses suggestions. A trailing clear button resets the controlled query without moving focus.
+- **Empty state**: a concise message replaces the ordered definition list when the lookup has no exact result.
+- **Data provenance**: the visible source must identify the dictionary data actually used; demos must not attribute generated or bundled content to an unrelated publisher.
+- **Bundled data**: the default synchronous lookup indexes a generated 5,000-entry ECDICT core. Selection uses the best available `frq` or `bnc` rank, then the other rank and normalized headword for deterministic ordering.
+- **Vocabulary packs**: 中考、高考、CET-4、CET-6、考研、IELTS、TOEFL、GRE and BNC are separate package entry points. Exam packs contain words carrying the matching upstream-native ECDICT tag; BNC contains entries with a positive British National Corpus rank ordered from most frequent to least frequent. Every pack excludes the core, packs may overlap one another, and runtime lookup deduplicates by normalized headword.
+- **Size boundary**: the root library budgets about 211 kB gzip. The 40,470-entry BNC complement is intentionally isolated at about 1.32 MiB gzip as a JS entry. Optional packs are loaded only after explicit import, and the Demo reports a conservative sum of the root and selected pack chunks.
+- **Positioning**: the demo anchors the popover from its top edge so definition-height changes move the bottom edge instead of shifting the search controls.
+
+### Vocabulary Pack Picker
+
+- **Structure**: a native-checkbox fieldset below the Demo metadata. Nested labelled fieldsets divide the nine packs into 基础学段（中考、高考）、国内英语考试（CET-4、CET-6、考研）、留学考试（IELTS、TOEFL、GRE）和语料词频（BNC）, while each option retains its label, entry count, gzip estimate, loading state, total estimate, and explanatory note.
+- **States**: available, checked, loading-busy, load error, focus-visible, light, and dark.
+- **Typography and spacing**: `12px` caption text on the 4px spacing scale; option rows use `8px 12px` padding.
+- **Accessibility**: native checkbox semantics, 44px option rows, visible focus outline, preserved keyboard focus while loading, polite loading and size updates, and an alert only when loading fails.
+- **Loading contract**: each option maps to a statically analyzable dynamic import. Unchecked packs must not enter the initial Demo chunk.
 
 ### Demo Trigger
 
@@ -88,7 +110,7 @@ The base unit is `4px`. Component spacing uses `4, 8, 12, 16, 20, 24, 32, 48, 64
 | Micro    | `120ms`  | `ease-out`                      | Button feedback |
 | Standard | `220ms`  | `cubic-bezier(0.16, 1, 0.3, 1)` | Popover entry   |
 
-Entry motion only animates `transform` and `opacity`. Interactive controls may use short color and background-color transitions to communicate hover state. `prefers-reduced-motion: reduce` removes transitions and entry animation.
+Entry motion only animates `transform` and `opacity`. Dragging follows the pointer one-to-one through `translate3d` with no decorative inertia. Interactive controls may use short color and background-color transitions to communicate hover state. `prefers-reduced-motion: reduce` removes transitions and entry animation.
 
 ## 7. Depth & Surface
 

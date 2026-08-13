@@ -85,6 +85,7 @@ body {
   color: var(--dictionary-text-secondary);
   font-size: 16px;
   line-height: 1.75;
+  text-wrap: balance;
 }
 
 .demo-meta {
@@ -124,7 +125,9 @@ body {
   position: absolute;
   top: 116px;
   right: 8px;
+  box-sizing: border-box;
   width: min(490px, 92%);
+  max-width: 100%;
   min-height: 270px;
   padding: 48px;
   background: var(--demo-document);
@@ -159,8 +162,8 @@ body {
 
 .demo-popover-slot {
   position: absolute;
+  top: 104px;
   right: 160px;
-  bottom: 72px;
   z-index: 2;
   min-width: 260px;
 }
@@ -239,8 +242,8 @@ body {
   }
 
   .demo-popover-slot {
+    top: 80px;
     right: 50%;
-    bottom: 44px;
     transform: translateX(50%);
   }
 }

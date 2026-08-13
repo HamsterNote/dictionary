@@ -194,6 +194,11 @@
     "@eslint/core" "^1.2.1"
     levn "^0.4.1"
 
+"@hamster-note/components@^0.3.0":
+  version "0.3.0"
+  resolved "https://registry.yarnpkg.com/@hamster-note/components/-/components-0.3.0.tgz#b97c23ab736e802f5650b8037d84ef7a649d5e96"
+  integrity sha512-ck1BWwcwtASY/uMrKZYmhCaa9hGyYPPFptjeRg8hvzFx1Qu7qdmLpnGmKFzhmiEMP2Qfb18L8xWa8hHLdR/91Q==
+
 "@humanfs/core@^0.19.2":
   version "0.19.2"
   resolved "https://registry.yarnpkg.com/@humanfs/core/-/core-0.19.2.tgz#a8272ca03b2acf492670222b2320b6c421bfde60"
@@ -338,6 +343,19 @@
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/@rolldown/pluginutils/-/pluginutils-1.0.1.tgz#e3fcee093fbb5ce765e1ad088ff4de2889f6f9be"
   integrity sha512-2j9bGt5Jh8hj+vPtgzPtl72j0yRxHAyumoo6TNfAjsLB04UtpSvPbPcDcBMxz7n+9CYB0c1GxQFxYRg2jimqGw==
+
+"@system-ui-js/multi-drag-core@*", "@system-ui-js/multi-drag-core@0.4.0":
+  version "0.4.0"
+  resolved "https://registry.yarnpkg.com/@system-ui-js/multi-drag-core/-/multi-drag-core-0.4.0.tgz#68dd401af22691ca55f840e0fd4b7818794473d6"
+  integrity sha512-7V366jAmK8hUjPJi9yYngabhuE+ixnRxZS7lw/1uNbxEYLaR/Mh5XtxMvY/gGHcL7tdJtYzE5lF1i786jKbKIA==
+
+"@system-ui-js/multi-drag@0.4.0":
+  version "0.4.0"
+  resolved "https://registry.yarnpkg.com/@system-ui-js/multi-drag/-/multi-drag-0.4.0.tgz#0404192470eaa84a1afbe9ed01cf1ea1a2a12097"
+  integrity sha512-gZwFJ2hrpq8CCmJhdoViIQAFd1cD+o8uWJUP/+Myo2xuqvamIuZdDsd9rIaD+JV6otA9+JF2O9XV0vozmqafOg==
+  dependencies:
+    "@system-ui-js/multi-drag-core" "*"
+    loglevel "^1.9.2"
 
 "@types/esrecurse@^4.3.1":
   version "4.3.1"
@@ -924,6 +942,11 @@ locate-path@^6.0.0:
   integrity sha512-iPZK6eYjbxRu3uB4/WZ3EsEIMJFMqAoopl3R+zuq0UjcAm/MO6KCweDgPfP3elTztoKP3KtnVHxTn2NHBSDVUw==
   dependencies:
     p-locate "^5.0.0"
+
+loglevel@1.9.2, loglevel@^1.9.2:
+  version "1.9.2"
+  resolved "https://registry.yarnpkg.com/loglevel/-/loglevel-1.9.2.tgz#c2e028d6c757720107df4e64508530db6621ba08"
+  integrity sha512-HgMmCqIJSAKqo68l0rS2AanEWfkxaZ5wNiEFb5ggm08lDs9Xl2KxBlX3PTcaD2chBM1gXAYf491/M2Rv8Jwayg==
 
 lru-cache@^5.1.1:
   version "5.1.1"

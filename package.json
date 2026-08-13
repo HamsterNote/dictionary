@@ -8,7 +8,8 @@
     "**/*.css"
   ],
   "files": [
-    "dist"
+    "dist",
+    "THIRD_PARTY_NOTICES.md"
   ],
   "main": "./dist/index.js",
   "module": "./dist/index.js",
@@ -18,20 +19,62 @@
       "types": "./dist/index.d.ts",
       "import": "./dist/index.js"
     },
-    "./style.css": "./dist/dictionary.css"
+    "./vocabulary-packs/bnc": {
+      "types": "./dist/vocabulary-packs/bnc.d.ts",
+      "import": "./dist/vocabulary-packs/bnc.js"
+    },
+    "./vocabulary-packs/cet4": {
+      "types": "./dist/vocabulary-packs/cet4.d.ts",
+      "import": "./dist/vocabulary-packs/cet4.js"
+    },
+    "./vocabulary-packs/cet6": {
+      "types": "./dist/vocabulary-packs/cet6.d.ts",
+      "import": "./dist/vocabulary-packs/cet6.js"
+    },
+    "./vocabulary-packs/gre": {
+      "types": "./dist/vocabulary-packs/gre.d.ts",
+      "import": "./dist/vocabulary-packs/gre.js"
+    },
+    "./vocabulary-packs/gk": {
+      "types": "./dist/vocabulary-packs/gk.d.ts",
+      "import": "./dist/vocabulary-packs/gk.js"
+    },
+    "./vocabulary-packs/ielts": {
+      "types": "./dist/vocabulary-packs/ielts.d.ts",
+      "import": "./dist/vocabulary-packs/ielts.js"
+    },
+    "./vocabulary-packs/ky": {
+      "types": "./dist/vocabulary-packs/ky.d.ts",
+      "import": "./dist/vocabulary-packs/ky.js"
+    },
+    "./vocabulary-packs/toefl": {
+      "types": "./dist/vocabulary-packs/toefl.d.ts",
+      "import": "./dist/vocabulary-packs/toefl.js"
+    },
+    "./vocabulary-packs/zk": {
+      "types": "./dist/vocabulary-packs/zk.d.ts",
+      "import": "./dist/vocabulary-packs/zk.js"
+    },
+    "./style.css": {
+      "types": "./dist/style.d.ts",
+      "default": "./dist/dictionary.css"
+    }
   },
   "scripts": {
     "dev": "vite --config vite.demo.config.ts",
     "build": "yarn clean && yarn build:types && yarn build:lib && yarn build:demo",
+    "build:package": "rm -rf dist && yarn build:types && yarn build:lib",
     "build:lib": "vite build --config vite.lib.config.ts",
     "build:types": "tsc -p tsconfig.build.json",
     "build:demo": "vite build --config vite.demo.config.ts",
+    "generate:dictionary": "uv run scripts/generate_ecdict.py",
     "clean": "rm -rf dist demo-dist",
     "preview": "vite preview --config vite.demo.config.ts",
     "typecheck": "tsc -b --pretty false",
     "lint": "eslint . --max-warnings 0",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
+    "prepack": "yarn build:package",
     "check": "yarn format:check && yarn lint && yarn typecheck && yarn build"
   },
   "peerDependencies": {
@@ -58,5 +101,13 @@
   "engines": {
     "node": "^20.19.0 || >=22.12.0"
   },
-  "packageManager": "yarn@1.22.22"
+  "packageManager": "yarn@1.22.22",
+  "resolutions": {
+    "@system-ui-js/multi-drag-core": "0.4.0",
+    "loglevel": "1.9.2"
+  },
+  "dependencies": {
+    "@hamster-note/components": "^0.3.0",
+    "@system-ui-js/multi-drag": "0.4.0"
+  }
 }

@@ -1,0 +1,128 @@
+.vocabulary-picker {
+  max-width: 470px;
+  margin: 28px 0 0;
+  padding: 0;
+  border: 0;
+}
+
+.vocabulary-picker legend {
+  padding: 0;
+  color: var(--dictionary-text-primary);
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.vocabulary-picker__hint,
+.vocabulary-picker__note {
+  margin: 8px 0 0;
+  color: var(--dictionary-text-secondary);
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+.vocabulary-picker__keep {
+  white-space: nowrap;
+}
+
+.vocabulary-picker__error {
+  margin: 8px 0 0;
+  color: var(--dictionary-error);
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.vocabulary-picker__loading {
+  min-height: 16px;
+  margin: 8px 0 0;
+  color: var(--dictionary-text-secondary);
+  font-size: 12px;
+  line-height: 1.4;
+}
+
+.vocabulary-picker__groups {
+  display: grid;
+  gap: 16px;
+  margin-top: 16px;
+}
+
+.vocabulary-picker__group-title {
+  margin: 0 0 8px;
+  padding: 0;
+  color: var(--dictionary-text-secondary);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+
+.vocabulary-picker__group {
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.vocabulary-picker__options {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.vocabulary-picker__option {
+  display: grid;
+  grid-template-columns: 20px 1fr;
+  align-items: center;
+  min-height: 44px;
+  padding: 8px 12px;
+  cursor: pointer;
+  background: var(--dictionary-surface-muted);
+  border: 1px solid var(--dictionary-border);
+  border-radius: 10px;
+}
+
+.vocabulary-picker__option:has(input:checked) {
+  background: var(--dictionary-accent-soft);
+  border-color: var(--dictionary-accent);
+}
+
+.vocabulary-picker__option:has(input[aria-busy='true']) {
+  cursor: progress;
+  opacity: 0.7;
+}
+
+.vocabulary-picker__option:has(input:focus-visible) {
+  outline: 2px solid var(--dictionary-focus);
+  outline-offset: 2px;
+}
+
+.vocabulary-picker__option input {
+  width: 16px;
+  height: 16px;
+  margin: 0;
+  accent-color: var(--dictionary-accent);
+}
+
+.vocabulary-picker__name {
+  color: var(--dictionary-text-primary);
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.vocabulary-picker__size {
+  grid-column: 2;
+  color: var(--dictionary-text-secondary);
+  font-size: 12px;
+}
+
+.vocabulary-picker__estimate {
+  display: block;
+  margin-top: 4px;
+  color: var(--dictionary-text-secondary);
+  font-size: 12px;
+  font-weight: 650;
+}
+
+@media (max-width: 560px) {
+  .vocabulary-picker__options {
+    grid-template-columns: 1fr;
+  }
+}

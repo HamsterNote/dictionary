@@ -3,6 +3,7 @@ import { createRoot } from 'react-dom/client';
 import { Demo } from './Demo';
 import '../../src/dictionary.css';
 import './styles.css';
+import './vocabularyPackPicker.css';
 
 const rootElement = document.querySelector('#root');
 

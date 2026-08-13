@@ -6,7 +6,14 @@ import globals from 'globals';
 import tseslint from 'typescript-eslint';
 
 export default defineConfig([
-  globalIgnores(['dist/**', 'demo-dist/**', 'node_modules/**', '.codegraph/**', '.omo/**']),
+  globalIgnores([
+    'dist/**',
+    'demo-dist/**',
+    'node_modules/**',
+    '.codegraph/**',
+    '.omo/**',
+    'src/data/**',
+  ]),
   {
     files: ['**/*.{ts,tsx}'],
     extends: [
