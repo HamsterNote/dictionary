@@ -51,7 +51,7 @@ export function countChineseEntries(dictionaryPacks: readonly ChineseDictionaryP
 export function suggestChinese(
   query: string,
   dictionaryPacks: readonly ChineseDictionaryPack[],
-  limit = 6,
+  limit = 18,
 ): readonly string[] {
   const normalizedQuery = normalizeChineseQuery(query);
   if (normalizedQuery.length === 0 || limit <= 0) return [];
@@ -66,14 +66,18 @@ export function suggestChinese(
     }
   }
 
-  suggestions.sort((left, right) => right.length - left.length);
+  suggestions.sort((left, right) => {
+    if (left === normalizedQuery) return -1;
+    if (right === normalizedQuery) return 1;
+    return left.length - right.length;
+  });
   return suggestions.slice(0, limit);
 }
 
 export function suggestChineseEntries(
   query: string,
   dictionaryPacks: readonly ChineseDictionaryPack[],
-  limit = 6,
+  limit = 18,
 ): readonly DictionaryEntrySummary[] {
   return suggestChinese(query, dictionaryPacks, limit).flatMap((word) => {
     const entry = resolveChineseEntry(word, dictionaryPacks);
