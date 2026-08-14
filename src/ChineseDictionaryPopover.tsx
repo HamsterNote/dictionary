@@ -52,7 +52,7 @@ export function ChineseDictionaryPopover({
           : '没有找到精确释义，请换一个汉字或成语再试。')
       }
       meanings={result.status === 'found' ? result.meanings : []}
-      {...(onQueryChange ? { onQueryChange } : {})}
+      {...(onQueryChange ? { onQueryChange: navigation.onQueryChange } : {})}
       onSearch={navigation.search}
       {...(result.status === 'found' && result.phonetic ? { phonetic: result.phonetic } : {})}
       query={query}

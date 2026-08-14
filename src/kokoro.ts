@@ -35,11 +35,15 @@ export function createKokoroPronouncer({
   const normalizedCacheSize = Math.max(0, Math.floor(cacheSize));
   const pendingRequests = new Map<number, PendingRequest>();
   let activeAudio: HTMLAudioElement | undefined;
+  let activePlaybackAbort: AbortController | undefined;
   let activeUrl: string | undefined;
   let nextRequestId = 0;
+  let pronunciationGeneration = 0;
   let worker: Worker | undefined;
 
   const disposeAudio = () => {
+    activePlaybackAbort?.abort();
+    activePlaybackAbort = undefined;
     activeAudio?.pause();
     activeAudio = undefined;
     if (activeUrl) URL.revokeObjectURL(activeUrl);
@@ -102,6 +106,7 @@ export function createKokoroPronouncer({
 
   return {
     dispose: () => {
+      pronunciationGeneration += 1;
       disposeAudio();
       audioCache.clear();
       worker?.terminate();
@@ -111,11 +116,16 @@ export function createKokoroPronouncer({
       pendingRequests.clear();
     },
     pronounce: async (word) => {
+      pronunciationGeneration += 1;
+      const generation = pronunciationGeneration;
       disposeAudio();
       const audioBlob = await getAudio(word);
+      if (generation !== pronunciationGeneration) return;
 
       activeUrl = URL.createObjectURL(audioBlob);
       activeAudio = new Audio(activeUrl);
+      const playbackAbort = new AbortController();
+      activePlaybackAbort = playbackAbort;
       await new Promise<void>((resolve, reject) => {
         const audio = activeAudio;
         if (!audio) {
@@ -136,6 +146,13 @@ export function createKokoroPronouncer({
           },
           { once: true },
         );
+        playbackAbort.signal.addEventListener(
+          'abort',
+          () => {
+            resolve();
+          },
+          { once: true },
+        );
         void audio.play().catch((error: unknown) => {
           reject(
             error instanceof Error
@@ -143,7 +160,9 @@ export function createKokoroPronouncer({
               : new KokoroPronunciationError('浏览器拒绝播放生成的语音'),
           );
         });
-      }).finally(disposeAudio);
+      }).finally(() => {
+        if (generation === pronunciationGeneration) disposeAudio();
+      });
     },
   };
 }

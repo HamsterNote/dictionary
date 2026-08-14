@@ -95,7 +95,7 @@ export function EnglishChineseDictionaryPopover({
       {...(navigation.canGoBack ? { onBack: navigation.goBack } : {})}
       {...(navigation.canGoForward ? { onForward: navigation.goForward } : {})}
       meanings={result.status === 'found' ? result.meanings : []}
-      {...(onQueryChange ? { onQueryChange } : {})}
+      {...(onQueryChange ? { onQueryChange: navigation.onQueryChange } : {})}
       onSearch={navigation.search}
       {...(result.status === 'found' && result.phonetic ? { phonetic: result.phonetic } : {})}
       query={query}

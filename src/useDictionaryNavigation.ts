@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 
 interface DictionaryNavigationOptions {
   readonly onQueryChange: ((query: string) => void) | undefined;
@@ -12,6 +12,7 @@ interface DictionaryNavigation {
   readonly committedQuery: string;
   readonly goBack: () => void;
   readonly goForward: () => void;
+  readonly onQueryChange: (query: string) => void;
   readonly search: (query: string) => void;
 }
 
@@ -26,26 +27,60 @@ export function useDictionaryNavigation({
   onSearch,
   query,
 }: DictionaryNavigationOptions): DictionaryNavigation {
+  const internalQueryRef = useRef<string | undefined>(undefined);
   const [history, setHistory] = useState<DictionaryHistory>(() => ({
     future: [],
     past: [],
     present: query.trim(),
   }));
 
+  const updateQuery = useCallback(
+    (nextQuery: string) => {
+      internalQueryRef.current = nextQuery;
+      onQueryChange?.(nextQuery);
+    },
+    [onQueryChange],
+  );
+
+  useEffect(() => {
+    if (query === internalQueryRef.current) {
+      internalQueryRef.current = undefined;
+      return;
+    }
+    internalQueryRef.current = undefined;
+
+    const normalizedQuery = query.trim();
+    setHistory((currentHistory) => {
+      if (normalizedQuery === currentHistory.present) return currentHistory;
+      return {
+        future: [],
+        past:
+          currentHistory.present.length > 0
+            ? [...currentHistory.past, currentHistory.present]
+            : currentHistory.past,
+        present: normalizedQuery,
+      };
+    });
+  }, [query]);
+
   const search = useCallback(
     (nextQuery: string) => {
       const normalizedQuery = nextQuery.trim();
-      onQueryChange?.(normalizedQuery);
+      updateQuery(normalizedQuery);
       onSearch?.(normalizedQuery);
-      if (normalizedQuery === history.present) return;
-
-      setHistory({
-        future: [],
-        past: history.present.length > 0 ? [...history.past, history.present] : history.past,
-        present: normalizedQuery,
+      setHistory((currentHistory) => {
+        if (normalizedQuery === currentHistory.present) return currentHistory;
+        return {
+          future: [],
+          past:
+            currentHistory.present.length > 0
+              ? [...currentHistory.past, currentHistory.present]
+              : currentHistory.past,
+          present: normalizedQuery,
+        };
       });
     },
-    [history, onQueryChange, onSearch],
+    [onSearch, updateQuery],
   );
 
   const goBack = useCallback(() => {
@@ -57,9 +92,9 @@ export function useDictionaryNavigation({
       past: history.past.slice(0, -1),
       present: previousQuery,
     });
-    onQueryChange?.(previousQuery);
+    updateQuery(previousQuery);
     onSearch?.(previousQuery);
-  }, [history, onQueryChange, onSearch]);
+  }, [history, onSearch, updateQuery]);
 
   const goForward = useCallback(() => {
     const nextQuery = history.future[0];
@@ -70,9 +105,9 @@ export function useDictionaryNavigation({
       past: [...history.past, history.present],
       present: nextQuery,
     });
-    onQueryChange?.(nextQuery);
+    updateQuery(nextQuery);
     onSearch?.(nextQuery);
-  }, [history, onQueryChange, onSearch]);
+  }, [history, onSearch, updateQuery]);
 
   return {
     canGoBack: history.past.length > 0,
@@ -80,6 +115,7 @@ export function useDictionaryNavigation({
     committedQuery: history.present,
     goBack,
     goForward,
+    onQueryChange: updateQuery,
     search,
   };
 }

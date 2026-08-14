@@ -224,6 +224,7 @@
     "test:chinese": "python3 scripts/test_generate_chinese_dictionaries.py",
     "test:examples": "python3 scripts/test_generate_oanc_examples.py",
     "test:inflections": "python3 scripts/test_generate_ecdict_inflections.py",
+    "test:kokoro": "yarn build:package && node scripts/test_kokoro_concurrency.mjs",
     "test:synonyms": "python3 scripts/test_generate_wordnet_synonyms.py",
     "test:roots": "python3 scripts/test_generate_unimorph_roots.py",
     "test:result-sources": "node scripts/test_english_result_sources.mjs",
@@ -235,7 +236,7 @@
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "prepack": "yarn build:package",
-    "check": "yarn test:chinese && yarn test:examples && yarn test:inflections && yarn test:synonyms && yarn test:roots && yarn test:result-sources && yarn test:chinese-suggestions && yarn format:check && yarn lint && yarn typecheck && yarn build"
+    "check": "yarn test:chinese && yarn test:examples && yarn test:inflections && yarn test:synonyms && yarn test:roots && yarn test:result-sources && yarn test:chinese-suggestions && yarn test:kokoro && yarn format:check && yarn lint && yarn typecheck && yarn build"
   },
   "peerDependencies": {
     "react": ">=19.0.0 <20.0.0",

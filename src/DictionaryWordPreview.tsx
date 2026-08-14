@@ -9,6 +9,7 @@ import { protectCjkLineBreaks } from './protectCjkLineBreaks';
 interface DictionaryWordPreviewProps {
   readonly anchor: HTMLElement;
   readonly entry: DictionaryEntrySummary;
+  readonly focusOnMount?: boolean;
   readonly onClose: () => void;
   readonly onExpand: (word: string) => void;
   readonly onPointerEnter?: (event: ReactPointerEvent<HTMLDivElement>) => void;
@@ -19,6 +20,7 @@ interface DictionaryWordPreviewProps {
 export function DictionaryWordPreview({
   anchor,
   entry,
+  focusOnMount = true,
   onClose,
   onExpand,
   onPointerEnter,
@@ -27,10 +29,13 @@ export function DictionaryWordPreview({
 }: DictionaryWordPreviewProps) {
   const headingId = useId();
   const previewRef = useRef<HTMLDivElement>(null);
-  const focusPreview = useCallback((element: HTMLDivElement | null) => {
-    previewRef.current = element;
-    element?.focus();
-  }, []);
+  const focusPreview = useCallback(
+    (element: HTMLDivElement | null) => {
+      previewRef.current = element;
+      if (focusOnMount) element?.focus();
+    },
+    [focusOnMount],
+  );
 
   useEffect(() => {
     const closeOnOutsideInteraction = (event: PointerEvent): void => {
@@ -41,8 +46,10 @@ export function DictionaryWordPreview({
     };
     const closeOnEscape = (event: KeyboardEvent): void => {
       if (event.key !== 'Escape') return;
+      const shouldRestoreAnchorFocus =
+        previewRef.current?.contains(document.activeElement) ?? false;
       onClose();
-      anchor.focus();
+      if (shouldRestoreAnchorFocus) anchor.focus();
     };
     document.addEventListener('pointerdown', closeOnOutsideInteraction);
     document.addEventListener('keydown', closeOnEscape);

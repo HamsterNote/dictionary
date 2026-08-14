@@ -217,7 +217,7 @@ export function Demo() {
                 focusTargetRef.current = 'trigger';
                 setIsOpen(false);
               }}
-              onQueryChange={setQuery}
+              onQueryChange={navigation.onQueryChange}
               onSearch={navigation.search}
               open={isOpen}
               {...(!isChineseQuery && isPronunciationEnabled ? { pronounce: pronounceWord } : {})}

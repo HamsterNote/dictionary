@@ -88,6 +88,7 @@ export function HamsterDictionaryPopover({
         <DictionaryWordPreview
           anchor={anchor}
           entry={entry}
+          focusOnMount={trigger === 'click'}
           onClose={() => {
             setIsOpen(false);
           }}
