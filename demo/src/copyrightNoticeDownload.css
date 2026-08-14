@@ -1,0 +1,99 @@
+.copyright-notice {
+  max-width: var(--demo-panel-max-width);
+  margin-top: 24px;
+  padding: 20px;
+  background: var(--dictionary-surface);
+  border: 1px solid var(--dictionary-border);
+  border-radius: var(--demo-panel-radius);
+}
+
+.copyright-notice__eyebrow {
+  margin: 0;
+  color: var(--dictionary-accent-text);
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1.4;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.copyright-notice h2 {
+  margin: 8px 0 0;
+  color: var(--dictionary-text-primary);
+  font-size: 16px;
+  line-height: 1.4;
+}
+
+.copyright-notice__description {
+  margin: 8px 0 0;
+  color: var(--dictionary-text-secondary);
+  font-size: 14px;
+  line-height: 1.65;
+}
+
+.copyright-notice__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 12px;
+  align-items: center;
+  margin-top: 16px;
+}
+
+.copyright-notice__actions button {
+  min-height: 44px;
+  padding: 0 16px;
+  color: var(--demo-on-accent);
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  background: var(--dictionary-accent-text);
+  border: 0;
+  border-radius: var(--demo-control-radius);
+  transition:
+    background-color 120ms ease-out,
+    transform 120ms ease-out;
+}
+
+.copyright-notice__actions button:hover {
+  background: var(--dictionary-text-primary);
+}
+
+.copyright-notice__actions button:disabled {
+  cursor: wait;
+  background: var(--dictionary-text-secondary);
+  transform: none;
+}
+
+.copyright-notice__actions button:active:not(:disabled) {
+  transform: scale(0.98);
+}
+
+.copyright-notice__actions button:focus-visible,
+.copyright-notice a:focus-visible {
+  outline: 2px solid var(--dictionary-focus);
+  outline-offset: 3px;
+}
+
+.copyright-notice__actions span {
+  color: var(--dictionary-text-secondary);
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.copyright-notice > a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  margin-top: 12px;
+  color: var(--dictionary-accent-text);
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1.5;
+  text-underline-offset: 3px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .copyright-notice__actions button {
+    transition: none;
+  }
+}

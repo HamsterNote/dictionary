@@ -1,0 +1,15 @@
+node_modules/
+dist/
+demo-dist/
+coverage/
+*.tsbuildinfo
+__pycache__/
+*.pyc
+.DS_Store
+.omo/
+.codegraph/
+.playwright-mcp/
+*.local
+*.log
+playwright-report/
+test-results/

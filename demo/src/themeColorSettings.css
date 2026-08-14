@@ -1,0 +1,93 @@
+.theme-color-settings {
+  min-width: 0;
+  margin: 20px 0 0;
+  padding: 0;
+  border: 0;
+}
+
+.theme-color-settings > legend {
+  padding: 0;
+  color: var(--dictionary-text-primary);
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1.4;
+  letter-spacing: 0.04em;
+}
+
+.theme-color-settings__options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.theme-color-settings__option {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  min-width: 0;
+  min-height: 44px;
+  padding: 0 12px;
+  color: var(--dictionary-text-secondary);
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  background: var(--dictionary-surface);
+  border: 1px solid var(--dictionary-border);
+  border-radius: var(--demo-control-radius);
+}
+
+.theme-color-settings__option:has(input:checked) {
+  color: var(--dictionary-text-primary);
+  background: var(--dictionary-accent-soft);
+  border-color: var(--dictionary-accent-text);
+}
+
+.theme-color-settings__option:has(input:focus-visible) {
+  outline: 2px solid var(--dictionary-focus);
+  outline-offset: 2px;
+}
+
+.theme-color-settings__option input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+}
+
+.theme-color-settings__swatch {
+  width: 12px;
+  height: 12px;
+  margin-right: 7px;
+  border: 1px solid var(--dictionary-border);
+  border-radius: 50%;
+}
+
+@media (width <= 560px) {
+  .theme-color-settings__options {
+    display: grid;
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    gap: 6px;
+  }
+
+  .theme-color-settings__option {
+    grid-column: span 2;
+    justify-content: center;
+    padding: 0 4px;
+    white-space: nowrap;
+  }
+
+  .theme-color-settings__option:nth-child(4) {
+    grid-column: 2 / span 2;
+  }
+
+  .theme-color-settings__option:nth-child(5) {
+    grid-column: 4 / span 2;
+  }
+
+  .theme-color-settings__swatch {
+    margin-right: 5px;
+  }
+}
