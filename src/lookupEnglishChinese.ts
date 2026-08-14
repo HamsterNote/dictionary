@@ -1,43 +1,67 @@
 import coreSnapshot from './data/ecdict-core.tsv?raw';
 import { CORE_VOCABULARY_METADATA } from './data/ecdictManifest';
+import type { DictionaryEntrySummary } from './dictionaryEntrySummary';
 import {
   createEnglishChineseVocabularyPack,
   type EnglishChineseEntry,
   type EnglishChineseVocabularyPack,
 } from './englishChineseVocabularyPack';
+import type { EnglishExampleSentencePack } from './englishExampleSentencePack';
+import { ENGLISH_PART_OF_SPEECH } from './englishPartOfSpeech';
+import {
+  ENGLISH_INFLECTION_LABELS,
+  type EnglishInflection,
+  type EnglishInflectionFormsPack,
+  type EnglishInflectionIndexPack,
+} from './englishInflectionPack';
+import { findEnglishInflections, findEnglishInflectionSources } from './englishInflectionLookup';
+import type { EnglishSynonymPack } from './englishSynonymPack';
+import type { EnglishDerivationRoot, EnglishRootPack } from './englishRootPack';
 
 export interface EnglishChineseMeaning {
   readonly definition: string;
+  readonly examples?: readonly string[];
   readonly id: string;
   readonly partOfSpeech?: string;
 }
 
+export interface EnglishInflectionLookupPacks {
+  readonly forms?: readonly EnglishInflectionFormsPack[];
+  readonly index?: readonly EnglishInflectionIndexPack[];
+}
+
+export interface EnglishChineseSuggestionOptions {
+  readonly inflectionIndexPacks?: readonly EnglishInflectionIndexPack[];
+  readonly limit?: number;
+}
+
 export type EnglishChineseLookupResult =
   | {
+      readonly examples: readonly string[];
+      readonly inflections: readonly EnglishInflection[];
+      readonly kind: 'entry';
       readonly meanings: readonly EnglishChineseMeaning[];
       readonly phonetic?: string;
+      readonly roots: readonly EnglishDerivationRoot[];
       readonly status: 'found';
+      readonly synonyms: readonly string[];
+      readonly word: string;
+    }
+  | {
+      readonly examples: readonly [];
+      readonly inflections: readonly [];
+      readonly kind: 'inflection';
+      readonly meanings: readonly EnglishChineseMeaning[];
+      readonly phonetic?: never;
+      readonly roots: readonly [];
+      readonly status: 'found';
+      readonly synonyms: readonly [];
       readonly word: string;
     }
   | {
       readonly query: string;
       readonly status: 'not-found';
     };
-
-const PART_OF_SPEECH: ReadonlyMap<string, string> = new Map([
-  ['a', 'adjective · 形容词'],
-  ['adj', 'adjective · 形容词'],
-  ['adv', 'adverb · 副词'],
-  ['aux', 'auxiliary · 助动词'],
-  ['conj', 'conjunction · 连词'],
-  ['n', 'noun · 名词'],
-  ['num', 'numeral · 数词'],
-  ['prep', 'preposition · 介词'],
-  ['pron', 'pronoun · 代词'],
-  ['v', 'verb · 动词'],
-  ['vi', 'intransitive verb · 不及物动词'],
-  ['vt', 'transitive verb · 及物动词'],
-]);
 
 const MEANING_SEPARATOR = '\u001f';
 const CORE_VOCABULARY_PACK = createEnglishChineseVocabularyPack(
@@ -110,30 +134,133 @@ export function suggestEnglishChinese(
   return suggestions;
 }
 
+export function suggestEnglishChineseEntries(
+  query: string,
+  vocabularyPacks: readonly EnglishChineseVocabularyPack[] = [],
+  limitOrOptions: number | EnglishChineseSuggestionOptions = 6,
+): readonly DictionaryEntrySummary[] {
+  const limit = typeof limitOrOptions === 'number' ? limitOrOptions : (limitOrOptions.limit ?? 6);
+  if (limit <= 0) return [];
+
+  const inflectionIndexPacks =
+    typeof limitOrOptions === 'number' ? undefined : limitOrOptions.inflectionIndexPacks;
+  const inflectionResult = lookupEnglishChinese(
+    query,
+    vocabularyPacks,
+    [],
+    [],
+    [],
+    inflectionIndexPacks === undefined ? {} : { index: inflectionIndexPacks },
+  );
+  const suggestions: DictionaryEntrySummary[] = [];
+  if (inflectionResult.status === 'found' && inflectionResult.kind === 'inflection') {
+    const firstMeaning = inflectionResult.meanings[0];
+    if (firstMeaning !== undefined) {
+      suggestions.push({ definition: firstMeaning.definition, word: inflectionResult.word });
+    }
+  }
+
+  const prefixSuggestions = suggestEnglishChinese(query, vocabularyPacks, limit).flatMap((word) => {
+    const result = lookupEnglishChinese(word, vocabularyPacks);
+    if (result.status === 'not-found') return [];
+    const firstMeaning = result.meanings[0];
+    if (firstMeaning === undefined) return [];
+    return [
+      {
+        definition: firstMeaning.definition,
+        ...(result.phonetic ? { phonetic: result.phonetic } : {}),
+        word: result.word,
+      },
+    ];
+  });
+  return [...suggestions, ...prefixSuggestions].slice(0, limit);
+}
+
+export function resolveEnglishChineseEntry(
+  query: string,
+  vocabularyPacks: readonly EnglishChineseVocabularyPack[] = [],
+  inflectionPacks: EnglishInflectionLookupPacks = {},
+): DictionaryEntrySummary | undefined {
+  const result = lookupEnglishChinese(query, vocabularyPacks, [], [], [], inflectionPacks);
+  if (result.status === 'not-found') return undefined;
+  const firstMeaning = result.meanings[0];
+  if (firstMeaning === undefined) return undefined;
+  return {
+    definition: firstMeaning.definition,
+    ...(result.phonetic ? { phonetic: result.phonetic } : {}),
+    word: result.word,
+  };
+}
+
 export function lookupEnglishChinese(
   query: string,
   vocabularyPacks: readonly EnglishChineseVocabularyPack[] = [],
+  exampleSentencePacks: readonly EnglishExampleSentencePack[] = [],
+  synonymPacks: readonly EnglishSynonymPack[] = [],
+  rootPacks: readonly EnglishRootPack[] = [],
+  inflectionPacks: EnglishInflectionLookupPacks = {},
 ): EnglishChineseLookupResult {
   const trimmedQuery = query.trim();
   const normalizedQuery = normalizeEnglishChineseQuery(query);
   const entry = findEntry(normalizedQuery, vocabularyPacks);
-  if (entry === undefined) return { query: trimmedQuery, status: 'not-found' };
+  if (entry === undefined) {
+    const sources = findEnglishInflectionSources(normalizedQuery, inflectionPacks.index ?? []);
+    if (sources.length === 0) return { query: trimmedQuery, status: 'not-found' };
+    return {
+      examples: [],
+      inflections: [],
+      kind: 'inflection',
+      meanings: sources.map((source, index) => ({
+        definition: `是 ${source.lemma} 的${ENGLISH_INFLECTION_LABELS[source.kind]}`,
+        id: `${normalizedQuery}-source-${String(index + 1)}`,
+      })),
+      roots: [],
+      status: 'found',
+      synonyms: [],
+      word: normalizedQuery,
+    };
+  }
 
   const [phonetic, translation] = entry;
+  const examples = exampleSentencePacks
+    .flatMap((exampleSentencePack) => exampleSentencePack.entries.get(normalizedQuery) ?? [])
+    .filter((example, index, allExamples) => allExamples.indexOf(example) === index)
+    .slice(0, 2);
+  const synonyms = synonymPacks
+    .flatMap((synonymPack) => synonymPack.entries.get(normalizedQuery) ?? [])
+    .filter((synonym, index, allSynonyms) => allSynonyms.indexOf(synonym) === index);
+  const roots = rootPacks
+    .flatMap((rootPack) => rootPack.entries.get(normalizedQuery) ?? [])
+    .filter(
+      (root, index, allRoots) =>
+        allRoots.findIndex(
+          (candidate) =>
+            candidate.base === root.base &&
+            candidate.affix === root.affix &&
+            candidate.sourcePartOfSpeech === root.sourcePartOfSpeech &&
+            candidate.targetPartOfSpeech === root.targetPartOfSpeech,
+        ) === index,
+    );
+  const inflections = findEnglishInflections(normalizedQuery, inflectionPacks.forms ?? []);
   const meanings = translation.split(MEANING_SEPARATOR).map((definition, index) => {
-    const match = /^(?<part>[a-z]+)\.\s*(?<text>.+)$/iu.exec(definition);
-    const part = match?.groups?.['part'];
+    const match = /^([a-z]+)\.\s*(.+)$/iu.exec(definition);
+    const part = match?.[1];
     return {
-      definition: match?.groups?.['text'] ?? definition,
+      definition: match?.[2] ?? definition,
       id: `${normalizedQuery}-${String(index + 1)}`,
-      ...(part === undefined ? {} : { partOfSpeech: PART_OF_SPEECH.get(part) ?? part }),
+      ...(part === undefined ? {} : { partOfSpeech: ENGLISH_PART_OF_SPEECH.get(part) ?? part }),
     };
   });
 
   return {
+    examples,
+    inflections,
+    kind: 'entry',
     meanings,
     ...(phonetic ? { phonetic: `/${phonetic}/` } : {}),
+    roots,
     status: 'found',
+    synonyms,
     word: normalizedQuery,
   };
 }

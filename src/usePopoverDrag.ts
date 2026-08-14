@@ -1,12 +1,32 @@
 import { DragBase, DragOperationType, type Pose } from '@system-ui-js/multi-drag';
-import { type RefObject, useEffect } from 'react';
+import { type RefObject, useEffect, useRef } from 'react';
+
+export interface DictionaryPosition {
+  readonly x: number;
+  readonly y: number;
+}
 
 interface PopoverDragOptions {
   readonly enabled: boolean;
+  readonly onPositionChange?: (position: DictionaryPosition) => void;
   readonly popoverRef: RefObject<HTMLElement | null>;
+  readonly position: DictionaryPosition;
 }
 
-export function usePopoverDrag({ enabled, popoverRef }: PopoverDragOptions): void {
+export function usePopoverDrag({
+  enabled,
+  onPositionChange,
+  popoverRef,
+  position,
+}: PopoverDragOptions): void {
+  const positionRef = useRef(position);
+  const onPositionChangeRef = useRef(onPositionChange);
+
+  useEffect(() => {
+    positionRef.current = position;
+    onPositionChangeRef.current = onPositionChange;
+  }, [onPositionChange, position]);
+
   useEffect(() => {
     if (!enabled) return;
     const popover = popoverRef.current;
@@ -14,7 +34,6 @@ export function usePopoverDrag({ enabled, popoverRef }: PopoverDragOptions): voi
     const handle = popover.querySelector<HTMLButtonElement>('.dictionary-popover__drag-handle');
     if (handle === null) return;
 
-    let position = { x: 0, y: 0 };
     let isDisposed = false;
     const previousTouchAction = handle.style.touchAction;
 
@@ -24,8 +43,8 @@ export function usePopoverDrag({ enabled, popoverRef }: PopoverDragOptions): voi
       const viewport = window.visualViewport;
       const viewportWidth = viewport?.width ?? document.documentElement.clientWidth;
       const viewportHeight = viewport?.height ?? document.documentElement.clientHeight;
-      const originLeft = rect.left - position.x;
-      const originTop = rect.top - position.y;
+      const originLeft = rect.left - positionRef.current.x;
+      const originTop = rect.top - positionRef.current.y;
       const minimumX = viewportInset - originLeft;
       const maximumX = Math.max(
         minimumX,
@@ -37,10 +56,16 @@ export function usePopoverDrag({ enabled, popoverRef }: PopoverDragOptions): voi
         Math.max(nextPosition.y, minimumY),
         Math.max(minimumY, viewportHeight - 44 - originTop),
       );
-      position = { x: nextX, y: nextY };
+      const clampedPosition = { x: nextX, y: nextY };
+      positionRef.current = clampedPosition;
       popover.style.setProperty('--dictionary-drag-x', `${String(nextX)}px`);
       popover.style.setProperty('--dictionary-drag-y', `${String(nextY)}px`);
+      onPositionChangeRef.current?.(clampedPosition);
     };
+
+    if (positionRef.current.x !== 0 || positionRef.current.y !== 0) {
+      setPosition(positionRef.current);
+    }
 
     const createDrag = (): DragBase => {
       const drag = new DragBase(
@@ -50,7 +75,7 @@ export function usePopoverDrag({ enabled, popoverRef }: PopoverDragOptions): voi
           maxFingerCount: 1,
           getPose: (): Pose => ({
             height: popover.offsetHeight,
-            position,
+            position: positionRef.current,
             width: popover.offsetWidth,
           }),
           setPose: (_target, pose): void => {
@@ -75,15 +100,16 @@ export function usePopoverDrag({ enabled, popoverRef }: PopoverDragOptions): voi
     let activeDrag = createDrag();
     const handleKeyDown = (event: KeyboardEvent): void => {
       const step = event.shiftKey ? 4 : 12;
+      const current = positionRef.current;
       const nextPosition =
         event.key === 'ArrowLeft'
-          ? { x: position.x - step, y: position.y }
+          ? { x: current.x - step, y: current.y }
           : event.key === 'ArrowRight'
-            ? { x: position.x + step, y: position.y }
+            ? { x: current.x + step, y: current.y }
             : event.key === 'ArrowUp'
-              ? { x: position.x, y: position.y - step }
+              ? { x: current.x, y: current.y - step }
               : event.key === 'ArrowDown'
-                ? { x: position.x, y: position.y + step }
+                ? { x: current.x, y: current.y + step }
                 : event.key === 'Escape' || event.key === 'Home'
                   ? { x: 0, y: 0 }
                   : undefined;
@@ -92,8 +118,9 @@ export function usePopoverDrag({ enabled, popoverRef }: PopoverDragOptions): voi
       setPosition(nextPosition);
     };
     const keepInViewport = (): void => {
-      if (position.x === 0 && position.y === 0) return;
-      setPosition(position);
+      const current = positionRef.current;
+      if (current.x === 0 && current.y === 0) return;
+      setPosition(current);
     };
     handle.addEventListener('keydown', handleKeyDown);
     window.addEventListener('resize', keepInViewport);

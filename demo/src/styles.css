@@ -6,12 +6,16 @@
   --demo-document: rgb(255 255 255 / 80%);
   --demo-document-border: rgb(222 220 215 / 88%);
   --demo-document-text: #55524d;
-  --demo-label: #8a8781;
+  --demo-label: var(--dictionary-text-secondary);
   --demo-highlight: #dcebf7;
   --demo-popover-glow: rgb(20 110 190 / 10%);
   --demo-document-shadow: rgb(68 62 50 / 7%);
   --demo-trigger-shadow: rgb(20 110 190 / 22%);
   --demo-on-accent: #ffffff;
+  --demo-panel-max-width: 470px;
+  --demo-license-popover-max-width: 320px;
+  --demo-panel-radius: 12px;
+  --demo-control-radius: 10px;
   color: var(--dictionary-text-primary);
   font-family:
     ui-sans-serif,
@@ -21,13 +25,14 @@
     sans-serif;
   font-synthesis: none;
   background: var(--demo-canvas);
+  overflow-x: clip;
   text-rendering: optimizeLegibility;
 }
 
 body {
-  min-width: 320px;
   min-height: 100vh;
   margin: 0;
+  overflow-x: clip;
 }
 
 button,
@@ -40,9 +45,19 @@ body {
 }
 
 .demo-shell {
+  --dictionary-accent: var(--hn-color-accent);
+  --dictionary-accent-soft: color-mix(in srgb, var(--hn-color-accent) 14%, transparent);
+  --dictionary-accent-text: color-mix(
+    in srgb,
+    var(--hn-color-accent) 46%,
+    var(--dictionary-text-primary)
+  );
+  --dictionary-accent-strong: var(--dictionary-accent-text);
+  --dictionary-focus: var(--dictionary-accent-text);
+
   display: grid;
   grid-template-columns: minmax(0, 0.86fr) minmax(480px, 1.14fr);
-  align-items: center;
+  align-items: start;
   width: min(1120px, calc(100% - 64px));
   min-height: 100vh;
   margin: 0 auto;
@@ -52,12 +67,13 @@ body {
 .demo-copy {
   position: relative;
   z-index: 1;
+  min-width: 0;
   max-width: 500px;
 }
 
 .demo-eyebrow {
   margin: 0 0 20px;
-  color: var(--dictionary-accent);
+  color: var(--dictionary-accent-text);
   font-size: 12px;
   font-weight: 700;
   line-height: 1.4;
@@ -106,8 +122,10 @@ body {
 }
 
 .demo-stage {
-  position: relative;
-  min-height: 620px;
+  position: sticky;
+  top: 32px;
+  align-self: start;
+  min-height: max(620px, calc(100dvh + 72px));
 }
 
 .demo-stage::before {
@@ -174,7 +192,7 @@ body {
   color: var(--demo-on-accent);
   font-weight: 650;
   cursor: pointer;
-  background: var(--dictionary-accent);
+  background: var(--dictionary-accent-text);
   border: 0;
   border-radius: 10px;
   box-shadow: 0 8px 22px var(--demo-trigger-shadow);
@@ -184,7 +202,7 @@ body {
 }
 
 .demo-trigger:hover {
-  background: var(--dictionary-accent-strong);
+  background: var(--dictionary-text-primary);
 }
 
 .demo-trigger:active {
@@ -208,6 +226,8 @@ body {
   }
 
   .demo-stage {
+    position: relative;
+    top: auto;
     min-height: 680px;
   }
 
@@ -227,7 +247,7 @@ body {
   }
 
   .demo-stage {
-    min-height: 620px;
+    min-height: calc(100dvh + 96px);
   }
 
   .demo-document {
@@ -243,8 +263,15 @@ body {
 
   .demo-popover-slot {
     top: 80px;
-    right: 50%;
-    transform: translateX(50%);
+    right: 4px;
+    left: 4px;
+    min-width: 0;
+  }
+}
+
+@media (max-width: 340px) {
+  .demo-copy h1 {
+    font-size: 38px;
   }
 }
 

@@ -19,6 +19,154 @@
       "types": "./dist/index.d.ts",
       "import": "./dist/index.js"
     },
+    "./kokoro": {
+      "types": "./dist/kokoro.d.ts",
+      "import": "./dist/kokoro.js"
+    },
+    "./dictionary-packs/chinese-dictionary": {
+      "types": "./dist/dictionary-packs/chinese-dictionary.d.ts",
+      "import": "./dist/dictionary-packs/chinese-dictionary.js"
+    },
+    "./dictionary-packs/chinese-dictionary-words": {
+      "types": "./dist/dictionary-packs/chinese-dictionary-words.d.ts",
+      "import": "./dist/dictionary-packs/chinese-dictionary-words.js"
+    },
+    "./dictionary-packs/chinese-xinhua": {
+      "types": "./dist/dictionary-packs/chinese-xinhua.d.ts",
+      "import": "./dist/dictionary-packs/chinese-xinhua.js"
+    },
+    "./dictionary-packs/chinese-xinhua-words": {
+      "types": "./dist/dictionary-packs/chinese-xinhua-words.d.ts",
+      "import": "./dist/dictionary-packs/chinese-xinhua-words.js"
+    },
+    "./example-sentence-packs/bnc": {
+      "types": "./dist/example-sentence-packs/bnc.d.ts",
+      "import": "./dist/example-sentence-packs/bnc.js"
+    },
+    "./example-sentence-packs/cet4": {
+      "types": "./dist/example-sentence-packs/cet4.d.ts",
+      "import": "./dist/example-sentence-packs/cet4.js"
+    },
+    "./example-sentence-packs/cet6": {
+      "types": "./dist/example-sentence-packs/cet6.d.ts",
+      "import": "./dist/example-sentence-packs/cet6.js"
+    },
+    "./example-sentence-packs/core": {
+      "types": "./dist/example-sentence-packs/core.d.ts",
+      "import": "./dist/example-sentence-packs/core.js"
+    },
+    "./example-sentence-packs/gk": {
+      "types": "./dist/example-sentence-packs/gk.d.ts",
+      "import": "./dist/example-sentence-packs/gk.js"
+    },
+    "./example-sentence-packs/gre": {
+      "types": "./dist/example-sentence-packs/gre.d.ts",
+      "import": "./dist/example-sentence-packs/gre.js"
+    },
+    "./example-sentence-packs/ielts": {
+      "types": "./dist/example-sentence-packs/ielts.d.ts",
+      "import": "./dist/example-sentence-packs/ielts.js"
+    },
+    "./example-sentence-packs/ky": {
+      "types": "./dist/example-sentence-packs/ky.d.ts",
+      "import": "./dist/example-sentence-packs/ky.js"
+    },
+    "./example-sentence-packs/toefl": {
+      "types": "./dist/example-sentence-packs/toefl.d.ts",
+      "import": "./dist/example-sentence-packs/toefl.js"
+    },
+    "./example-sentence-packs/zk": {
+      "types": "./dist/example-sentence-packs/zk.d.ts",
+      "import": "./dist/example-sentence-packs/zk.js"
+    },
+    "./inflection-packs/forms": {
+      "types": "./dist/inflection-packs/forms.d.ts",
+      "import": "./dist/inflection-packs/forms.js"
+    },
+    "./inflection-packs/reverse": {
+      "types": "./dist/inflection-packs/reverse.d.ts",
+      "import": "./dist/inflection-packs/reverse.js"
+    },
+    "./synonym-packs/bnc": {
+      "types": "./dist/synonym-packs/bnc.d.ts",
+      "import": "./dist/synonym-packs/bnc.js"
+    },
+    "./synonym-packs/cet4": {
+      "types": "./dist/synonym-packs/cet4.d.ts",
+      "import": "./dist/synonym-packs/cet4.js"
+    },
+    "./synonym-packs/cet6": {
+      "types": "./dist/synonym-packs/cet6.d.ts",
+      "import": "./dist/synonym-packs/cet6.js"
+    },
+    "./synonym-packs/core": {
+      "types": "./dist/synonym-packs/core.d.ts",
+      "import": "./dist/synonym-packs/core.js"
+    },
+    "./synonym-packs/gk": {
+      "types": "./dist/synonym-packs/gk.d.ts",
+      "import": "./dist/synonym-packs/gk.js"
+    },
+    "./synonym-packs/gre": {
+      "types": "./dist/synonym-packs/gre.d.ts",
+      "import": "./dist/synonym-packs/gre.js"
+    },
+    "./synonym-packs/ielts": {
+      "types": "./dist/synonym-packs/ielts.d.ts",
+      "import": "./dist/synonym-packs/ielts.js"
+    },
+    "./synonym-packs/ky": {
+      "types": "./dist/synonym-packs/ky.d.ts",
+      "import": "./dist/synonym-packs/ky.js"
+    },
+    "./synonym-packs/toefl": {
+      "types": "./dist/synonym-packs/toefl.d.ts",
+      "import": "./dist/synonym-packs/toefl.js"
+    },
+    "./synonym-packs/zk": {
+      "types": "./dist/synonym-packs/zk.d.ts",
+      "import": "./dist/synonym-packs/zk.js"
+    },
+    "./root-packs/bnc": {
+      "types": "./dist/root-packs/bnc.d.ts",
+      "import": "./dist/root-packs/bnc.js"
+    },
+    "./root-packs/cet4": {
+      "types": "./dist/root-packs/cet4.d.ts",
+      "import": "./dist/root-packs/cet4.js"
+    },
+    "./root-packs/cet6": {
+      "types": "./dist/root-packs/cet6.d.ts",
+      "import": "./dist/root-packs/cet6.js"
+    },
+    "./root-packs/core": {
+      "types": "./dist/root-packs/core.d.ts",
+      "import": "./dist/root-packs/core.js"
+    },
+    "./root-packs/gk": {
+      "types": "./dist/root-packs/gk.d.ts",
+      "import": "./dist/root-packs/gk.js"
+    },
+    "./root-packs/gre": {
+      "types": "./dist/root-packs/gre.d.ts",
+      "import": "./dist/root-packs/gre.js"
+    },
+    "./root-packs/ielts": {
+      "types": "./dist/root-packs/ielts.d.ts",
+      "import": "./dist/root-packs/ielts.js"
+    },
+    "./root-packs/ky": {
+      "types": "./dist/root-packs/ky.d.ts",
+      "import": "./dist/root-packs/ky.js"
+    },
+    "./root-packs/toefl": {
+      "types": "./dist/root-packs/toefl.d.ts",
+      "import": "./dist/root-packs/toefl.js"
+    },
+    "./root-packs/zk": {
+      "types": "./dist/root-packs/zk.d.ts",
+      "import": "./dist/root-packs/zk.js"
+    },
     "./vocabulary-packs/bnc": {
       "types": "./dist/vocabulary-packs/bnc.d.ts",
       "import": "./dist/vocabulary-packs/bnc.js"
@@ -68,6 +216,17 @@
     "build:types": "tsc -p tsconfig.build.json",
     "build:demo": "vite build --config vite.demo.config.ts",
     "generate:dictionary": "uv run scripts/generate_ecdict.py",
+    "generate:chinese-dictionaries": "uv run scripts/generate_chinese_dictionaries.py",
+    "generate:examples": "uv run scripts/generate_oanc_examples.py",
+    "generate:inflections": "uv run scripts/generate_ecdict_inflections.py",
+    "generate:synonyms": "uv run scripts/generate_wordnet_synonyms.py",
+    "generate:roots": "uv run scripts/generate_unimorph_roots.py",
+    "test:chinese": "python3 scripts/test_generate_chinese_dictionaries.py",
+    "test:examples": "python3 scripts/test_generate_oanc_examples.py",
+    "test:inflections": "python3 scripts/test_generate_ecdict_inflections.py",
+    "test:synonyms": "python3 scripts/test_generate_wordnet_synonyms.py",
+    "test:roots": "python3 scripts/test_generate_unimorph_roots.py",
+    "test:result-sources": "node scripts/test_english_result_sources.mjs",
     "clean": "rm -rf dist demo-dist",
     "preview": "vite preview --config vite.demo.config.ts",
     "typecheck": "tsc -b --pretty false",
@@ -75,7 +234,7 @@
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "prepack": "yarn build:package",
-    "check": "yarn format:check && yarn lint && yarn typecheck && yarn build"
+    "check": "yarn test:chinese && yarn test:examples && yarn test:inflections && yarn test:synonyms && yarn test:roots && yarn test:result-sources && yarn format:check && yarn lint && yarn typecheck && yarn build"
   },
   "peerDependencies": {
     "react": ">=19.0.0 <20.0.0",
@@ -83,6 +242,7 @@
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
+    "@system-ui-js/multi-drag": "0.4.0",
     "@types/node": "^24.0.0",
     "@types/react": "^19.0.0",
     "@types/react-dom": "^19.0.0",
@@ -107,7 +267,7 @@
     "loglevel": "1.9.2"
   },
   "dependencies": {
-    "@hamster-note/components": "^0.3.0",
-    "@system-ui-js/multi-drag": "0.4.0"
+    "@hamster-note/components": "0.3.0",
+    "kokoro-js": "1.2.1"
   }
 }

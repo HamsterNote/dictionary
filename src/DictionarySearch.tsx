@@ -2,6 +2,7 @@ import { Button } from '@hamster-note/components/button';
 import { Icon } from '@hamster-note/components/icon';
 import { TextField } from '@hamster-note/components/text-field';
 import { useId, useRef, useState } from 'react';
+import type { DictionaryEntrySummary } from './dictionaryEntrySummary';
 
 interface DictionarySearchProps {
   readonly label: string;
@@ -9,7 +10,7 @@ interface DictionarySearchProps {
   readonly onSearch: ((query: string) => void) | undefined;
   readonly placeholder: string;
   readonly query: string;
-  readonly suggestions: readonly string[];
+  readonly suggestions: readonly DictionaryEntrySummary[];
 }
 
 export function DictionarySearch({
@@ -21,17 +22,22 @@ export function DictionarySearch({
   suggestions,
 }: DictionarySearchProps) {
   const formRef = useRef<HTMLFormElement>(null);
+  const inputId = useId();
   const listboxId = useId();
   const [activeIndex, setActiveIndex] = useState(-1);
   const [isExpanded, setIsExpanded] = useState(false);
   const canExpand = query.trim().length > 0 && suggestions.length > 0;
 
-  const selectSuggestion = (suggestion: string): void => {
-    onQueryChange?.(suggestion);
-    onSearch?.(suggestion);
+  const focusQueryInput = (): void => {
+    const input = formRef.current?.elements.namedItem('dictionary-query');
+    if (input instanceof HTMLInputElement) input.focus();
+  };
+
+  const selectSuggestion = (suggestion: DictionaryEntrySummary): void => {
+    onSearch?.(suggestion.word);
     setActiveIndex(-1);
     setIsExpanded(false);
-    formRef.current?.querySelector<HTMLInputElement>('.hn-text-field__control')?.focus();
+    focusQueryInput();
   };
 
   const activeSuggestion =
@@ -62,7 +68,9 @@ export function DictionarySearch({
           aria-controls={listboxId}
           aria-expanded={isExpanded && canExpand}
           autoComplete="off"
+          id={inputId}
           label={label}
+          name="dictionary-query"
           onBlur={() => {
             setActiveIndex(-1);
             setIsExpanded(false);
@@ -108,7 +116,7 @@ export function DictionarySearch({
               onQueryChange('');
               setActiveIndex(-1);
               setIsExpanded(false);
-              formRef.current?.querySelector<HTMLInputElement>('.hn-text-field__control')?.focus();
+              focusQueryInput();
             }}
             size="small"
           >
@@ -129,17 +137,27 @@ export function DictionarySearch({
               aria-selected={index === activeIndex}
               className="dictionary-popover__suggestion"
               id={`${listboxId}-${String(index)}`}
-              key={suggestion}
+              key={suggestion.word}
               ghost
               onPointerDown={(event) => {
                 event.preventDefault();
+              }}
+              onClick={() => {
                 selectSuggestion(suggestion);
               }}
               role="option"
               size="small"
               tabIndex={-1}
             >
-              {suggestion}
+              <span className="dictionary-popover__suggestion-word">{suggestion.word}</span>
+              {suggestion.phonetic ? (
+                <span className="dictionary-popover__suggestion-phonetic">
+                  {suggestion.phonetic}
+                </span>
+              ) : null}
+              <span className="dictionary-popover__suggestion-definition">
+                {suggestion.definition}
+              </span>
             </Button>
           ))}
         </div>

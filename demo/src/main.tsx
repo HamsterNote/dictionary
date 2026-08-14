@@ -2,6 +2,8 @@ import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import { Demo } from './Demo';
 import '../../src/dictionary.css';
+import './copyrightNoticeDownload.css';
+import './featureOptions.css';
 import './styles.css';
 import './vocabularyPackPicker.css';
 

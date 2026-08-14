@@ -19,5 +19,7 @@ export default defineConfig(({ mode }) => ({
   build: {
     outDir: resolve(import.meta.dirname, 'demo-dist'),
     emptyOutDir: true,
+    target: 'esnext',
   },
+  worker: { format: 'es' },
 }));
