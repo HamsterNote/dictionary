@@ -1,0 +1,44 @@
+name: 发布 npm 包
+
+# 通过 tag 触发发布：
+# - 正式版：v1.0.0 等 v*.*.* 格式
+# - beta 版：v1.0.0-beta、v1.0.0-beta.1 等 v*.*.*-beta* 格式
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: read
+  # npm provenance 所需，用于在 npm 上声明构建来源
+  id-token: write
+
+jobs:
+  publish:
+    name: 发布到 npm
+    runs-on: ubuntu-latest
+    steps:
+      - name: 检出代码
+        uses: actions/checkout@v4
+
+      - name: 配置 Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: yarn
+          registry-url: https://registry.npmjs.org
+
+      - name: 安装依赖
+        run: |
+          corepack enable
+          yarn install --frozen-lockfile
+
+      - name: 构建发布包
+        # build:package = 清理 dist 后生成类型声明 + 构建库
+        run: yarn build:package
+
+      - name: 发布到 npm
+        # NPM_TOKEN 需在仓库 Settings -> Secrets 中配置
+        run: yarn publish --non-interactive --access public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

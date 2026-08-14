@@ -1,6 +1,6 @@
 {
   "name": "@hamster-note/dictionary",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "仓鼠笔记的 React 词典悬浮窗组件",
   "type": "module",
   "license": "MIT",
