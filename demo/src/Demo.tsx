@@ -1,12 +1,15 @@
 import { type ThemeAccentPreset, ThemeProvider } from '@hamster-note/components/theme';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
+  DictionaryContent,
   type DictionaryEntrySummary,
   ENGLISH_CHINESE_CORE_GZIP_BYTES,
+  getDetail as getDictionaryDetail,
   HamsterDictionary,
   HamsterDictionaryPopover,
   resolveChineseEntry,
   resolveEnglishChineseEntry,
+  search as searchDictionary,
 } from '../../src';
 import type { KokoroPronouncer } from '../../src/kokoro';
 import { useDictionaryNavigation } from '../../src/useDictionaryNavigation';
@@ -97,6 +100,40 @@ export function Demo() {
       dictionaryPacks.englishVocabularyPacks,
     ],
   );
+  const search = useCallback(
+    (word: string) =>
+      searchDictionary(word, {
+        chineseDictionaryPacks: dictionaryPacks.chineseDictionaryPacks,
+        englishInflectionIndexPacks: dictionaryPacks.englishInflectionIndexPacks,
+        englishVocabularyPacks: dictionaryPacks.englishVocabularyPacks,
+      }),
+    [
+      dictionaryPacks.chineseDictionaryPacks,
+      dictionaryPacks.englishInflectionIndexPacks,
+      dictionaryPacks.englishVocabularyPacks,
+    ],
+  );
+  const getDetail = useCallback(
+    (word: string) =>
+      getDictionaryDetail(word, {
+        chineseDictionaryPacks: dictionaryPacks.chineseDictionaryPacks,
+        englishExampleSentencePacks: dictionaryPacks.englishExampleSentencePacks,
+        englishInflectionFormsPacks: dictionaryPacks.englishInflectionFormsPacks,
+        englishInflectionIndexPacks: dictionaryPacks.englishInflectionIndexPacks,
+        englishRootPacks: dictionaryPacks.englishRootPacks,
+        englishSynonymPacks: dictionaryPacks.englishSynonymPacks,
+        englishVocabularyPacks: dictionaryPacks.englishVocabularyPacks,
+      }),
+    [
+      dictionaryPacks.chineseDictionaryPacks,
+      dictionaryPacks.englishExampleSentencePacks,
+      dictionaryPacks.englishInflectionFormsPacks,
+      dictionaryPacks.englishInflectionIndexPacks,
+      dictionaryPacks.englishRootPacks,
+      dictionaryPacks.englishSynonymPacks,
+      dictionaryPacks.englishVocabularyPacks,
+    ],
+  );
 
   const inlineDemoEntry = useMemo<DictionaryEntrySummary>(() => {
     const resolved = resolveEntry('durable');
@@ -174,6 +211,18 @@ export function Demo() {
             <span>按需扩充</span>
             <span>Vite 8</span>
           </div>
+          <section className="demo-content-example" aria-labelledby="content-example-title">
+            <p className="demo-eyebrow" id="content-example-title">
+              独立文字内容
+            </p>
+            <DictionaryContent
+              getDetail={getDetail}
+              keyword="note"
+              search={search}
+              textColor="#37342f"
+              themeColor="#146ebe"
+            />
+          </section>
           <VocabularyPackPicker
             activeIds={dictionaryPacks.activeIds}
             {...(dictionaryPacks.loadError ? { errorMessage: dictionaryPacks.loadError } : {})}
@@ -210,7 +259,7 @@ export function Demo() {
           <div className="demo-popover-slot">
             <HamsterDictionary
               emptyMessage={dictionaryView.emptyMessage}
-              meanings={dictionaryView.meanings}
+              getDetail={getDetail}
               {...(navigation.canGoBack ? { onBack: navigation.goBack } : {})}
               {...(navigation.canGoForward ? { onForward: navigation.goForward } : {})}
               onClose={() => {
@@ -221,14 +270,11 @@ export function Demo() {
               onSearch={navigation.search}
               open={isOpen}
               {...(!isChineseQuery && isPronunciationEnabled ? { pronounce: pronounceWord } : {})}
-              {...(dictionaryView.phonetic ? { phonetic: dictionaryView.phonetic } : {})}
               query={query}
               ref={popoverRef}
-              resolveEntry={resolveEntry}
+              search={search}
               searchLabel={dictionaryView.searchLabel}
               searchPlaceholder={dictionaryView.searchPlaceholder}
-              sources={dictionaryView.sources}
-              suggestions={dictionaryView.suggestions}
               showGuide={navigation.committedQuery.length === 0}
               tabIndex={-1}
               word={dictionaryView.word}

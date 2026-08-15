@@ -1,0 +1,190 @@
+import type { CSSProperties, HTMLAttributes, ReactNode } from 'react';
+import { useCallback, useId, useMemo, useState } from 'react';
+import { DictionarySourceResults } from './DictionarySourceResults';
+import {
+  type DictionaryGetDetail,
+  type DictionaryMeaning,
+  type DictionarySearch,
+  type DictionarySource,
+  getDetail as defaultGetDetail,
+  search as defaultSearch,
+} from './dictionaryData';
+import type { DictionaryEntrySummary } from './dictionaryEntrySummary';
+import { PronunciationButton } from './PronunciationButton';
+
+interface DictionaryContentStyle extends CSSProperties {
+  readonly '--dictionary-accent'?: string;
+  readonly '--dictionary-accent-soft'?: string;
+  readonly '--dictionary-accent-strong'?: string;
+  readonly '--dictionary-accent-text'?: string;
+  readonly '--dictionary-focus'?: string;
+  readonly '--dictionary-text-primary'?: string;
+  readonly '--dictionary-text-secondary'?: string;
+}
+
+export interface DictionaryContentProps extends Omit<HTMLAttributes<HTMLElement>, 'color'> {
+  readonly emptyMessage?: ReactNode;
+  readonly getDetail?: DictionaryGetDetail;
+  readonly headingId?: string;
+  readonly keyword: string;
+  readonly meanings?: readonly DictionaryMeaning[];
+  readonly onOpenPreview?: (entry: DictionaryEntrySummary, anchor: HTMLButtonElement) => void;
+  readonly phonetic?: string;
+  readonly pronounce?: (word: string) => Promise<void>;
+  readonly resolveEntry?: (word: string) => DictionaryEntrySummary | undefined;
+  readonly search?: DictionarySearch;
+  readonly showGuide?: boolean;
+  readonly sources?: readonly DictionarySource[];
+  readonly textColor?: string;
+  readonly themeColor?: string;
+}
+
+export function DictionaryContent({
+  className,
+  emptyMessage = (
+    <>
+      没有找到精确释义。<span className="dictionary-popover__nowrap">请检查拼写</span>
+      ，或换一个词再试。
+    </>
+  ),
+  getDetail = defaultGetDetail,
+  headingId: providedHeadingId,
+  id,
+  keyword,
+  meanings: providedMeanings,
+  onOpenPreview,
+  phonetic: providedPhonetic,
+  pronounce,
+  resolveEntry,
+  search = defaultSearch,
+  showGuide = false,
+  sources: providedSources,
+  style,
+  textColor,
+  themeColor,
+  ...props
+}: DictionaryContentProps) {
+  const generatedId = useId();
+  const headingId = providedHeadingId ?? generatedId;
+  const [selection, setSelection] = useState({ activeKeyword: keyword, propKeyword: keyword });
+  if (selection.propKeyword !== keyword) {
+    setSelection({ activeKeyword: keyword, propKeyword: keyword });
+  }
+  const activeKeyword = selection.propKeyword === keyword ? selection.activeKeyword : keyword;
+  const resolvedContent = useMemo(() => {
+    const detail = providedMeanings === undefined ? getDetail(activeKeyword) : undefined;
+    const detailMeanings = detail?.sources.flatMap((source) => source.meanings) ?? [];
+    return {
+      meanings: providedMeanings ?? detailMeanings,
+      phonetic: providedPhonetic ?? detail?.phonetic,
+      sources: providedSources ?? (providedMeanings === undefined ? detail?.sources : undefined),
+    };
+  }, [activeKeyword, getDetail, providedMeanings, providedPhonetic, providedSources]);
+  const searchEntry = useCallback(
+    (word: string) => {
+      const normalizedWord = word.trim().normalize('NFKC').toLocaleLowerCase('en-US');
+      const candidates = search(word);
+      return candidates.find(
+        (candidate) =>
+          candidate.word.trim().normalize('NFKC').toLocaleLowerCase('en-US') === normalizedWord,
+      );
+    },
+    [search],
+  );
+  const interactiveResolver = resolveEntry ?? searchEntry;
+  const openPreview =
+    onOpenPreview ??
+    ((entry: DictionaryEntrySummary) => {
+      if (getDetail(entry.word) !== undefined) {
+        setSelection({ activeKeyword: entry.word, propKeyword: keyword });
+      }
+    });
+  const contentClassName = className ? `dictionary-content ${className}` : 'dictionary-content';
+  const contentStyle: DictionaryContentStyle = {
+    ...style,
+    ...(textColor === undefined
+      ? {}
+      : {
+          '--dictionary-text-primary': textColor,
+          '--dictionary-text-secondary': `color-mix(in srgb, ${textColor} 68%, transparent)`,
+        }),
+    ...(themeColor === undefined
+      ? {}
+      : {
+          '--dictionary-accent': themeColor,
+          '--dictionary-accent-soft': `color-mix(in srgb, ${themeColor} 12%, transparent)`,
+          '--dictionary-accent-strong': themeColor,
+          '--dictionary-accent-text': themeColor,
+          '--dictionary-focus': themeColor,
+        }),
+  };
+
+  return (
+    <section
+      {...props}
+      aria-labelledby={headingId}
+      className={contentClassName}
+      id={id}
+      style={contentStyle}
+    >
+      <header className="dictionary-popover__header">
+        <div>
+          <h2 className="dictionary-popover__word" id={headingId}>
+            {activeKeyword}
+          </h2>
+          {resolvedContent.phonetic ? (
+            <div className="dictionary-popover__pronunciation-row">
+              <p className="dictionary-popover__phonetic">{resolvedContent.phonetic}</p>
+              {pronounce ? (
+                <PronunciationButton pronounce={pronounce} word={activeKeyword} />
+              ) : null}
+            </div>
+          ) : null}
+        </div>
+      </header>
+
+      <div className="dictionary-popover__results">
+        <span
+          aria-atomic="true"
+          aria-live="polite"
+          className="dictionary-popover__status"
+          role="status"
+        >
+          {showGuide
+            ? '仓鼠词典已就绪'
+            : resolvedContent.meanings.length === 0
+              ? '没有找到释义'
+              : `找到 ${String(resolvedContent.meanings.length)} 条释义`}
+        </span>
+        {showGuide ? (
+          <div className="dictionary-popover__guide">
+            <p>
+              输入想了解的词，在候选中
+              <span className="dictionary-popover__nowrap">查看读音和基本含义</span>。
+            </p>
+            <ol>
+              <li>点击候选词，或按回车打开完整词条</li>
+              <li>点击释义中的可用词汇，快速查看迷你解释</li>
+              <li>
+                使用放大按钮打开词条，
+                <span className="dictionary-popover__nowrap">标题栏可前进或后退</span>
+              </li>
+            </ol>
+          </div>
+        ) : resolvedContent.meanings.length === 0 ? (
+          <p className="dictionary-popover__empty">{emptyMessage}</p>
+        ) : (
+          <DictionarySourceResults
+            onOpenPreview={openPreview}
+            resolveEntry={interactiveResolver}
+            sources={
+              resolvedContent.sources ?? [
+                { id: 'dictionary', label: '词典', meanings: resolvedContent.meanings },
+              ]
+            }
+          />
+        )}
+      </div>
+    </section>
+  );
+}

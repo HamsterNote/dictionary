@@ -1,28 +1,11 @@
-import { Badge } from '@hamster-note/components/badge';
-import type { ReactNode } from 'react';
 import { DictionaryInteractiveText } from './DictionaryInteractiveText';
+import type { DictionarySource } from './dictionaryData';
 import type { DictionaryEntrySummary } from './dictionaryEntrySummary';
 import { protectCjkLineBreaks } from './protectCjkLineBreaks';
 
-export interface DictionaryMeaning {
-  readonly definition: ReactNode;
-  readonly example?: ReactNode;
-  readonly examples?: readonly string[];
-  readonly id: string;
-  readonly partOfSpeech?: string;
-}
-
-export interface DictionarySource {
-  readonly examples?: readonly string[];
-  readonly heading?: string;
-  readonly href?: string | undefined;
-  readonly id: string;
-  readonly label: string;
-  readonly meanings: readonly DictionaryMeaning[];
-}
-
 interface DictionarySourceResultsProps {
-  readonly onOpenPreview: (entry: DictionaryEntrySummary, anchor: HTMLButtonElement) => void;
+  readonly onOpenPreview:
+    ((entry: DictionaryEntrySummary, anchor: HTMLButtonElement) => void) | undefined;
   readonly resolveEntry: ((word: string) => DictionaryEntrySummary | undefined) | undefined;
   readonly sources: readonly DictionarySource[];
 }
@@ -32,11 +15,14 @@ function InteractiveContent({
   onOpenPreview,
   resolveEntry,
 }: {
-  readonly children: ReactNode;
-  readonly onOpenPreview: (entry: DictionaryEntrySummary, anchor: HTMLButtonElement) => void;
+  readonly children: string;
+  readonly onOpenPreview:
+    ((entry: DictionaryEntrySummary, anchor: HTMLButtonElement) => void) | undefined;
   readonly resolveEntry: ((word: string) => DictionaryEntrySummary | undefined) | undefined;
 }) {
-  if (!resolveEntry || typeof children !== 'string') return protectCjkLineBreaks(children);
+  if (!resolveEntry || !onOpenPreview) {
+    return protectCjkLineBreaks(children);
+  }
   return (
     <DictionaryInteractiveText onOpen={onOpenPreview} resolveEntry={resolveEntry}>
       {children}
@@ -72,9 +58,9 @@ export function DictionarySourceResults({
               {source.meanings.map((meaning) => (
                 <li className="dictionary-popover__meaning" key={meaning.id}>
                   {meaning.partOfSpeech ? (
-                    <Badge className="dictionary-popover__part-of-speech" tone="neutral">
+                    <span className="dictionary-popover__part-of-speech">
                       {meaning.partOfSpeech}
-                    </Badge>
+                    </span>
                   ) : null}
                   <div className="dictionary-popover__definition">
                     <InteractiveContent onOpenPreview={onOpenPreview} resolveEntry={resolveEntry}>

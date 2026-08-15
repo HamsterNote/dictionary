@@ -1,8 +1,12 @@
 import { useMemo } from 'react';
 import type { ChineseDictionaryPack } from './chineseDictionaryPack';
+import {
+  type DictionaryGetDetail,
+  type DictionarySearch,
+  search as defaultSearch,
+  getDetail as getDefaultDetail,
+} from './dictionaryData';
 import { HamsterDictionary, type HamsterDictionaryProps } from './HamsterDictionary';
-import { getChineseSourceHref } from './dictionarySources';
-import { lookupChinese, resolveChineseEntry, suggestChineseEntries } from './lookupChinese';
 import { useDictionaryNavigation } from './useDictionaryNavigation';
 
 const EMPTY_DICTIONARY_PACKS: readonly ChineseDictionaryPack[] = [];
@@ -27,17 +31,23 @@ export function ChineseDictionaryPopover({
   ...props
 }: ChineseDictionaryPopoverProps) {
   const navigation = useDictionaryNavigation({ onQueryChange, onSearch, query });
-  const result = useMemo(
-    () => lookupChinese(navigation.committedQuery, dictionaryPacks),
-    [dictionaryPacks, navigation.committedQuery],
+  const providedSearch = props.search;
+  const providedGetDetail = props.getDetail;
+  const search = useMemo<DictionarySearch>(
+    () =>
+      providedSearch ??
+      ((word) => defaultSearch(word, { chineseDictionaryPacks: dictionaryPacks })),
+    [dictionaryPacks, providedSearch],
   );
-  const suggestions = useMemo(
-    () => suggestChineseEntries(query, dictionaryPacks),
-    [dictionaryPacks, query],
+  const getDetail = useMemo<DictionaryGetDetail>(
+    () =>
+      providedGetDetail ??
+      ((word) => getDefaultDetail(word, { chineseDictionaryPacks: dictionaryPacks })),
+    [dictionaryPacks, providedGetDetail],
   );
-  const resolveEntry = useMemo(
-    () => (word: string) => resolveChineseEntry(word, dictionaryPacks),
-    [dictionaryPacks],
+  const detail = useMemo(
+    () => getDetail(navigation.committedQuery),
+    [getDetail, navigation.committedQuery],
   );
 
   return (
@@ -51,32 +61,16 @@ export function ChineseDictionaryPopover({
           ? '请先加载一个中文词库，再查询汉字或成语。'
           : '没有找到精确释义，请换一个汉字或成语再试。')
       }
-      meanings={result.status === 'found' ? result.meanings : []}
+      getDetail={getDetail}
       {...(onQueryChange ? { onQueryChange: navigation.onQueryChange } : {})}
       onSearch={navigation.search}
-      {...(result.status === 'found' && result.phonetic ? { phonetic: result.phonetic } : {})}
       query={query}
-      resolveEntry={resolveEntry}
+      search={search}
       searchLabel={searchLabel}
       searchPlaceholder={searchPlaceholder}
-      sources={
-        sources ??
-        (result.status === 'found'
-          ? [
-              {
-                ...(getChineseSourceHref(result.sourceId) === undefined
-                  ? {}
-                  : { href: getChineseSourceHref(result.sourceId) }),
-                id: result.sourceId,
-                label: result.sourceLabel,
-                meanings: result.meanings,
-              },
-            ]
-          : [])
-      }
+      {...(sources ? { sources } : {})}
       showGuide={navigation.committedQuery.length === 0}
-      suggestions={suggestions}
-      word={result.status === 'found' ? result.word : navigation.committedQuery || '仓鼠词典'}
+      word={detail?.word ?? (navigation.committedQuery || '仓鼠词典')}
     />
   );
 }

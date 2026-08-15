@@ -3,18 +3,19 @@ import { Icon } from '@hamster-note/components/icon';
 import { Popover } from '@hamster-note/components/popover';
 import type { CSSProperties, HTMLAttributes, ReactNode, Ref } from 'react';
 import { useCallback, useId, useRef, useState } from 'react';
+import { DictionaryContent } from './DictionaryContent';
 import { DictionarySearch } from './DictionarySearch';
-import {
-  type DictionaryMeaning,
-  type DictionarySource,
-  DictionarySourceResults,
-} from './DictionarySourceResults';
 import { DictionaryWordPreview } from './DictionaryWordPreview';
-import { PronunciationButton } from './PronunciationButton';
+import type {
+  DictionaryGetDetail,
+  DictionaryMeaning,
+  DictionarySearch as DictionarySearchFunction,
+  DictionarySource,
+} from './dictionaryData';
 import type { DictionaryEntrySummary } from './dictionaryEntrySummary';
 import { type DictionaryPosition, usePopoverDrag } from './usePopoverDrag';
 
-export type { DictionaryMeaning, DictionarySource } from './DictionarySourceResults';
+export type { DictionaryMeaning, DictionarySource } from './dictionaryData';
 export type { DictionaryPosition } from './usePopoverDrag';
 
 export interface HamsterDictionaryProps extends Omit<HTMLAttributes<HTMLElement>, 'title'> {
@@ -23,7 +24,8 @@ export interface HamsterDictionaryProps extends Omit<HTMLAttributes<HTMLElement>
   readonly emptyMessage?: ReactNode;
   readonly maxHeight?: number;
   readonly maxWidth?: number;
-  readonly meanings: readonly DictionaryMeaning[];
+  readonly getDetail?: DictionaryGetDetail;
+  readonly meanings?: readonly DictionaryMeaning[];
   readonly onBack?: () => void;
   readonly onClose?: () => void;
   readonly onForward?: () => void;
@@ -39,6 +41,7 @@ export interface HamsterDictionaryProps extends Omit<HTMLAttributes<HTMLElement>
   readonly ref?: Ref<HTMLElement>;
   readonly searchLabel?: string;
   readonly searchPlaceholder?: string;
+  readonly search?: DictionarySearchFunction;
   readonly showGuide?: boolean;
   readonly resolveEntry?: (word: string) => DictionaryEntrySummary | undefined;
   readonly sources?: readonly DictionarySource[];
@@ -59,6 +62,7 @@ export function HamsterDictionary({
   ),
   maxHeight,
   maxWidth,
+  getDetail,
   meanings,
   onBack,
   onClose,
@@ -76,10 +80,11 @@ export function HamsterDictionary({
   role = 'complementary',
   searchLabel = '搜索英文单词',
   searchPlaceholder = '请输入字或词',
+  search,
   showGuide = false,
   sources,
   style,
-  suggestions = [],
+  suggestions,
   word,
   ...props
 }: HamsterDictionaryProps) {
@@ -98,6 +103,7 @@ export function HamsterDictionary({
   >(undefined);
   const isControlled = position !== undefined;
   const currentPosition = position ?? uncontrolledPosition;
+  const resolvedSuggestions = suggestions ?? (query === undefined ? [] : (search?.(query) ?? []));
   usePopoverDrag({
     enabled: open,
     onPositionChange: (nextPosition) => {
@@ -199,23 +205,9 @@ export function HamsterDictionary({
           onSearch={onSearch}
           placeholder={searchPlaceholder}
           query={query}
-          suggestions={suggestions}
+          suggestions={resolvedSuggestions}
         />
       )}
-      <header className="dictionary-popover__header">
-        <div>
-          <h2 className="dictionary-popover__word" id={headingId}>
-            {word}
-          </h2>
-          {phonetic ? (
-            <div className="dictionary-popover__pronunciation-row">
-              <p className="dictionary-popover__phonetic">{phonetic}</p>
-              {pronounce ? <PronunciationButton pronounce={pronounce} word={word} /> : null}
-            </div>
-          ) : null}
-        </div>
-      </header>
-
       {preview ? (
         <DictionaryWordPreview
           anchor={preview.anchor}
@@ -230,46 +222,22 @@ export function HamsterDictionary({
         />
       ) : null}
 
-      <div className="dictionary-popover__results" id={`${headingId}-results`}>
-        <span
-          aria-atomic="true"
-          aria-live="polite"
-          className="dictionary-popover__status"
-          role="status"
-        >
-          {showGuide
-            ? '仓鼠词典已就绪'
-            : meanings.length === 0
-              ? '没有找到释义'
-              : `找到 ${String(meanings.length)} 条释义`}
-        </span>
-        {showGuide ? (
-          <div className="dictionary-popover__guide">
-            <p>
-              输入想了解的词，在候选中
-              <span className="dictionary-popover__nowrap">查看读音和基本含义</span>。
-            </p>
-            <ol>
-              <li>点击候选词，或按回车打开完整词条</li>
-              <li>点击释义中的可用词汇，快速查看迷你解释</li>
-              <li>
-                使用放大按钮打开词条，
-                <span className="dictionary-popover__nowrap">标题栏可前进或后退</span>
-              </li>
-            </ol>
-          </div>
-        ) : meanings.length === 0 ? (
-          <p className="dictionary-popover__empty">{emptyMessage}</p>
-        ) : (
-          <DictionarySourceResults
-            onOpenPreview={(entry, anchor) => {
-              setPreview({ anchor, entry });
-            }}
-            resolveEntry={resolveEntry}
-            sources={sources ?? [{ id: 'dictionary', label: '词典', meanings }]}
-          />
-        )}
-      </div>
+      <DictionaryContent
+        emptyMessage={emptyMessage}
+        headingId={headingId}
+        keyword={word}
+        {...(getDetail ? { getDetail } : {})}
+        {...(meanings ? { meanings } : {})}
+        onOpenPreview={(entry, anchor) => {
+          setPreview({ anchor, entry });
+        }}
+        {...(phonetic ? { phonetic } : {})}
+        {...(pronounce ? { pronounce } : {})}
+        {...(resolveEntry ? { resolveEntry } : {})}
+        {...(search ? { search } : {})}
+        showGuide={showGuide}
+        {...(sources ? { sources } : {})}
+      />
     </Popover>
   );
 }

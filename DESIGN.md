@@ -12,51 +12,54 @@ A quiet reading companion that feels like a small sheet of reference paper float
 
 ## 2. Color
 
-| Role            | Token                         | Light                    | Dark                    | Usage                    |
-| --------------- | ----------------------------- | ------------------------ | ----------------------- | ------------------------ |
-| Surface         | `--dictionary-surface`        | `#ffffff`                | `#292927`               | Popover                  |
-| Surface muted   | `--dictionary-surface-muted`  | `#f3f2ef`                | `#343432`               | Part-of-speech badge     |
-| Text primary    | `--dictionary-text-primary`   | `#242320`                | `#f4f3ef`               | Word and definition      |
-| Text secondary  | `--dictionary-text-secondary` | `#66635f`                | `#b8b5ae`               | Pronunciation and labels |
-| Border          | `--dictionary-border`         | `#dedcd7`                | `#454541`               | Quiet structure          |
-| Accent          | `--dictionary-accent`         | `#146ebe`                | `#62aef0`               | Actions and focus        |
-| Accent soft     | `--dictionary-accent-soft`    | `#e8f2fb`                | `#223c52`               | Selected option surface  |
-| Accent strong   | `--dictionary-accent-strong`  | `#0c5799`                | `#91c9f7`               | Hover state              |
-| Accent text     | `--dictionary-accent-text`    | `#0c5799`                | `#91c9f7`               | High-contrast small text |
-| Error           | `--dictionary-error`          | `#b42318`                | `#ffb4ab`               | Recoverable load errors  |
-| Focus           | `--dictionary-focus`          | `#097fe8`                | `#91c9f7`               | Keyboard focus           |
-| Popover shadow  | `--dictionary-shadow-high`    | `rgb(68 62 50 / 14%)`    | `rgb(0 0 0 / 28%)`      | Ambient floating depth   |
-| Popover contact | `--dictionary-shadow-low`     | `rgb(68 62 50 / 8%)`     | `rgb(0 0 0 / 18%)`      | Contact shadow           |
-| Demo canvas     | `--demo-canvas`               | `#f7f6f3`                | `#1f1f1d`               | Demo page                |
-| Demo stage top  | `--demo-stage-from`           | `#f0eee9`                | `#292927`               | Stage gradient           |
-| Demo stage base | `--demo-stage-to`             | `#ebe8e1`                | `#242422`               | Stage gradient           |
-| Demo stage edge | `--demo-stage-border`         | `#e2dfd8`                | `#3c3c39`               | Stage boundary           |
-| Demo document   | `--demo-document`             | `rgb(255 255 255 / 80%)` | `rgb(41 41 39 / 82%)`   | Context sheet            |
-| Document edge   | `--demo-document-border`      | `rgb(222 220 215 / 88%)` | `#454541`               | Context sheet boundary   |
-| Document text   | `--demo-document-text`        | `#55524d`                | `#d6d3cc`               | Context prose            |
-| Demo label      | `--demo-label`                | `#8a8781`                | `#8a8781`               | Context sheet label      |
-| Demo highlight  | `--demo-highlight`            | `#dcebf7`                | `#29465d`               | Selected source word     |
-| Accent glow     | `--demo-popover-glow`         | `rgb(20 110 190 / 10%)`  | `rgb(98 174 240 / 14%)` | Stage emphasis           |
-| Document shadow | `--demo-document-shadow`      | `rgb(68 62 50 / 7%)`     | `rgb(0 0 0 / 18%)`      | Context sheet depth      |
-| Trigger shadow  | `--demo-trigger-shadow`       | `rgb(20 110 190 / 22%)`  | `rgb(0 0 0 / 28%)`      | Primary action depth     |
-| On accent       | `--demo-on-accent`            | `#ffffff`                | `#242320`               | Primary button text      |
+| Role            | Token                         | Light                    | Dark                    | Usage                            |
+| --------------- | ----------------------------- | ------------------------ | ----------------------- | -------------------------------- |
+| Surface         | `--dictionary-surface`        | `#ffffff`                | `#292927`               | Popover                          |
+| Surface muted   | `--dictionary-surface-muted`  | `#f3f2ef`                | `#343432`               | Quiet supporting surface         |
+| Text primary    | `--dictionary-text-primary`   | `#242320`                | `#f4f3ef`               | Word and definition              |
+| Text secondary  | `--dictionary-text-secondary` | `#66635f`                | `#b8b5ae`               | Pronunciation and labels         |
+| Border          | `--dictionary-border`         | `#dedcd7`                | `#454541`               | Quiet structure                  |
+| Accent          | `--dictionary-accent`         | `#146ebe`                | `#62aef0`               | Actions and focus                |
+| Accent soft     | `--dictionary-accent-soft`    | `#e8f2fb`                | `#223c52`               | Selected option surface          |
+| Accent strong   | `--dictionary-accent-strong`  | `#0c5799`                | `#91c9f7`               | Hover state                      |
+| Accent text     | `--dictionary-accent-text`    | `#0c5799`                | `#91c9f7`               | High-contrast small text         |
+| Part of speech  | `--dictionary-part-of-speech` | `#0c5799`                | `#91c9f7`               | Reference-faithful meaning label |
+| Error           | `--dictionary-error`          | `#b42318`                | `#ffb4ab`               | Recoverable load errors          |
+| Focus           | `--dictionary-focus`          | `#097fe8`                | `#91c9f7`               | Keyboard focus                   |
+| Popover shadow  | `--dictionary-shadow-high`    | `rgb(68 62 50 / 14%)`    | `rgb(0 0 0 / 28%)`      | Ambient floating depth           |
+| Popover contact | `--dictionary-shadow-low`     | `rgb(68 62 50 / 8%)`     | `rgb(0 0 0 / 18%)`      | Contact shadow                   |
+| Demo canvas     | `--demo-canvas`               | `#f7f6f3`                | `#1f1f1d`               | Demo page                        |
+| Demo stage top  | `--demo-stage-from`           | `#f0eee9`                | `#292927`               | Stage gradient                   |
+| Demo stage base | `--demo-stage-to`             | `#ebe8e1`                | `#242422`               | Stage gradient                   |
+| Demo stage edge | `--demo-stage-border`         | `#e2dfd8`                | `#3c3c39`               | Stage boundary                   |
+| Demo document   | `--demo-document`             | `rgb(255 255 255 / 80%)` | `rgb(41 41 39 / 82%)`   | Context sheet                    |
+| Document edge   | `--demo-document-border`      | `rgb(222 220 215 / 88%)` | `#454541`               | Context sheet boundary           |
+| Document text   | `--demo-document-text`        | `#55524d`                | `#d6d3cc`               | Context prose                    |
+| Demo label      | `--demo-label`                | `#8a8781`                | `#8a8781`               | Context sheet label              |
+| Demo highlight  | `--demo-highlight`            | `#dcebf7`                | `#29465d`               | Selected source word             |
+| Accent glow     | `--demo-popover-glow`         | `rgb(20 110 190 / 10%)`  | `rgb(98 174 240 / 14%)` | Stage emphasis                   |
+| Document shadow | `--demo-document-shadow`      | `rgb(68 62 50 / 7%)`     | `rgb(0 0 0 / 18%)`      | Context sheet depth              |
+| Trigger shadow  | `--demo-trigger-shadow`       | `rgb(20 110 190 / 22%)`  | `rgb(0 0 0 / 28%)`      | Primary action depth             |
+| On accent       | `--demo-on-accent`            | `#ffffff`                | `#242320`               | Primary button text              |
 
 Accent is reserved for interactive controls and focus. The Demo derives accent, soft, strong, focus, and high-contrast text roles from the selected components theme preset. `--dictionary-accent-text` mixes the selected accent toward primary text and must retain at least 4.5:1 contrast wherever accent appears as small text, a focus indicator, a selected border, or a solid action surface paired with `--demo-on-accent`. Decorative swatches alone retain the unmodified preset color. New colors must be added here before use.
 
 ## 3. Typography
 
-| Level      | Size      | Weight | Line height | Tracking   | Usage                   |
-| ---------- | --------- | ------ | ----------- | ---------- | ----------------------- |
-| Display    | `40px`    | 700    | 1.1         | `-0.03em`  | Demo heading            |
-| Hero       | `40–58px` | 700    | 1.06        | `-0.045em` | Responsive Demo heading |
-| Word       | `28px`    | 700    | 1.2         | `-0.02em`  | Dictionary headword     |
-| Body       | `16px`    | 400    | 1.6         | normal     | Definition              |
-| Body small | `14px`    | 400    | 1.5         | normal     | Demo guidance           |
-| Caption    | `12px`    | 600    | 1.4         | `0.04em`   | Labels and badges       |
-| Eyebrow    | `12px`    | 700    | 1.4         | `0.08em`   | Demo section labels     |
+| Level          | Size      | Weight | Line height | Tracking   | Usage                        |
+| -------------- | --------- | ------ | ----------- | ---------- | ---------------------------- |
+| Display        | `40px`    | 700    | 1.1         | `-0.03em`  | Demo heading                 |
+| Hero           | `40–58px` | 700    | 1.06        | `-0.045em` | Responsive Demo heading      |
+| Word           | `28px`    | 700    | 1.2         | `-0.02em`  | Dictionary headword          |
+| Body           | `16px`    | 400    | 1.6         | normal     | Definition                   |
+| Body small     | `14px`    | 400    | 1.5         | normal     | Demo guidance                |
+| Caption        | `12px`    | 600    | 1.4         | `0.04em`   | Labels and badges            |
+| Part of speech | `12px`    | 400    | 1.4         | normal     | Georgia italic meaning label |
+| Eyebrow        | `12px`    | 700    | 1.4         | `0.08em`   | Demo section labels          |
 
 - Primary: `ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif`
 - Phonetic: `ui-monospace, "SFMono-Regular", Consolas, monospace`
+- Part of speech: `Georgia, "Times New Roman", serif`, italic, fixed strong-accent text, without a pill surface or decorative dot; definitions follow at `3px`.
 
 ## 4. Spacing & Layout
 
@@ -67,6 +70,7 @@ The base unit is `4px`. Component spacing uses `4, 8, 12, 16, 20, 24, 32, 48, 64
 - License explanation max width: `--demo-license-popover-max-width` (`320px`).
 - Panel radius: `--demo-panel-radius` (`12px`); compact control radius: `--demo-control-radius` (`10px`).
 - Popover width: fluid from the viewport edge up to `380px`.
+- Meaning rows use an exact `13.3333px` vertical gap (two-thirds of the former `20px` rhythm) and an `18px` muted circular counter badge with a `9px` text gap.
 - Breakpoints: compact layout below `900px`, with tighter mobile sizing below `560px`.
 - The Demo uses one editorial text column and one live component stage; it collapses to one column on mobile. At every breakpoint, the stage reserves the viewport-height popover plus its anchor offset so the popover's bottom edge remains inside the stage and its internal scroll area stays reachable.
 
@@ -97,6 +101,12 @@ The base unit is `4px`. Component spacing uses `4, 8, 12, 16, 20, 24, 32, 48, 64
 - **Vocabulary packs**: 中考、高考、CET-4、CET-6、考研、IELTS、TOEFL、GRE and BNC are separate package entry points. Exam packs contain words carrying the matching upstream-native ECDICT tag; BNC contains entries with a positive British National Corpus rank ordered from most frequent to least frequent. Every pack excludes the core, packs may overlap one another, and runtime lookup deduplicates by normalized headword.
 - **Size boundary**: the root library budgets about 211 kB gzip and contains no Chinese snapshot. The 40,470-entry BNC complement, 3,500-entry common-character dictionary, and 45,705-headword Xinhua/idiom dictionary are isolated package entries. Optional packs are loaded only after explicit import, and the Demo reports an approximate gzip total for the root entry and enabled data snapshots rather than a built JavaScript chunk size.
 - **Positioning**: the demo anchors the popover from its top edge so definition-height changes move the bottom edge instead of shifting the search controls.
+
+### Dictionary Content
+
+- **Structure**: `DictionaryContent` renders only the keyword, phonetic text, definitions, examples, and source labels. It has no search field, window controls, surface background, border, shadow, or width and height limits.
+- **Reuse**: `HamsterDictionary` owns the window chrome and reuses `DictionaryContent` for everything below the search field. Standalone consumers pass `keyword`, `textColor`, and `themeColor`; loaded meanings and sources remain typed data rather than preformatted HTML.
+- **Interaction**: standalone content is selectable plain text by default. Inline word previews are enabled only when both `resolveEntry` and `onOpenPreview` are supplied by a host such as the main dictionary window.
 
 ### Pronunciation Control
 
