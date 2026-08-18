@@ -1,52 +1,33 @@
 import { Button } from '@hamster-note/components/button';
 import { Icon } from '@hamster-note/components/icon';
 import { Popover } from '@hamster-note/components/popover';
-import type { CSSProperties, HTMLAttributes, ReactNode, Ref } from 'react';
+import type { CSSProperties, HTMLAttributes, Ref } from 'react';
 import { useCallback, useId, useRef, useState } from 'react';
-import { DictionaryContent } from './DictionaryContent';
-import { DictionarySearch } from './DictionarySearch';
-import { DictionaryWordPreview } from './DictionaryWordPreview';
-import type {
-  DictionaryGetDetail,
-  DictionaryMeaning,
-  DictionarySearch as DictionarySearchFunction,
-  DictionarySource,
-} from './dictionaryData';
-import type { DictionaryEntrySummary } from './dictionaryEntrySummary';
+import {
+  DictionarySearchContent,
+  type DictionarySearchContentProps,
+} from './DictionarySearchContent';
 import { type DictionaryPosition, usePopoverDrag } from './usePopoverDrag';
 
 export type { DictionaryMeaning, DictionarySource } from './dictionaryData';
 export type { DictionaryPosition } from './usePopoverDrag';
 
-export interface HamsterDictionaryProps extends Omit<HTMLAttributes<HTMLElement>, 'title'> {
+export interface HamsterDictionaryProps
+  extends
+    Omit<HTMLAttributes<HTMLElement>, 'title'>,
+    Omit<DictionarySearchContentProps, 'headingId'> {
   /** 非受控模式下窗口的初始位置；未提供时从 {x:0, y:0} 开始。 */
   readonly defaultPosition?: DictionaryPosition;
-  readonly emptyMessage?: ReactNode;
   readonly maxHeight?: number;
   readonly maxWidth?: number;
-  readonly getDetail?: DictionaryGetDetail;
-  readonly meanings?: readonly DictionaryMeaning[];
   readonly onBack?: () => void;
   readonly onClose?: () => void;
   readonly onForward?: () => void;
   readonly onPositionChange?: (position: DictionaryPosition) => void;
-  readonly onQueryChange?: (query: string) => void;
-  readonly onSearch?: (query: string) => void;
   readonly open: boolean;
-  readonly phonetic?: string;
   /** 受控位置；提供后窗口位置完全由外部 state 驱动。 */
   readonly position?: DictionaryPosition;
-  readonly pronounce?: (word: string) => Promise<void>;
-  readonly query?: string;
   readonly ref?: Ref<HTMLElement>;
-  readonly searchLabel?: string;
-  readonly searchPlaceholder?: string;
-  readonly search?: DictionarySearchFunction;
-  readonly showGuide?: boolean;
-  readonly resolveEntry?: (word: string) => DictionaryEntrySummary | undefined;
-  readonly sources?: readonly DictionarySource[];
-  readonly suggestions?: readonly DictionaryEntrySummary[];
-  readonly word: string;
 }
 
 export function HamsterDictionary({
@@ -54,12 +35,7 @@ export function HamsterDictionary({
   'aria-labelledby': ariaLabelledBy,
   className,
   defaultPosition,
-  emptyMessage = (
-    <>
-      没有找到精确释义。<span className="dictionary-popover__nowrap">请检查拼写</span>
-      ，或换一个词再试。
-    </>
-  ),
+  emptyMessage,
   maxHeight,
   maxWidth,
   getDetail,
@@ -78,8 +54,8 @@ export function HamsterDictionary({
   ref,
   resolveEntry,
   role = 'complementary',
-  searchLabel = '搜索英文单词',
-  searchPlaceholder = '请输入字或词',
+  searchLabel,
+  searchPlaceholder,
   search,
   showGuide = false,
   sources,
@@ -94,16 +70,8 @@ export function HamsterDictionary({
   const [uncontrolledPosition, setUncontrolledPosition] = useState<DictionaryPosition>(
     defaultPosition ?? { x: 0, y: 0 },
   );
-  const [preview, setPreview] = useState<
-    | {
-        readonly anchor: HTMLButtonElement;
-        readonly entry: DictionaryEntrySummary;
-      }
-    | undefined
-  >(undefined);
   const isControlled = position !== undefined;
   const currentPosition = position ?? uncontrolledPosition;
-  const resolvedSuggestions = suggestions ?? (query === undefined ? [] : (search?.(query) ?? []));
   usePopoverDrag({
     enabled: open,
     onPositionChange: (nextPosition) => {
@@ -198,45 +166,24 @@ export function HamsterDictionary({
           <Icon aria-hidden="true" name="close" />
         </Button>
       ) : null}
-      {query === undefined ? null : (
-        <DictionarySearch
-          label={searchLabel}
-          onQueryChange={onQueryChange}
-          onSearch={onSearch}
-          placeholder={searchPlaceholder}
-          query={query}
-          suggestions={resolvedSuggestions}
-        />
-      )}
-      {preview ? (
-        <DictionaryWordPreview
-          anchor={preview.anchor}
-          entry={preview.entry}
-          onClose={() => {
-            setPreview(undefined);
-          }}
-          onExpand={(nextWord) => {
-            setPreview(undefined);
-            onSearch?.(nextWord);
-          }}
-        />
-      ) : null}
-
-      <DictionaryContent
-        emptyMessage={emptyMessage}
-        headingId={headingId}
-        keyword={word}
+      <DictionarySearchContent
+        {...(emptyMessage === undefined ? {} : { emptyMessage })}
         {...(getDetail ? { getDetail } : {})}
+        headingId={headingId}
         {...(meanings ? { meanings } : {})}
-        onOpenPreview={(entry, anchor) => {
-          setPreview({ anchor, entry });
-        }}
+        {...(onQueryChange ? { onQueryChange } : {})}
+        {...(onSearch ? { onSearch } : {})}
         {...(phonetic ? { phonetic } : {})}
         {...(pronounce ? { pronounce } : {})}
+        {...(query === undefined ? {} : { query })}
         {...(resolveEntry ? { resolveEntry } : {})}
         {...(search ? { search } : {})}
+        {...(searchLabel === undefined ? {} : { searchLabel })}
+        {...(searchPlaceholder === undefined ? {} : { searchPlaceholder })}
         showGuide={showGuide}
         {...(sources ? { sources } : {})}
+        {...(suggestions === undefined ? {} : { suggestions })}
+        word={word}
       />
     </Popover>
   );

@@ -5,6 +5,8 @@ export type { DictionaryContentProps } from './DictionaryContent';
 export { DictionaryContent } from './DictionaryContent';
 export type { DictionaryPopoverProps } from './DictionaryPopover';
 export { DictionaryPopover } from './DictionaryPopover';
+export type { DictionarySearchContentProps } from './DictionarySearchContent';
+export { DictionarySearchContent } from './DictionarySearchContent';
 export type {
   DictionaryDetail,
   DictionaryDetailOptions,
