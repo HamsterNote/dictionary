@@ -154,6 +154,22 @@ try {
   // SSR 下不渲染模态弹窗内容。
   assert.doesNotMatch(markup, /dictionary-correction__panel/u);
 
+  // Given 仅音标被纠错；When 渲染 DictionaryContent；Then “已纠错”紧跟音标且不再出现“当前单词已纠错”。
+  const phoneticOnlyMarkup = renderToStaticMarkup(
+    createElement(DictionaryContent, {
+      corrections: {
+        onChange: () => undefined,
+        user: { note: { phonetic: '/nəut/' } },
+      },
+      keyword: 'note',
+    }),
+  );
+  assert.match(
+    phoneticOnlyMarkup,
+    /dictionary-popover__phonetic">\/nəut\/<\/p><button aria-haspopup="dialog" class="dictionary-correction-details__summary"[^>]*>已纠错<\/button>/u,
+  );
+  assert.doesNotMatch(phoneticOnlyMarkup, /当前单词已纠错/u);
+
   // Given 宿主禁用纠错；When 渲染；Then 不显示纠错入口且内容保持原样。
   const disabledMarkup = renderToStaticMarkup(
     createElement(DictionaryContent, {
