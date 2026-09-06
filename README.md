@@ -101,13 +101,13 @@ import { HamsterDictionaryPopover } from '@hamster-note/dictionary';
 }
 ```
 
-展示时逐字段应用 **用户补丁 > 系统补丁 > 词典原文**（字段级合并：用户只改音标时，其余字段仍可来自系统补丁）；查找、搜索候选、导航历史与来源命中始终使用原始词头，纠错拼写只影响显示。保存音标修改会与既有用户补丁合并，保留已存储的 `word`/`meaning` 字段。已纠错的词条在来源分组上方出现“当前单词已纠错”按钮，点击后打开模态弹窗，逐字段列出原始值与纠错内容及其来源（我的纠错 / 系统纠错）。纠错覆盖主窗词头、音标与首条释义、搜索候选、行内迷你预览与 `HamsterDictionaryPopover`，包括宿主通过 `meanings`/`sources` 提供的自定义数据。
+展示时逐字段应用 **用户补丁 > 系统补丁 > 词典原文**（字段级合并：用户只改音标时，其余字段仍可来自系统补丁）；查找、搜索候选、导航历史与来源命中始终使用原始词头，纠错拼写只影响显示。保存音标修改会与既有用户补丁合并，保留已存储的 `word`/`meaning` 字段。音标被纠错的词条在音标后显示可点击的“已纠错”，其余字段被纠错时在来源分组上方显示“当前单词已纠错”，点击后打开模态弹窗，逐字段列出原始值与纠错内容及其来源（我的纠错 / 系统纠错）。纠错覆盖主窗词头、音标与首条释义、搜索候选、行内迷你预览与 `HamsterDictionaryPopover`，包括宿主通过 `meanings`/`sources` 提供的自定义数据。
 
 持久化与宿主集成：
 
 - **默认（非受控）**：不传 `corrections` 时，补丁写入当前浏览器 profile 的 `localStorage`（键 `hamster-dictionary-corrections/v1`），同一页面的多个词典实例实时同步；SSR 渲染不读取任何用户状态。组件没有账号或跨设备同步体系；`localStorage` 的作用域是当前设备与浏览器 profile。若需要按用户、按设备或跨设备隔离/共享，请用下面的托管模式自行控制作用域。
 - **宿主托管**：传入 `corrections={{ user, system, onChange, disabled }}` 完全接管数据。`user`/`system` 为上述 JSON 形状（键可先用 `normalizeDictionaryCorrectionKey` 规范化，拉丁词头按 `en-US` 小写、中文不大小写折叠）；`onChange(originalWord, patch | null)` 在保存或清除时回调，抛错即视为失败；`disabled: true` 停用纠错入口并暂停所有补丁。
-- **系统补丁**：包内导出 `SYSTEM_DICTIONARY_CORRECTIONS`，数据本体是随包分发的 `dictionarySystemCorrections.json`。当前没有已核实并获批的词库勘误，注册表为空；后续条目须逐条注明来源并评审。
+- **系统补丁**：包内导出 `SYSTEM_DICTIONARY_CORRECTIONS`，数据本体是随包分发的 `dictionarySystemCorrections.json`。当前收录已核实的勘误（如 `curiosity` 音标）；填写方式见 `src/data/SYSTEM_CORRECTIONS.md`，后续条目须逐条注明来源并评审。
 - **自定义存储**：`createDictionaryCorrectionStore(storage)` 可把纠错表落到任意实现 `getItem`/`setItem` 的存储；`createLocalDictionaryCorrectionStore()` 是默认的 localStorage 实现。
 
 ```tsx
