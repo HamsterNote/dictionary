@@ -1,6 +1,7 @@
 import type { CSSProperties, HTMLAttributes, ReactNode } from 'react';
 import { useCallback, useId, useState } from 'react';
 import { DictionaryContentCorrection } from './DictionaryContentCorrection';
+import { DictionaryCorrectionDetailsButton } from './DictionaryCorrectionDetailsButton';
 import { DictionarySourceResults } from './DictionarySourceResults';
 import {
   type DictionaryGetDetail,
@@ -164,6 +165,12 @@ export function DictionaryContent({
           {resolvedContent.phonetic ? (
             <div className="dictionary-popover__pronunciation-row">
               <p className="dictionary-popover__phonetic">{resolvedContent.phonetic}</p>
+              <DictionaryCorrectionDetailsButton
+                changes={resolvedContent.changes.filter((change) => change.field === 'phonetic')}
+                key={activeKeyword}
+                themeStyle={contentStyle}
+                word={resolvedContent.word}
+              />
               {pronounce ? (
                 <PronunciationButton pronounce={pronounce} word={activeKeyword} />
               ) : null}
@@ -204,7 +211,7 @@ export function DictionaryContent({
           <p className="dictionary-popover__empty">{emptyMessage}</p>
         ) : (
           <DictionarySourceResults
-            changes={resolvedContent.changes}
+            changes={resolvedContent.changes.filter((change) => change.field !== 'phonetic')}
             onOpenPreview={openPreview}
             resolveEntry={interactiveResolver}
             sources={

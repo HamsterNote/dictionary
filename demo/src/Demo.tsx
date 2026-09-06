@@ -14,6 +14,8 @@ import {
 import type { KokoroPronouncer } from '../../src/kokoro';
 import { useDictionaryNavigation } from '../../src/useDictionaryNavigation';
 import { CopyrightNoticeDownload } from './CopyrightNoticeDownload';
+import { CorrectionLists } from './CorrectionLists';
+import { useDemoCorrections } from './useDemoCorrections';
 import { DICTIONARY_PACK_GROUPS } from './dictionaryPacks';
 import { createDictionaryView } from './dictionaryView';
 import { FeatureOptions } from './FeatureOptions';
@@ -26,6 +28,7 @@ const BASE_LIBRARY_OVERHEAD_GZIP_BYTES = 12_000;
 const HAN_CHARACTER_PATTERN = /\p{Script=Han}/u;
 
 export function Demo() {
+  const corrections = useDemoCorrections();
   const [isOpen, setIsOpen] = useState(true);
   const [isPronunciationEnabled, setIsPronunciationEnabled] = useState(false);
   const [query, setQuery] = useState('');
@@ -216,6 +219,7 @@ export function Demo() {
               独立文字内容
             </p>
             <DictionaryContent
+              corrections={corrections.control}
               getDetail={getDetail}
               keyword="note"
               search={search}
@@ -237,6 +241,14 @@ export function Demo() {
             pronunciationEnabled={isPronunciationEnabled}
           />
           <ThemeColorSettings accent={themeAccent} onAccentChange={setThemeAccent} />
+          <CorrectionLists
+            system={corrections.control.system}
+            user={corrections.control.user}
+            onRemoveSystem={corrections.removeSystem}
+            onRemoveUser={corrections.removeUser}
+            onRestoreSystem={corrections.restoreSystem}
+            removedCount={corrections.removedCount}
+          />
           <CopyrightNoticeDownload
             activeIds={dictionaryPacks.activeIds}
             isSelectionPending={dictionaryPacks.loadingIds.size > 0}
@@ -249,7 +261,11 @@ export function Demo() {
             <p>
               Capture each useful <mark>note</mark> before the context disappears. Small
               observations become{' '}
-              <HamsterDictionaryPopover entry={inlineDemoEntry} onExpand={openInlineWord}>
+              <HamsterDictionaryPopover
+                corrections={corrections.control}
+                entry={inlineDemoEntry}
+                onExpand={openInlineWord}
+              >
                 durable
               </HamsterDictionaryPopover>{' '}
               knowledge when they stay close to the work.
@@ -258,6 +274,7 @@ export function Demo() {
 
           <div className="demo-popover-slot">
             <HamsterDictionary
+              corrections={corrections.control}
               emptyMessage={dictionaryView.emptyMessage}
               getDetail={getDetail}
               {...(navigation.canGoBack ? { onBack: navigation.goBack } : {})}

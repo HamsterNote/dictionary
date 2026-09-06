@@ -372,6 +372,7 @@
 
 .dictionary-popover__pronunciation-row {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   gap: 4px;
   margin-top: 4px;
@@ -857,34 +858,31 @@
 
 .dictionary-popover__correction-trigger {
   flex: 0 0 auto;
-  color: var(--dictionary-accent);
-  font-size: 12px;
-  font-weight: 600;
-  line-height: 1.4;
 }
 
+.dictionary-popover__correction-trigger,
 .dictionary-correction-details__summary {
   display: inline-flex;
   align-items: center;
-  min-height: 32px;
-  padding: 0 10px;
-  color: var(--dictionary-accent-text);
+  padding: 0;
+  color: var(--dictionary-accent);
   font: inherit;
   font-size: 12px;
   font-weight: 600;
   line-height: 1.5;
   cursor: pointer;
-  background: var(--dictionary-surface-muted);
-  border: 1px solid var(--dictionary-border);
-  border-radius: 8px;
+  background: transparent;
+  border: 0;
+  border-radius: 0;
 }
 
+.dictionary-popover__correction-trigger:hover,
 .dictionary-correction-details__summary:hover {
   color: var(--dictionary-accent-strong);
-  background: var(--dictionary-accent-soft);
-  border-color: var(--dictionary-accent-soft);
+  text-decoration: underline;
 }
 
+.dictionary-popover__correction-trigger:focus-visible,
 .dictionary-correction-details__summary:focus-visible {
   outline: 2px solid var(--dictionary-focus);
   outline-offset: 2px;

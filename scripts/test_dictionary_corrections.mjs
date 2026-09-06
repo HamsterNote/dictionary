@@ -134,8 +134,8 @@ try {
   // Given 默认本地存储工厂；When 在非浏览器环境创建；Then 明确抛出而不是静默共享状态。
   assert.throws(() => createLocalDictionaryCorrectionStore(), ReferenceError);
 
-  // Given 随包系统纠错表；Then 当前为空且形状合法。
-  assert.deepEqual(SYSTEM_DICTIONARY_CORRECTIONS, {});
+  // Given 已确认的 curiosity 勘误；When 加载随包系统纠错表；Then 保留指定音标。
+  assert.deepEqual(SYSTEM_DICTIONARY_CORRECTIONS.curiosity, { phonetic: "/.kjuәri'ɒsəti/" });
 
   // Given 纠错后的详情；When 渲染 DictionaryContent；Then 词头展示纠错拼写并出现详情弹窗按钮。
   const markup = renderToStaticMarkup(

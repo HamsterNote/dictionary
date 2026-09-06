@@ -1,6 +1,5 @@
-import { useState } from 'react';
 import type { CSSProperties } from 'react';
-import { DictionaryCorrectionDetailsDialog } from './DictionaryCorrectionDetailsDialog';
+import { DictionaryCorrectionDetailsButton } from './DictionaryCorrectionDetailsButton';
 import { DictionaryInteractiveText } from './DictionaryInteractiveText';
 import type { DictionarySource } from './dictionaryData';
 import type { DictionaryCorrectedField } from './dictionaryCorrections';
@@ -45,32 +44,15 @@ export function DictionarySourceResults({
   themeStyle,
   word = '',
 }: DictionarySourceResultsProps) {
-  const [isDetailsOpen, setIsDetailsOpen] = useState(false);
   return (
     <div className="dictionary-popover__sources">
-      {changes.length > 0 ? (
-        <>
-          <button
-            aria-haspopup="dialog"
-            className="dictionary-correction-details__summary"
-            onClick={() => {
-              setIsDetailsOpen(true);
-            }}
-            type="button"
-          >
-            当前单词已纠错
-          </button>
-          <DictionaryCorrectionDetailsDialog
-            changes={changes}
-            onClose={() => {
-              setIsDetailsOpen(false);
-            }}
-            open={isDetailsOpen}
-            themeStyle={themeStyle}
-            word={word}
-          />
-        </>
-      ) : null}
+      <DictionaryCorrectionDetailsButton
+        changes={changes}
+        key={word}
+        label="当前单词已纠错"
+        themeStyle={themeStyle}
+        word={word}
+      />
       {sources.map((source) => (
         <section className="dictionary-popover__source-group" key={source.id}>
           <h3 className="dictionary-popover__source-heading">
