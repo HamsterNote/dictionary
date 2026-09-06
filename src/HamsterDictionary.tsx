@@ -34,6 +34,7 @@ export function HamsterDictionary({
   'aria-label': ariaLabel,
   'aria-labelledby': ariaLabelledBy,
   className,
+  corrections,
   defaultPosition,
   emptyMessage,
   maxHeight,
@@ -167,6 +168,7 @@ export function HamsterDictionary({
         </Button>
       ) : null}
       <DictionarySearchContent
+        {...(corrections === undefined ? {} : { corrections })}
         {...(emptyMessage === undefined ? {} : { emptyMessage })}
         {...(getDetail ? { getDetail } : {})}
         headingId={headingId}

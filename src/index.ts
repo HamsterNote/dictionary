@@ -58,6 +58,49 @@ export type { DictionaryPosition, HamsterDictionaryProps } from './HamsterDictio
 export { HamsterDictionary } from './HamsterDictionary';
 export type { HamsterDictionaryPopoverProps } from './HamsterDictionaryPopover';
 export { HamsterDictionaryPopover } from './HamsterDictionaryPopover';
+export type { DictionaryCorrectionDetailsDialogProps } from './DictionaryCorrectionDetailsDialog';
+export { DictionaryCorrectionDetailsDialog } from './DictionaryCorrectionDetailsDialog';
+export type { DictionaryCorrectionDialogProps } from './DictionaryCorrectionDialog';
+export { DictionaryCorrectionDialog } from './DictionaryCorrectionDialog';
+export type { DictionaryModalDialogProps } from './DictionaryModalDialog';
+export { DictionaryModalDialog } from './DictionaryModalDialog';
+export {
+  applyDictionaryCorrectionToDetail,
+  applyDictionaryCorrectionToSummary,
+  createDictionaryCorrectedDetail,
+} from './dictionaryCorrectionApply';
+export {
+  createDictionaryCorrectionStore,
+  createLocalDictionaryCorrectionStore,
+} from './dictionaryCorrectionStore';
+export { getDictionaryCorrectionViews } from './dictionaryCorrectionViews';
+export {
+  createDictionaryCorrectionPatch,
+  DICTIONARY_CORRECTION_FIELDS,
+  DICTIONARY_CORRECTION_STORAGE_KEY,
+  isDictionaryCorrectionPatchEmpty,
+  mergeDictionaryPhoneticCorrection,
+  normalizeDictionaryCorrectionKey,
+  resolveDictionaryCorrection,
+  sanitizeDictionaryCorrectionMap,
+  sanitizeDictionaryCorrectionPatch,
+} from './dictionaryCorrections';
+export type {
+  DictionaryCorrectedDetail,
+  DictionaryCorrectedField,
+  DictionaryCorrectedSummary,
+  DictionaryCorrectionField,
+  DictionaryCorrectionFieldValues,
+  DictionaryCorrectionFieldViews,
+  DictionaryCorrectionMap,
+  DictionaryCorrectionPatch,
+  DictionaryCorrectionsControl,
+  DictionaryCorrectionStore,
+  DictionaryCorrectionViewConfig,
+  DictionaryCorrectionViews,
+  ResolvedDictionaryCorrection,
+  ResolvedDictionaryCorrectionsControl,
+} from './dictionaryCorrections';
 export type { ChineseLookupResult, ChineseMeaning } from './lookupChinese';
 export {
   countChineseEntries,
@@ -84,3 +127,9 @@ export {
 } from './lookupEnglishChinese';
 export type { DictionaryCandidateSearchOptions } from './searchDictionaryCandidates';
 export { searchDictionaryCandidates } from './searchDictionaryCandidates';
+export { SYSTEM_DICTIONARY_CORRECTIONS } from './systemDictionaryCorrections';
+export type { DictionaryCorrectionsManager } from './useDictionaryCorrections';
+export {
+  resolveDictionaryCorrectionsControl,
+  useDictionaryCorrections,
+} from './useDictionaryCorrections';

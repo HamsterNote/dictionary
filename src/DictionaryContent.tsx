@@ -1,5 +1,6 @@
 import type { CSSProperties, HTMLAttributes, ReactNode } from 'react';
-import { useCallback, useId, useMemo, useState } from 'react';
+import { useCallback, useId, useState } from 'react';
+import { DictionaryContentCorrection } from './DictionaryContentCorrection';
 import { DictionarySourceResults } from './DictionarySourceResults';
 import {
   type DictionaryGetDetail,
@@ -9,8 +10,14 @@ import {
   getDetail as defaultGetDetail,
   search as defaultSearch,
 } from './dictionaryData';
+import type {
+  DictionaryCorrectionsControl,
+  ResolvedDictionaryCorrectionsControl,
+} from './dictionaryCorrections';
 import type { DictionaryEntrySummary } from './dictionaryEntrySummary';
 import { PronunciationButton } from './PronunciationButton';
+import { useDictionaryCorrectedContent } from './useDictionaryCorrectedContent';
+import { useDictionaryCorrections } from './useDictionaryCorrections';
 
 interface DictionaryContentStyle extends CSSProperties {
   readonly '--dictionary-accent'?: string;
@@ -23,6 +30,7 @@ interface DictionaryContentStyle extends CSSProperties {
 }
 
 export interface DictionaryContentProps extends Omit<HTMLAttributes<HTMLElement>, 'color'> {
+  readonly corrections?: DictionaryCorrectionsControl;
   readonly emptyMessage?: ReactNode;
   readonly getDetail?: DictionaryGetDetail;
   readonly headingId?: string;
@@ -32,6 +40,7 @@ export interface DictionaryContentProps extends Omit<HTMLAttributes<HTMLElement>
   readonly phonetic?: string;
   readonly pronounce?: (word: string) => Promise<void>;
   readonly resolveEntry?: (word: string) => DictionaryEntrySummary | undefined;
+  readonly resolvedCorrections?: ResolvedDictionaryCorrectionsControl;
   readonly search?: DictionarySearch;
   readonly showGuide?: boolean;
   readonly sources?: readonly DictionarySource[];
@@ -41,6 +50,7 @@ export interface DictionaryContentProps extends Omit<HTMLAttributes<HTMLElement>
 
 export function DictionaryContent({
   className,
+  corrections,
   emptyMessage = (
     <>
       没有找到精确释义。<span className="dictionary-popover__nowrap">请检查拼写</span>
@@ -56,6 +66,7 @@ export function DictionaryContent({
   phonetic: providedPhonetic,
   pronounce,
   resolveEntry,
+  resolvedCorrections,
   search = defaultSearch,
   showGuide = false,
   sources: providedSources,
@@ -71,15 +82,23 @@ export function DictionaryContent({
     setSelection({ activeKeyword: keyword, propKeyword: keyword });
   }
   const activeKeyword = selection.propKeyword === keyword ? selection.activeKeyword : keyword;
-  const resolvedContent = useMemo(() => {
-    const detail = providedMeanings === undefined ? getDetail(activeKeyword) : undefined;
-    const detailMeanings = detail?.sources.flatMap((source) => source.meanings) ?? [];
-    return {
-      meanings: providedMeanings ?? detailMeanings,
-      phonetic: providedPhonetic ?? detail?.phonetic,
-      sources: providedSources ?? (providedMeanings === undefined ? detail?.sources : undefined),
-    };
-  }, [activeKeyword, getDetail, providedMeanings, providedPhonetic, providedSources]);
+  const correctionStore = useDictionaryCorrections(corrections);
+  const effectiveCorrections = resolvedCorrections ?? {
+    disabled: correctionStore.disabled,
+    editable: correctionStore.editable,
+    managed: correctionStore.managed,
+    onChange: correctionStore.onChange,
+    system: correctionStore.system,
+    user: correctionStore.user,
+  };
+  const resolvedContent = useDictionaryCorrectedContent({
+    activeKeyword,
+    corrections: effectiveCorrections,
+    getDetail,
+    providedMeanings,
+    providedPhonetic,
+    providedSources,
+  });
   const searchEntry = useCallback(
     (word: string) => {
       const normalizedWord = word.trim().normalize('NFKC').toLocaleLowerCase('en-US');
@@ -129,9 +148,19 @@ export function DictionaryContent({
     >
       <header className="dictionary-popover__header">
         <div>
-          <h2 className="dictionary-popover__word" id={headingId}>
-            {activeKeyword}
-          </h2>
+          <div className="dictionary-popover__headword-row">
+            <h2 className="dictionary-popover__word" id={headingId}>
+              {resolvedContent.word}
+            </h2>
+            <DictionaryContentCorrection
+              activeKeyword={activeKeyword}
+              corrections={effectiveCorrections}
+              originalPhonetic={resolvedContent.originalPhonetic}
+              phonetic={resolvedContent.phonetic ?? ''}
+              store={correctionStore}
+              themeStyle={contentStyle}
+            />
+          </div>
           {resolvedContent.phonetic ? (
             <div className="dictionary-popover__pronunciation-row">
               <p className="dictionary-popover__phonetic">{resolvedContent.phonetic}</p>
@@ -175,6 +204,7 @@ export function DictionaryContent({
           <p className="dictionary-popover__empty">{emptyMessage}</p>
         ) : (
           <DictionarySourceResults
+            changes={resolvedContent.changes}
             onOpenPreview={openPreview}
             resolveEntry={interactiveResolver}
             sources={
@@ -182,6 +212,8 @@ export function DictionaryContent({
                 { id: 'dictionary', label: '词典', meanings: resolvedContent.meanings },
               ]
             }
+            themeStyle={contentStyle}
+            word={resolvedContent.word}
           />
         )}
       </div>

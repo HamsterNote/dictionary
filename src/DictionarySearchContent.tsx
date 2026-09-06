@@ -9,9 +9,13 @@ import type {
   DictionarySearch as DictionarySearchFunction,
   DictionarySource,
 } from './dictionaryData';
+import type { DictionaryCorrectionsControl } from './dictionaryCorrections';
+import { applyDictionaryCorrectionToSummary } from './dictionaryCorrectionApply';
 import type { DictionaryEntrySummary } from './dictionaryEntrySummary';
+import { useDictionaryCorrections } from './useDictionaryCorrections';
 
 export interface DictionarySearchContentProps {
+  readonly corrections?: DictionaryCorrectionsControl;
   readonly emptyMessage?: ReactNode;
   readonly getDetail?: DictionaryGetDetail;
   readonly headingId?: string;
@@ -32,6 +36,7 @@ export interface DictionarySearchContentProps {
 }
 
 export function DictionarySearchContent({
+  corrections,
   emptyMessage,
   getDetail,
   headingId,
@@ -54,15 +59,18 @@ export function DictionarySearchContent({
     | {
         readonly anchor: HTMLButtonElement;
         readonly entry: DictionaryEntrySummary;
+        readonly originalWord: string;
       }
     | undefined
   >(undefined);
+  const resolvedCorrections = useDictionaryCorrections(corrections);
   const resolvedSuggestions = suggestions ?? (query === undefined ? [] : (search?.(query) ?? []));
 
   return (
     <>
       {query === undefined ? null : (
         <DictionarySearch
+          corrections={resolvedCorrections}
           label={searchLabel}
           onQueryChange={onQueryChange}
           onSearch={onSearch}
@@ -74,29 +82,32 @@ export function DictionarySearchContent({
       {preview ? (
         <DictionaryWordPreview
           anchor={preview.anchor}
-          entry={preview.entry}
+          entry={applyDictionaryCorrectionToSummary(preview.entry, resolvedCorrections).summary}
           onClose={() => {
             setPreview(undefined);
           }}
-          onExpand={(nextWord) => {
+          onExpand={() => {
             setPreview(undefined);
-            onSearch?.(nextWord);
+            onSearch?.(preview.originalWord);
           }}
+          originalWord={preview.originalWord}
         />
       ) : null}
 
       <DictionaryContent
+        {...(corrections === undefined ? {} : { corrections })}
         {...(emptyMessage === undefined ? {} : { emptyMessage })}
         {...(getDetail ? { getDetail } : {})}
         {...(headingId ? { headingId } : {})}
         keyword={word}
         {...(meanings ? { meanings } : {})}
         onOpenPreview={(entry, anchor) => {
-          setPreview({ anchor, entry });
+          setPreview({ anchor, entry, originalWord: entry.word });
         }}
         {...(phonetic ? { phonetic } : {})}
         {...(pronounce ? { pronounce } : {})}
         {...(resolveEntry ? { resolveEntry } : {})}
+        resolvedCorrections={resolvedCorrections}
         {...(search ? { search } : {})}
         showGuide={showGuide}
         {...(sources ? { sources } : {})}

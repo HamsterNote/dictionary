@@ -14,6 +14,8 @@ interface DictionaryWordPreviewProps {
   readonly onExpand: (word: string) => void;
   readonly onPointerEnter?: (event: ReactPointerEvent<HTMLDivElement>) => void;
   readonly onPointerLeave?: (event: ReactPointerEvent<HTMLDivElement>) => void;
+  /** 词条纠错前的原始词头；展开与查找始终使用它。 */
+  readonly originalWord?: string;
   readonly showExpandButton?: boolean;
 }
 
@@ -25,6 +27,7 @@ export function DictionaryWordPreview({
   onExpand,
   onPointerEnter,
   onPointerLeave,
+  originalWord,
   showExpandButton = true,
 }: DictionaryWordPreviewProps) {
   const headingId = useId();
@@ -81,11 +84,11 @@ export function DictionaryWordPreview({
         </div>
         {showExpandButton ? (
           <Button
-            aria-label={`在主窗口打开 ${entry.word}`}
+            aria-label={`在主窗口打开 ${originalWord ?? entry.word}`}
             className="dictionary-word-preview__expand"
             ghost
             onClick={() => {
-              onExpand(entry.word);
+              onExpand(originalWord ?? entry.word);
             }}
             size="small"
             title="放大到主窗口"

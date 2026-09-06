@@ -2,9 +2,12 @@ import { Button } from '@hamster-note/components/button';
 import { Icon } from '@hamster-note/components/icon';
 import { TextField } from '@hamster-note/components/text-field';
 import { useId, useRef, useState } from 'react';
+import type { ResolvedDictionaryCorrectionsControl } from './dictionaryCorrections';
+import { applyDictionaryCorrectionToSummary } from './dictionaryCorrectionApply';
 import type { DictionaryEntrySummary } from './dictionaryEntrySummary';
 
 interface DictionarySearchProps {
+  readonly corrections?: ResolvedDictionaryCorrectionsControl;
   readonly label: string;
   readonly onQueryChange: ((query: string) => void) | undefined;
   readonly onSearch: ((query: string) => void) | undefined;
@@ -14,6 +17,7 @@ interface DictionarySearchProps {
 }
 
 export function DictionarySearch({
+  corrections,
   label,
   onQueryChange,
   onSearch,
@@ -27,21 +31,32 @@ export function DictionarySearch({
   const [activeIndex, setActiveIndex] = useState(-1);
   const [isExpanded, setIsExpanded] = useState(false);
   const canExpand = query.trim().length > 0 && suggestions.length > 0;
+  const displaySuggestions =
+    corrections === undefined
+      ? suggestions.map((suggestion) => ({
+          entry: suggestion,
+          originalWord: suggestion.word,
+        }))
+      : suggestions.map((suggestion) => {
+          const corrected = applyDictionaryCorrectionToSummary(suggestion, corrections);
+          return { entry: corrected.summary, originalWord: corrected.originalWord };
+        });
 
   const focusQueryInput = (): void => {
     const input = formRef.current?.elements.namedItem('dictionary-query');
     if (input instanceof HTMLInputElement) input.focus();
   };
 
-  const selectSuggestion = (suggestion: DictionaryEntrySummary): void => {
-    onSearch?.(suggestion.word);
+  const selectSuggestion = (suggestion: { originalWord: string }): void => {
+    // 提交始终使用原始词头：查找、导航与历史不感知纠错后的拼写。
+    onSearch?.(suggestion.originalWord);
     setActiveIndex(-1);
     setIsExpanded(false);
     focusQueryInput();
   };
 
   const activeSuggestion =
-    isExpanded && canExpand && activeIndex >= 0 ? suggestions[activeIndex] : undefined;
+    isExpanded && canExpand && activeIndex >= 0 ? displaySuggestions[activeIndex] : undefined;
 
   return (
     <search className="dictionary-popover__search-region">
@@ -95,9 +110,9 @@ export function DictionarySearch({
             if (!canExpand) return;
             setActiveIndex((currentIndex) => {
               if (event.key === 'ArrowDown') {
-                return currentIndex >= suggestions.length - 1 ? 0 : currentIndex + 1;
+                return currentIndex >= displaySuggestions.length - 1 ? 0 : currentIndex + 1;
               }
-              return currentIndex <= 0 ? suggestions.length - 1 : currentIndex - 1;
+              return currentIndex <= 0 ? displaySuggestions.length - 1 : currentIndex - 1;
             });
           }}
           placeholder={placeholder}
@@ -132,12 +147,12 @@ export function DictionarySearch({
           role="listbox"
           tabIndex={-1}
         >
-          {suggestions.map((suggestion, index) => (
+          {displaySuggestions.map((suggestion, index) => (
             <Button
               aria-selected={index === activeIndex}
               className="dictionary-popover__suggestion"
               id={`${listboxId}-${String(index)}`}
-              key={suggestion.word}
+              key={suggestion.originalWord}
               ghost
               onPointerDown={(event) => {
                 event.preventDefault();
@@ -149,14 +164,14 @@ export function DictionarySearch({
               size="small"
               tabIndex={-1}
             >
-              <span className="dictionary-popover__suggestion-word">{suggestion.word}</span>
-              {suggestion.phonetic ? (
+              <span className="dictionary-popover__suggestion-word">{suggestion.entry.word}</span>
+              {suggestion.entry.phonetic ? (
                 <span className="dictionary-popover__suggestion-phonetic">
-                  {suggestion.phonetic}
+                  {suggestion.entry.phonetic}
                 </span>
               ) : null}
               <span className="dictionary-popover__suggestion-definition">
-                {suggestion.definition}
+                {suggestion.entry.definition}
               </span>
             </Button>
           ))}
