@@ -5,6 +5,7 @@ import { useId, useRef, useState } from 'react';
 import type { ResolvedDictionaryCorrectionsControl } from './dictionaryCorrections';
 import { applyDictionaryCorrectionToSummary } from './dictionaryCorrectionApply';
 import type { DictionaryEntrySummary } from './dictionaryEntrySummary';
+import { formatDictionaryPhonetic } from './formatDictionaryPhonetic';
 
 interface DictionarySearchProps {
   readonly corrections?: ResolvedDictionaryCorrectionsControl;
@@ -167,7 +168,7 @@ export function DictionarySearch({
               <span className="dictionary-popover__suggestion-word">{suggestion.entry.word}</span>
               {suggestion.entry.phonetic ? (
                 <span className="dictionary-popover__suggestion-phonetic">
-                  {suggestion.entry.phonetic}
+                  {formatDictionaryPhonetic(suggestion.originalWord, suggestion.entry.phonetic)}
                 </span>
               ) : null}
               <span className="dictionary-popover__suggestion-definition">

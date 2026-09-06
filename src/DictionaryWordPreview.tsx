@@ -5,6 +5,7 @@ import { useCallback, useEffect, useId, useRef } from 'react';
 import type { PointerEvent as ReactPointerEvent } from 'react';
 import type { DictionaryEntrySummary } from './dictionaryEntrySummary';
 import { protectCjkLineBreaks } from './protectCjkLineBreaks';
+import { formatDictionaryPhonetic } from './formatDictionaryPhonetic';
 
 interface DictionaryWordPreviewProps {
   readonly anchor: HTMLElement;
@@ -80,7 +81,9 @@ export function DictionaryWordPreview({
       <div className="dictionary-word-preview__heading">
         <div>
           <h3 id={headingId}>{entry.word}</h3>
-          {entry.phonetic ? <p>{entry.phonetic}</p> : null}
+          {entry.phonetic ? (
+            <p>{formatDictionaryPhonetic(originalWord ?? entry.word, entry.phonetic)}</p>
+          ) : null}
         </div>
         {showExpandButton ? (
           <Button

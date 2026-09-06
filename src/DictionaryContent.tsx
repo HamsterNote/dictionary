@@ -18,6 +18,7 @@ import type {
 import { resolveDictionaryCorrection } from './dictionaryCorrections';
 import type { DictionaryEntrySummary } from './dictionaryEntrySummary';
 import { PronunciationButton } from './PronunciationButton';
+import { formatDictionaryPhonetic } from './formatDictionaryPhonetic';
 import { useDictionaryCorrectedContent } from './useDictionaryCorrectedContent';
 import { useDictionaryCorrections } from './useDictionaryCorrections';
 
@@ -179,7 +180,9 @@ export function DictionaryContent({
           </div>
           {resolvedContent.phonetic ? (
             <div className="dictionary-popover__pronunciation-row">
-              <p className="dictionary-popover__phonetic">{resolvedContent.phonetic}</p>
+              <p className="dictionary-popover__phonetic">
+                {formatDictionaryPhonetic(activeKeyword, resolvedContent.phonetic)}
+              </p>
               <DictionaryCorrectionDetailsButton
                 changes={resolvedContent.changes.filter((change) => change.field === 'phonetic')}
                 key={activeKeyword}

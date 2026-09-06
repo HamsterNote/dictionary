@@ -166,7 +166,7 @@ try {
   );
   assert.match(
     phoneticOnlyMarkup,
-    /dictionary-popover__phonetic">\/nəut\/<\/p><button aria-haspopup="dialog" class="dictionary-correction-details__summary"[^>]*>已纠错<\/button>/u,
+    /dictionary-popover__phonetic">英：\/nəut\/<\/p><button aria-haspopup="dialog" class="dictionary-correction-details__summary"[^>]*>已纠错<\/button>/u,
   );
   assert.doesNotMatch(phoneticOnlyMarkup, /当前单词已纠错/u);
 
