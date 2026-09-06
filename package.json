@@ -1,6 +1,6 @@
 {
   "name": "@hamster-note/dictionary",
-  "version": "0.1.0",
+  "version": "0.1.1-beta.2",
   "description": "仓鼠笔记的 React 词典悬浮窗组件",
   "type": "module",
   "license": "MIT",
@@ -221,6 +221,7 @@
     "generate:inflections": "uv run scripts/generate_ecdict_inflections.py",
     "generate:synonyms": "uv run scripts/generate_wordnet_synonyms.py",
     "generate:roots": "uv run scripts/generate_unimorph_roots.py",
+    "audit:pronunciations": "node scripts/audit_ecdict_pronunciations.mjs --write",
     "test:chinese": "python3 scripts/test_generate_chinese_dictionaries.py",
     "test:examples": "python3 scripts/test_generate_oanc_examples.py",
     "test:inflections": "python3 scripts/test_generate_ecdict_inflections.py",
@@ -229,6 +230,10 @@
     "test:roots": "python3 scripts/test_generate_unimorph_roots.py",
     "test:result-sources": "node scripts/test_english_result_sources.mjs",
     "test:chinese-suggestions": "node scripts/test_chinese_suggestions.mjs",
+    "test:dictionary-candidates": "node scripts/test_dictionary_candidates.mjs",
+    "test:dictionary-data": "node scripts/test_dictionary_data.mjs",
+    "test:dictionary-corrections": "node scripts/test_dictionary_corrections.mjs && node scripts/test_dictionary_correction_details.mjs",
+    "test:pronunciation-audit": "node scripts/test_dictionary_pronunciation_audit.mjs",
     "clean": "rm -rf dist demo-dist",
     "preview": "vite preview --config vite.demo.config.ts",
     "typecheck": "tsc -b --pretty false",
@@ -236,7 +241,7 @@
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "prepack": "yarn build:package",
-    "check": "yarn test:chinese && yarn test:examples && yarn test:inflections && yarn test:synonyms && yarn test:roots && yarn test:result-sources && yarn test:chinese-suggestions && yarn test:kokoro && yarn format:check && yarn lint && yarn typecheck && yarn build"
+    "check": "yarn test:chinese && yarn test:examples && yarn test:inflections && yarn test:synonyms && yarn test:roots && yarn test:result-sources && yarn test:chinese-suggestions && yarn test:dictionary-candidates && yarn test:dictionary-data && yarn test:dictionary-corrections && yarn test:pronunciation-audit && yarn test:kokoro && yarn format:check && yarn lint && yarn typecheck && yarn build"
   },
   "peerDependencies": {
     "react": ">=19.0.0 <20.0.0",

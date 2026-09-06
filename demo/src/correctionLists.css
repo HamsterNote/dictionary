@@ -1,0 +1,73 @@
+.correction-lists {
+  margin-top: 24px;
+  max-width: var(--demo-panel-max-width);
+  padding: 16px;
+  color: var(--dictionary-text-primary);
+  background: var(--dictionary-surface);
+  border: 1px solid var(--dictionary-border);
+  border-radius: var(--demo-panel-radius);
+  overflow-wrap: anywhere;
+}
+
+.correction-lists h2,
+.correction-lists h3 {
+  margin: 0 0 8px;
+  font-size: 14px;
+}
+
+.correction-lists section {
+  margin-top: 20px;
+}
+.correction-lists p,
+.correction-lists dl {
+  margin: 8px 0;
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--dictionary-text-secondary);
+}
+.correction-lists ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.correction-lists li {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 12px;
+  align-items: start;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--dictionary-border);
+}
+.correction-lists dl {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 4px 8px;
+}
+.correction-lists dd {
+  margin: 0;
+  white-space: pre-wrap;
+}
+.correction-lists button {
+  min-height: 44px;
+  padding: 8px 12px;
+  color: var(--dictionary-accent-text);
+  background: var(--dictionary-surface-muted);
+  border: 1px solid var(--dictionary-border);
+  border-radius: var(--demo-control-radius);
+  font: inherit;
+  font-size: 12px;
+  cursor: pointer;
+}
+.correction-lists button:hover {
+  background: var(--dictionary-accent-soft);
+}
+.correction-lists button:focus-visible {
+  outline: 2px solid var(--dictionary-focus);
+  outline-offset: 2px;
+}
+.correction-lists [role='alert'] {
+  color: var(--dictionary-error);
+}
+.correction-lists [role='status']:empty {
+  margin: 0;
+}
