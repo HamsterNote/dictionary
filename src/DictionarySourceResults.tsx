@@ -8,6 +8,7 @@ import { protectCjkLineBreaks } from './protectCjkLineBreaks';
 
 interface DictionarySourceResultsProps {
   readonly changes?: readonly DictionaryCorrectedField[];
+  readonly onDeleteCorrection?: (() => void) | undefined;
   readonly onOpenPreview:
     ((entry: DictionaryEntrySummary, anchor: HTMLButtonElement) => void) | undefined;
   readonly resolveEntry: ((word: string) => DictionaryEntrySummary | undefined) | undefined;
@@ -38,6 +39,7 @@ function InteractiveContent({
 
 export function DictionarySourceResults({
   changes = [],
+  onDeleteCorrection,
   onOpenPreview,
   resolveEntry,
   sources,
@@ -50,6 +52,7 @@ export function DictionarySourceResults({
         changes={changes}
         key={word}
         label="当前单词已纠错"
+        onDelete={onDeleteCorrection}
         themeStyle={themeStyle}
         word={word}
       />

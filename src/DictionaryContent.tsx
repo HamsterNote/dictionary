@@ -1,5 +1,5 @@
 import type { CSSProperties, HTMLAttributes, ReactNode } from 'react';
-import { useCallback, useId, useState } from 'react';
+import { useCallback, useId, useRef, useState } from 'react';
 import { DictionaryContentCorrection } from './DictionaryContentCorrection';
 import { DictionaryCorrectionDetailsButton } from './DictionaryCorrectionDetailsButton';
 import { DictionarySourceResults } from './DictionarySourceResults';
@@ -15,6 +15,7 @@ import type {
   DictionaryCorrectionsControl,
   ResolvedDictionaryCorrectionsControl,
 } from './dictionaryCorrections';
+import { resolveDictionaryCorrection } from './dictionaryCorrections';
 import type { DictionaryEntrySummary } from './dictionaryEntrySummary';
 import { PronunciationButton } from './PronunciationButton';
 import { useDictionaryCorrectedContent } from './useDictionaryCorrectedContent';
@@ -77,6 +78,7 @@ export function DictionaryContent({
   ...props
 }: DictionaryContentProps) {
   const generatedId = useId();
+  const correctionTriggerRef = useRef<HTMLButtonElement>(null);
   const headingId = providedHeadingId ?? generatedId;
   const [selection, setSelection] = useState({ activeKeyword: keyword, propKeyword: keyword });
   if (selection.propKeyword !== keyword) {
@@ -119,6 +121,18 @@ export function DictionaryContent({
         setSelection({ activeKeyword: entry.word, propKeyword: keyword });
       }
     });
+  const userCorrection = resolveDictionaryCorrection(activeKeyword, {
+    user: correctionStore.user,
+  });
+  const deleteUserCorrection =
+    correctionStore.editable && userCorrection !== undefined
+      ? () => {
+          correctionStore.reset(activeKeyword);
+          requestAnimationFrame(() => {
+            correctionTriggerRef.current?.focus();
+          });
+        }
+      : undefined;
   const contentClassName = className ? `dictionary-content ${className}` : 'dictionary-content';
   const contentStyle: DictionaryContentStyle = {
     ...style,
@@ -160,6 +174,7 @@ export function DictionaryContent({
               phonetic={resolvedContent.phonetic ?? ''}
               store={correctionStore}
               themeStyle={contentStyle}
+              triggerRef={correctionTriggerRef}
             />
           </div>
           {resolvedContent.phonetic ? (
@@ -168,6 +183,7 @@ export function DictionaryContent({
               <DictionaryCorrectionDetailsButton
                 changes={resolvedContent.changes.filter((change) => change.field === 'phonetic')}
                 key={activeKeyword}
+                onDelete={deleteUserCorrection}
                 themeStyle={contentStyle}
                 word={resolvedContent.word}
               />
@@ -212,6 +228,7 @@ export function DictionaryContent({
         ) : (
           <DictionarySourceResults
             changes={resolvedContent.changes.filter((change) => change.field !== 'phonetic')}
+            onDeleteCorrection={deleteUserCorrection}
             onOpenPreview={openPreview}
             resolveEntry={interactiveResolver}
             sources={

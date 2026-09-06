@@ -1,4 +1,6 @@
+import { Button } from '@hamster-note/components/button';
 import type { CSSProperties } from 'react';
+import { useState } from 'react';
 import { DictionaryModalDialog } from './DictionaryModalDialog';
 import type { DictionaryCorrectedField } from './dictionaryCorrections';
 
@@ -19,29 +21,42 @@ const DESCRIPTION_ID = 'dictionary-correction-details-description';
 export interface DictionaryCorrectionDetailsDialogProps {
   readonly changes: readonly DictionaryCorrectedField[];
   readonly onClose: () => void;
+  readonly onDelete?: (() => void) | undefined;
   readonly open: boolean;
   /** 宿主实例的主题变量（Portal 继承配色）。 */
   readonly themeStyle?: CSSProperties | undefined;
   readonly word: string;
 }
 
-export function DictionaryCorrectionDetailsDialog({
+interface DictionaryCorrectionDetailsContentProps {
+  readonly changes: readonly DictionaryCorrectedField[];
+  readonly onClose: () => void;
+  readonly onDelete?: (() => void) | undefined;
+}
+
+export function DictionaryCorrectionDetailsContent({
   changes,
   onClose,
-  open,
-  themeStyle,
-  word,
-}: DictionaryCorrectionDetailsDialogProps) {
+  onDelete,
+}: DictionaryCorrectionDetailsContentProps) {
+  const [errorMessage, setErrorMessage] = useState<string | undefined>(undefined);
+  const [isDeleting, setIsDeleting] = useState(false);
+
+  const deleteCorrection = (): void => {
+    if (onDelete === undefined || isDeleting) return;
+    setIsDeleting(true);
+    setErrorMessage(undefined);
+    try {
+      onDelete();
+      onClose();
+    } catch (error) {
+      setErrorMessage(error instanceof Error ? error.message : '删除失败，请重试。');
+      setIsDeleting(false);
+    }
+  };
+
   return (
-    <DictionaryModalDialog
-      description="以下字段与词典原始内容不同；查找与导航始终使用原始词头。"
-      descriptionId={DESCRIPTION_ID}
-      onClose={onClose}
-      open={open}
-      themeStyle={themeStyle}
-      title={`${word} 的纠错详情`}
-      titleId={TITLE_ID}
-    >
+    <>
       <dl className="dictionary-correction-details__list">
         {changes.map((change) => (
           <div className="dictionary-correction-details__row" key={change.field}>
@@ -57,6 +72,50 @@ export function DictionaryCorrectionDetailsDialog({
           </div>
         ))}
       </dl>
+      {errorMessage === undefined ? null : (
+        <p className="dictionary-correction__error" role="alert">
+          {errorMessage}
+        </p>
+      )}
+      {onDelete === undefined ? null : (
+        <div className="dictionary-correction__actions">
+          <Button disabled={isDeleting} ghost onClick={deleteCorrection} type="button">
+            {isDeleting ? '删除中…' : '删除纠错'}
+          </Button>
+        </div>
+      )}
+    </>
+  );
+}
+
+export function DictionaryCorrectionDetailsDialog({
+  changes,
+  onClose,
+  onDelete,
+  open,
+  themeStyle,
+  word,
+}: DictionaryCorrectionDetailsDialogProps) {
+  return (
+    <DictionaryModalDialog
+      description={
+        <>
+          以下字段与词典原始内容不同；查找与导航始终使用
+          <span className="dictionary-correction__keep-together">原始词头</span>。
+        </>
+      }
+      descriptionId={DESCRIPTION_ID}
+      onClose={onClose}
+      open={open}
+      themeStyle={themeStyle}
+      title={`${word} 的纠错详情`}
+      titleId={TITLE_ID}
+    >
+      <DictionaryCorrectionDetailsContent
+        changes={changes}
+        onClose={onClose}
+        onDelete={onDelete}
+      />
     </DictionaryModalDialog>
   );
 }

@@ -231,7 +231,7 @@
     "test:chinese-suggestions": "node scripts/test_chinese_suggestions.mjs",
     "test:dictionary-candidates": "node scripts/test_dictionary_candidates.mjs",
     "test:dictionary-data": "node scripts/test_dictionary_data.mjs",
-    "test:dictionary-corrections": "node scripts/test_dictionary_corrections.mjs",
+    "test:dictionary-corrections": "node scripts/test_dictionary_corrections.mjs && node scripts/test_dictionary_correction_details.mjs",
     "clean": "rm -rf dist demo-dist",
     "preview": "vite preview --config vite.demo.config.ts",
     "typecheck": "tsc -b --pretty false",

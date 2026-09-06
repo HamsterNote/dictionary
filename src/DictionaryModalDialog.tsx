@@ -4,7 +4,7 @@ import { createPortal } from 'react-dom';
 
 export interface DictionaryModalDialogProps {
   readonly children: ReactNode;
-  readonly description?: string;
+  readonly description?: ReactNode;
   readonly descriptionId: string;
   readonly onClose: () => void;
   readonly open: boolean;

@@ -1017,6 +1017,10 @@
   line-height: 1.5;
 }
 
+.dictionary-correction__keep-together {
+  white-space: nowrap;
+}
+
 .dictionary-correction__fields {
   display: grid;
   gap: 14px;

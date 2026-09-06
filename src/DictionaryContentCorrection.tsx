@@ -1,5 +1,5 @@
-import { useRef, useState } from 'react';
-import type { CSSProperties } from 'react';
+import { useState } from 'react';
+import type { CSSProperties, RefObject } from 'react';
 import { DictionaryCorrectionDialog } from './DictionaryCorrectionDialog';
 import type { ResolvedDictionaryCorrectionsControl } from './dictionaryCorrections';
 import {
@@ -19,6 +19,7 @@ interface DictionaryContentCorrectionProps {
   readonly store: DictionaryCorrectionsManager;
   /** 宿主实例的主题变量，供 Portal 对话框继承配色。 */
   readonly themeStyle: CSSProperties;
+  readonly triggerRef: RefObject<HTMLButtonElement | null>;
 }
 
 /** 词条头旁的纠错入口与音标编辑对话框。 */
@@ -29,9 +30,9 @@ export function DictionaryContentCorrection({
   phonetic,
   store,
   themeStyle,
+  triggerRef,
 }: DictionaryContentCorrectionProps) {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const triggerRef = useRef<HTMLButtonElement>(null);
   if (corrections.disabled || !corrections.editable) return null;
 
   return (
