@@ -1,4 +1,4 @@
-import type { DictionarySource } from './DictionaryPopover';
+import type { DictionarySource } from './dictionaryData';
 import { ECDICT_SOURCE, OANC_SOURCE, UNIMORPH_SOURCE, WORDNET_SOURCE } from './dictionarySources';
 import { ENGLISH_INFLECTION_LABELS } from './englishInflectionPack';
 import type { EnglishChineseLookupResult } from './lookupEnglishChinese';

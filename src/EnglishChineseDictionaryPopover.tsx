@@ -1,20 +1,19 @@
 import { useMemo } from 'react';
-import { HamsterDictionary, type HamsterDictionaryProps } from './HamsterDictionary';
+import {
+  type DictionaryGetDetail,
+  type DictionarySearch,
+  search as defaultSearch,
+  getDetail as getDefaultDetail,
+} from './dictionaryData';
 import type { EnglishChineseVocabularyPack } from './englishChineseVocabularyPack';
 import type { EnglishExampleSentencePack } from './englishExampleSentencePack';
 import type {
   EnglishInflectionFormsPack,
   EnglishInflectionIndexPack,
 } from './englishInflectionPack';
-import { createEnglishResultSources } from './englishResultSources';
-import type { EnglishSynonymPack } from './englishSynonymPack';
 import type { EnglishRootPack } from './englishRootPack';
-import {
-  findEnglishChineseEntryLabels,
-  lookupEnglishChinese,
-  resolveEnglishChineseEntry,
-  suggestEnglishChineseEntries,
-} from './lookupEnglishChinese';
+import type { EnglishSynonymPack } from './englishSynonymPack';
+import { HamsterDictionary, type HamsterDictionaryProps } from './HamsterDictionary';
 import { useDictionaryNavigation } from './useDictionaryNavigation';
 
 const EMPTY_VOCABULARY_PACKS: readonly EnglishChineseVocabularyPack[] = [];
@@ -51,59 +50,58 @@ export function EnglishChineseDictionaryPopover({
   ...props
 }: EnglishChineseDictionaryPopoverProps) {
   const navigation = useDictionaryNavigation({ onQueryChange, onSearch, query });
-  const result = useMemo(
+  const providedSearch = props.search;
+  const providedGetDetail = props.getDetail;
+  const search = useMemo<DictionarySearch>(
     () =>
-      lookupEnglishChinese(
-        navigation.committedQuery,
-        vocabularyPacks,
-        exampleSentencePacks,
-        synonymPacks,
-        rootPacks,
-        { forms: inflectionFormsPacks, index: inflectionIndexPacks },
-      ),
+      providedSearch ??
+      ((word) =>
+        defaultSearch(word, {
+          englishInflectionIndexPacks: inflectionIndexPacks,
+          englishVocabularyPacks: vocabularyPacks,
+        })),
+    [inflectionIndexPacks, providedSearch, vocabularyPacks],
+  );
+  const getDetail = useMemo<DictionaryGetDetail>(
+    () =>
+      providedGetDetail ??
+      ((word) =>
+        getDefaultDetail(word, {
+          englishExampleSentencePacks: exampleSentencePacks,
+          englishInflectionFormsPacks: inflectionFormsPacks,
+          englishInflectionIndexPacks: inflectionIndexPacks,
+          englishRootPacks: rootPacks,
+          englishSynonymPacks: synonymPacks,
+          englishVocabularyPacks: vocabularyPacks,
+        })),
     [
       exampleSentencePacks,
       inflectionFormsPacks,
       inflectionIndexPacks,
-      navigation.committedQuery,
+      providedGetDetail,
       rootPacks,
       synonymPacks,
       vocabularyPacks,
     ],
   );
-  const suggestions = useMemo(
-    () =>
-      suggestEnglishChineseEntries(query, vocabularyPacks, {
-        inflectionIndexPacks,
-      }),
-    [inflectionIndexPacks, query, vocabularyPacks],
+  const detail = useMemo(
+    () => getDetail(navigation.committedQuery),
+    [getDetail, navigation.committedQuery],
   );
-  const matchingLabels = useMemo(
-    () => findEnglishChineseEntryLabels(navigation.committedQuery, vocabularyPacks),
-    [navigation.committedQuery, vocabularyPacks],
-  ).join(' + ');
-  const resolveEntry = useMemo(
-    () => (word: string) =>
-      resolveEnglishChineseEntry(word, vocabularyPacks, { index: inflectionIndexPacks }),
-    [inflectionIndexPacks, vocabularyPacks],
-  );
-  const resultSources = createEnglishResultSources(result, matchingLabels);
 
   return (
     <HamsterDictionary
       {...props}
       {...(navigation.canGoBack ? { onBack: navigation.goBack } : {})}
       {...(navigation.canGoForward ? { onForward: navigation.goForward } : {})}
-      meanings={result.status === 'found' ? result.meanings : []}
+      getDetail={getDetail}
       {...(onQueryChange ? { onQueryChange: navigation.onQueryChange } : {})}
       onSearch={navigation.search}
-      {...(result.status === 'found' && result.phonetic ? { phonetic: result.phonetic } : {})}
       query={query}
-      resolveEntry={resolveEntry}
-      sources={sources ?? resultSources}
+      search={search}
+      {...(sources ? { sources } : {})}
       showGuide={navigation.committedQuery.length === 0}
-      suggestions={suggestions}
-      word={result.status === 'found' ? result.word : navigation.committedQuery || '仓鼠词典'}
+      word={detail?.word ?? (navigation.committedQuery || '仓鼠词典')}
     />
   );
 }
