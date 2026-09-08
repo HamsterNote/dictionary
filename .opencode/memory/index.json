@@ -1,0 +1,39 @@
+{
+  "schema_version": "1.0",
+  "scope": "project",
+  "updated_at": "2026-09-06T15:31:00+08:00",
+  "categories": [
+    {
+      "id": "workflow",
+      "title": "工作流约束",
+      "description": "本仓库构建、验证与提交操作的非显性约束",
+      "keywords": ["build", "commit", "git", "workflow"],
+      "file": "workflow.md",
+      "memory_count": 2
+    }
+  ],
+  "memories": [
+    {
+      "id": "mem-20260906-avoid-full-build",
+      "title": "避免运行完整 build 脚本",
+      "summary": "完整 yarn build 会清理输出目录；日常验证用 build:lib、build:types 与 test:dictionary-corrections，Demo 端口 9489。",
+      "category": "workflow",
+      "file": "workflow.md",
+      "tags": ["build", "scripts", "workflow"],
+      "importance": "high",
+      "created_at": "2026-09-06T15:31:00+08:00",
+      "updated_at": "2026-09-06T15:31:00+08:00"
+    },
+    {
+      "id": "mem-20260906-git-commit-identity",
+      "title": "提交身份用内联 -c 参数",
+      "summary": "仓库未配置 git 身份；提交时内联 git -c user.name='Z.X' -c user.email='x@z-x.vip'，不改配置文件。",
+      "category": "workflow",
+      "file": "workflow.md",
+      "tags": ["commit", "git", "workflow"],
+      "importance": "normal",
+      "created_at": "2026-09-06T15:31:00+08:00",
+      "updated_at": "2026-09-06T15:31:00+08:00"
+    }
+  ]
+}

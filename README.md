@@ -271,9 +271,12 @@ ECDICT 没有 TEM-4/TEM-8 标签，因此本包不把 GRE 或 CET-6 冒充为专
 yarn generate:dictionary /path/to/ECDICT/ecdict.csv
 yarn generate:inflections /path/to/ECDICT/ecdict.csv
 yarn test:inflections
+yarn generate:phonetics
 ```
 
 脚本固定使用 ECDICT commit `bc015ed2e24a7abef49fc6dbbb7fe32c1dadaf8b`，输出核心、八个 ECDICT 上游原生标签 TSV、BNC 排名 TSV 和类型安全元数据清单。运行环境需要 Python 3.12+ 与 [uv](https://docs.astral.sh/uv/)；生成文件应随源码提交，以便普通安装和构建不依赖网络或 Python。
+
+Wiktionary 音标生成器读取项目本地固定快照 `data_sources/wiktionary/raw-wiktextract-data.jsonl.gz`。先从 `https://kaikki.org/dictionary/raw-wiktextract-data.jsonl.gz` 手工下载该文件，再运行 `yarn generate:phonetics`；快照目录已被 Git 忽略，不得提交。脚本校验固定 SHA-256，并生成与十个 ECDICT 词包逐行对齐的英音/美音 TSV、清单和覆盖率报告；`yarn generate:phonetics --check` 可重渲染并逐字节核对提交产物。该快照来自 2026-08-05 enwiktionary dump，于 2026-08-28 由 `wiktextract@872fc7b` 抽取。
 
 中文生成器同样只接受本地审核快照，并在读取前校验六个 SHA-256。参数依次为 chinese-xinhua 的 `word.json`、`idiom.json`、`ci.json`，以及 chinese-dictionary 的 `char_common_base.json`、`char_common_detail.json`、`word.json`：
 
@@ -331,6 +334,7 @@ yarn test:roots
 | `yarn generate:inflections <ECDICT CSV>`        | 校验并重新生成词形与反向索引懒加载包         |
 | `yarn generate:synonyms <WordNet tar.gz>`       | 校验并重新生成十个英文近义词补充包           |
 | `yarn generate:roots <UniMorph TSV> [CityLex]`  | 校验并重新生成十个英文派生基词补充包         |
+| `yarn generate:phonetics`                       | 校验固定 Wiktionary 快照并生成十个英美音标包 |
 | `yarn test:examples`                            | 运行 OANC 例句生成器夹具测试                 |
 | `yarn test:inflections`                         | 运行 ECDICT 词形生成器夹具测试               |
 | `yarn test:synonyms`                            | 运行 WordNet 近义词生成器夹具测试            |

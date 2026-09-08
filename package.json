@@ -9,7 +9,8 @@
   ],
   "files": [
     "dist",
-    "THIRD_PARTY_NOTICES.md"
+    "THIRD_PARTY_NOTICES.md",
+    "LICENSES"
   ],
   "main": "./dist/index.js",
   "module": "./dist/index.js",
@@ -221,6 +222,7 @@
     "generate:inflections": "uv run scripts/generate_ecdict_inflections.py",
     "generate:synonyms": "uv run scripts/generate_wordnet_synonyms.py",
     "generate:roots": "uv run scripts/generate_unimorph_roots.py",
+    "generate:phonetics": "uv run scripts/generate_wiktionary_phonetics.py",
     "audit:pronunciations": "node scripts/audit_ecdict_pronunciations.mjs --write",
     "test:chinese": "python3 scripts/test_generate_chinese_dictionaries.py",
     "test:examples": "python3 scripts/test_generate_oanc_examples.py",
