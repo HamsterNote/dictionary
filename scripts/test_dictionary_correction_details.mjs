@@ -9,9 +9,7 @@ try {
   const { DictionaryCorrectionDetailsContent } = await server.ssrLoadModule(
     '/src/DictionaryCorrectionDetailsDialog.tsx',
   );
-  const changes = [
-    { after: '/nəʊt/', before: '/noʊt/', field: 'phonetic', origin: 'user' },
-  ];
+  const changes = [{ after: '/nəʊt/', before: '/noʊt/', field: 'phonetic', origin: 'user' }];
 
   // Given an editable user correction; When its detail content is rendered; Then deletion is offered.
   const userMarkup = renderToStaticMarkup(

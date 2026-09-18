@@ -120,10 +120,11 @@ function isPatchRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === 'object' && value !== null && !Array.isArray(value);
 }
 
-function sanitizePatchField(value: unknown): string | undefined {
+function sanitizePatchField(value: unknown, allowEmpty = false): string | undefined {
   if (typeof value !== 'string') return undefined;
   const text = value.trim();
-  if (text.length === 0 || text.length > CORRECTION_FIELD_MAX_LENGTH) return undefined;
+  if ((!allowEmpty && text.length === 0) || text.length > CORRECTION_FIELD_MAX_LENGTH)
+    return undefined;
   return text;
 }
 
@@ -132,7 +133,7 @@ export function sanitizeDictionaryCorrectionPatch(
   patch: DictionaryCorrectionPatch,
 ): DictionaryCorrectionPatch | undefined {
   const word = sanitizePatchField(patch.word);
-  const phonetic = sanitizePatchField(patch.phonetic);
+  const phonetic = sanitizePatchField(patch.phonetic, true);
   const meaning = sanitizePatchField(patch.meaning);
   if (word === undefined && phonetic === undefined && meaning === undefined) return undefined;
   return {
@@ -145,12 +146,15 @@ export function sanitizeDictionaryCorrectionPatch(
 /** 解析外部提供的纠错表（宿主注入或 JSON 文件），丢弃非法键与字段。 */
 export function sanitizeDictionaryCorrectionMap(raw: unknown): DictionaryCorrectionMap {
   if (!isPatchRecord(raw)) return {};
-  const result: Record<string, DictionaryCorrectionPatch> = {};
+  const result: Record<string, DictionaryCorrectionPatch> = Object.create(null) as Record<
+    string,
+    DictionaryCorrectionPatch
+  >;
   for (const [key, value] of Object.entries(raw)) {
     if (key.length === 0 || key.length > CORRECTION_KEY_MAX_LENGTH || !isPatchRecord(value))
       continue;
     const patch = sanitizePatchField(value['word']);
-    const phonetic = sanitizePatchField(value['phonetic']);
+    const phonetic = sanitizePatchField(value['phonetic'], true);
     const meaning = sanitizePatchField(value['meaning']);
     if (patch === undefined && phonetic === undefined && meaning === undefined) continue;
     result[key] = {
@@ -177,10 +181,10 @@ export function resolveDictionaryCorrection(
     map: DictionaryCorrectionMap | undefined,
   ): { key: string; patch: DictionaryCorrectionPatch } | undefined => {
     if (map === undefined) return undefined;
-    const direct = map[word];
+    const direct = Object.hasOwn(map, word) ? map[word] : undefined;
     if (direct !== undefined) return { key: word, patch: direct };
     const key = normalizeDictionaryCorrectionKey(word);
-    const normalized = map[key];
+    const normalized = Object.hasOwn(map, key) ? map[key] : undefined;
     return normalized === undefined ? undefined : { key, patch: normalized };
   };
   const userMatch = matchPatch(corrections.user);
@@ -224,7 +228,7 @@ export function isDictionaryCorrectionPatchEmpty(patch: DictionaryCorrectionPatc
 
 /**
  * 音标纠错专用的保存合并：本期界面只允许修改音标。
- * `nextPhonetic` 与词典原值相同（或为空）时丢弃该字段；
+ * `nextPhonetic` 与词典原值相同时丢弃该字段；清空非空原值时保留空字符串；
  * 其余用户字段（word/meaning）原样保留，全部为空的补丁返回 null 表示删除。
  */
 export function mergeDictionaryPhoneticCorrection(

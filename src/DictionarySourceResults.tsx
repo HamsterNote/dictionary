@@ -1,4 +1,4 @@
-import type { CSSProperties } from 'react';
+import type { CSSProperties, ReactNode } from 'react';
 import { DictionaryCorrectionDetailsButton } from './DictionaryCorrectionDetailsButton';
 import { DictionaryInteractiveText } from './DictionaryInteractiveText';
 import type { DictionarySource } from './dictionaryData';
@@ -22,11 +22,12 @@ function InteractiveContent({
   onOpenPreview,
   resolveEntry,
 }: {
-  readonly children: string;
+  readonly children: ReactNode;
   readonly onOpenPreview:
     ((entry: DictionaryEntrySummary, anchor: HTMLButtonElement) => void) | undefined;
   readonly resolveEntry: ((word: string) => DictionaryEntrySummary | undefined) | undefined;
 }) {
+  if (typeof children !== 'string') return children;
   if (!resolveEntry || !onOpenPreview) {
     return protectCjkLineBreaks(children);
   }

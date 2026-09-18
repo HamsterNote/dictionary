@@ -12,6 +12,7 @@ try {
     normalizeDictionaryCorrectionKey,
     resolveDictionaryCorrection,
     sanitizeDictionaryCorrectionMap,
+    sanitizeDictionaryCorrectionPatch,
   } = await server.ssrLoadModule('/src/dictionaryCorrections.ts');
   const {
     applyDictionaryCorrectionToDetail,
@@ -21,6 +22,8 @@ try {
   const { createDictionaryCorrectionStore, createLocalDictionaryCorrectionStore } =
     await server.ssrLoadModule('/src/dictionaryCorrectionStore.ts');
   const { DictionaryContent } = await server.ssrLoadModule('/src/DictionaryContent.tsx');
+  const { createLocalCorrectionsCache, resolveDictionaryCorrectionsControl } =
+    await server.ssrLoadModule('/src/useDictionaryCorrections.ts');
   const { getDetail } = await server.ssrLoadModule('/src/dictionaryData.ts');
   const { SYSTEM_DICTIONARY_CORRECTIONS } = await server.ssrLoadModule(
     '/src/systemDictionaryCorrections.ts',
@@ -43,6 +46,20 @@ try {
     system: { note: { phonetic: '/sys/' } },
   });
   assert.equal(systemOnly?.origin, 'system');
+  assert.equal(resolveDictionaryCorrection('constructor', { user: {} }), undefined);
+  assert.equal(resolveDictionaryCorrection('toString', { user: {} }), undefined);
+  assert.equal(resolveDictionaryCorrection('__proto__', { user: {} }), undefined);
+  const ownPrototypeNames = JSON.parse(
+    '{"constructor":{"phonetic":"/ctor/"},"__proto__":{"phonetic":"/proto/"}}',
+  );
+  assert.equal(
+    resolveDictionaryCorrection('constructor', { user: ownPrototypeNames })?.patch.phonetic,
+    '/ctor/',
+  );
+  assert.equal(
+    resolveDictionaryCorrection('__proto__', { user: ownPrototypeNames })?.patch.phonetic,
+    '/proto/',
+  );
 
   // Given 仅改音标的保存；When 合并既有用户补丁；Then word/meaning 字段原样保留。
   assert.deepEqual(
@@ -56,6 +73,13 @@ try {
   // Given 音标改回原值且无其他字段；Then 返回 null 表示删除纠错。
   assert.equal(mergeDictionaryPhoneticCorrection(undefined, '/nәut/', '/nәut/'), null);
   assert.equal(mergeDictionaryPhoneticCorrection(undefined, '  ', ''), null);
+  assert.deepEqual(mergeDictionaryPhoneticCorrection(undefined, '', '/original/'), {
+    phonetic: '',
+  });
+  assert.deepEqual(
+    mergeDictionaryPhoneticCorrection({ meaning: '自定义释义' }, '   ', '/original/'),
+    { meaning: '自定义释义', phonetic: '' },
+  );
 
   // Given 词条详情；When 应用补丁；Then 词头、音标、首条释义被逐字段覆盖。
   const noteDetail = getDetail('note');
@@ -101,14 +125,23 @@ try {
   );
 
   // Given 外部 JSON；When 清洗纠错表；Then 丢弃非法键与字段。
-  assert.deepEqual(
-    sanitizeDictionaryCorrectionMap({
-      bad: { word: 1 },
-      empty: {},
-      note: { meaning: '笔记', phonetic: '  /nəʊt/  ', word: 'notte' },
-    }),
-    { note: { meaning: '笔记', phonetic: '/nəʊt/', word: 'notte' } },
-  );
+  const sanitized = sanitizeDictionaryCorrectionMap({
+    bad: { word: 1 },
+    empty: {},
+    note: { meaning: '笔记', phonetic: '  /nəʊt/  ', word: 'notte' },
+  });
+  assert.equal(Object.getPrototypeOf(sanitized), null);
+  assert.deepEqual(Object.entries(sanitized), [
+    ['note', { meaning: '笔记', phonetic: '/nəʊt/', word: 'notte' }],
+  ]);
+  assert.deepEqual(sanitizeDictionaryCorrectionPatch({ meaning: '', phonetic: '', word: '' }), {
+    phonetic: '',
+  });
+  const sanitizedPrototypeNames = sanitizeDictionaryCorrectionMap(ownPrototypeNames);
+  assert.equal(Object.getPrototypeOf(sanitizedPrototypeNames), null);
+  assert.equal(Object.hasOwn(sanitizedPrototypeNames, '__proto__'), true);
+  assert.equal(Object.hasOwn(sanitizedPrototypeNames, 'constructor'), true);
+  assert.deepEqual(JSON.parse(JSON.stringify(sanitizedPrototypeNames)), ownPrototypeNames);
 
   // Given 假存储；When 通过仓库读写；Then 读写往返一致。
   const memory = new Map();
@@ -120,19 +153,56 @@ try {
     'test-key',
   );
   memoryStore.save({ note: { phonetic: '/x/' } });
-  assert.deepEqual(memoryStore.load(), { note: { phonetic: '/x/' } });
+  assert.deepEqual(Object.entries(memoryStore.load()), [['note', { phonetic: '/x/' }]]);
+  memoryStore.save({ note: { phonetic: '' } });
+  assert.deepEqual(Object.entries(memoryStore.load()), [['note', { phonetic: '' }]]);
+
+  const readError = new Error('禁止读取存储');
+  const unreadableStore = createDictionaryCorrectionStore({
+    getItem: () => {
+      throw readError;
+    },
+    setItem: () => undefined,
+  });
+  assert.throws(
+    () => unreadableStore.load(),
+    (error) => error === readError,
+  );
 
   // Given 写入会失败的存储；When 保存；Then 异常原样抛出，不产生假成功。
+  const writeError = new Error('磁盘配额已满');
   const failingStore = createDictionaryCorrectionStore({
     getItem: () => null,
     setItem: () => {
-      throw new Error('磁盘配额已满');
+      throw writeError;
     },
   });
-  assert.throws(() => failingStore.save({ note: { phonetic: '/x/' } }), /磁盘配额已满/u);
+  assert.throws(
+    () => failingStore.save({ note: { phonetic: '/x/' } }),
+    (error) => error === writeError,
+  );
 
-  // Given 默认本地存储工厂；When 在非浏览器环境创建；Then 明确抛出而不是静默共享状态。
-  assert.throws(() => createLocalDictionaryCorrectionStore(), ReferenceError);
+  // Given localStorage getter 不可用；When 创建默认仓库；Then 创建本身不崩溃，读取时才报告错误。
+  const localStoreWithoutWindow = createLocalDictionaryCorrectionStore();
+  assert.throws(() => localStoreWithoutWindow.load(), ReferenceError);
+
+  const localStorageGetterError = new Error('禁止访问 localStorage');
+  Object.defineProperty(globalThis, 'window', {
+    configurable: true,
+    value: Object.defineProperty({}, 'localStorage', {
+      get: () => {
+        throw localStorageGetterError;
+      },
+    }),
+  });
+  const getterFailureCache = createLocalCorrectionsCache(createLocalDictionaryCorrectionStore());
+  assert.deepEqual(getterFailureCache.patches, {});
+  assert.equal(getterFailureCache.loadError, localStorageGetterError);
+  delete globalThis.window;
+
+  const unreadableCache = createLocalCorrectionsCache(unreadableStore);
+  assert.deepEqual(unreadableCache.patches, {});
+  assert.equal(unreadableCache.loadError, readError);
 
   // Given 已确认的音标勘误；When 加载随包系统纠错表；Then 保留指定音标。
   assert.deepEqual(SYSTEM_DICTIONARY_CORRECTIONS.curiosity, { phonetic: '/ˌkjʊəriˈɒsəti/' });
@@ -237,9 +307,6 @@ try {
   );
 
   // 修复 5：托管模式缺少 onChange 时不可编辑；提供回调后可编辑。
-  const { resolveDictionaryCorrectionsControl } = await server.ssrLoadModule(
-    '/src/useDictionaryCorrections.ts',
-  );
   assert.equal(resolveDictionaryCorrectionsControl({ user: {} }).editable, false);
   assert.equal(
     resolveDictionaryCorrectionsControl({ onChange: () => undefined, user: {} }).editable,
@@ -362,6 +429,41 @@ try {
   const normalizedProvidedMarkup = providedMarkup.replace(/\u2060/gu, '').replace(/<[^>]+>/gu, '');
   assert.match(normalizedProvidedMarkup, /宿主已纠正释义/u);
   assert.match(providedMarkup, /当前单词已纠错/u);
+
+  // Given 仅传 sources；When 渲染内容；Then meanings 来自 sources，不错误显示空状态。
+  const sourcesOnlyMarkup = renderToStaticMarkup(
+    createElement(DictionaryContent, {
+      keyword: 'source-only',
+      sources: [
+        {
+          id: 'source-only',
+          label: '仅来源',
+          meanings: [{ definition: '来源中的释义', id: 'source-only-1' }],
+        },
+      ],
+    }),
+  );
+  assert.match(sourcesOnlyMarkup.replace(/\u2060/gu, '').replace(/<[^>]+>/gu, ''), /来源中的释义/u);
+  assert.doesNotMatch(sourcesOnlyMarkup, /没有找到释义/u);
+
+  // Given 宿主内容对应外部关键词；When 内部导航到另一词条；Then 不再复用旧宿主内容。
+  const { resolveDictionaryContentSelection } = await server.ssrLoadModule(
+    '/src/dictionaryContentSelection.ts',
+  );
+  assert.deepEqual(
+    resolveDictionaryContentSelection(
+      { activeKeyword: 'nested-entry', propKeyword: 'host-entry' },
+      'host-entry',
+    ),
+    { activeKeyword: 'nested-entry', useProvidedContent: false },
+  );
+  assert.deepEqual(
+    resolveDictionaryContentSelection(
+      { activeKeyword: 'nested-entry', propKeyword: 'host-entry' },
+      'new-host-entry',
+    ),
+    { activeKeyword: 'new-host-entry', useProvidedContent: true },
+  );
 } finally {
   await server.close();
 }

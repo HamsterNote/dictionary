@@ -1,3 +1,4 @@
+import type { ReactNode } from 'react';
 import type { ChineseDictionaryPack } from './chineseDictionaryPack';
 import type { DictionaryEntrySummary } from './dictionaryEntrySummary';
 import { getChineseSourceHref } from './dictionarySources';
@@ -20,11 +21,21 @@ import {
 const HAN_CHARACTER_PATTERN = /\p{Script=Han}/u;
 
 export interface DictionaryMeaning {
-  readonly definition: string;
-  readonly example?: string;
+  readonly definition: ReactNode;
+  readonly example?: ReactNode;
   readonly examples?: readonly string[];
   readonly id: string;
   readonly partOfSpeech?: string;
+}
+
+/** JSON-only meaning returned by the bundled dictionary data layer. */
+export interface DictionaryDataMeaning extends Omit<DictionaryMeaning, 'definition' | 'example'> {
+  readonly definition: string;
+  readonly example?: string;
+}
+
+export interface DictionaryDataSource extends Omit<DictionarySource, 'meanings'> {
+  readonly meanings: readonly DictionaryDataMeaning[];
 }
 
 export interface DictionarySource {
@@ -40,6 +51,11 @@ export interface DictionaryDetail {
   readonly phonetic?: string;
   readonly sources: readonly DictionarySource[];
   readonly word: string;
+}
+
+/** JSON-only detail returned by getDetail and custom data providers. */
+export interface DictionaryDataDetail extends Omit<DictionaryDetail, 'sources'> {
+  readonly sources: readonly DictionaryDataSource[];
 }
 
 export interface DictionaryDetailOptions {
@@ -65,7 +81,7 @@ export function search(
 export function getDetail(
   word: string,
   options: DictionaryDetailOptions = {},
-): DictionaryDetail | undefined {
+): DictionaryDataDetail | undefined {
   if (HAN_CHARACTER_PATTERN.test(word)) {
     const result = lookupChinese(word, options.chineseDictionaryPacks ?? []);
     if (result.status === 'not-found') return undefined;

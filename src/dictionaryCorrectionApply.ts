@@ -90,9 +90,11 @@ export function applyDictionaryCorrectionToDetail(
   const meaningApplies =
     correctedMeaning !== undefined && firstSource !== undefined && firstMeaning !== undefined;
   if (meaningApplies && correctedMeaning !== firstMeaning.definition) {
+    const originalMeaning =
+      typeof firstMeaning.definition === 'string' ? firstMeaning.definition : '';
     changes.push({
       after: correctedMeaning,
-      before: firstMeaning.definition,
+      before: originalMeaning,
       field: 'meaning',
       origin: fieldOrigins.meaning ?? resolved.origin,
     });

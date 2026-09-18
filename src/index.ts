@@ -9,6 +9,9 @@ export type { DictionarySearchContentProps } from './DictionarySearchContent';
 export { DictionarySearchContent } from './DictionarySearchContent';
 export type {
   DictionaryDetail,
+  DictionaryDataDetail,
+  DictionaryDataMeaning,
+  DictionaryDataSource,
   DictionaryDetailOptions,
   DictionaryGetDetail,
   DictionaryMeaning,
