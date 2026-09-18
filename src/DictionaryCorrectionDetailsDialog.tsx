@@ -111,11 +111,7 @@ export function DictionaryCorrectionDetailsDialog({
       title={`${word} 的纠错详情`}
       titleId={TITLE_ID}
     >
-      <DictionaryCorrectionDetailsContent
-        changes={changes}
-        onClose={onClose}
-        onDelete={onDelete}
-      />
+      <DictionaryCorrectionDetailsContent changes={changes} onClose={onClose} onDelete={onDelete} />
     </DictionaryModalDialog>
   );
 }

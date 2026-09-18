@@ -40,20 +40,21 @@ export function useDictionaryCorrectedContent({
   providedSources,
 }: CorrectedContentOptions): DictionaryCorrectedContent {
   return useMemo(() => {
-    const rawDetail = providedMeanings === undefined ? getDetail(activeKeyword) : undefined;
+    const hasProvidedContent = providedMeanings !== undefined || providedSources !== undefined;
+    const rawDetail = hasProvidedContent ? undefined : getDetail(activeKeyword);
     const correctedDetail = (() => {
-      if (providedMeanings !== undefined) return undefined;
+      if (hasProvidedContent) return undefined;
       if (rawDetail !== undefined) return applyDictionaryCorrectionToDetail(rawDetail, corrections);
       if (!corrections.disabled) return createDictionaryCorrectedDetail(activeKeyword, corrections);
       return undefined;
     })();
     const detailMeanings =
       correctedDetail?.detail.sources.flatMap((source) => source.meanings) ?? [];
-    const rawMeaning =
+    const firstDefinition =
       providedMeanings?.[0]?.definition ??
       providedSources?.[0]?.meanings[0]?.definition ??
-      rawDetail?.sources[0]?.meanings[0]?.definition ??
-      '';
+      rawDetail?.sources[0]?.meanings[0]?.definition;
+    const rawMeaning = typeof firstDefinition === 'string' ? firstDefinition : '';
     const rawPhonetic = providedPhonetic ?? rawDetail?.phonetic ?? '';
     const views = getDictionaryCorrectionViews(
       { definition: rawMeaning, phonetic: rawPhonetic, word: activeKeyword },
@@ -64,12 +65,14 @@ export function useDictionaryCorrectedContent({
     const fieldOrigin = (field: DictionaryCorrectedField['field']) =>
       resolved?.fieldOrigins[field] ?? resolved?.origin ?? 'user';
     const meaningPatch = patch?.meaning;
+    const providedContentMeanings =
+      providedMeanings ?? providedSources?.flatMap((source) => source.meanings);
     const meanings: readonly DictionaryMeaning[] =
-      providedMeanings !== undefined && meaningPatch !== undefined
-        ? providedMeanings.map((meaning, index) =>
+      providedContentMeanings !== undefined && meaningPatch !== undefined
+        ? providedContentMeanings.map((meaning, index) =>
             index === 0 ? { ...meaning, definition: meaningPatch } : meaning,
           )
-        : (providedMeanings ?? detailMeanings);
+        : (providedContentMeanings ?? detailMeanings);
     const sources: readonly DictionarySource[] | undefined = (() => {
       if (providedSources !== undefined) {
         if (meaningPatch === undefined) return providedSources;
@@ -84,7 +87,7 @@ export function useDictionaryCorrectedContent({
             : source,
         );
       }
-      if (providedMeanings === undefined) return correctedDetail?.detail.sources;
+      if (!hasProvidedContent) return correctedDetail?.detail.sources;
       return undefined;
     })();
     const changes: readonly DictionaryCorrectedField[] = (() => {

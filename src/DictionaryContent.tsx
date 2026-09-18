@@ -1,6 +1,7 @@
 import type { CSSProperties, HTMLAttributes, ReactNode } from 'react';
 import { useCallback, useId, useRef, useState } from 'react';
 import { DictionaryContentCorrection } from './DictionaryContentCorrection';
+import { resolveDictionaryContentSelection } from './dictionaryContentSelection';
 import { DictionaryCorrectionDetailsButton } from './DictionaryCorrectionDetailsButton';
 import { DictionarySourceResults } from './DictionarySourceResults';
 import {
@@ -85,7 +86,10 @@ export function DictionaryContent({
   if (selection.propKeyword !== keyword) {
     setSelection({ activeKeyword: keyword, propKeyword: keyword });
   }
-  const activeKeyword = selection.propKeyword === keyword ? selection.activeKeyword : keyword;
+  const { activeKeyword, useProvidedContent } = resolveDictionaryContentSelection(
+    selection,
+    keyword,
+  );
   const correctionStore = useDictionaryCorrections(corrections);
   const effectiveCorrections = resolvedCorrections ?? {
     disabled: correctionStore.disabled,
@@ -99,9 +103,9 @@ export function DictionaryContent({
     activeKeyword,
     corrections: effectiveCorrections,
     getDetail,
-    providedMeanings,
-    providedPhonetic,
-    providedSources,
+    providedMeanings: useProvidedContent ? providedMeanings : undefined,
+    providedPhonetic: useProvidedContent ? providedPhonetic : undefined,
+    providedSources: useProvidedContent ? providedSources : undefined,
   });
   const searchEntry = useCallback(
     (word: string) => {

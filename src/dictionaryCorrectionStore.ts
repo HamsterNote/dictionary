@@ -27,5 +27,10 @@ export function createDictionaryCorrectionStore(
 
 /** 默认本地持久化：写入当前浏览器 profile 的 localStorage。 */
 export function createLocalDictionaryCorrectionStore(): DictionaryCorrectionStore {
-  return createDictionaryCorrectionStore(window.localStorage);
+  return createDictionaryCorrectionStore({
+    getItem: (key) => window.localStorage.getItem(key),
+    setItem: (key, value) => {
+      window.localStorage.setItem(key, value);
+    },
+  });
 }

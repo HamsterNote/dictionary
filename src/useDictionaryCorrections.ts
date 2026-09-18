@@ -59,9 +59,24 @@ export function resolveDictionaryCorrectionsControl(
   };
 }
 
-interface LocalCorrectionsCache {
+export interface LocalCorrectionsCache {
+  loadError?: Error;
   patches: DictionaryCorrectionMap;
   store: DictionaryCorrectionStore;
+}
+
+function toError(value: unknown): Error {
+  return value instanceof Error ? value : new Error(String(value));
+}
+
+export function createLocalCorrectionsCache(
+  store: DictionaryCorrectionStore = createLocalDictionaryCorrectionStore(),
+): LocalCorrectionsCache {
+  try {
+    return { patches: store.load(), store };
+  } catch (loadError) {
+    return { loadError: toError(loadError), patches: EMPTY_PATCHES, store };
+  }
 }
 
 // 每个标签页一份缓存，useSyncExternalStore 保证同页多个词典实例同步；
@@ -70,15 +85,13 @@ let localCorrectionsCache: LocalCorrectionsCache | undefined;
 const localCorrectionsSubscribers = new Set<() => void>();
 
 function getLocalCorrectionsCache(): LocalCorrectionsCache {
-  if (localCorrectionsCache === undefined) {
-    const store = createLocalDictionaryCorrectionStore();
-    localCorrectionsCache = { patches: store.load(), store };
-  }
+  localCorrectionsCache ??= createLocalCorrectionsCache();
   return localCorrectionsCache;
 }
 
 function writeLocalCorrections(patches: DictionaryCorrectionMap): void {
   const cache = getLocalCorrectionsCache();
+  if (cache.loadError !== undefined) throw cache.loadError;
   cache.store.save(patches);
   // 写入成功后才更新内存，持久化失败不会留下假成功状态。
   cache.patches = patches;
@@ -119,10 +132,10 @@ export function useDictionaryCorrections(
       const key = normalizeDictionaryCorrectionKey(word);
       if (!resolved.managed) {
         const cache = getLocalCorrectionsCache();
-        const next: Record<string, DictionaryCorrectionPatch> = Object.fromEntries(
-          Object.entries(cache.patches).filter(([patchKey]) => patchKey !== key),
-        );
-        if (patch !== null) next[key] = patch;
+        const next: Record<string, DictionaryCorrectionPatch> = Object.fromEntries([
+          ...Object.entries(cache.patches).filter(([patchKey]) => patchKey !== key),
+          ...(patch === null ? [] : [[key, patch] as const]),
+        ]);
         writeLocalCorrections(next);
       }
       resolved.onChange?.(key, patch);
