@@ -59,6 +59,7 @@ export function EnglishChineseDictionaryPopover({
         defaultSearch(word, {
           englishInflectionIndexPacks: inflectionIndexPacks,
           englishVocabularyPacks: vocabularyPacks,
+          language: 'english',
         })),
     [inflectionIndexPacks, providedSearch, vocabularyPacks],
   );
@@ -73,6 +74,7 @@ export function EnglishChineseDictionaryPopover({
           englishRootPacks: rootPacks,
           englishSynonymPacks: synonymPacks,
           englishVocabularyPacks: vocabularyPacks,
+          language: 'english',
         })),
     [
       exampleSentencePacks,

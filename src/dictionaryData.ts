@@ -15,6 +15,7 @@ import { lookupChinese } from './lookupChinese';
 import { findEnglishChineseEntryLabels, lookupEnglishChinese } from './lookupEnglishChinese';
 import {
   type DictionaryCandidateSearchOptions,
+  type DictionaryLanguage,
   searchDictionaryCandidates,
 } from './searchDictionaryCandidates';
 
@@ -66,6 +67,7 @@ export interface DictionaryDetailOptions {
   readonly englishRootPacks?: readonly EnglishRootPack[];
   readonly englishSynonymPacks?: readonly EnglishSynonymPack[];
   readonly englishVocabularyPacks?: readonly EnglishChineseVocabularyPack[];
+  readonly language?: DictionaryLanguage;
 }
 
 export type DictionarySearch = (query: string) => readonly DictionaryEntrySummary[];
@@ -82,7 +84,10 @@ export function getDetail(
   word: string,
   options: DictionaryDetailOptions = {},
 ): DictionaryDataDetail | undefined {
-  if (HAN_CHARACTER_PATTERN.test(word)) {
+  const useChinese =
+    options.language === 'chinese' ||
+    (options.language !== 'english' && HAN_CHARACTER_PATTERN.test(word));
+  if (useChinese) {
     const result = lookupChinese(word, options.chineseDictionaryPacks ?? []);
     if (result.status === 'not-found') return undefined;
     const href = getChineseSourceHref(result.sourceId);

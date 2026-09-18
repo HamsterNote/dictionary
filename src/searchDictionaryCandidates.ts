@@ -7,10 +7,13 @@ import { suggestEnglishChineseEntries } from './lookupEnglishChinese';
 
 const HAN_CHARACTER_PATTERN = /\p{Script=Han}/u;
 
+export type DictionaryLanguage = 'auto' | 'chinese' | 'english';
+
 export interface DictionaryCandidateSearchOptions {
   readonly chineseDictionaryPacks?: readonly ChineseDictionaryPack[];
   readonly englishInflectionIndexPacks?: readonly EnglishInflectionIndexPack[];
   readonly englishVocabularyPacks?: readonly EnglishChineseVocabularyPack[];
+  readonly language?: DictionaryLanguage;
   readonly limit?: number;
 }
 
@@ -21,7 +24,10 @@ export function searchDictionaryCandidates(
   const normalizedQuery = query.trim().normalize('NFKC');
   if (normalizedQuery.length === 0) return [];
 
-  if (HAN_CHARACTER_PATTERN.test(normalizedQuery)) {
+  const useChinese =
+    options.language === 'chinese' ||
+    (options.language !== 'english' && HAN_CHARACTER_PATTERN.test(normalizedQuery));
+  if (useChinese) {
     return suggestChineseEntries(
       normalizedQuery,
       options.chineseDictionaryPacks ?? [],

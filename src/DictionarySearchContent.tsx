@@ -104,7 +104,7 @@ export function DictionarySearchContent({
         onOpenPreview={(entry, anchor) => {
           setPreview({ anchor, entry, originalWord: entry.word });
         }}
-        {...(phonetic ? { phonetic } : {})}
+        {...(phonetic === undefined ? {} : { phonetic })}
         {...(pronounce ? { pronounce } : {})}
         {...(resolveEntry ? { resolveEntry } : {})}
         resolvedCorrections={resolvedCorrections}

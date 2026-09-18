@@ -465,12 +465,18 @@ def render_coverage_report(
     return "\n".join((*lines, ""))
 
 
-def build_artifacts(source: Path, vocabulary_directory: Path) -> GeneratedArtifacts:
+def build_artifacts(
+    source: Path,
+    vocabulary_directory: Path,
+    *,
+    expected_sha256: str = EXPECTED_SHA256,
+    minimum_hit_rates: dict[str, float] = MINIMUM_HIT_RATES,
+) -> GeneratedArtifacts:
     if not source.exists():
         raise MissingSnapshotError(source)
     digest = sha256_file(source)
-    if EXPECTED_SHA256 != "__SNAPSHOT_SHA256__" and digest != EXPECTED_SHA256:
-        raise SnapshotMismatchError(EXPECTED_SHA256, digest)
+    if digest != expected_sha256:
+        raise SnapshotMismatchError(expected_sha256, digest)
     packs = read_pack_headwords(vocabulary_directory)
     target_words = frozenset(normalize_word(word) for words in packs.values() for word in words)
     extraction = extract_pronunciations(source, target_words)
@@ -504,9 +510,9 @@ def build_artifacts(source: Path, vocabulary_directory: Path) -> GeneratedArtifa
             invalid_ipa=invalid_ipa,
         )
         coverage[pack_id] = item
-        if item.hit_rate < MINIMUM_HIT_RATES[pack_id]:
+        if item.hit_rate < minimum_hit_rates[pack_id]:
             raise GenerationError(
-                f"{pack_id} 命中率 {item.hit_rate:.6f} 低于阈值 {MINIMUM_HIT_RATES[pack_id]:.6f}"
+                f"{pack_id} 命中率 {item.hit_rate:.6f} 低于阈值 {minimum_hit_rates[pack_id]:.6f}"
             )
         relative = Path("src/data") / f"wiktionary-phonetics-{pack_id}.tsv"
         files[relative] = render_pack(

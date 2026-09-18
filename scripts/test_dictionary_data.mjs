@@ -48,6 +48,36 @@ try {
     { definition: '内心安定', phonetic: 'xīn ān', word: '心安' },
   ]);
   assert.equal(getDetail('不存在', { chineseDictionaryPacks: [chineseDictionaryPack] }), undefined);
+  assert.equal(
+    getDetail('note', {
+      chineseDictionaryPacks: [chineseDictionaryPack],
+      language: 'chinese',
+    }),
+    undefined,
+  );
+  assert.equal(
+    getDetail('心', {
+      chineseDictionaryPacks: [chineseDictionaryPack],
+      language: 'english',
+    }),
+    undefined,
+  );
+
+  // Given 展示层消费者传入 ReactNode；When 渲染公开 meanings；Then 保留富文本节点。
+  const reactNodeMarkup = renderToStaticMarkup(
+    createElement(DictionaryContent, {
+      keyword: 'rich-content',
+      meanings: [
+        {
+          definition: createElement('strong', null, 'rich definition'),
+          example: createElement('em', null, 'rich example'),
+          id: 'rich-1',
+        },
+      ],
+    }),
+  );
+  assert.match(reactNodeMarkup, /<strong>rich definition<\/strong>/u);
+  assert.match(reactNodeMarkup, /<em>rich example<\/em>/u);
 
   // Given 外部实现的数据能力；When 渲染详情视图；Then 视图只消费注入 JSON，并用 search 检索释义词语。
   const searchedWords = [];

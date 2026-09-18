@@ -35,6 +35,24 @@ try {
     { definition: '内心安定', phonetic: 'xīn ān', word: '心安' },
   ]);
 
+  // Given 中文 wrapper 的固定语言模式；When 输入拉丁词；Then 不回退到内置英文词典。
+  assert.deepEqual(
+    searchDictionaryCandidates('note', {
+      chineseDictionaryPacks: [chineseDictionaryPack],
+      language: 'chinese',
+    }),
+    [],
+  );
+
+  // Given 英文 wrapper 的固定语言模式；When 输入汉字；Then 不路由到中文词典。
+  assert.deepEqual(
+    searchDictionaryCandidates('心', {
+      chineseDictionaryPacks: [chineseDictionaryPack],
+      language: 'english',
+    }),
+    [],
+  );
+
   // Given 只有空白；When 搜索候选；Then 不返回无意义结果。
   assert.deepEqual(searchDictionaryCandidates('   '), []);
 } finally {

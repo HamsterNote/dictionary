@@ -1,5 +1,5 @@
 ---
-memory_schema: "1.0"
+memory_schema: '1.0'
 category: workflow
 title: 工作流约束
 scope: project

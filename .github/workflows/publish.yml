@@ -33,6 +33,9 @@ jobs:
           corepack enable
           yarn install --frozen-lockfile
 
+      - name: 验证 Wiktionary 音标生成器
+        run: yarn test:phonetics
+
       - name: 构建发布包
         # build:package = 清理 dist 后生成类型声明 + 构建库
         run: yarn build:package

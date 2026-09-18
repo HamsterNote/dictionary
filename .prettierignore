@@ -5,4 +5,5 @@ pnpm-lock.yaml
 .codegraph
 .omo
 .playwright-mcp
+.paperclip-runtime
 src/data/ecdict-top-20000.tsv

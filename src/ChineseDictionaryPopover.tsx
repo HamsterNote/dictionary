@@ -36,13 +36,21 @@ export function ChineseDictionaryPopover({
   const search = useMemo<DictionarySearch>(
     () =>
       providedSearch ??
-      ((word) => defaultSearch(word, { chineseDictionaryPacks: dictionaryPacks })),
+      ((word) =>
+        defaultSearch(word, {
+          chineseDictionaryPacks: dictionaryPacks,
+          language: 'chinese',
+        })),
     [dictionaryPacks, providedSearch],
   );
   const getDetail = useMemo<DictionaryGetDetail>(
     () =>
       providedGetDetail ??
-      ((word) => getDefaultDetail(word, { chineseDictionaryPacks: dictionaryPacks })),
+      ((word) =>
+        getDefaultDetail(word, {
+          chineseDictionaryPacks: dictionaryPacks,
+          language: 'chinese',
+        })),
     [dictionaryPacks, providedGetDetail],
   );
   const detail = useMemo(
