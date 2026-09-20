@@ -10,11 +10,16 @@ import {
 } from './phoneticEditing';
 
 export interface DictionaryCorrectionDialogProps {
-  /** 词典原始音标（无任何补丁时的值），用于判断补丁是否退化为空。 */
+  /** 词典原始音标（无任何补丁时的值），用于判断补丁是否退化为空并给出对照提示。 */
   readonly originalPhonetic: string;
   /** 词典原始词头，仅用于标题与存储键。 */
   readonly originalWord: string;
   readonly onClose: () => void;
+  /**
+   * 清除该词的全部用户纠错（含 word/meaning 字段）。
+   * 可选：旧调用方未传时，reset 回退到 onSave(null) 的整条清除语义。
+   */
+  readonly onReset?: (() => void) | undefined;
   /** 传入的音标补丁值，或 null 表示清除纠错；宿主负责与既有 user 补丁合并。 */
   readonly onSave: (phoneticPatch: string | null) => void;
   readonly open: boolean;
@@ -29,6 +34,7 @@ const DESCRIPTION_ID = 'dictionary-correction-description';
 
 export function DictionaryCorrectionDialog({
   onClose,
+  onReset,
   onSave,
   open,
   originalPhonetic,
@@ -116,6 +122,8 @@ export function DictionaryCorrectionDialog({
     setErrorMessage(undefined);
     try {
       const trimmed = draft.trim();
+      // 改回词典原音标时传 null（保持旧 onSave(null) 语义）；
+      // 整条删除还是仅丢弃 phonetic 字段由宿主的合并逻辑决定。
       onSave(trimmed === originalPhonetic ? null : trimmed);
       onClose();
     } catch (error) {
@@ -129,7 +137,10 @@ export function DictionaryCorrectionDialog({
     setIsSaving(true);
     setErrorMessage(undefined);
     try {
-      onSave(null);
+      // 新调用方传入 onReset 时整条删除该词补丁（含 word/meaning 字段），
+      // 而不是把音标改回原值；旧调用方未传时回退到 onSave(null)。
+      if (onReset !== undefined) onReset();
+      else onSave(null);
       onClose();
     } catch (error) {
       setErrorMessage(error instanceof Error ? error.message : '清除失败，请重试。');

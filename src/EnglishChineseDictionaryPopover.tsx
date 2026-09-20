@@ -14,6 +14,7 @@ import type {
 import type { EnglishRootPack } from './englishRootPack';
 import type { EnglishSynonymPack } from './englishSynonymPack';
 import { HamsterDictionary, type HamsterDictionaryProps } from './HamsterDictionary';
+import { resolveEnglishChineseEntry } from './lookupEnglishChinese';
 import { useDictionaryNavigation } from './useDictionaryNavigation';
 
 const EMPTY_VOCABULARY_PACKS: readonly EnglishChineseVocabularyPack[] = [];
@@ -23,9 +24,11 @@ const EMPTY_ROOT_PACKS: readonly EnglishRootPack[] = [];
 const EMPTY_INFLECTION_FORMS_PACKS: readonly EnglishInflectionFormsPack[] = [];
 const EMPTY_INFLECTION_INDEX_PACKS: readonly EnglishInflectionIndexPack[] = [];
 
+// 说明：resolveEntry 与 phonetic 均直接继承 HamsterDictionaryProps，避免重复 Omit / 重声明。
+// 宿主显式传入的 phonetic（包括空字符串）优先于 detail 中的音标。
 export interface EnglishChineseDictionaryPopoverProps extends Omit<
   HamsterDictionaryProps,
-  'meanings' | 'phonetic' | 'sources' | 'suggestions' | 'word'
+  'meanings' | 'sources' | 'suggestions' | 'word'
 > {
   readonly exampleSentencePacks?: readonly EnglishExampleSentencePack[];
   readonly inflectionFormsPacks?: readonly EnglishInflectionFormsPack[];
@@ -52,6 +55,7 @@ export function EnglishChineseDictionaryPopover({
   const navigation = useDictionaryNavigation({ onQueryChange, onSearch, query });
   const providedSearch = props.search;
   const providedGetDetail = props.getDetail;
+  const providedResolveEntry = props.resolveEntry;
   const search = useMemo<DictionarySearch>(
     () =>
       providedSearch ??
@@ -61,6 +65,16 @@ export function EnglishChineseDictionaryPopover({
           englishVocabularyPacks: vocabularyPacks,
         })),
     [inflectionIndexPacks, providedSearch, vocabularyPacks],
+  );
+  const resolveEntry = useMemo(
+    () =>
+      providedResolveEntry ??
+      ((word) =>
+        resolveEnglishChineseEntry(word, vocabularyPacks, {
+          forms: inflectionFormsPacks,
+          index: inflectionIndexPacks,
+        })),
+    [inflectionFormsPacks, inflectionIndexPacks, providedResolveEntry, vocabularyPacks],
   );
   const getDetail = useMemo<DictionaryGetDetail>(
     () =>
@@ -88,6 +102,7 @@ export function EnglishChineseDictionaryPopover({
     () => getDetail(navigation.committedQuery),
     [getDetail, navigation.committedQuery],
   );
+  const phonetic = props.phonetic ?? detail?.phonetic;
 
   return (
     <HamsterDictionary
@@ -97,7 +112,11 @@ export function EnglishChineseDictionaryPopover({
       getDetail={getDetail}
       {...(onQueryChange ? { onQueryChange: navigation.onQueryChange } : {})}
       onSearch={navigation.search}
+      // 显式 phonetic 放在 ...props 展开之后：宿主显式值优先；未显式提供时用已取回的 detail 音标，
+      // 从而让内容 hook 不再为音标重复调用 getDetail。使用 ?? 以尊重显式传入的空字符串。
+      {...(phonetic === undefined ? {} : { phonetic })}
       query={query}
+      resolveEntry={resolveEntry}
       search={search}
       {...(sources ? { sources } : {})}
       showGuide={navigation.committedQuery.length === 0}

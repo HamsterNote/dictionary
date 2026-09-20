@@ -116,6 +116,46 @@ export function normalizeDictionaryCorrectionKey(word: string): string {
   return /[\p{Script=Han}]/u.test(normalized) ? normalized : normalized.toLocaleLowerCase('en-US');
 }
 
+/**
+ * 在纠错表中查找与传入词头等价的真实键。读取（resolveDictionaryCorrection）
+ * 与写入（resolveDictionaryCorrectionWriteKey）必须共用这一份匹配优先级，
+ * 否则会出现「读不到已有补丁、写却复用了真实键」的错位：
+ * 1) 精确原始键：原样复用，避免改写宿主的大小写风格；
+ * 2) 规范化键：命中已有条目即沿用，保证更新与删除指向同一条目；
+ * 3) 扫描真实键比较 normalize：覆盖真实键与词头仅大小写/全半角/空白
+ *    差异的情况（如 `Note` 对 `note`）。
+ * 返回 undefined 表示表中没有等价条目。
+ */
+function findEquivalentDictionaryCorrectionKey(
+  word: string,
+  map: DictionaryCorrectionMap | undefined,
+): string | undefined {
+  if (map === undefined) return undefined;
+  if (Object.hasOwn(map, word)) return word;
+  const normalized = normalizeDictionaryCorrectionKey(word);
+  if (Object.hasOwn(map, normalized)) return normalized;
+  for (const key of Object.keys(map)) {
+    if (normalizeDictionaryCorrectionKey(key) === normalized) return key;
+  }
+  return undefined;
+}
+
+/**
+ * 决定保存/删除纠错时写入宿主所应使用的键。
+ * 受控宿主的 user 表若已存在与传入词头等价的真实键（例如 `Note`），
+ * 必须复用该键：否则更新会新建一条重复补丁，删除也清不掉原条目。
+ * 新词（表中无等价条目）与本地存储路径仍统一使用规范化键。
+ */
+export function resolveDictionaryCorrectionWriteKey(
+  word: string,
+  userPatches: DictionaryCorrectionMap | undefined,
+): string {
+  return (
+    findEquivalentDictionaryCorrectionKey(word, userPatches) ??
+    normalizeDictionaryCorrectionKey(word)
+  );
+}
+
 function isPatchRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === 'object' && value !== null && !Array.isArray(value);
 }
@@ -167,8 +207,9 @@ export function sanitizeDictionaryCorrectionMap(raw: unknown): DictionaryCorrect
 }
 
 /**
- * 解析词条当前生效的纠错。先按传入词头直接命中，再按规范化键命中，
- * 因此保存用的原始词头与后续查询的大小写差异仍能命中同一条补丁。
+ * 解析词条当前生效的纠错。键匹配与写入共用同一优先级：
+ * 精确原始键 → 规范化键 → 扫描真实键比较 normalize，因此宿主 user 表中的
+ * `Note` 与查询 `note` 等价命中，读取与后续保存/删除始终指向同一条目。
  * 合并是逐字段的：用户补丁的每个字段优先，其余字段回落到系统补丁，
  * fieldOrigins 记录每个字段各自的来源层级。
  */
@@ -180,12 +221,10 @@ export function resolveDictionaryCorrection(
   const matchPatch = (
     map: DictionaryCorrectionMap | undefined,
   ): { key: string; patch: DictionaryCorrectionPatch } | undefined => {
-    if (map === undefined) return undefined;
-    const direct = Object.hasOwn(map, word) ? map[word] : undefined;
-    if (direct !== undefined) return { key: word, patch: direct };
-    const key = normalizeDictionaryCorrectionKey(word);
-    const normalized = Object.hasOwn(map, key) ? map[key] : undefined;
-    return normalized === undefined ? undefined : { key, patch: normalized };
+    const key = findEquivalentDictionaryCorrectionKey(word, map);
+    if (key === undefined) return undefined;
+    const patch = map?.[key];
+    return patch === undefined ? undefined : { key, patch };
   };
   const userMatch = matchPatch(corrections.user);
   const systemMatch = matchPatch(corrections.system);

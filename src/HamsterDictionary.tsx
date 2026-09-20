@@ -175,7 +175,7 @@ export function HamsterDictionary({
         {...(meanings ? { meanings } : {})}
         {...(onQueryChange ? { onQueryChange } : {})}
         {...(onSearch ? { onSearch } : {})}
-        {...(phonetic ? { phonetic } : {})}
+        {...(phonetic === undefined ? {} : { phonetic })}
         {...(pronounce ? { pronounce } : {})}
         {...(query === undefined ? {} : { query })}
         {...(resolveEntry ? { resolveEntry } : {})}

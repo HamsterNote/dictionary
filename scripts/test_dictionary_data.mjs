@@ -49,8 +49,8 @@ try {
   ]);
   assert.equal(getDetail('不存在', { chineseDictionaryPacks: [chineseDictionaryPack] }), undefined);
 
-  // Given 外部实现的数据能力；When 渲染详情视图；Then 视图只消费注入 JSON，并用 search 检索释义词语。
-  const searchedWords = [];
+  // Given 外部实现的数据能力；When 渲染详情视图；Then 视图只消费注入 JSON，并用精确 resolver 解析释义词语。
+  const resolvedWords = [];
   const markup = renderToStaticMarkup(
     createElement(DictionaryContent, {
       getDetail: (word) => ({
@@ -65,18 +65,18 @@ try {
       }),
       keyword: 'external-entry',
       onOpenPreview: () => {},
-      search: (word) => {
-        searchedWords.push(word);
-        return word === 'durable' ? [{ definition: '持久的', word }] : [];
+      resolveEntry: (word) => {
+        resolvedWords.push(word);
+        return word === 'durable' ? { definition: '持久的', word } : undefined;
       },
     }),
   );
   assert.match(markup, /external-entry/);
   assert.match(markup, /外部数据源/);
   assert.match(markup, /dictionary-popover__inline-word/);
-  assert.ok(searchedWords.includes('durable'));
+  assert.ok(resolvedWords.includes('durable'));
 
-  // Given search 只返回前缀候选；When 渲染详情词元；Then 不把原词错误链接到其他词条。
+  // Given 只提供旧 search 回调；When 渲染详情词元；Then 不启用交互，也不把原词错误链接到前缀候选。
   const prefixMarkup = renderToStaticMarkup(
     createElement(DictionaryContent, {
       getDetail: (word) => ({

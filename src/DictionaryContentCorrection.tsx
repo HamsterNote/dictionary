@@ -53,10 +53,16 @@ export function DictionaryContentCorrection({
           setIsDialogOpen(false);
           triggerRef.current?.focus();
         }}
+        onReset={() => {
+          // 整条删除该词的用户补丁；键由 store 按宿主 user 表解析。
+          store.reset(activeKeyword);
+        }}
         onSave={(phoneticPatch) => {
           const existingUserPatch = resolveDictionaryCorrection(activeKeyword, {
             user: store.user,
           })?.patch;
+          // 保存只改音标：null（改回原音标）映射为 originalPhonetic 后走合并，
+          // 仅丢弃 phonetic 字段，保留既有 word/meaning。
           store.save(
             activeKeyword,
             mergeDictionaryPhoneticCorrection(

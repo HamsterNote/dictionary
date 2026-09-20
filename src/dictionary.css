@@ -17,6 +17,22 @@
   --dictionary-shadow-low: rgb(68 62 50 / 8%);
 }
 
+/* 亮色：public props（themeColor/textColor）写入的 --dictionary-*-custom 输入令牌
+   在此映射为组件级语义令牌。inline 只携带输入令牌，不直接覆盖语义令牌，
+   因此 dark media 可以显式切换语义令牌而不会被 inline 样式压制。
+   .dictionary-correction 是 body portal，不继承 .dictionary-content，
+   必须同样建立映射（独立渲染 DictionaryContent 时 portal 才能拿到亮色定制）。 */
+.dictionary-content,
+.dictionary-correction {
+  --dictionary-accent: var(--dictionary-accent-custom, #146ebe);
+  --dictionary-accent-soft: var(--dictionary-accent-soft-custom, #e8f2fb);
+  --dictionary-accent-strong: var(--dictionary-accent-strong-custom, #0c5799);
+  --dictionary-accent-text: var(--dictionary-accent-text-custom, #0c5799);
+  --dictionary-text-primary: var(--dictionary-text-primary-custom, #242320);
+  --dictionary-text-secondary: var(--dictionary-text-secondary-custom, #66635f);
+  --dictionary-focus: var(--dictionary-focus-custom, #097fe8);
+}
+
 .dictionary-popover {
   --dictionary-drag-x: 0px;
   --dictionary-drag-y: 0px;
@@ -804,10 +820,30 @@
     --dictionary-accent: #62aef0;
     --dictionary-accent-soft: #223c52;
     --dictionary-accent-strong: #91c9f7;
+    /* 词性标签：深色下改用浅蓝，#0c5799 在 #292927 上对比度仅 1.97:1，不满足 WCAG AA */
+    --dictionary-part-of-speech: #91c9f7;
+    /* 强调文字（来源链接、纠错 dialog ghost 按钮）：与词性标签同色，
+       浅色主题的 #0c5799 在 #292927 上仅 1.97:1，深色必须显式覆盖 */
+    --dictionary-accent-text: #91c9f7;
     --dictionary-error: #ffb4ab;
     --dictionary-focus: #91c9f7;
     --dictionary-shadow-high: rgb(0 0 0 / 28%);
     --dictionary-shadow-low: rgb(0 0 0 / 18%);
+  }
+
+  /* 深色：组件级语义令牌显式切换为安全深色（#292927 上 >= 4.5:1），
+     刻意不引用 --dictionary-*-custom 输入令牌——亮色 public prop 定制在深色下失效，
+     从而避开 inline 输入令牌对语义令牌的间接污染（来源链接、纠错触发/摘要、
+     portal ghost 控件均使用这些语义令牌）。 */
+  .dictionary-content,
+  .dictionary-correction {
+    --dictionary-accent: #62aef0;
+    --dictionary-accent-soft: #223c52;
+    --dictionary-accent-strong: #91c9f7;
+    --dictionary-accent-text: #91c9f7;
+    --dictionary-text-primary: #f4f3ef;
+    --dictionary-text-secondary: #b8b5ae;
+    --dictionary-focus: #91c9f7;
   }
 }
 

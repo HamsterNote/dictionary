@@ -1,5 +1,5 @@
 import type { CSSProperties, HTMLAttributes, ReactNode } from 'react';
-import { useCallback, useId, useRef, useState } from 'react';
+import { useId, useRef, useState } from 'react';
 import { DictionaryContentCorrection } from './DictionaryContentCorrection';
 import { resolveDictionaryContentSelection } from './dictionaryContentSelection';
 import { DictionaryCorrectionDetailsButton } from './DictionaryCorrectionDetailsButton';
@@ -10,7 +10,6 @@ import {
   type DictionarySearch,
   type DictionarySource,
   getDetail as defaultGetDetail,
-  search as defaultSearch,
 } from './dictionaryData';
 import type {
   DictionaryCorrectionsControl,
@@ -23,14 +22,19 @@ import { formatDictionaryPhonetic } from './formatDictionaryPhonetic';
 import { useDictionaryCorrectedContent } from './useDictionaryCorrectedContent';
 import { useDictionaryCorrections } from './useDictionaryCorrections';
 
+// public props（themeColor/textColor）只写入 --dictionary-*-custom 输入令牌，
+// 绝不 inline 覆盖 --dictionary-accent 等语义令牌：inline 优先级会压过
+// dark media 的 :root 覆盖，导致深色下对比度不达标。语义令牌由
+// .dictionary-content / .dictionary-correction 在 CSS 中引用输入令牌（亮色），
+// dark media 再对组件级语义令牌显式切换到安全深色（忽略输入令牌）。
 interface DictionaryContentStyle extends CSSProperties {
-  readonly '--dictionary-accent'?: string;
-  readonly '--dictionary-accent-soft'?: string;
-  readonly '--dictionary-accent-strong'?: string;
-  readonly '--dictionary-accent-text'?: string;
-  readonly '--dictionary-focus'?: string;
-  readonly '--dictionary-text-primary'?: string;
-  readonly '--dictionary-text-secondary'?: string;
+  readonly '--dictionary-accent-custom'?: string;
+  readonly '--dictionary-accent-soft-custom'?: string;
+  readonly '--dictionary-accent-strong-custom'?: string;
+  readonly '--dictionary-accent-text-custom'?: string;
+  readonly '--dictionary-focus-custom'?: string;
+  readonly '--dictionary-text-primary-custom'?: string;
+  readonly '--dictionary-text-secondary-custom'?: string;
 }
 
 export interface DictionaryContentProps extends Omit<HTMLAttributes<HTMLElement>, 'color'> {
@@ -45,6 +49,7 @@ export interface DictionaryContentProps extends Omit<HTMLAttributes<HTMLElement>
   readonly pronounce?: (word: string) => Promise<void>;
   readonly resolveEntry?: (word: string) => DictionaryEntrySummary | undefined;
   readonly resolvedCorrections?: ResolvedDictionaryCorrectionsControl;
+  /** @deprecated 正文交互请同时提供 O(1) 的 resolveEntry 与 onOpenPreview。 */
   readonly search?: DictionarySearch;
   readonly showGuide?: boolean;
   readonly sources?: readonly DictionarySource[];
@@ -71,7 +76,10 @@ export function DictionaryContent({
   pronounce,
   resolveEntry,
   resolvedCorrections,
-  search = defaultSearch,
+  // search 仅保留 API 兼容：正文交互必须通过 resolveEntry（配合 onOpenPreview）显式接线。
+  // 这里必须消费掉它，避免它随 ...props 透传到 <section> 上。
+  // eslint-disable-next-line @typescript-eslint/no-deprecated -- 内部兼容层必须消费已弃用属性。
+  search: legacySearch,
   showGuide = false,
   sources: providedSources,
   style,
@@ -79,6 +87,8 @@ export function DictionaryContent({
   themeColor,
   ...props
 }: DictionaryContentProps) {
+  // 兼容旧调用签名：search 不再参与任何解析或交互，正文交互统一使用 resolveEntry。
+  void legacySearch;
   const generatedId = useId();
   const correctionTriggerRef = useRef<HTMLButtonElement>(null);
   const headingId = providedHeadingId ?? generatedId;
@@ -107,25 +117,6 @@ export function DictionaryContent({
     providedPhonetic: useProvidedContent ? providedPhonetic : undefined,
     providedSources: useProvidedContent ? providedSources : undefined,
   });
-  const searchEntry = useCallback(
-    (word: string) => {
-      const normalizedWord = word.trim().normalize('NFKC').toLocaleLowerCase('en-US');
-      const candidates = search(word);
-      return candidates.find(
-        (candidate) =>
-          candidate.word.trim().normalize('NFKC').toLocaleLowerCase('en-US') === normalizedWord,
-      );
-    },
-    [search],
-  );
-  const interactiveResolver = resolveEntry ?? searchEntry;
-  const openPreview =
-    onOpenPreview ??
-    ((entry: DictionaryEntrySummary) => {
-      if (getDetail(entry.word) !== undefined) {
-        setSelection({ activeKeyword: entry.word, propKeyword: keyword });
-      }
-    });
   const userCorrection = resolveDictionaryCorrection(activeKeyword, {
     user: correctionStore.user,
   });
@@ -139,22 +130,25 @@ export function DictionaryContent({
         }
       : undefined;
   const contentClassName = className ? `dictionary-content ${className}` : 'dictionary-content';
+  // 亮色定制输入令牌：仅 dark media 之外的 CSS 映射会引用它们。
+  // 该对象同时作为 portal（.dictionary-correction）的 themeStyle，
+  // 因此 portal 也不会收到任何危险的 inline 语义令牌。
   const contentStyle: DictionaryContentStyle = {
     ...style,
     ...(textColor === undefined
       ? {}
       : {
-          '--dictionary-text-primary': textColor,
-          '--dictionary-text-secondary': `color-mix(in srgb, ${textColor} 68%, transparent)`,
+          '--dictionary-text-primary-custom': textColor,
+          '--dictionary-text-secondary-custom': `color-mix(in srgb, ${textColor} 68%, transparent)`,
         }),
     ...(themeColor === undefined
       ? {}
       : {
-          '--dictionary-accent': themeColor,
-          '--dictionary-accent-soft': `color-mix(in srgb, ${themeColor} 12%, transparent)`,
-          '--dictionary-accent-strong': themeColor,
-          '--dictionary-accent-text': themeColor,
-          '--dictionary-focus': themeColor,
+          '--dictionary-accent-custom': themeColor,
+          '--dictionary-accent-soft-custom': `color-mix(in srgb, ${themeColor} 12%, transparent)`,
+          '--dictionary-accent-strong-custom': themeColor,
+          '--dictionary-accent-text-custom': themeColor,
+          '--dictionary-focus-custom': themeColor,
         }),
   };
 
@@ -236,8 +230,8 @@ export function DictionaryContent({
           <DictionarySourceResults
             changes={resolvedContent.changes.filter((change) => change.field !== 'phonetic')}
             onDeleteCorrection={deleteUserCorrection}
-            onOpenPreview={openPreview}
-            resolveEntry={interactiveResolver}
+            onOpenPreview={resolveEntry && onOpenPreview ? onOpenPreview : undefined}
+            resolveEntry={resolveEntry && onOpenPreview ? resolveEntry : undefined}
             sources={
               resolvedContent.sources ?? [
                 { id: 'dictionary', label: '词典', meanings: resolvedContent.meanings },

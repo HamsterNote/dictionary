@@ -6,7 +6,7 @@ import type {
   DictionaryCorrectionStore,
   ResolvedDictionaryCorrectionsControl,
 } from './dictionaryCorrections';
-import { normalizeDictionaryCorrectionKey } from './dictionaryCorrections';
+import { resolveDictionaryCorrectionWriteKey } from './dictionaryCorrections';
 import { createLocalDictionaryCorrectionStore } from './dictionaryCorrectionStore';
 import { SYSTEM_DICTIONARY_CORRECTIONS } from './systemDictionaryCorrections';
 
@@ -129,15 +129,24 @@ export function useDictionaryCorrections(
       if (resolved.managed && resolved.onChange === undefined) {
         throw new Error('corrections.onChange 缺失：托管模式必须提供持久化回调，补丁未保存。');
       }
-      const key = normalizeDictionaryCorrectionKey(word);
       if (!resolved.managed) {
         const cache = getLocalCorrectionsCache();
+        // 非受控本地存储同样必须复用 cache.patches 中「真正命中的键」：
+        // 预置数据可能是真实键 `Note` 而非规范化键 `note`；若按规范化键
+        // 更新/删除，reset('note') 既清不掉 `Note`，又会留下无意义的 `note`。
+        // 表中没有等价条目（新词）时才回落到规范化键。
+        const key = resolveDictionaryCorrectionWriteKey(word, cache.patches);
         const next: Record<string, DictionaryCorrectionPatch> = Object.fromEntries([
           ...Object.entries(cache.patches).filter(([patchKey]) => patchKey !== key),
           ...(patch === null ? [] : [[key, patch] as const]),
         ]);
         writeLocalCorrections(next);
+        resolved.onChange?.(key, patch);
+        return;
       }
+      // 受控模式必须复用宿主 user 表中已有的真实键（如 `Note`），
+      // 否则保存/清除会落到规范化新键上，原条目永远更新/删除不掉。
+      const key = resolveDictionaryCorrectionWriteKey(word, resolved.user);
       resolved.onChange?.(key, patch);
     },
     [resolved],

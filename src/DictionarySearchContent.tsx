@@ -1,5 +1,6 @@
 import type { ReactNode } from 'react';
 import { useState } from 'react';
+import { flushSync } from 'react-dom';
 import { DictionaryContent } from './DictionaryContent';
 import { DictionarySearch } from './DictionarySearch';
 import { DictionaryWordPreview } from './DictionaryWordPreview';
@@ -86,9 +87,13 @@ export function DictionarySearchContent({
           onClose={() => {
             setPreview(undefined);
           }}
-          onExpand={() => {
-            setPreview(undefined);
-            onSearch?.(preview.originalWord);
+          onExpand={(originalWord) => {
+            // React 会批处理点击事件里的状态更新；同步提交卸载，确保宿主回调
+            // 执行时预览 portal 已经从 DOM 中移除。
+            flushSync(() => {
+              setPreview(undefined);
+            });
+            onSearch?.(originalWord);
           }}
           originalWord={preview.originalWord}
         />
@@ -101,12 +106,18 @@ export function DictionarySearchContent({
         {...(headingId ? { headingId } : {})}
         keyword={word}
         {...(meanings ? { meanings } : {})}
-        onOpenPreview={(entry, anchor) => {
-          setPreview({ anchor, entry, originalWord: entry.word });
-        }}
-        {...(phonetic ? { phonetic } : {})}
+        {...(phonetic === undefined ? {} : { phonetic })}
         {...(pronounce ? { pronounce } : {})}
-        {...(resolveEntry ? { resolveEntry } : {})}
+        {...(resolveEntry
+          ? {
+              // 只有外部显式提供 resolveEntry 时才启用释义内交互与预览，
+              // 避免 DictionaryContent 在独立使用时自行导航。
+              onOpenPreview: (entry: DictionaryEntrySummary, anchor: HTMLButtonElement) => {
+                setPreview({ anchor, entry, originalWord: entry.word });
+              },
+              resolveEntry,
+            }
+          : {})}
         resolvedCorrections={resolvedCorrections}
         {...(search ? { search } : {})}
         showGuide={showGuide}

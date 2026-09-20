@@ -222,7 +222,6 @@ export function Demo() {
               corrections={corrections.control}
               getDetail={getDetail}
               keyword="note"
-              search={search}
               textColor="#37342f"
               themeColor="#146ebe"
             />

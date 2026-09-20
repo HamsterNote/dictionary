@@ -41,7 +41,10 @@ export function useDictionaryCorrectedContent({
 }: CorrectedContentOptions): DictionaryCorrectedContent {
   return useMemo(() => {
     const hasProvidedContent = providedMeanings !== undefined || providedSources !== undefined;
-    const rawDetail = hasProvidedContent ? undefined : getDetail(activeKeyword);
+    // 来源、释义与音标独立解析：宿主内容优先，但未显式提供音标时仍读取词典音标。
+    // 当宿主已同时提供内容和音标时，无需再做一次无意义的详情查询。
+    const rawDetail =
+      !hasProvidedContent || providedPhonetic === undefined ? getDetail(activeKeyword) : undefined;
     const correctedDetail = (() => {
       if (hasProvidedContent) return undefined;
       if (rawDetail !== undefined) return applyDictionaryCorrectionToDetail(rawDetail, corrections);

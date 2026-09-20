@@ -10,7 +10,12 @@ export interface DictionaryModalDialogProps {
   readonly open: boolean;
   /** 打开后聚焦的目标选择器；缺省聚焦整个面板。 */
   readonly initialFocusSelector?: string;
-  /** 宿主实例的主题变量；Portal 挂载在 body 上，必须显式传递才能继承当前实例的配色。 */
+  /**
+   * 宿主实例的主题输入令牌（--dictionary-*-custom）；Portal 挂载在 body 上，
+   * 必须显式传递才能继承当前实例的亮色定制。注意：这里只允许携带输入令牌，
+   * 不得 inline 传入 --dictionary-accent 等语义令牌——inline 语义令牌会压过
+   * dark media 对 .dictionary-correction 的安全深色覆盖，破坏对比度。
+   */
   readonly themeStyle?: CSSProperties | undefined;
   readonly title: ReactNode;
   readonly titleId: string;
