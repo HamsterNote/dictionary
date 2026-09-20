@@ -1,4 +1,4 @@
-import type { DictionarySource } from './DictionaryPopover';
+import type { DictionaryDataSource } from './dictionaryData';
 import { ECDICT_SOURCE, OANC_SOURCE, UNIMORPH_SOURCE, WORDNET_SOURCE } from './dictionarySources';
 import { ENGLISH_INFLECTION_LABELS } from './englishInflectionPack';
 import type { EnglishChineseLookupResult } from './lookupEnglishChinese';
@@ -6,7 +6,7 @@ import type { EnglishChineseLookupResult } from './lookupEnglishChinese';
 export function createEnglishResultSources(
   result: EnglishChineseLookupResult,
   matchingLabels = '',
-): readonly DictionarySource[] {
+): readonly DictionaryDataSource[] {
   if (result.status !== 'found') return [];
 
   return [

@@ -1,15 +1,22 @@
 import { useMemo } from 'react';
 import type { ChineseDictionaryPack } from './chineseDictionaryPack';
+import {
+  type DictionaryGetDetail,
+  type DictionarySearch,
+  search as defaultSearch,
+  getDetail as getDefaultDetail,
+} from './dictionaryData';
 import { HamsterDictionary, type HamsterDictionaryProps } from './HamsterDictionary';
-import { getChineseSourceHref } from './dictionarySources';
-import { lookupChinese, resolveChineseEntry, suggestChineseEntries } from './lookupChinese';
+import { resolveChineseEntry } from './lookupChinese';
 import { useDictionaryNavigation } from './useDictionaryNavigation';
 
 const EMPTY_DICTIONARY_PACKS: readonly ChineseDictionaryPack[] = [];
 
+// 说明：不再 Omit 'phonetic'，改为直接从父 Props 继承并继续透传。
+// 宿主显式传入的 phonetic（包括空字符串）优先于 detail 中的音标。
 export interface ChineseDictionaryPopoverProps extends Omit<
   HamsterDictionaryProps,
-  'meanings' | 'phonetic' | 'sources' | 'suggestions' | 'word'
+  'meanings' | 'sources' | 'suggestions' | 'word'
 > {
   readonly dictionaryPacks?: readonly ChineseDictionaryPack[];
   readonly sources?: HamsterDictionaryProps['sources'];
@@ -27,18 +34,30 @@ export function ChineseDictionaryPopover({
   ...props
 }: ChineseDictionaryPopoverProps) {
   const navigation = useDictionaryNavigation({ onQueryChange, onSearch, query });
-  const result = useMemo(
-    () => lookupChinese(navigation.committedQuery, dictionaryPacks),
-    [dictionaryPacks, navigation.committedQuery],
+  const providedSearch = props.search;
+  const providedGetDetail = props.getDetail;
+  const providedResolveEntry = props.resolveEntry;
+  const search = useMemo<DictionarySearch>(
+    () =>
+      providedSearch ??
+      ((word) => defaultSearch(word, { chineseDictionaryPacks: dictionaryPacks })),
+    [dictionaryPacks, providedSearch],
   );
-  const suggestions = useMemo(
-    () => suggestChineseEntries(query, dictionaryPacks),
-    [dictionaryPacks, query],
+  const getDetail = useMemo<DictionaryGetDetail>(
+    () =>
+      providedGetDetail ??
+      ((word) => getDefaultDetail(word, { chineseDictionaryPacks: dictionaryPacks })),
+    [dictionaryPacks, providedGetDetail],
   );
   const resolveEntry = useMemo(
-    () => (word: string) => resolveChineseEntry(word, dictionaryPacks),
-    [dictionaryPacks],
+    () => providedResolveEntry ?? ((word: string) => resolveChineseEntry(word, dictionaryPacks)),
+    [dictionaryPacks, providedResolveEntry],
   );
+  const detail = useMemo(
+    () => getDetail(navigation.committedQuery),
+    [getDetail, navigation.committedQuery],
+  );
+  const phonetic = props.phonetic ?? detail?.phonetic;
 
   return (
     <HamsterDictionary
@@ -51,32 +70,20 @@ export function ChineseDictionaryPopover({
           ? '请先加载一个中文词库，再查询汉字或成语。'
           : '没有找到精确释义，请换一个汉字或成语再试。')
       }
-      meanings={result.status === 'found' ? result.meanings : []}
+      getDetail={getDetail}
       {...(onQueryChange ? { onQueryChange: navigation.onQueryChange } : {})}
       onSearch={navigation.search}
-      {...(result.status === 'found' && result.phonetic ? { phonetic: result.phonetic } : {})}
+      // 显式 phonetic 放在 ...props 展开之后：宿主显式值优先；未显式提供时用已取回的 detail 音标，
+      // 从而让内容 hook 不再为音标重复调用 getDetail。使用 ?? 以尊重显式传入的空字符串。
+      {...(phonetic === undefined ? {} : { phonetic })}
       query={query}
       resolveEntry={resolveEntry}
+      search={search}
       searchLabel={searchLabel}
       searchPlaceholder={searchPlaceholder}
-      sources={
-        sources ??
-        (result.status === 'found'
-          ? [
-              {
-                ...(getChineseSourceHref(result.sourceId) === undefined
-                  ? {}
-                  : { href: getChineseSourceHref(result.sourceId) }),
-                id: result.sourceId,
-                label: result.sourceLabel,
-                meanings: result.meanings,
-              },
-            ]
-          : [])
-      }
+      {...(sources ? { sources } : {})}
       showGuide={navigation.committedQuery.length === 0}
-      suggestions={suggestions}
-      word={result.status === 'found' ? result.word : navigation.committedQuery || '仓鼠词典'}
+      word={detail?.word ?? (navigation.committedQuery || '仓鼠词典')}
     />
   );
 }

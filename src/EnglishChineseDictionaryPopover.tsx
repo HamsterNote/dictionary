@@ -1,20 +1,20 @@
 import { useMemo } from 'react';
-import { HamsterDictionary, type HamsterDictionaryProps } from './HamsterDictionary';
+import {
+  type DictionaryGetDetail,
+  type DictionarySearch,
+  search as defaultSearch,
+  getDetail as getDefaultDetail,
+} from './dictionaryData';
 import type { EnglishChineseVocabularyPack } from './englishChineseVocabularyPack';
 import type { EnglishExampleSentencePack } from './englishExampleSentencePack';
 import type {
   EnglishInflectionFormsPack,
   EnglishInflectionIndexPack,
 } from './englishInflectionPack';
-import { createEnglishResultSources } from './englishResultSources';
-import type { EnglishSynonymPack } from './englishSynonymPack';
 import type { EnglishRootPack } from './englishRootPack';
-import {
-  findEnglishChineseEntryLabels,
-  lookupEnglishChinese,
-  resolveEnglishChineseEntry,
-  suggestEnglishChineseEntries,
-} from './lookupEnglishChinese';
+import type { EnglishSynonymPack } from './englishSynonymPack';
+import { HamsterDictionary, type HamsterDictionaryProps } from './HamsterDictionary';
+import { resolveEnglishChineseEntry } from './lookupEnglishChinese';
 import { useDictionaryNavigation } from './useDictionaryNavigation';
 
 const EMPTY_VOCABULARY_PACKS: readonly EnglishChineseVocabularyPack[] = [];
@@ -24,9 +24,11 @@ const EMPTY_ROOT_PACKS: readonly EnglishRootPack[] = [];
 const EMPTY_INFLECTION_FORMS_PACKS: readonly EnglishInflectionFormsPack[] = [];
 const EMPTY_INFLECTION_INDEX_PACKS: readonly EnglishInflectionIndexPack[] = [];
 
+// 说明：resolveEntry 与 phonetic 均直接继承 HamsterDictionaryProps，避免重复 Omit / 重声明。
+// 宿主显式传入的 phonetic（包括空字符串）优先于 detail 中的音标。
 export interface EnglishChineseDictionaryPopoverProps extends Omit<
   HamsterDictionaryProps,
-  'meanings' | 'phonetic' | 'sources' | 'suggestions' | 'word'
+  'meanings' | 'sources' | 'suggestions' | 'word'
 > {
   readonly exampleSentencePacks?: readonly EnglishExampleSentencePack[];
   readonly inflectionFormsPacks?: readonly EnglishInflectionFormsPack[];
@@ -51,59 +53,74 @@ export function EnglishChineseDictionaryPopover({
   ...props
 }: EnglishChineseDictionaryPopoverProps) {
   const navigation = useDictionaryNavigation({ onQueryChange, onSearch, query });
-  const result = useMemo(
+  const providedSearch = props.search;
+  const providedGetDetail = props.getDetail;
+  const providedResolveEntry = props.resolveEntry;
+  const search = useMemo<DictionarySearch>(
     () =>
-      lookupEnglishChinese(
-        navigation.committedQuery,
-        vocabularyPacks,
-        exampleSentencePacks,
-        synonymPacks,
-        rootPacks,
-        { forms: inflectionFormsPacks, index: inflectionIndexPacks },
-      ),
+      providedSearch ??
+      ((word) =>
+        defaultSearch(word, {
+          englishInflectionIndexPacks: inflectionIndexPacks,
+          englishVocabularyPacks: vocabularyPacks,
+        })),
+    [inflectionIndexPacks, providedSearch, vocabularyPacks],
+  );
+  const resolveEntry = useMemo(
+    () =>
+      providedResolveEntry ??
+      ((word) =>
+        resolveEnglishChineseEntry(word, vocabularyPacks, {
+          forms: inflectionFormsPacks,
+          index: inflectionIndexPacks,
+        })),
+    [inflectionFormsPacks, inflectionIndexPacks, providedResolveEntry, vocabularyPacks],
+  );
+  const getDetail = useMemo<DictionaryGetDetail>(
+    () =>
+      providedGetDetail ??
+      ((word) =>
+        getDefaultDetail(word, {
+          englishExampleSentencePacks: exampleSentencePacks,
+          englishInflectionFormsPacks: inflectionFormsPacks,
+          englishInflectionIndexPacks: inflectionIndexPacks,
+          englishRootPacks: rootPacks,
+          englishSynonymPacks: synonymPacks,
+          englishVocabularyPacks: vocabularyPacks,
+        })),
     [
       exampleSentencePacks,
       inflectionFormsPacks,
       inflectionIndexPacks,
-      navigation.committedQuery,
+      providedGetDetail,
       rootPacks,
       synonymPacks,
       vocabularyPacks,
     ],
   );
-  const suggestions = useMemo(
-    () =>
-      suggestEnglishChineseEntries(query, vocabularyPacks, {
-        inflectionIndexPacks,
-      }),
-    [inflectionIndexPacks, query, vocabularyPacks],
+  const detail = useMemo(
+    () => getDetail(navigation.committedQuery),
+    [getDetail, navigation.committedQuery],
   );
-  const matchingLabels = useMemo(
-    () => findEnglishChineseEntryLabels(navigation.committedQuery, vocabularyPacks),
-    [navigation.committedQuery, vocabularyPacks],
-  ).join(' + ');
-  const resolveEntry = useMemo(
-    () => (word: string) =>
-      resolveEnglishChineseEntry(word, vocabularyPacks, { index: inflectionIndexPacks }),
-    [inflectionIndexPacks, vocabularyPacks],
-  );
-  const resultSources = createEnglishResultSources(result, matchingLabels);
+  const phonetic = props.phonetic ?? detail?.phonetic;
 
   return (
     <HamsterDictionary
       {...props}
       {...(navigation.canGoBack ? { onBack: navigation.goBack } : {})}
       {...(navigation.canGoForward ? { onForward: navigation.goForward } : {})}
-      meanings={result.status === 'found' ? result.meanings : []}
+      getDetail={getDetail}
       {...(onQueryChange ? { onQueryChange: navigation.onQueryChange } : {})}
       onSearch={navigation.search}
-      {...(result.status === 'found' && result.phonetic ? { phonetic: result.phonetic } : {})}
+      // 显式 phonetic 放在 ...props 展开之后：宿主显式值优先；未显式提供时用已取回的 detail 音标，
+      // 从而让内容 hook 不再为音标重复调用 getDetail。使用 ?? 以尊重显式传入的空字符串。
+      {...(phonetic === undefined ? {} : { phonetic })}
       query={query}
       resolveEntry={resolveEntry}
-      sources={sources ?? resultSources}
+      search={search}
+      {...(sources ? { sources } : {})}
       showGuide={navigation.committedQuery.length === 0}
-      suggestions={suggestions}
-      word={result.status === 'found' ? result.word : navigation.committedQuery || '仓鼠词典'}
+      word={detail?.word ?? (navigation.committedQuery || '仓鼠词典')}
     />
   );
 }

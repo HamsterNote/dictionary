@@ -1,12 +1,17 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import type { ReactNode } from 'react';
+import type { DictionaryCorrectionsControl } from './dictionaryCorrections';
+import { applyDictionaryCorrectionToSummary } from './dictionaryCorrectionApply';
 import type { DictionaryEntrySummary } from './dictionaryEntrySummary';
 import { DictionaryWordPreview } from './DictionaryWordPreview';
+import { useDictionaryCorrections } from './useDictionaryCorrections';
 
 const CLOSE_DELAY_MS = 150;
 
 export interface HamsterDictionaryPopoverProps {
   readonly children: ReactNode;
+  /** 词条纠错配置；缺省使用本机 localStorage 持久化。 */
+  readonly corrections?: DictionaryCorrectionsControl;
   readonly entry: DictionaryEntrySummary;
   /** 点击“放大到主窗口”或（悬停模式下）点击触发词时回调，通常用于打开主窗。 */
   readonly onExpand: (word: string) => void;
@@ -22,6 +27,7 @@ export interface HamsterDictionaryPopoverProps {
  */
 export function HamsterDictionaryPopover({
   children,
+  corrections,
   entry,
   onExpand,
   showExpandButton = true,
@@ -30,7 +36,8 @@ export function HamsterDictionaryPopover({
   const closeTimerRef = useRef<ReturnType<typeof setTimeout>>(undefined);
   const [anchor, setAnchor] = useState<HTMLButtonElement | null>(null);
   const [isOpen, setIsOpen] = useState(false);
-
+  const resolvedCorrections = useDictionaryCorrections(corrections);
+  const displayEntry = applyDictionaryCorrectionToSummary(entry, resolvedCorrections).summary;
   const cancelScheduledClose = useCallback(() => {
     if (closeTimerRef.current === undefined) return;
     clearTimeout(closeTimerRef.current);
@@ -53,6 +60,7 @@ export function HamsterDictionaryPopover({
   useEffect(() => cancelScheduledClose, [cancelScheduledClose]);
 
   const handleExpand = useCallback(
+    // 展开始终携带原始词头，纠错拼写只影响预览显示。
     (word: string) => {
       setIsOpen(false);
       onExpand(word);
@@ -62,14 +70,13 @@ export function HamsterDictionaryPopover({
 
   const handleClick = (): void => {
     if (trigger === 'hover') {
-      // 悬停模式下点击触发词 = 直接打开主窗。
+      // 悬停模式下点击触发词 = 直接打开主窗（用原始词头查找）。
       setIsOpen(false);
       onExpand(entry.word);
       return;
     }
     setIsOpen((previous) => !previous);
   };
-
   return (
     <>
       <button
@@ -87,7 +94,7 @@ export function HamsterDictionaryPopover({
       {isOpen && anchor !== null ? (
         <DictionaryWordPreview
           anchor={anchor}
-          entry={entry}
+          entry={displayEntry}
           focusOnMount={trigger === 'click'}
           onClose={() => {
             setIsOpen(false);
@@ -95,6 +102,7 @@ export function HamsterDictionaryPopover({
           onExpand={handleExpand}
           onPointerEnter={cancelScheduledClose}
           onPointerLeave={scheduleClose}
+          originalWord={entry.word}
           showExpandButton={showExpandButton}
         />
       ) : null}
