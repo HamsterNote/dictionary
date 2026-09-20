@@ -121,6 +121,16 @@ body {
   border-radius: 999px;
 }
 
+.demo-content-example {
+  margin-top: 40px;
+  padding-top: 24px;
+  border-top: 1px solid var(--dictionary-border);
+}
+
+.demo-content-example > .demo-eyebrow {
+  margin-bottom: 16px;
+}
+
 .demo-stage {
   position: sticky;
   top: 32px;

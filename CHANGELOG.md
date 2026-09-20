@@ -5,6 +5,35 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.1.1-beta.2] - 2026-08-18
+
+### Added
+
+- 新增 `DictionarySearchContent` 聚合组件，统一封装搜索框、词条预览与词典内容渲染，便于主窗口与嵌套面板复用。
+- `HamsterDictionary` 继续保留受控/非受控窗口位置能力的同时，改为通过 `DictionarySearchContent` 组织内容区，简化主组件职责。
+- `src/index.ts` 新增 `DictionarySearchContent` 的类型导出与运行时导出，便于外部直接复用该组合层。
+
+### Changed
+
+- `HamsterDictionary` 内容区从直接拼装搜索与预览逻辑，重构为调用 `DictionarySearchContent`，减少重复分支并统一预览行为。
+- 相关导出结构调整，公开层级中补充了 `DictionarySearchContent`。
+
+## [0.1.1-beta.1] - 2026-08-15
+
+### Added
+
+- 新增统一查询数据层 `dictionaryData`，提供 `search`（候选搜索）与 `getDetail`（详情查询）两个入口，按查询是否含汉字自动路由到中文或英文查询逻辑。
+- 新增 `searchDictionaryCandidates` 统一候选搜索入口：汉字候选默认 18 条、英文候选默认 6 条，并支持 `limit` 配置。
+- 新增独立内容组件 `DictionaryContent`：仅渲染关键词、音标、释义、例句与来源标签，不含搜索框、窗口控制与背景装饰，可由宿主独立消费或由 `HamsterDictionary` 复用。
+- `EnglishChineseDictionaryPopover` 与 `ChineseDictionaryPopover` 新增可选的 `search` / `getDetail` props，允许宿主自定义查询逻辑。
+- 新增词性排版规范与 `--dictionary-part-of-speech` 设计令牌，词性标签使用 Georgia 斜体展示。
+- 新增中文候选与词典数据查询的自动化测试（`test:dictionary-candidates`、`test:dictionary-data`），并纳入 `check` 门禁。
+
+### Changed
+
+- `HamsterDictionary` 主组件内容区重构为复用 `DictionaryContent`，并新增可选的 `search` / `getDetail` props；原有 `meanings`、`sources`、`resolveEntry`、`suggestions` 等 props 保持兼容。
+- Demo 改用新的 `search` / `getDetail` 查询接口，并新增词性展示示例与截图。
+
 ## [0.1.0] - 2026-08-14
 
 ### Added

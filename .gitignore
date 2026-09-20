@@ -9,7 +9,9 @@ __pycache__/
 .omo/
 .codegraph/
 .playwright-mcp/
+.paperclip-runtime/
 *.local
 *.log
 playwright-report/
 test-results/
+data_sources/

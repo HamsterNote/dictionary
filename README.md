@@ -87,7 +87,57 @@ import { HamsterDictionaryPopover } from '@hamster-note/dictionary';
 </HamsterDictionaryPopover>;
 ```
 
-`HamsterDictionaryPopover` 的 props：`children`（被包裹的文字）、`entry`（要预览的词条）、`onExpand`（打开主窗口的回调）、`trigger`（`'hover'` | `'click'`，默认 `'hover'`）、`showExpandButton`（是否显示预览内的展开按钮，默认 `true`）。
+`HamsterDictionaryPopover` 的 props：`children`（被包裹的文字）、`entry`（要预览的词条）、`onExpand`（打开主窗口的回调）、`trigger`（`'hover'` | `'click'`，默认 `'hover'`）、`showExpandButton`（是否显示预览内的展开按钮，默认 `true`）、`corrections`（词条纠错配置，见下节）。
+
+### 词条纠错
+
+词条旁的主题色“纠错”按钮会打开一个模态对话框。**本期界面仅支持纠正音标**：音标字段禁用系统软键盘（`readOnly` + `inputMode="none"`），打开时焦点直接落在音标输入框，输入完全通过对话框底部的分组 IPA 键盘完成。键盘覆盖完整 IPA 清单——单元音、双元音、清浊辅音、鼻音、近音与流音、重音与长度符号（ˈ ˌ ː ˑ）、声调与变音符（如 ̃ ̥ ʰ ˤ），并附带带声调拼音字母；支持 ← → 移动光标与 ⌫ 按字素删除，键盘操作不会让焦点或光标离开输入框。对话框具备焦点陷阱、Escape 关闭与焦点还原，保存失败会显示真实错误而不是假成功。
+
+纠错以 JSON 补丁保存，键为**原始词头字符串**，字段均为可选：
+
+```json
+{
+  "note": { "word": "notte", "phonetic": "/nəʊt/", "meaning": "自定义释义" }
+}
+```
+
+展示时逐字段应用 **用户补丁 > 系统补丁 > 词典原文**（字段级合并：用户只改音标时，其余字段仍可来自系统补丁）；查找、搜索候选、导航历史与来源命中始终使用原始词头，纠错拼写只影响显示。保存音标修改会与既有用户补丁合并，保留已存储的 `word`/`meaning` 字段。音标被纠错的词条在音标后显示可点击的“已纠错”，其余字段被纠错时在来源分组上方显示“当前单词已纠错”，点击后打开模态弹窗，逐字段列出原始值与纠错内容及其来源（我的纠错 / 系统纠错）。纠错覆盖主窗词头、音标与首条释义、搜索候选、行内迷你预览与 `HamsterDictionaryPopover`，包括宿主通过 `meanings`/`sources` 提供的自定义数据。
+
+持久化与宿主集成：
+
+- **默认（非受控）**：不传 `corrections` 时，补丁写入当前浏览器 profile 的 `localStorage`（键 `hamster-dictionary-corrections/v1`），同一页面的多个词典实例实时同步；SSR 渲染不读取任何用户状态。组件没有账号或跨设备同步体系；`localStorage` 的作用域是当前设备与浏览器 profile。若需要按用户、按设备或跨设备隔离/共享，请用下面的托管模式自行控制作用域。
+- **宿主托管**：传入 `corrections={{ user, system, onChange, disabled }}` 完全接管数据。`user`/`system` 为上述 JSON 形状（键可先用 `normalizeDictionaryCorrectionKey` 规范化，拉丁词头按 `en-US` 小写、中文不大小写折叠）；`onChange(originalWord, patch | null)` 在保存或清除时回调，抛错即视为失败；`disabled: true` 停用纠错入口并暂停所有补丁。
+- **系统补丁**：包内导出 `SYSTEM_DICTIONARY_CORRECTIONS`，数据本体是随包分发的 `dictionarySystemCorrections.json`。当前收录已核实的勘误（如 `curiosity` 音标）；填写方式见 `src/data/SYSTEM_CORRECTIONS.md`，后续条目须逐条注明来源并评审。
+- **自定义存储**：`createDictionaryCorrectionStore(storage)` 可把纠错表落到任意实现 `getItem`/`setItem` 的存储；`createLocalDictionaryCorrectionStore()` 是默认的 localStorage 实现。
+
+```tsx
+import { useState } from 'react';
+import type { DictionaryCorrectionMap } from '@hamster-note/dictionary';
+import { HamsterDictionary } from '@hamster-note/dictionary';
+
+export function ManagedCorrections() {
+  const [user, setUser] = useState<DictionaryCorrectionMap>({});
+  return (
+    <HamsterDictionary
+      corrections={{
+        user,
+        onChange: (word, patch) => {
+          setUser((current) => {
+            if (patch === null) {
+              const { [word]: _removed, ...rest } = current;
+              return rest;
+            }
+            return { ...current, [word]: patch };
+          });
+        },
+      }}
+      open
+      query="note"
+      word="note"
+    />
+  );
+}
+```
 
 ### 可选 Kokoro 英文朗读
 
@@ -221,9 +271,12 @@ ECDICT 没有 TEM-4/TEM-8 标签，因此本包不把 GRE 或 CET-6 冒充为专
 yarn generate:dictionary /path/to/ECDICT/ecdict.csv
 yarn generate:inflections /path/to/ECDICT/ecdict.csv
 yarn test:inflections
+yarn generate:phonetics
 ```
 
 脚本固定使用 ECDICT commit `bc015ed2e24a7abef49fc6dbbb7fe32c1dadaf8b`，输出核心、八个 ECDICT 上游原生标签 TSV、BNC 排名 TSV 和类型安全元数据清单。运行环境需要 Python 3.12+ 与 [uv](https://docs.astral.sh/uv/)；生成文件应随源码提交，以便普通安装和构建不依赖网络或 Python。
+
+Wiktionary 音标生成器读取项目本地固定快照 `data_sources/wiktionary/raw-wiktextract-data.jsonl.gz`。先从 `https://kaikki.org/dictionary/raw-wiktextract-data.jsonl.gz` 手工下载该文件，再运行 `yarn generate:phonetics`；快照目录已被 Git 忽略，不得提交。脚本校验固定 SHA-256，并生成与十个 ECDICT 词包逐行对齐的英音/美音 TSV、清单和覆盖率报告；`yarn generate:phonetics --check` 可重渲染并逐字节核对提交产物。该快照来自 2026-08-05 enwiktionary dump，于 2026-08-28 由 `wiktextract@872fc7b` 抽取。
 
 中文生成器同样只接受本地审核快照，并在读取前校验六个 SHA-256。参数依次为 chinese-xinhua 的 `word.json`、`idiom.json`、`ci.json`，以及 chinese-dictionary 的 `char_common_base.json`、`char_common_detail.json`、`word.json`：
 
@@ -281,10 +334,12 @@ yarn test:roots
 | `yarn generate:inflections <ECDICT CSV>`        | 校验并重新生成词形与反向索引懒加载包         |
 | `yarn generate:synonyms <WordNet tar.gz>`       | 校验并重新生成十个英文近义词补充包           |
 | `yarn generate:roots <UniMorph TSV> [CityLex]`  | 校验并重新生成十个英文派生基词补充包         |
+| `yarn generate:phonetics`                       | 校验固定 Wiktionary 快照并生成十个英美音标包 |
 | `yarn test:examples`                            | 运行 OANC 例句生成器夹具测试                 |
 | `yarn test:inflections`                         | 运行 ECDICT 词形生成器夹具测试               |
 | `yarn test:synonyms`                            | 运行 WordNet 近义词生成器夹具测试            |
 | `yarn test:roots`                               | 运行 UniMorph 派生基词生成器夹具测试         |
+| `yarn test:dictionary-corrections`              | 运行词条纠错纯逻辑与渲染回归测试             |
 | `yarn preview`                                  | 在 `0.0.0.0:9489` 预览生产版 Demo            |
 | `yarn typecheck`                                | 运行 TypeScript 项目引用检查                 |
 | `yarn lint`                                     | 运行 ESLint，警告也视为失败                  |

@@ -15,8 +15,7 @@ import {
   getChineseSourceHref,
   lookupChinese,
   lookupEnglishChinese,
-  suggestChineseEntries,
-  suggestEnglishChineseEntries,
+  searchDictionaryCandidates,
 } from '../../src';
 
 export interface DictionaryView {
@@ -82,11 +81,11 @@ export function createDictionaryView({
               },
             ]
           : [],
-      suggestions: isChineseSearch
-        ? suggestChineseEntries(query, chineseDictionaryPacks)
-        : suggestEnglishChineseEntries(query, englishVocabularyPacks, {
-            inflectionIndexPacks: englishInflectionIndexPacks,
-          }),
+      suggestions: searchDictionaryCandidates(query, {
+        chineseDictionaryPacks,
+        englishInflectionIndexPacks,
+        englishVocabularyPacks,
+      }),
       totalEntries: countChineseEntries(chineseDictionaryPacks),
       word: result.status === 'found' ? result.word : committedQuery || '仓鼠词典',
     };
@@ -107,11 +106,11 @@ export function createDictionaryView({
     searchLabel: isChineseSearch ? '搜索中文汉字或成语' : '搜索英文单词',
     searchPlaceholder: '请输入字或词',
     sources: createEnglishResultSources(result),
-    suggestions: isChineseSearch
-      ? suggestChineseEntries(query, chineseDictionaryPacks)
-      : suggestEnglishChineseEntries(query, englishVocabularyPacks, {
-          inflectionIndexPacks: englishInflectionIndexPacks,
-        }),
+    suggestions: searchDictionaryCandidates(query, {
+      chineseDictionaryPacks,
+      englishInflectionIndexPacks,
+      englishVocabularyPacks,
+    }),
     totalEntries: countEnglishChineseEntries(englishVocabularyPacks),
     word: result.status === 'found' ? result.word : committedQuery || '仓鼠词典',
   };

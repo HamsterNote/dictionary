@@ -130,6 +130,17 @@ The name of Princeton University or Princeton may not be used in advertising or 
 
 分发该数据或改编数据库时，须给予适当署名、提供许可证链接、说明所作修改，并依 CC BY-SA 3.0 以相同方式共享改编内容。商业使用并不免除这些义务；正式发布前应结合产品的数据组合与数据库权利适用方式进行法务审核。
 
+## Wiktionary 英语音标派生数据
+
+- 原始资料与贡献者：https://en.wiktionary.org/ ，署名归 Wiktionary 贡献者。
+- Kaikki 原始数据页：https://kaikki.org/dictionary/rawdata.html
+- 输入快照：`https://kaikki.org/dictionary/raw-wiktextract-data.jsonl.gz`，来自 2026-08-05 enwiktionary dump，于 2026-08-28 使用 `wiktextract@872fc7b` 抽取；输入 SHA-256 记录于生成器、TSV 头与清单。
+- 本项目修改：只保留与十个 ECDICT 词包相交的词头，按 NFKC 与小写规则匹配，合并多词性记录，过滤地区、时代、语域及未知标签，并将明确英式、明确美式和通用 IPA 确定性映射为英音/美音列。
+- 可复现生成器：`scripts/generate_wiktionary_phonetics.py`。
+- 许可证：本项目派生的音标 TSV 数据与其打包 chunk 采用 Creative Commons Attribution-ShareAlike 3.0（CC BY-SA 3.0），许可证全文见 `LICENSES/CC-BY-SA-3.0.txt` 及 https://creativecommons.org/licenses/by-sa/3.0/ 。项目 MIT 许可证仅覆盖代码，不覆盖这些派生数据。
+
+Kaikki 当前说明其数据从 Wiktionary 抽取，并按 Wiktionary 的 CC-BY-SA 与 GFDL 许可提供。本项目选择以 CC BY-SA 3.0 分发上述派生数据；再分发或改编时须保留对 Wiktionary 贡献者的适当署名、许可证链接和修改说明，并按相同方式共享适用的改编内容。npm 包中数据 chunk 与其他代码的组合可能涉及数据库权利及 share-alike 边界；本声明不代表已免除全部许可义务，正式商业发布前仍须由法务结合具体产品与分发方式复核。
+
 ### CityLex 使用边界
 
 - 项目地址：https://github.com/CUNY-CL/citylex

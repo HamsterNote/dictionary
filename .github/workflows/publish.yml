@@ -33,12 +33,29 @@ jobs:
           corepack enable
           yarn install --frozen-lockfile
 
+      - name: 验证 Wiktionary 音标生成器
+        run: yarn test:phonetics
+
       - name: 构建发布包
         # build:package = 清理 dist 后生成类型声明 + 构建库
         run: yarn build:package
 
+      - name: 验证版本并选择 npm 标签
+        shell: bash
+        run: |
+          VERSION="$(node -p "require('./package.json').version")"
+          if [[ "$GITHUB_REF_NAME" != "v$VERSION" ]]; then
+            echo "::error::Git tag $GITHUB_REF_NAME does not match package version $VERSION"
+            exit 1
+          fi
+          if [[ "$VERSION" == *-* ]]; then
+            echo "NPM_TAG=beta" >> "$GITHUB_ENV"
+          else
+            echo "NPM_TAG=latest" >> "$GITHUB_ENV"
+          fi
+
       - name: 发布到 npm
         # NPM_TOKEN 需在仓库 Settings -> Secrets 中配置
-        run: yarn publish --non-interactive --access public
+        run: yarn publish --non-interactive --access public --tag "$NPM_TAG"
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
