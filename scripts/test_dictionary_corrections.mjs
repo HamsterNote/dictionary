@@ -5,6 +5,16 @@ import { createServer } from 'vite';
 
 const server = await createServer({ logLevel: 'error', server: { middlewareMode: true } });
 
+function stripMarkupTagsToStable(markup) {
+  let strippedMarkup = markup;
+
+  while (true) {
+    const nextMarkup = strippedMarkup.replace(/<[^>]+>/gu, '');
+    if (nextMarkup === strippedMarkup) return strippedMarkup;
+    strippedMarkup = nextMarkup;
+  }
+}
+
 try {
   const {
     createDictionaryCorrectionPatch,
@@ -426,7 +436,7 @@ try {
       ],
     }),
   );
-  const normalizedProvidedMarkup = providedMarkup.replace(/\u2060/gu, '').replace(/<[^>]+>/gu, '');
+  const normalizedProvidedMarkup = stripMarkupTagsToStable(providedMarkup.replace(/\u2060/gu, ''));
   assert.match(normalizedProvidedMarkup, /宿主已纠正释义/u);
   assert.match(providedMarkup, /当前单词已纠错/u);
 
@@ -443,7 +453,7 @@ try {
       ],
     }),
   );
-  assert.match(sourcesOnlyMarkup.replace(/\u2060/gu, '').replace(/<[^>]+>/gu, ''), /来源中的释义/u);
+  assert.match(stripMarkupTagsToStable(sourcesOnlyMarkup.replace(/\u2060/gu, '')), /来源中的释义/u);
   assert.doesNotMatch(sourcesOnlyMarkup, /没有找到释义/u);
 
   // Given 宿主内容对应外部关键词；When 内部导航到另一词条；Then 不再复用旧宿主内容。
