@@ -1,0 +1,7 @@
+# HTTP transport 阶段实际退出码
+http=0
+transport=0
+discover=0
+compile=0
+help=0
+apply-alone=2

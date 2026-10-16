@@ -1,0 +1,260 @@
+"""Action API 编排：动态定位 English hLevel=2 并获取完整 English 展开文本。
+
+对应 task 5.2。要点：
+
+- 用 ``parse`` + ``tocdata`` 动态选择 ``line == "English"`` 且 ``level == 2`` 的
+  section，**不写死 section=1**。
+- 再对选中 section 取 ``prop=text`` 的完整展开 HTML（官方展开已含模板输出，
+  主线不自行展开模板）。
+- 缺页 / 无 English 成为明确状态，**不清空正式结果**。
+- Kaikki 只作可选对照，其不可用不阻断官方流程。
+"""
+
+from __future__ import annotations
+
+import json
+import urllib.parse
+from dataclasses import dataclass, field
+from enum import Enum
+from typing import Any, Final, Mapping
+
+from .http_adapter import FetchedResponse, HttpAdapter, RequestKind
+
+DEFAULT_API_ENDPOINT: Final = "https://en.wiktionary.org/w/api.php"
+ENGLISH_HEADING: Final = "English"
+
+
+class PageStatus(str, Enum):
+    FOUND = "found"
+    MISSING = "missing"
+    NO_ENGLISH = "no-english"
+
+
+class ActionApiError(RuntimeError):
+    """Action API 返回错误或结构不可用（结构性失败，须持久 FAILED）。"""
+
+
+class RetryableActionApiError(ActionApiError):
+    """可重试的上游 API 错误（maxlag / ratelimited 等），受预算有限重试。"""
+
+
+# 真实缺页：仅此码映射为 MISSING。
+_MISSING_CODES = ("missingtitle", "nosuchpageid", "nosuchrevid")
+# 上游暂时性错误：可在预算内有限重试。
+_RETRIABLE_CODES = ("maxlag", "ratelimited", "readonly", "internal_api_error", "backend-fail")
+
+
+@dataclass
+class PageFetch:
+    page: str
+    status: PageStatus
+    english_section_number: str | None = None
+    revid: int | None = None
+    html: str | None = None
+    toc_sections: list[dict[str, Any]] = field(default_factory=list)
+    requests: list[FetchedResponse] = field(default_factory=list)
+    warnings: list[str] = field(default_factory=list)
+
+
+def build_tocdata_url(page: str, *, endpoint: str = DEFAULT_API_ENDPOINT) -> str:
+    query = urllib.parse.urlencode(
+        {
+            "action": "parse",
+            "page": page,
+            "prop": "tocdata",
+            "format": "json",
+            "redirects": "1",
+        }
+    )
+    return f"{endpoint}?{query}"
+
+
+def build_parse_text_url(
+    page: str, section_number: str, *, endpoint: str = DEFAULT_API_ENDPOINT
+) -> str:
+    query = urllib.parse.urlencode(
+        {
+            "action": "parse",
+            "page": page,
+            "section": str(section_number),
+            "prop": "text",
+            "format": "json",
+            "redirects": "1",
+        }
+    )
+    return f"{endpoint}?{query}"
+
+
+def _decode_json(response: FetchedResponse) -> Mapping[str, Any]:
+    try:
+        payload = json.loads(response.body.decode("utf-8"))
+    except (UnicodeDecodeError, json.JSONDecodeError) as error:
+        # 截断内容不会到达这里（adapter 已拒绝），但坏 JSON 仍保守报错。
+        raise ActionApiError(f"响应不是有效 JSON: {error}") from error
+    # 顶层必须是对象：``[]`` / ``null`` / ``"str"`` 等不能携带 ``.get``，直接
+    # 结构性失败（ActionApiError），绝不留在 in-flight、也不伪装成 MISSING。
+    if not isinstance(payload, Mapping):
+        raise ActionApiError(
+            f"响应 JSON 顶层必须是对象，实为 {type(payload).__name__}"
+        )
+    return payload
+
+
+def select_english_section(
+    payload: Mapping[str, Any],
+) -> tuple[str | None, list[dict[str, Any]]]:
+    """从 tocdata 中选出 English hLevel=2 的 section number。
+
+    返回 ``(section_number_or_None, sections)``。动态扫描，绝不假设 index=1。
+    """
+    parse = payload.get("parse")
+    if not isinstance(parse, Mapping):
+        raise ActionApiError("tocdata 缺少 parse 字段")
+    tocdata = parse.get("tocdata")
+    if tocdata is None:
+        raise ActionApiError("tocdata 缺少 parse.tocdata 字段")
+    if not isinstance(tocdata, Mapping):
+        raise ActionApiError("tocdata.tocdata 结构异常")
+    sections = tocdata.get("sections")
+    if sections is None:
+        sections = []
+    if not isinstance(sections, list):
+        raise ActionApiError("tocdata.sections 结构异常")
+    for section in sections:
+        # 非对象的 section 无法携带 line/level：结构性失败，不静默跳过。
+        if not isinstance(section, Mapping):
+            raise ActionApiError("tocdata.sections 元素必须是对象")
+        line = str(section.get("line", "")).strip()
+        level = section.get("level")
+        try:
+            level_int = int(level)
+        except (TypeError, ValueError):
+            continue
+        if line == ENGLISH_HEADING and level_int == 2:
+            number = section.get("number")
+            if number is None:
+                continue
+            return str(number), list(sections)
+    return None, list(sections)
+
+
+def _has_api_error(payload: Mapping[str, Any]) -> str | None:
+    error = payload.get("error")
+    if isinstance(error, dict):
+        return str(error.get("code") or error.get("info") or "unknown-api-error")
+    if error:
+        return str(error)
+    return None
+
+
+def classify_api_error(code: str) -> str:
+    """把 API 错误码分为 ``missing`` / ``retriable`` / ``structural``。"""
+    if code in _MISSING_CODES:
+        return "missing"
+    if code in _RETRIABLE_CODES:
+        return "retriable"
+    return "structural"
+
+
+def _claim_api_retry(adapter: HttpAdapter, *, head: str, kind: RequestKind, api_error: str) -> None:
+    """为 HTTP-200 的 API 错误声明一次 operation 重试；额度耗尽则抛可重试错误。
+
+    错误/重试在同一 logical operation 上计账，并在 sleep 前持久（由适配层
+    ``claim_operation_retry`` 保证）；额度耗尽必须停止重试，交由 collector 收尾。
+    """
+    adapter.budget.note_error()
+    retry_index = adapter.claim_operation_retry(
+        head=head, kind=kind, reason=f"api-error:{api_error}"
+    )
+    if retry_index is None:
+        raise RetryableActionApiError(
+            f"{kind.value}-api-error:{api_error}(retry-budget-exhausted)"
+        )
+    adapter.operation_retry_wait(retry_index)
+
+
+def fetch_english_page(
+    adapter: HttpAdapter,
+    page: str,
+    *,
+    endpoint: str = DEFAULT_API_ENDPOINT,
+) -> PageFetch:
+    """抓取并定位 English 段，返回完整展开 HTML 或明确缺失状态。
+
+    TOC 与 MAIN **各自**有独立的 fetch+decode/APIerror 重试循环：MAIN 的可重试
+    错误只会重抓 MAIN，绝不回退重跑 TOC（避免重复计费与放大）。
+    """
+    fetch = PageFetch(page=page, status=PageStatus.MISSING)
+
+    # --- TOC：独立循环 ---
+    while True:
+        toc_response = adapter.fetch(
+            build_tocdata_url(page, endpoint=endpoint), kind=RequestKind.TOC, head=page
+        )
+        fetch.requests.append(toc_response)
+        toc_payload = _decode_json(toc_response)
+        api_error = _has_api_error(toc_payload)
+        if api_error is None:
+            break
+        fetch.warnings.append(f"tocdata-api-error:{api_error}")
+        category = classify_api_error(api_error)
+        if category == "missing":
+            fetch.status = PageStatus.MISSING
+            return fetch
+        if category == "retriable":
+            _claim_api_retry(adapter, head=page, kind=RequestKind.TOC, api_error=api_error)
+            continue
+        raise ActionApiError(f"tocdata-api-error:{api_error}")
+
+    section_number, sections = select_english_section(toc_payload)
+    fetch.toc_sections = sections
+    if section_number is None:
+        fetch.status = PageStatus.NO_ENGLISH
+        return fetch
+
+    fetch.english_section_number = section_number
+
+    # --- MAIN：独立循环；MAIN 错误绝不重跑 TOC ---
+    while True:
+        text_response = adapter.fetch(
+            build_parse_text_url(page, section_number, endpoint=endpoint),
+            kind=RequestKind.MAIN,
+            head=page,
+        )
+        fetch.requests.append(text_response)
+        text_payload = _decode_json(text_response)
+        api_error = _has_api_error(text_payload)
+        if api_error is None:
+            break
+        fetch.warnings.append(f"parse-api-error:{api_error}")
+        category = classify_api_error(api_error)
+        if category == "missing":
+            fetch.status = PageStatus.MISSING
+            return fetch
+        if category == "retriable":
+            _claim_api_retry(adapter, head=page, kind=RequestKind.MAIN, api_error=api_error)
+            continue
+        raise ActionApiError(f"parse-api-error:{api_error}")
+
+    parse = text_payload.get("parse")
+    if not isinstance(parse, Mapping):
+        raise ActionApiError("parse 文本响应缺少 parse 字段")
+    text = parse.get("text")
+    if isinstance(text, dict):
+        html = text.get("*")
+    else:
+        html = text
+    if not isinstance(html, str):
+        raise ActionApiError("parse 文本响应缺少展开 HTML")
+    revid = parse.get("revid")
+    fetch.revid = int(revid) if isinstance(revid, int) else None
+    fetch.html = html
+    fetch.status = PageStatus.FOUND
+    return fetch
+
+
+def optional_compare_available(path: str | None) -> tuple[bool, str | None]:
+    """Kaikki 可选对照：缺失不阻断官方按词流程。"""
+    if path is None:
+        return False, "optional-compare-not-configured"
+    return False, "optional-compare-not-used-in-main-path"

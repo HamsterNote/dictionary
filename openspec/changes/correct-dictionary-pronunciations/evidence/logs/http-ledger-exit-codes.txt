@@ -1,0 +1,8 @@
+# Phase B (HTTP + ledger persistence) 实际退出码
+http=0
+transport=0
+ledger=0
+persistence=0
+compile=0
+help=0
+apply-alone=2

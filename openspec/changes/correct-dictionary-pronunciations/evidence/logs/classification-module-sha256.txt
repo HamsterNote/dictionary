@@ -1,0 +1,2 @@
+b45f8f7dc875c6f8cedd13528001a0e5e1391779ebe0cf104db6224b9f09f8b6  src/pronunciation-overlay/classification.ts
+49c8e096df6fbfbfaec0939c332b3d0cda008436d607bc1b1c15e7cffd7d5b88  scripts/test_pronunciation_classification.mjs
