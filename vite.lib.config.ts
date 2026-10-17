@@ -8,6 +8,7 @@ export default defineConfig({
     emptyOutDir: false,
     lib: {
       entry: {
+        'pronunciation-overlay': resolve(import.meta.dirname, 'src/pronunciation-overlay/index.ts'),
         index: resolve(import.meta.dirname, 'src/library.ts'),
         kokoro: resolve(import.meta.dirname, 'src/kokoro.ts'),
         'dictionary-packs/chinese-dictionary': resolve(

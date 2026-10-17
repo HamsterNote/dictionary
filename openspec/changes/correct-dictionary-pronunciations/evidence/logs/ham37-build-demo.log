@@ -1,0 +1,82 @@
+
+> @hamster-note/dictionary@0.1.1-beta.2 build:demo /home/zhangxiao/multica_workspaces/hamster-arm-d6b65621f809/ham-37-447aee136aa2/workdir/dictionary
+> vite build --config vite.demo.config.ts
+
+vite v8.2.1 building client environment for production...
+[2Ktransforming...✓ 220 modules transformed.
+rendering chunks...
+computing gzip size...
+demo-dist/assets/kokoro.worker-BNks-lIL.js                       0.66 kB
+demo-dist/index.html                                             0.82 kB │ gzip:      0.52 kB
+demo-dist/assets/kokoro-NUOP3T1E.js                          2,224.72 kB
+demo-dist/assets/ort-wasm-simd-threaded.jsep-B0T3yYHD.wasm  21,596.01 kB │ gzip:  5,168.67 kB
+demo-dist/assets/index-D1uhckwE.css                             58.74 kB │ gzip:      9.81 kB
+demo-dist/assets/englishExampleSentencePack-C9xZ9Imd.js          0.22 kB │ gzip:      0.19 kB
+demo-dist/assets/englishSynonymPack-C9xZ9Imd.js                  0.22 kB │ gzip:      0.19 kB
+demo-dist/assets/chineseDictionaryPack-DZpsKL7P.js               0.27 kB │ gzip:      0.21 kB
+demo-dist/assets/englishRootPack-DnlJN2sp.js                     0.32 kB │ gzip:      0.25 kB
+demo-dist/assets/zk-BYln4UZS.js                                  1.41 kB │ gzip:      0.73 kB
+demo-dist/assets/kokoro-M2fqRkKL.js                              1.69 kB │ gzip:      0.94 kB
+demo-dist/assets/zk-CQYVjqiF.js                                  6.71 kB │ gzip:      3.49 kB
+demo-dist/assets/zk-CwPmdU2q.js                                  8.79 kB │ gzip:      5.54 kB
+demo-dist/assets/gk-D9r9HXvj.js                                  9.95 kB │ gzip:      3.67 kB
+demo-dist/assets/cet4-g7nrGfqO.js                               12.05 kB │ gzip:      4.29 kB
+demo-dist/assets/ky-iEbvHDTJ.js                                 16.48 kB │ gzip:      5.74 kB
+demo-dist/assets/ielts-0bquUkkG.js                              21.90 kB │ gzip:      7.48 kB
+demo-dist/assets/zk-BD8hXc_2.js                                 28.12 kB │ gzip:     13.62 kB
+demo-dist/assets/cet6-CXRcl3sT.js                               29.59 kB │ gzip:      9.61 kB
+demo-dist/assets/gk-B-z8y9VB.js                                 38.23 kB │ gzip:     18.20 kB
+demo-dist/assets/core-Bf_r_bnI.js                               49.09 kB │ gzip:     14.94 kB
+demo-dist/assets/gk-hcD9y_Dv.js                                 56.79 kB │ gzip:     30.74 kB
+demo-dist/assets/cet4-Bk2tJn9d.js                               62.48 kB │ gzip:     28.59 kB
+demo-dist/assets/toefl-D1vXCpk3.js                              64.54 kB │ gzip:     19.16 kB
+demo-dist/assets/gre-C-SwfPU8.js                                64.92 kB │ gzip:     20.07 kB
+demo-dist/assets/cet4-BIKhSH4j.js                               84.14 kB │ gzip:     43.67 kB
+demo-dist/assets/ky-Cp5rqfUT.js                                107.19 kB │ gzip:     46.95 kB
+demo-dist/assets/ielts-Dk-Yx6gQ.js                             129.82 kB │ gzip:     56.14 kB
+demo-dist/assets/cet6-DWDmEcBE.js                              136.32 kB │ gzip:     58.69 kB
+demo-dist/assets/ky-BcZnTv7L.js                                143.43 kB │ gzip:     73.31 kB
+demo-dist/assets/gk-XjUkoxd5.js                                166.83 kB │ gzip:     75.89 kB
+demo-dist/assets/cet6-Dc5aKxaU.js                              191.94 kB │ gzip:     97.30 kB
+demo-dist/assets/ielts-CT9yF2eI.js                             200.61 kB │ gzip:    100.89 kB
+demo-dist/assets/cet4-Ccv16fE5.js                              217.81 kB │ gzip:     98.89 kB
+demo-dist/assets/toefl-B8AJU2HS.js                             219.95 kB │ gzip:     92.32 kB
+demo-dist/assets/gre-Bqj7t3wG.js                               293.17 kB │ gzip:    122.78 kB
+demo-dist/assets/toefl-D-G4fYON.js                             345.84 kB │ gzip:    173.48 kB
+demo-dist/assets/ky-DrS0U8WH.js                                361.26 kB │ gzip:    161.73 kB
+demo-dist/assets/core-BSZyoYRC.js                              364.69 kB │ gzip:    149.96 kB
+demo-dist/assets/gre-BY03cizQ.js                               470.28 kB │ gzip:    238.27 kB
+demo-dist/assets/bnc-w2meWol3.js                               484.04 kB │ gzip:    126.62 kB
+demo-dist/assets/cet6-ZaInGTl2.js                              487.40 kB │ gzip:    217.20 kB
+demo-dist/assets/ielts-EEPPy4H-.js                             508.37 kB │ gzip:    225.35 kB
+demo-dist/assets/index-CgtUzGpw.js                             749.41 kB │ gzip:    310.96 kB
+demo-dist/assets/toefl-BgOOYvGX.js                             903.36 kB │ gzip:    397.84 kB
+demo-dist/assets/chinese-dictionary-Dvny2tn5.js                929.35 kB │ gzip:    394.17 kB
+demo-dist/assets/core-DUjppzTe.js                              948.91 kB │ gzip:    407.10 kB
+demo-dist/assets/bnc-B-xAWgK5.js                               983.42 kB │ gzip:    395.64 kB
+demo-dist/assets/gre-CGQx1Rba.js                             1,180.17 kB │ gzip:    523.35 kB
+demo-dist/assets/forms-DqYew65a.js                           1,447.51 kB │ gzip:    368.24 kB
+demo-dist/assets/reverse-CXznlEnw.js                         1,447.52 kB │ gzip:    362.29 kB
+demo-dist/assets/bnc-K-K9QCN9.js                             2,568.02 kB │ gzip:  1,343.76 kB
+demo-dist/assets/bnc-Bx2bS1vu.js                             6,599.15 kB │ gzip:  2,949.52 kB
+demo-dist/assets/chinese-xinhua-LpkvfvOm.js                 12,885.32 kB │ gzip:  5,839.11 kB
+demo-dist/assets/chinese-xinhua-words-BZBqRccG.js           20,308.75 kB │ gzip:  9,071.32 kB
+demo-dist/assets/chinese-dictionary-words-_N9FeKbB.js       27,582.04 kB │ gzip: 11,975.36 kB
+
+✓ built in 4.71s
+[plugin builtin:vite-reporter]
+(!) Some chunks are larger than 500 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rolldownOptions.output.codeSplitting to improve chunking: https://rolldown.rs/reference/OutputOptions.codeSplitting
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+[33m[PLUGIN_TIMINGS] [0mYour build spent 41% of 4.7s inside plugin hooks (1.9s).
+Measured inside the callback, so queue time is excluded and time the callback itself awaited is not:
+  - vite:worker-import-meta-url transform (31%, 1.4s, 1 call)
+Those rows are 31% of the build; the rest of the 41% is below.
+Not measurable — 2 hooks whose calls overlap, so elapsed time covers work other calls were doing. Profile with `node --cpu-prof`:
+  - vite:asset load (46 calls)
+  - vite:css transform (7 calls)
+See https://rolldown.rs/reference/InputOptions.checks#plugintimings for more details.
+
+
+Exit code: 0

@@ -1,0 +1,36 @@
+
+> @hamster-note/dictionary@0.1.1-beta.2 test:phonetics /home/zhangxiao/multica_workspaces/hamster-arm-d6b65621f809/ham-37-447aee136aa2/workdir/dictionary
+> python3 scripts/test_generate_wiktionary_phonetics.py
+
+已生成：/tmp/multica-task-1894615162/tmpd0t0ty43/src/data/wiktionary-phonetics-core.tsv
+已生成：/tmp/multica-task-1894615162/tmpd0t0ty43/src/data/wiktionary-phonetics-zk.tsv
+已生成：/tmp/multica-task-1894615162/tmpd0t0ty43/src/data/wiktionary-phonetics-gk.tsv
+已生成：/tmp/multica-task-1894615162/tmpd0t0ty43/src/data/wiktionary-phonetics-cet4.tsv
+已生成：/tmp/multica-task-1894615162/tmpd0t0ty43/src/data/wiktionary-phonetics-cet6.tsv
+已生成：/tmp/multica-task-1894615162/tmpd0t0ty43/src/data/wiktionary-phonetics-ky.tsv
+已生成：/tmp/multica-task-1894615162/tmpd0t0ty43/src/data/wiktionary-phonetics-ielts.tsv
+已生成：/tmp/multica-task-1894615162/tmpd0t0ty43/src/data/wiktionary-phonetics-toefl.tsv
+已生成：/tmp/multica-task-1894615162/tmpd0t0ty43/src/data/wiktionary-phonetics-gre.tsv
+已生成：/tmp/multica-task-1894615162/tmpd0t0ty43/src/data/wiktionary-phonetics-bnc.tsv
+已生成：/tmp/multica-task-1894615162/tmpd0t0ty43/src/data/wiktionaryPhoneticsManifest.ts
+已生成：/tmp/multica-task-1894615162/tmpd0t0ty43/reports/wiktionary-phonetics-coverage.txt
+已生成：/tmp/multica-task-1894615162/wiktionary-phonetics-fq5x0d4w/src/data/wiktionary-phonetics-core.tsv
+已生成：/tmp/multica-task-1894615162/wiktionary-phonetics-fq5x0d4w/src/data/wiktionary-phonetics-zk.tsv
+已生成：/tmp/multica-task-1894615162/wiktionary-phonetics-fq5x0d4w/src/data/wiktionary-phonetics-gk.tsv
+已生成：/tmp/multica-task-1894615162/wiktionary-phonetics-fq5x0d4w/src/data/wiktionary-phonetics-cet4.tsv
+已生成：/tmp/multica-task-1894615162/wiktionary-phonetics-fq5x0d4w/src/data/wiktionary-phonetics-cet6.tsv
+已生成：/tmp/multica-task-1894615162/wiktionary-phonetics-fq5x0d4w/src/data/wiktionary-phonetics-ky.tsv
+已生成：/tmp/multica-task-1894615162/wiktionary-phonetics-fq5x0d4w/src/data/wiktionary-phonetics-ielts.tsv
+已生成：/tmp/multica-task-1894615162/wiktionary-phonetics-fq5x0d4w/src/data/wiktionary-phonetics-toefl.tsv
+已生成：/tmp/multica-task-1894615162/wiktionary-phonetics-fq5x0d4w/src/data/wiktionary-phonetics-gre.tsv
+已生成：/tmp/multica-task-1894615162/wiktionary-phonetics-fq5x0d4w/src/data/wiktionary-phonetics-bnc.tsv
+已生成：/tmp/multica-task-1894615162/wiktionary-phonetics-fq5x0d4w/src/data/wiktionaryPhoneticsManifest.ts
+已生成：/tmp/multica-task-1894615162/wiktionary-phonetics-fq5x0d4w/reports/wiktionary-phonetics-coverage.txt
+--check 通过：所有 Wiktionary 音标产物逐字节一致
+....
+----------------------------------------------------------------------
+Ran 4 tests in 0.006s
+
+OK
+
+Exit code: 0

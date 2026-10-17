@@ -1,5 +1,20 @@
 # 合同与身份证据（小阶段 A 合同恢复 + 小阶段 B 身份恢复）
 
+## 当前复核（HAM-37，2026-10-17）
+
+下文 A–H 保留为历史记录；其“待修订/未通过”不代表当前实现。
+在 `feat/pronunciation-overlay` 重新运行 `node scripts/test_pronunciation_identity.mjs`，退出码 0，
+日志 `logs/ham37-identity.log`。本次补充空白别名、非布尔 synthetic、重复后继、空白 split 原因的拒绝，
+以及 retired 条目不能共享证据的直接回归；真实身份缺省 synthetic=false 可正常复用。
+
+2.2：entry/lexeme 工厂拒绝交叉前缀，序列化恢复保持 ID，更新拼写/POS/IPA 保持 ID；
+lowercase/NFKC 碰撞保留独立身份，alias 的 pending/confirmed/historical 与定位冲突均有负例。
+2.3：四角色独立、单角色证据不认证其他角色；共享逐维覆盖全部八维并排除 retired；
+身份复用仅接受 active、有据、相同语言和 synthetic class 的 verb/lexeme。
+2.4：未知第二后继保持 unresolved，其他后继必须确定 disjoint；merge/split 同步重映射 scope.entry，
+其他维度不变；部分交集不能迁移，注入 matcher 只能收紧；历史 scope/fingerprint 与旧 alias 保留。
+全部测试均为 synthetic，未采集、发布或自动批准。
+
 > **重要更正**：本文件更早版本宣称任务 2.1–2.4 全部完成，属于**历史未验收声明，不实**。
 > 主编排复核发现合同与身份实现存在多处缺口（无效 scope 夹具、身份引用、坏引用、createdAt、
 > 指纹规范化、split 唯一性、scope.entry 重映射、生命周期不变量等）。

@@ -16,6 +16,10 @@
   "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "exports": {
+    "./pronunciation-overlay": {
+      "types": "./dist/pronunciation-overlay/index.d.ts",
+      "import": "./dist/pronunciation-overlay.js"
+    },
     ".": {
       "types": "./dist/index.d.ts",
       "import": "./dist/index.js"
@@ -210,6 +214,7 @@
     }
   },
   "scripts": {
+    "test:pronunciation-overlay": "node scripts/test_pronunciation_overlay.mjs",
     "dev": "vite --config vite.demo.config.ts",
     "build": "yarn clean && yarn build:types && yarn build:lib && yarn build:demo",
     "build:package": "rm -rf dist && yarn build:types && yarn build:lib",

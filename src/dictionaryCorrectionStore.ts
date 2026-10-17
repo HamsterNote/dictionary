@@ -3,6 +3,7 @@ import {
   DICTIONARY_CORRECTION_STORAGE_KEY,
   sanitizeDictionaryCorrectionMap,
 } from './dictionaryCorrections';
+import { readLegacyState } from './pronunciation-overlay/legacy';
 
 /** 基于任意存储实现创建一个词条纠错仓库；存储异常会原样抛给调用方。 */
 export function createDictionaryCorrectionStore(
@@ -10,6 +11,12 @@ export function createDictionaryCorrectionStore(
   storageKey: string = DICTIONARY_CORRECTION_STORAGE_KEY,
 ): DictionaryCorrectionStore {
   return {
+    loadForOverlay: () => {
+      const raw = storage.getItem(storageKey);
+      const state = readLegacyState({ getItem: () => raw });
+      if (state.status === 'failed') throw new Error(state.reason);
+      return sanitizeDictionaryCorrectionMap(state.user);
+    },
     load: () => {
       const raw = storage.getItem(storageKey);
       if (raw === null) return {};

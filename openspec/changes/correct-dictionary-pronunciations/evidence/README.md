@@ -1,7 +1,8 @@
 # 任务 1.1 / 1.2 证据索引
 
-本目录是 OpenSpec change `correct-dictionary-pronunciations` 任务 1.1、1.2 的完成证据，
-写 scope 仅限本目录与 `tasks.md` 的 1.1/1.2 checkbox。
+本目录最初记录 OpenSpec change `correct-dictionary-pronunciations` 任务 1.1、1.2 的完成证据。
+后续离线实施已扩展至第 1–9 组；HAM-37 的逐项测试、实际退出码、环境缺口及授权边界见
+`08-offline-acceptance.md`、`ham37-test-results.json` 与 `logs/ham37-*`。
 
 | 文件 | 对应任务 | 内容 |
 | --- | --- | --- |

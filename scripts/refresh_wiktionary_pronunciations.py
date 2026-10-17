@@ -179,8 +179,15 @@ def run_offline_reparse(
 
     candidates: list[Candidate] = []
     for entry in cache.entries():  # 稳定顺序，便于审查
-        if "json" in entry.content_type.lower():
-            continue
+        try:
+            payload = json.loads(entry.body)
+        except (ValueError, UnicodeDecodeError):
+            payload = None
+        if isinstance(payload, dict) and not payload.get("error"):
+            parse = payload.get("parse")
+            # TOC is navigation evidence, whereas parse.text is the main response.
+            if isinstance(parse, dict) and "tocdata" in parse and "text" not in parse:
+                continue
         head = _head_from_url(entry.source_url)
         if head is None:
             continue

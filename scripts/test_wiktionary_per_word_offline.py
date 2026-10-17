@@ -408,6 +408,34 @@ class JsonCacheReparseTest(unittest.TestCase):
     def test_apply_alone_refuses_without_network(self) -> None:
         self.assertEqual(cli.main(["--apply"]), 2)
 
+    def test_cli_reparses_main_json_but_not_toc(self) -> None:
+        for as_object in (True, False):
+            with self.subTest(as_object=as_object), tempfile.TemporaryDirectory() as directory:
+                cache = ResponseCache(directory=Path(directory))
+                for body in (
+                    tocdata_payload(MULTI_LANG_SECTIONS),
+                    main_text_json(english_html(), as_object=as_object),
+                ):
+                    cache.put(
+                        body,
+                        content_type="application/json",
+                        complete=True,
+                        source_url="https://en.wiktionary.org/w/api.php?page=read",
+                        fetched_at="2026-01-01T00:00:00Z",
+                    )
+                candidates = cli.run_offline_reparse(
+                    cache_dir=Path(directory), current_path=None, output_path=None
+                )
+                expected = generate_candidates(
+                    head="read", current_value=None,
+                    observations=extract_observations(english_html()).observations,
+                )
+                self.assertEqual(
+                    [candidate.to_json() for candidate in candidates],
+                    [candidate.to_json() for candidate in expected],
+                )
+                self.assertTrue(any(candidate.readings for candidate in candidates))
+
     def test_apply_missing_user_agent_refused(self) -> None:
         parser = cli.build_parser()
         args = parser.parse_args(["--apply", "--heads-file", "/nope", "--authorization-file", "/nope"])

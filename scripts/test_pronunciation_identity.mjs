@@ -1357,6 +1357,28 @@ try {
   });
   assert.deepEqual([...shared.entryIds].sort(), [read.ids.base, read.ids.present].sort());
   assert.ok(getEntry(shared.registry, read.ids.base).sharedObservationIds.includes('obs-shared'));
+  const retiredShareRegistry = clone(readRegistry);
+  retiredShareRegistry.byId[read.ids.base] = {
+    ...retiredShareRegistry.byId[read.ids.base],
+    status: 'retired',
+    redirectTo: read.ids.present,
+    retiredReason: 'synthetic merge',
+  };
+  const retiredShare = shareRoleEvidence(retiredShareRegistry, read.lexemeId, {
+    observationId: 'obs-retired',
+    roles: ['base'],
+    applicability: sharedScope,
+    evidenceRefs: shareEvidence,
+  });
+  assert.deepEqual(retiredShare.entryIds, []);
+  assert.deepEqual(retiredShare.uncoveredRoles, ['base']);
+  assert.equal(getEntry(retiredShare.registry, read.ids.base).sharedObservationIds, undefined);
+  const blankAlias = clone(readRegistry);
+  blankAlias.byId[read.ids.base].aliases = ['   '];
+  assert.equal(validateIdentityRegistry(blankAlias).valid, false);
+  const badSynthetic = clone(readRegistry);
+  badSynthetic.byId[read.ids.base].synthetic = 'true';
+  assert.equal(validateIdentityRegistry(badSynthetic).valid, false);
   // 正面：entry.applicability 已有 sense reading/accent US，source 精确 8 维 multi-role → 必须共享。
   let fullReadReg = readRegistry;
   fullReadReg = updateEntryAttributes(fullReadReg, read.ids.base, {
@@ -1799,6 +1821,22 @@ try {
   assert.equal(getEntry(splitRegistry, unsplit.entryId).status, 'retired');
   assert.equal(getEntry(splitRegistry, unsplit.entryId).successorIds.length, 2);
   assert.equal(getEntry(splitRegistry, unsplit.entryId).redirectTo, undefined);
+  const repeatedSuccessor = clone(splitRegistry);
+  repeatedSuccessor.byId[unsplit.entryId].successorIds = [
+    splitResult.successorIds[0],
+    splitResult.successorIds[0],
+  ];
+  assert.equal(validateIdentityRegistry(repeatedSuccessor).valid, false);
+  assert.throws(
+    () =>
+      splitEntry(unsplit.registry, [], {
+        entryId: unsplit.entryId,
+        successors: [],
+        reason: '   ',
+        evidenceRefs: ['synthetic:test'],
+      }),
+    /身份证据/u,
+  );
   const pastSuccessorId = splitResult.successorIds[1];
   assert.deepEqual(splitResult.audit.migratedCorrectionIds, ['corr-past-ok']);
   const pastMigrated = splitResult.corrections.find((item) => item.correctionId === 'corr-past-ok');

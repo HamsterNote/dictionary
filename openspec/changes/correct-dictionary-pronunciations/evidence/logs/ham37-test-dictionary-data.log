@@ -1,0 +1,7 @@
+
+> @hamster-note/dictionary@0.1.1-beta.2 test:dictionary-data /home/zhangxiao/multica_workspaces/hamster-arm-d6b65621f809/ham-37-447aee136aa2/workdir/dictionary
+> node scripts/test_dictionary_data.mjs
+
+overlay opt-in query compatibility: OK
+
+Exit code: 0

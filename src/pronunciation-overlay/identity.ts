@@ -259,7 +259,7 @@ export function createEntry(
     ['aliases', input.aliases],
     ['evidenceRefs', input.evidenceRefs],
   ] as const) {
-    if (values?.some((value) => typeof value !== 'string' || value.length === 0)) {
+    if (values?.some((value) => typeof value !== 'string' || value.trim().length === 0)) {
       throw new Error(`createEntry: ${label} 元素必须是非空字符串`);
     }
   }
@@ -746,8 +746,7 @@ function isReusableVerbEntry(
     entry.language !== language ||
     !entryHasSpelling(entry, spelling) ||
     entry.partOfSpeech !== 'verb' ||
-    entry.synthetic === undefined ||
-    entry.synthetic !== synthetic ||
+    (entry.synthetic ?? false) !== synthetic ||
     entry.evidenceRefs.length === 0
   ) {
     return false;
@@ -1373,10 +1372,10 @@ export function mergeEntries(
   input: MergeInput,
   options: MergeOptions = {},
 ): MergeResult {
-  if (input.evidenceRefs.length === 0) {
+  if (!hasValidEvidence(input.evidenceRefs)) {
     throw new Error('mergeEntries: 合并必须有身份证据');
   }
-  if (input.reason.length === 0) {
+  if (input.reason.trim().length === 0 || input.mergedIds.length === 0) {
     throw new Error('mergeEntries: 合并必须有原因');
   }
   const canonical = getEntry(registry, input.canonicalId);
@@ -1525,7 +1524,7 @@ export function splitEntry(
   input: SplitInput,
   factory: IdentityIdFactory = defaultIdentityIdFactory,
 ): SplitResult {
-  if (input.evidenceRefs.length === 0) {
+  if (!hasValidEvidence(input.evidenceRefs) || input.reason.trim().length === 0) {
     throw new Error('splitEntry: 拆分必须有身份证据');
   }
   if (input.successors.length < 2) {
@@ -1773,7 +1772,10 @@ export function validateIdentityRegistry(value: unknown): ValidationResult {
         );
       }
       const aliases = item['aliases'];
-      if (!Array.isArray(aliases) || aliases.some((alias) => typeof alias !== 'string')) {
+      if (
+        !Array.isArray(aliases) ||
+        aliases.some((alias) => typeof alias !== 'string' || alias.trim() === '')
+      ) {
         pushIssue(issues, `$.byId.${key}.aliases`, 'entry-aliases', 'aliases 必须是字符串数组');
       }
       const roles = item['grammarRoles'];
@@ -1790,7 +1792,10 @@ export function validateIdentityRegistry(value: unknown): ValidationResult {
         pushIssue(issues, `$.byId.${key}.status`, 'entry-status', 'status 必须是 active | retired');
       }
       const evidenceRefs = item['evidenceRefs'];
-      if (!Array.isArray(evidenceRefs) || evidenceRefs.some((ref) => typeof ref !== 'string')) {
+      if (
+        !Array.isArray(evidenceRefs) ||
+        evidenceRefs.some((ref) => typeof ref !== 'string' || ref.trim() === '')
+      ) {
         pushIssue(
           issues,
           `$.byId.${key}.evidenceRefs`,
@@ -1806,6 +1811,12 @@ export function validateIdentityRegistry(value: unknown): ValidationResult {
           'entry-successors',
           'successorIds 必须是字符串数组',
         );
+      }
+      if (Array.isArray(successorIds) && new Set(successorIds).size !== successorIds.length) {
+        pushIssue(issues, `$.byId.${key}.successorIds`, 'duplicate-successor', '后继不得重复');
+      }
+      if (item['synthetic'] !== undefined && typeof item['synthetic'] !== 'boolean') {
+        pushIssue(issues, `$.byId.${key}.synthetic`, 'entry-synthetic', 'synthetic 必须是布尔值');
       }
       const lexemeId = item['lexemeId'];
       if (lexemeId !== undefined && (typeof lexemeId !== 'string' || !isOpaqueIdFormat(lexemeId))) {
@@ -1953,7 +1964,7 @@ export function validateIdentityRegistry(value: unknown): ValidationResult {
           '被停用条目必须恰好带 redirectTo 或 successorIds 之一',
         );
       }
-      if (typeof retiredReason !== 'string' || retiredReason === '') {
+      if (typeof retiredReason !== 'string' || retiredReason.trim() === '') {
         pushIssue(
           issues,
           `$.byId.${key}.retiredReason`,

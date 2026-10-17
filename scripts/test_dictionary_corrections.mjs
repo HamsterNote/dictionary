@@ -2,6 +2,7 @@ import assert from 'node:assert/strict';
 import { createElement } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { createServer } from 'vite';
+import { checkOverlayCorrections } from './pronunciation_compatibility_checks.mjs';
 
 const server = await createServer({ logLevel: 'error', server: { middlewareMode: true } });
 
@@ -474,6 +475,7 @@ try {
     ),
     { activeKeyword: 'new-host-entry', useProvidedContent: true },
   );
+  await checkOverlayCorrections(server);
 } finally {
   await server.close();
 }

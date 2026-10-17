@@ -1,0 +1,79 @@
+
+> @hamster-note/dictionary@0.1.1-beta.2 build:lib /home/zhangxiao/multica_workspaces/hamster-arm-d6b65621f809/ham-37-447aee136aa2/workdir/dictionary
+> vite build --config vite.lib.config.ts
+
+vite v8.2.1 building client environment for production...
+[2Ktransforming...✓ 177 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/assets/kokoro.worker-BwCuTFeS.js                   0.71 kB
+dist/assets/kokoro-BcvGHNLM.js                     59,814.12 kB
+dist/dictionary.css                                    42.97 kB │ gzip:      7.20 kB
+dist/ecdictInflectionManifest-C_ntGBue.js               0.37 kB │ gzip:      0.26 kB │ map:   0.70 kB
+dist/englishInflectionPack-BJnavJYI.js                  0.96 kB │ gzip:      0.48 kB │ map:   3.60 kB
+dist/chineseDictionaryManifest-CObKyby3.js              1.01 kB │ gzip:      0.54 kB │ map:   3.05 kB
+dist/englishExampleSentencePack-B9qEGbt8.js             1.34 kB │ gzip:      0.69 kB │ map:   3.63 kB
+dist/englishSynonymPack-CV9e3ZcN.js                     1.36 kB │ gzip:      0.68 kB │ map:   3.60 kB
+dist/englishChineseVocabularyPack-BVsuI4wq.js           1.38 kB │ gzip:      0.70 kB │ map:   3.81 kB
+dist/root-packs/zk.js                                   1.53 kB │ gzip:      0.78 kB │ map:   0.41 kB
+dist/englishRootPack-8MNrnkuo.js                        1.56 kB │ gzip:      0.75 kB │ map:   4.08 kB
+dist/kokoro.js                                          2.36 kB │ gzip:      1.16 kB │ map:   7.95 kB
+dist/synonym-packs/zk.js                                6.91 kB │ gzip:      3.58 kB │ map:   0.44 kB
+dist/vocabulary-packs/zk.js                             9.06 kB │ gzip:      5.67 kB │ map:   0.47 kB
+dist/root-packs/gk.js                                  10.40 kB │ gzip:      3.73 kB │ map:   0.41 kB
+dist/root-packs/cet4.js                                12.58 kB │ gzip:      4.36 kB │ map:   0.43 kB
+dist/root-packs/ky.js                                  17.17 kB │ gzip:      5.82 kB │ map:   0.41 kB
+dist/root-packs/ielts.js                               22.80 kB │ gzip:      7.56 kB │ map:   0.43 kB
+dist/example-sentence-packs/zk.js                      28.42 kB │ gzip:     13.70 kB │ map:   0.48 kB
+dist/root-packs/cet6.js                                30.76 kB │ gzip:      9.72 kB │ map:   0.43 kB
+dist/synonym-packs/gk.js                               39.00 kB │ gzip:     18.31 kB │ map:   0.44 kB
+dist/root-packs/core.js                                51.03 kB │ gzip:     15.07 kB │ map:   0.43 kB
+dist/vocabulary-packs/gk.js                            57.80 kB │ gzip:     30.98 kB │ map:   0.47 kB
+dist/synonym-packs/cet4.js                             63.54 kB │ gzip:     28.74 kB │ map:   0.45 kB
+dist/pronunciation-overlay.js                          64.43 kB │ gzip:     17.68 kB │ map: 195.48 kB
+dist/phoneticEditing-BjfGCxHM.js                       66.61 kB │ gzip:     18.74 kB │ map: 225.76 kB
+dist/root-packs/toefl.js                               66.91 kB │ gzip:     19.34 kB │ map:   0.43 kB
+dist/root-packs/gre.js                                 67.35 kB │ gzip:     20.25 kB │ map:   0.42 kB
+dist/vocabulary-packs/cet4.js                          85.41 kB │ gzip:     43.92 kB │ map:   0.49 kB
+dist/synonym-packs/ky.js                              108.92 kB │ gzip:     47.24 kB │ map:   0.44 kB
+dist/synonym-packs/ielts.js                           131.99 kB │ gzip:     56.47 kB │ map:   0.46 kB
+dist/synonym-packs/cet6.js                            138.61 kB │ gzip:     59.07 kB │ map:   0.45 kB
+dist/vocabulary-packs/ky.js                           145.44 kB │ gzip:     73.61 kB │ map:   0.47 kB
+dist/example-sentence-packs/gk.js                     168.08 kB │ gzip:     76.11 kB │ map:   0.48 kB
+dist/vocabulary-packs/cet6.js                         194.61 kB │ gzip:     97.63 kB │ map:   0.49 kB
+dist/vocabulary-packs/ielts.js                        203.39 kB │ gzip:    101.24 kB │ map:   0.49 kB
+dist/example-sentence-packs/cet4.js                   219.45 kB │ gzip:     99.19 kB │ map:   0.50 kB
+dist/synonym-packs/toefl.js                           224.07 kB │ gzip:     92.92 kB │ map:   0.46 kB
+dist/synonym-packs/gre.js                             298.71 kB │ gzip:    123.64 kB │ map:   0.45 kB
+dist/vocabulary-packs/toefl.js                        350.77 kB │ gzip:    174.12 kB │ map:   0.49 kB
+dist/example-sentence-packs/ky.js                     363.87 kB │ gzip:    162.20 kB │ map:   0.48 kB
+dist/synonym-packs/core.js                            369.15 kB │ gzip:    150.55 kB │ map:   0.45 kB
+dist/vocabulary-packs/gre.js                          476.94 kB │ gzip:    238.97 kB │ map:   0.48 kB
+dist/example-sentence-packs/cet6.js                   490.87 kB │ gzip:    217.85 kB │ map:   0.50 kB
+dist/root-packs/bnc.js                                501.20 kB │ gzip:    127.60 kB │ map:   0.42 kB
+dist/index.js                                         501.54 kB │ gzip:    229.13 kB │ map: 232.17 kB
+dist/example-sentence-packs/ielts.js                  511.91 kB │ gzip:    225.99 kB │ map:   0.50 kB
+dist/example-sentence-packs/toefl.js                  909.62 kB │ gzip:    399.09 kB │ map:   0.50 kB
+dist/dictionary-packs/chinese-dictionary.js           932.98 kB │ gzip:    394.34 kB │ map:   0.54 kB
+dist/example-sentence-packs/core.js                   956.58 kB │ gzip:    408.54 kB │ map:   0.50 kB
+dist/synonym-packs/bnc.js                           1,005.27 kB │ gzip:    398.12 kB │ map:   0.45 kB
+dist/example-sentence-packs/gre.js                  1,188.49 kB │ gzip:    524.91 kB │ map:   0.49 kB
+dist/inflection-packs/forms.js                      1,519.14 kB │ gzip:    371.87 kB │ map:   0.50 kB
+dist/inflection-packs/reverse.js                    1,519.15 kB │ gzip:    366.10 kB │ map:   0.51 kB
+dist/vocabulary-packs/bnc.js                        2,608.65 kB │ gzip:  1,346.87 kB │ map:   0.48 kB
+dist/example-sentence-packs/bnc.js                  6,643.78 kB │ gzip:  2,957.87 kB │ map:   0.49 kB
+dist/dictionary-packs/chinese-xinhua.js            12,947.32 kB │ gzip:  5,853.08 kB │ map:   0.53 kB
+dist/dictionary-packs/chinese-xinhua-words.js      20,695.64 kB │ gzip:  9,117.12 kB │ map:   0.56 kB
+dist/dictionary-packs/chinese-dictionary-words.js  27,960.64 kB │ gzip: 12,015.95 kB │ map:   0.59 kB
+
+✓ built in 6.86s
+[33m[PLUGIN_TIMINGS] [0mYour build spent 38% of 6.9s inside plugin hooks (2.6s).
+Measured inside the callback, so queue time is excluded and time the callback itself awaited is not:
+  - vite:worker-import-meta-url transform (35%, 2.4s, 1 call)
+Those rows are 35% of the build; the rest of the 38% is below.
+Not measurable — 1 hook whose calls overlap, so elapsed time covers work other calls were doing. Profile with `node --cpu-prof`:
+  - vite:asset load (46 calls)
+See https://rolldown.rs/reference/InputOptions.checks#plugintimings for more details.
+
+
+Exit code: 0
