@@ -12,6 +12,7 @@ def forbidden(*args, **kwargs):
 
 
 socket.socket.connect = forbidden
+socket.socket.connect_ex = forbidden
 socket.create_connection = forbidden
 loader = unittest.defaultTestLoader
 suite = unittest.TestSuite([

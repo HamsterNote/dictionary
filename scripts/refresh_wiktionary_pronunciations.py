@@ -35,19 +35,16 @@ from pathlib import Path
 from typing import Sequence
 from urllib.parse import parse_qs, urlparse
 
+sys.dont_write_bytecode = True
+
 from wiktionary_per_word.action_api import DEFAULT_API_ENDPOINT
+from wiktionary_per_word.authorization import GateRejected, build_binding, preflight
 from wiktionary_per_word.evidence import ResponseCache
 from wiktionary_per_word.http_adapter import (
-    HttpAdapter,
-    InvalidUserAgentError,
-    MissingUserAgentError,
     TransportError,
-    validate_user_agent,
 )
 from wiktionary_per_word.ledger import (
-    AuthorizationError,
     BatchAuthorization,
-    BatchLedger,
 )
 from wiktionary_per_word.offline_reparse import (
     Candidate,
@@ -77,6 +74,8 @@ class ApplyConfig:
     checkpoint: Path
     cache_dir: Path
     endpoint: str
+    budget_requests: int = 600
+    binding: dict | None = None
 
 
 def _load_heads(path: Path) -> list[str]:
@@ -92,71 +91,28 @@ def _load_heads(path: Path) -> list[str]:
     return heads
 
 
-def load_authorization(path: Path) -> BatchAuthorization:
-    if not path.exists():
-        raise CliError(f"授权文件不存在: {path}")
-    payload = json.loads(path.read_text(encoding="utf-8"))
-    authorization = BatchAuthorization(
-        distinct_heads=int(payload.get("distinctHeads", 0)),
-        decompressed_bytes=int(payload.get("decompressedBytes", 0)),
-        granted=bool(payload.get("granted", False)),
-        source=str(payload.get("source", "")),
-        synthetic=bool(payload.get("synthetic", False)),
-    )
-    # 真实入口：拒绝 synthetic 授权。
-    authorization.validate(allow_synthetic=False)
-    return authorization
-
-
 def validate_apply_config(args: argparse.Namespace) -> ApplyConfig:
-    """校验 --apply 所需的一切。任何缺失/无效都抛 CliError，绝不联网。"""
-    if not args.heads_file:
-        raise CliError("--apply 必须提供 --heads-file 名单")
-    heads_file = Path(args.heads_file)
-    _load_heads(heads_file)  # 校验存在且非空
-
-    if not args.user_agent:
-        raise CliError("--apply 必须提供带联系信息的真实 --user-agent")
+    """只读严格预检；成功也不构成执行许可（真实入口仍 NO-GO）。"""
     try:
-        # 缺联系信息或含 synthetic/测试标记时抛错。
-        validate_user_agent(args.user_agent, allow_synthetic=False)
-    except (MissingUserAgentError, InvalidUserAgentError) as error:
-        raise CliError(f"User-Agent 校验失败: {error}") from error
-
-    if not args.authorization_file:
-        raise CliError("--apply 必须提供 --authorization-file 明确授权")
-    try:
-        authorization = load_authorization(Path(args.authorization_file))
-    except AuthorizationError as error:
-        raise CliError(f"授权校验失败: {error}") from error
-
-    if not args.budget_heads or args.budget_heads <= 0:
-        raise CliError("--apply 必须提供正的 --budget-heads")
-    if not args.budget_decompressed_mib or args.budget_decompressed_mib <= 0:
-        raise CliError("--apply 必须提供正的 --budget-decompressed-mib")
-
-    budget_bytes = int(args.budget_decompressed_mib * 1024 * 1024)
-    if authorization.decompressed_bytes != budget_bytes:
-        raise CliError("授权额度与显式预算不一致，拒绝执行")
-    if authorization.distinct_heads != args.budget_heads:
-        raise CliError("授权词头额度与显式预算不一致，拒绝执行")
-
-    if not args.checkpoint:
-        raise CliError("--apply 必须提供 --checkpoint 以持久记账")
-    if not args.cache_dir:
-        raise CliError("--apply 必须提供 --cache-dir")
-
+        binding = preflight(args, repo=Path(__file__).resolve().parents[1])
+    except GateRejected as error:
+        raise CliError(str(error)) from error
+    root = Path(binding["workspaceRoot"])
+    limits = binding["limits"]
     return ApplyConfig(
-        heads_file=heads_file,
+        heads_file=root / binding["paths"]["heads"],
         user_agent=args.user_agent,
-        budget_heads=args.budget_heads,
-        budget_decompressed_bytes=budget_bytes,
-        authorization=authorization,
+        budget_heads=limits["distinctHeads"],
+        budget_decompressed_bytes=limits["decompressedBytesAll"],
+        authorization=BatchAuthorization(
+            limits["distinctHeads"], limits["decompressedBytesAll"], True,
+            "user-confirmation", requests=limits["requestAttempts"]),
         interval_seconds=args.interval_seconds,
         max_retries=args.max_retries,
-        checkpoint=Path(args.checkpoint),
-        cache_dir=Path(args.cache_dir),
+        checkpoint=root / binding["paths"]["checkpoint"],
+        cache_dir=root / binding["paths"]["cache"],
         endpoint=args.endpoint,
+        budget_requests=limits["requestAttempts"], binding=binding,
     )
 
 
@@ -299,43 +255,8 @@ def _build_urllib_transport(timeout: float = DEFAULT_HTTP_TIMEOUT_SECONDS):
 
 
 def run_apply(config: ApplyConfig, *, now) -> None:
-    """真实采集（须第 10 组授权）。校验已通过才会到这里。
-
-    已有 checkpoint：**绝不 create 覆盖**，加载并显式 resume 续作；否则新建。
-    完整授权绑定与 CLI 参数严格校验属下一阶段。
-    """
-    heads = _load_heads(config.heads_file)
-    if config.checkpoint.exists():
-        ledger = BatchLedger.load(config.checkpoint)
-        ledger.resume()
-    else:
-        ledger = BatchLedger.create(
-            batch_id="first-round",
-            authorization=config.authorization,
-            path=config.checkpoint,
-            created_at=now(),
-        )
-    # 适配层与账本共享同一预算对象，请求计账进入持久账本。
-    adapter = HttpAdapter(
-        transport=_build_urllib_transport(),
-        budget=ledger.budget,
-        user_agent=config.user_agent,
-        interval_seconds=config.interval_seconds,
-        max_retries=config.max_retries,
-    )
-    cache = ResponseCache(directory=config.cache_dir)
-    from wiktionary_per_word.collector import Collector
-    from wiktionary_per_word.evidence import EvidenceLedger
-
-    collector = Collector(
-        ledger=ledger,
-        adapter=adapter,
-        cache=cache,
-        evidence_ledger=EvidenceLedger(),
-        now=now,
-        endpoint=config.endpoint,
-    )
-    collector.run_batch(heads)
+    """No callable real-transport bypass while collection remains unauthorized."""
+    raise CliError("NO-GO: 真实采集尚未授权；run_apply 与 CLI 同样禁用")
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -356,6 +277,12 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--heads-file", help="首轮词头名单文件")
     parser.add_argument("--user-agent", help="真实合规 User-Agent（含联系信息）")
     parser.add_argument("--authorization-file", help="明确授权 JSON")
+    parser.add_argument("--workspace-root", help="绑定 workspace 的绝对路径")
+    parser.add_argument("--batch-root", help="独立批次目录名（workspace 相对路径）")
+    parser.add_argument("--execution-commit", help="最终执行版本的完整 commit SHA")
+    parser.add_argument("--budget-requests", type=int, help="跨恢复全批 dispatch attempt 上限（最多600）")
+    parser.add_argument("--describe-binding", action="store_true", help="只读输出待确认绑定，不创建授权")
+    parser.add_argument("--check-authorization", action="store_true", help="只读预检用户提供的授权，不执行")
     parser.add_argument("--budget-heads", type=int, help="授权 distinct head 上限")
     parser.add_argument(
         "--budget-decompressed-mib", type=float, help="授权解压后字节上限（MiB）"
@@ -374,15 +301,23 @@ def main(argv: Sequence[str] | None = None) -> int:
     args = parser.parse_args(argv)
 
     if args.apply:
-        # NO-GO 守卫：strict authorization（caps / config binding / registry / flock /
-        # CAS）尚未实现，真实 `--apply` 必须**显式拒绝**，而不是靠流程约定。
-        # Phase B（严格授权）独立实施前，这里硬性禁止真实采集。
+        # Independent guard: offline implementation/testing never grants collection.
         print(
-            "拒绝真实采集: strict authorization 尚未实现（NO-GO）；"
-            "本轮 --apply 明确禁用，请等待 Phase B 严格授权实现",
+            "拒绝真实采集（NO-GO）：gate 已实现离线校验，但本轮无真实采集授权；"
+            "--apply 保持禁用",
             file=sys.stderr,
         )
         return 2
+
+    if args.describe_binding or args.check_authorization:
+        try:
+            binding = (preflight if args.check_authorization else build_binding)(
+                args, repo=Path(__file__).resolve().parents[1])
+        except GateRejected as error:
+            print(f"绑定预检拒绝: {error}", file=sys.stderr)
+            return 2
+        print(json.dumps(binding, ensure_ascii=False, indent=2, sort_keys=True))
+        return 0
 
     if args.cache_dir:
         try:

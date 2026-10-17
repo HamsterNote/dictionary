@@ -199,6 +199,7 @@ class RunBudget:
 
     max_decompressed_bytes: int = 20 * 1024 * 1024
     max_distinct_heads: int = 100
+    max_requests: int = 600
     decompressed_bytes: int = 0
     network_bytes: int = 0
     request_count: int = 0
@@ -213,6 +214,8 @@ class RunBudget:
     # -- 计账原语（供下阶段持久账本协议复用）--------------------------------
     def begin_attempt(self, kind: RequestKind) -> None:
         """dispatch 前登记一次请求 attempt（与成功 response 数区分）。"""
+        if self.request_count >= self.max_requests:
+            raise BudgetPaused("request-budget-exhausted")
         self.request_count += 1
         self.requests_by_kind[kind.value] = self.requests_by_kind.get(kind.value, 0) + 1
 
@@ -231,6 +234,7 @@ class RunBudget:
         return {
             "max_decompressed_bytes": self.max_decompressed_bytes,
             "max_distinct_heads": self.max_distinct_heads,
+            "max_requests": self.max_requests,
             "decompressed_bytes": self.decompressed_bytes,
             "network_bytes": self.network_bytes,
             "request_count": self.request_count,
@@ -245,6 +249,7 @@ class RunBudget:
         return cls(
             max_decompressed_bytes=int(payload["max_decompressed_bytes"]),
             max_distinct_heads=int(payload["max_distinct_heads"]),
+            max_requests=int(payload.get("max_requests", 600)),
             decompressed_bytes=int(payload.get("decompressed_bytes", 0)),
             network_bytes=int(payload.get("network_bytes", 0)),
             request_count=int(payload.get("request_count", 0)),
@@ -557,7 +562,11 @@ class HttpAdapter:
         self._reader = BoundedStreamReader(chunk_size=chunk_size)
         self._lock = threading.Lock()
         self._in_flight = False
-        self._last_request_at: float | None = None
+        # A new adapter over consumed state conservatively waits one full interval;
+        # a process restart must not erase the previous dispatch's rate limit.
+        self._last_request_at: float | None = (
+            self.clock.monotonic() if budget.request_count else None
+        )
         self.pause_reason: str | None = None
         # 下阶段持久账本协议接入用的公开状态（本轮只暴露，不落盘）。
         self.consumption_uncertain = False
@@ -672,6 +681,9 @@ class HttpAdapter:
 
         while True:
             # 预算前置检查：额度耗尽就不再发请求（不补辅助/重试）。
+            if self.budget.request_count >= self.budget.max_requests:
+                self._pause("request-budget-exhausted")
+                raise BudgetPaused("request-budget-exhausted")
             if self.budget.remaining_decompressed() <= 0:
                 self._pause("decompressed-budget-exhausted")
                 raise BudgetPaused("decompressed-budget-exhausted")

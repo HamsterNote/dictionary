@@ -549,7 +549,7 @@ class ResumeSkipTerminalTest(unittest.TestCase):
         self.assertEqual(len(adapter._transport.calls), 1)
         self.assertEqual(ledger.checkpoint.words["new"].status, WordStatus.MISSING)
 
-    def test_run_apply_resume_e2e_no_refetch_and_41_continues(self) -> None:
+    def test_collector_resume_e2e_no_refetch_and_41_continues(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
             path = root / "cp.json"
@@ -575,20 +575,13 @@ class ResumeSkipTerminalTest(unittest.TestCase):
             transport = ScriptedTransport(
                 [plain_response(b'{"error":{"code":"missingtitle"}}')]
             )
-            config = cli.ApplyConfig(
-                heads_file=heads_file,
-                user_agent=REAL_LOOKING_UA,
-                budget_heads=100,
-                budget_decompressed_bytes=20 * 1024 * 1024,
-                authorization=auth,
-                interval_seconds=0.0,
-                max_retries=2,
-                checkpoint=path,
-                cache_dir=cache_dir,
-                endpoint=cli.DEFAULT_API_ENDPOINT,
-            )
-            with mock.patch.object(cli, "_build_urllib_transport", lambda: transport):
-                cli.run_apply(config, now=fixed_now())
+            restored = BatchLedger.load(path)
+            restored.resume()
+            adapter = make_adapter(transport, restored)
+            collector_module.Collector(
+                ledger=restored, adapter=adapter, cache=ResponseCache(cache_dir),
+                evidence_ledger=EvidenceLedger(), now=fixed_now(),
+            ).run_batch(heads_file.read_text().splitlines())
 
             # 40 个终态词不重抓：仅第 41 个（w040）抓取一次。
             self.assertEqual(len(transport.calls), 1)

@@ -519,7 +519,7 @@ class JsonCacheReparseTest(unittest.TestCase):
             with self.assertRaises(cli.CliError):
                 cli.validate_apply_config(args)
 
-    def test_apply_valid_config_builds_without_network(self) -> None:
+    def test_legacy_unbound_grant_is_no_longer_valid(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
             heads = Path(directory) / "heads.txt"
             heads.write_text("read\n", encoding="utf-8")
@@ -554,9 +554,8 @@ class JsonCacheReparseTest(unittest.TestCase):
                     str(Path(directory) / "cache"),
                 ]
             )
-            config = cli.validate_apply_config(args)
-            self.assertEqual(config.budget_heads, 1)
-            self.assertEqual(config.budget_decompressed_bytes, 1024 * 1024)
+            with self.assertRaises(cli.CliError):
+                cli.validate_apply_config(args)
 
 
 class CollectorIntegrationTest(unittest.TestCase):

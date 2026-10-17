@@ -38,6 +38,7 @@ from .http_adapter import RequestKind, RetryBudgetExhausted, RunBudget
 BUDGET_PAUSE_REASONS: Final = frozenset(
     {
         "distinct-head-budget",
+        "request-budget-exhausted",
         "decompressed-budget-exhausted",
         "consumption-uncertain",
         "unsupported-encoding",
@@ -96,15 +97,17 @@ class BatchAuthorization:
     granted: bool
     source: str
     synthetic: bool = False
+    requests: int = 600
 
     def validate(self, *, allow_synthetic: bool = False) -> None:
-        if not self.granted:
+        if self.granted is not True or type(self.synthetic) is not bool:
             raise AuthorizationError("授权未授予")
         if not self.source:
             raise AuthorizationError("授权必须有来源说明")
         if self.synthetic and not allow_synthetic:
             raise AuthorizationError("synthetic 授权不能作为真实许可")
-        if self.distinct_heads <= 0 or self.decompressed_bytes <= 0:
+        if any(type(value) is not int or value <= 0 for value in
+               (self.distinct_heads, self.decompressed_bytes, self.requests)):
             raise AuthorizationError("授权额度必须为正")
 
     def to_json(self) -> dict[str, Any]:
@@ -114,6 +117,7 @@ class BatchAuthorization:
             "granted": self.granted,
             "source": self.source,
             "synthetic": self.synthetic,
+            "requestCap": self.requests,
         }
 
 
@@ -321,6 +325,7 @@ def _parse_authorization(payload: Any) -> BatchAuthorization:
         granted=granted,
         source=source,
         synthetic=synthetic,
+        requests=_strict_non_negative_int(payload.get("requestCap", 600), "authorization.requestCap"),
     )
 
 
@@ -341,6 +346,9 @@ def _parse_budget(payload: Any) -> RunBudget:
         ),
         max_distinct_heads=_strict_non_negative_int(
             payload.get("max_distinct_heads", 0), "budget.max_distinct_heads"
+        ),
+        max_requests=_strict_non_negative_int(
+            payload.get("max_requests", 600), "budget.max_requests"
         ),
         decompressed_bytes=_strict_non_negative_int(
             payload.get("decompressed_bytes", 0), "budget.decompressed_bytes"
@@ -378,6 +386,8 @@ def _validate_checkpoint_invariants(checkpoint: BatchCheckpoint) -> None:
         )
 
     # usage 不得越过限额。
+    if budget.max_requests != auth.requests or budget.request_count > budget.max_requests:
+        raise CheckpointInvariantError("request cap / 累计请求与授权不符")
     if budget.decompressed_bytes > budget.max_decompressed_bytes:
         raise CheckpointInvariantError("decompressed_bytes 不得越过授权上限")
     if budget.distinct_heads_started > budget.max_distinct_heads:
@@ -474,6 +484,7 @@ class BatchLedger:
         budget = RunBudget(
             max_decompressed_bytes=authorization.decompressed_bytes,
             max_distinct_heads=authorization.distinct_heads,
+            max_requests=authorization.requests,
         )
         checkpoint = BatchCheckpoint(
             batch_id=batch_id,
@@ -525,6 +536,8 @@ class BatchLedger:
             raise ResumeRejected(
                 f"暂停原因 {self.checkpoint.pause_reason!r} 不可恢复绕过"
             )
+        if self.budget.request_count >= self.budget.max_requests:
+            raise ResumeRejected("全批请求额度耗尽，禁止恢复")
         # 请求级 in-flight 未清：额外消费无法确定，fail closed（不退预扣、不免费重试）。
         if self.checkpoint.active_request is not None:
             self.mark_paused(
@@ -604,6 +617,10 @@ class BatchLedger:
         self._require_resumable()
         if self.paused:
             raise RetryBudgetExhausted(f"批次已暂停: {self.checkpoint.pause_reason!r}")
+        if self.budget.request_count >= self.budget.max_requests:
+            self.mark_paused("request-budget-exhausted", reason)
+            self.persist()
+            raise RetryBudgetExhausted("全批请求额度耗尽，禁止重试")
         if self.budget.remaining_decompressed() <= 0:
             self.mark_paused("decompressed-budget-exhausted", reason)
             self.persist()
@@ -742,6 +759,10 @@ class BatchLedger:
         self._require_resumable()
         if self.paused:
             raise ResumeRejected(f"批次已暂停: {self.checkpoint.pause_reason!r}")
+        if self.budget.request_count >= self.budget.max_requests:
+            self.mark_paused("request-budget-exhausted", "禁止启动下一词")
+            self.persist()
+            raise ResumeRejected("全批请求额度耗尽，禁止启动词头")
 
         existing = self.checkpoint.words.get(head)
         if existing is None or not existing.started:
@@ -802,6 +823,8 @@ class BatchLedger:
             for evidence_id in evidence_ids:
                 if evidence_id not in entry.evidence_ids:
                     entry.evidence_ids.append(evidence_id)
+        if self.budget.request_count >= self.budget.max_requests and not self.paused:
+            self.mark_paused("request-budget-exhausted", "全批请求额度耗尽")
         # 终态后若 distinct 名额已用尽，立即持久暂停，禁止再请求旧词/新词。
         if (
             status in TERMINAL_STATUSES
