@@ -487,6 +487,10 @@ class ResponseCache:
             if existing.body != body:
                 # 内容寻址下不应发生；保守拒绝覆盖。
                 raise ImmutableViolation("缓存 key 冲突且内容不同")
+            # Loading a renamed file does not prove its directory was synced.
+            # Recovery must finish persistence before discarding pending bytes.
+            if self.directory is not None:
+                self._persist(existing)
             return existing
         entry = CacheEntry(
             http_sha256=digest,

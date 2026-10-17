@@ -118,6 +118,26 @@ class FingerprintTest(unittest.TestCase):
 
 
 class CacheTest(unittest.TestCase):
+    def test_existing_disk_hit_must_confirm_persistence(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory)
+            cache = ResponseCache(path)
+            arguments = dict(content_type="text/html", complete=True,
+                             source_url="https://en.wiktionary.org/wiki/read", fetched_at="offline")
+            entry = cache.put(b"complete response", **arguments)
+            for hit in (cache, ResponseCache(path)):
+                with self.subTest(reloaded=hit is not cache):
+                    with mock.patch.object(hit, "_persist", side_effect=OSError("sync failed")) as persist:
+                        with self.assertRaises(OSError):
+                            hit.put(entry.body, **arguments)
+                        persist.assert_called_once_with(entry)
+                    body_path = path / f"{entry.http_sha256}.body"
+                    body_path.write_bytes(b"damaged")
+                    with self.assertRaises(ImmutableViolation):
+                        hit.put(entry.body, **arguments)
+                    body_path.write_bytes(entry.body)
+                    self.assertEqual(hit.put(entry.body, **arguments), entry)
+
     def test_atomic_write_failures_are_unindexed_and_retryable(self) -> None:
         for suffix in (".body", ".meta.json"):
             with self.subTest(suffix=suffix), tempfile.TemporaryDirectory() as directory:

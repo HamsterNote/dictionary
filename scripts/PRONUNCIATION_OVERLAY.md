@@ -117,9 +117,22 @@ Paused batches return nonzero and cannot resume around their limits.
 
 Cache body and metadata writes use same-directory `.cache-*.tmp` files, fsync,
 rename, directory fsync and exact read-back verification before in-memory indexing.
-Identical partial writes can be retried; conflicting content is rejected. Temporary
-files are removed on handled failures; leftovers after a crash fail closed at the
-path gate. A cache write failure immediately persists `cache-persist-failed` and
+Disk-backed `put` hits (including entries indexed by `_load` after a restart) also
+run idempotent persistence before returning: existing identical files are checked,
+the directory is fsynced and bytes are read back. A visible rename alone is not a
+durability acknowledgement; failed sync or verification keeps recovery pending.
+Identical partial writes can be retried; conflicting content is rejected.
+
+The bound `.cache-` temporary prefix permits transient files only while an
+authorized writer is inside a session. Preflight does not accept leftover
+`.cache-*.tmp` files: the existing-file scan permits only the declared permanent
+64hex body/metadata cache names. Handled failures remove their temporary files.
+Crash leftovers block entry with zero writes; there is no automatic deletion or
+cleanup bypass. Recovery requires no leftover temporary files, intact permanent
+cache files, a valid settled pending checkpoint, an idle sealed registry and
+remaining bound budgets. An interrupted/active registry still refuses recovery
+even if someone removes a leftover file; deleting or recreating state to reset
+consumption is prohibited. A cache write failure persists `cache-persist-failed` and
 the already-accounted complete responses in `checkpoint.pendingCache`. The word
 stays paused and nonterminal, no further head/request is dispatched, and candidate
 generation is deferred (`candidateCount: null`; any older report is not updated).

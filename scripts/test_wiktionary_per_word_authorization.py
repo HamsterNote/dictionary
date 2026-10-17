@@ -257,6 +257,12 @@ class StrictGateTests(unittest.TestCase):
         (self.batch / "cache" / ("0" * 64 + ".body")).write_bytes(b"orphan")
         self.refused_without_effects()
 
+    def test_leftover_cache_temporary_file_refuses_without_cleanup(self):
+        self.initial_session()
+        (self.batch / "cache").mkdir()
+        (self.batch / "cache/.cache-interrupted.tmp").write_bytes(b"incomplete temporary payload")
+        self.refused_without_effects()
+
     def test_bad_ledger_and_unsettled_inflight_refuse_without_resume_writes(self):
         ledger = self.initial_session()
         cp = self.batch / "state/checkpoint.json"
