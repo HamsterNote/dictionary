@@ -1,0 +1,33 @@
+{
+  "date": "2026-10-17",
+  "scope": "conditional entry implementation and offline verification only",
+  "realWiktionaryRequests": 0,
+  "actualAuthorizationCreated": false,
+  "guard": "exact external user confirmation required for current clean execution commit",
+  "pythonTests": 284,
+  "authorizationTestMethods": 28,
+  "results": [
+    {"command": "python3 -B scripts/run_pronunciation_python_tests.py", "exitCode": 0},
+    {"command": "node scripts/test_pronunciation_overlay.mjs", "exitCode": 0},
+    {"command": "python3 -B scripts/check_pronunciation_immutable_baseline.py", "exitCode": 0},
+    {"command": "git diff --check", "exitCode": 0}
+  ],
+  "immutable": {
+    "srcDataFiles": 55,
+    "legacyBaselineFiles": 19,
+    "fullBaselineFiles": 57,
+    "fileSetUnchanged": true,
+    "allSha256Unchanged": true,
+    "fullBaselineSha256": "59daef043765d67d505947b2e93e0c8f713195564a2e5db827e268aef29a9cfe",
+    "legacyBaselineSha256": "5c276b787b38c094a4ccfe84b386f326091610271257ce3d1cf6cbbd32e38f14"
+  },
+  "externalPrerequisites": [
+    "independent gate review",
+    "user confirmation of complete frozen binding",
+    "user confirmation that public Issues contact is monitored",
+    "operator verifies user origin of unsigned external confirmation input"
+  ],
+  "tasks10Through12": "unchecked",
+  "pythonVersionTested": "3.14.4",
+  "python312Tested": false
+}

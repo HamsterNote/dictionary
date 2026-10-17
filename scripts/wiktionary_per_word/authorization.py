@@ -2,11 +2,12 @@
 
 This module never creates confirmation files or HTTP transports. User confirmation
 is an external input, not something an agent can manufacture with a CLI switch.
-The real collection entry remains disabled independently of this gate.
+The collection entry must enter authorized_session before constructing transport.
 """
 from __future__ import annotations
 
 from contextlib import contextmanager
+from dataclasses import dataclass
 import hashlib
 import json
 import os
@@ -21,12 +22,19 @@ except ImportError:
     fcntl = None
 
 from .action_api import DEFAULT_API_ENDPOINT
+from .evidence import ResponseCache
 from .http_adapter import validate_user_agent, InvalidUserAgentError, MissingUserAgentError
 from .ledger import BatchLedger, WordStatus
 
 
 class GateRejected(RuntimeError):
     pass
+
+
+@dataclass(frozen=True)
+class AuthorizedBatch:
+    binding: dict
+    heads: tuple[str, ...]
 
 
 def canonical(value: object) -> bytes:
@@ -203,11 +211,16 @@ def read_state(binding: dict) -> dict | None:
     root = Path(binding["workspaceRoot"])
     cp_path = root / binding["paths"]["checkpoint"]
     reg_path = root / binding["paths"]["registry"]
+    cache = root / binding["paths"]["cache"]
+    if cache.exists():
+        try:
+            ResponseCache(cache, read_only=True)
+        except (OSError, RuntimeError, ValueError, TypeError, KeyError) as error:
+            raise GateRejected(f"invalid response cache: {error}") from error
     if cp_path.exists() != reg_path.exists():
         raise GateRejected("checkpoint/registry pair missing; never reset same batch")
     if not reg_path.exists():
         # Cache without a ledger cannot prove previous consumption.
-        cache = root / binding["paths"]["cache"]
         if cache.exists() and any(cache.iterdir()):
             raise GateRejected("orphan cache without consumption ledger")
         return None
@@ -306,6 +319,10 @@ def authorized_session(args, *, repo: Path):
             raise GateRejected("batch authorization bootstrap lock is busy") from error
         if preflight(args, repo=repo) != binding:
             raise GateRejected("binding changed while acquiring lock")
+        raw_heads = (root / paths["heads"]).read_bytes()
+        if digest(raw_heads) != binding["headsSha256"]:
+            raise GateRejected("heads changed before session start")
+        approved_heads = tuple(raw_heads.decode("utf-8").splitlines())
         previous = read_state(binding)
         reg_path = root / paths["registry"]
         registry = {
@@ -333,7 +350,7 @@ def authorized_session(args, *, repo: Path):
             fd = os.open(lock, flags | os.O_CREAT | os.O_EXCL, 0o600)
             fcntl.flock(fd, fcntl.LOCK_EX | fcntl.LOCK_NB)
         _atomic_json(reg_path, registry)
-        yield binding
+        yield AuthorizedBatch(binding, approved_heads)
         # CAS prevents another writer from silently replacing the registry.
         if canonical(read_json(reg_path)) != canonical(registry):
             raise GateRejected("registry changed during session")

@@ -324,12 +324,14 @@ class ResponseCache:
     各自保留，不会互相覆盖或丢失来源。
     """
 
-    def __init__(self, directory: Path | None = None) -> None:
+    def __init__(self, directory: Path | None = None, *, read_only: bool = False) -> None:
         self.directory = directory
+        self.read_only = read_only
         self._entries: dict[str, CacheEntry] = {}
         self._by_body: dict[str, list[str]] = {}
         if directory is not None:
-            directory.mkdir(parents=True, exist_ok=True)
+            if not read_only:
+                directory.mkdir(parents=True, exist_ok=True)
             self._load()
 
     # ------------------------------------------------------------------
@@ -455,6 +457,8 @@ class ResponseCache:
         license_url: str = WIKTIONARY_LICENSE_URL,
         attribution: str = DEFAULT_ATTRIBUTION,
     ) -> CacheEntry:
+        if self.read_only:
+            raise CacheIntegrityError("只读缓存不得写入")
         # complete 必须是严格 True（字符串 "false"/其他真值不得当作完整）。
         if complete is not True:
             raise IncompleteCacheError("不完整/截断响应不得写入成功缓存")

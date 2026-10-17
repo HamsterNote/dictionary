@@ -30,7 +30,7 @@ import argparse
 import json
 import sys
 import urllib.request
-from dataclasses import dataclass
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import Sequence
 from urllib.parse import parse_qs, urlparse
@@ -38,13 +38,16 @@ from urllib.parse import parse_qs, urlparse
 sys.dont_write_bytecode = True
 
 from wiktionary_per_word.action_api import DEFAULT_API_ENDPOINT
-from wiktionary_per_word.authorization import GateRejected, build_binding, preflight
-from wiktionary_per_word.evidence import ResponseCache
+from wiktionary_per_word.authorization import GateRejected, authorized_session, build_binding, preflight
+from wiktionary_per_word.collector import Collector
+from wiktionary_per_word.evidence import EvidenceLedger, ResponseCache
 from wiktionary_per_word.http_adapter import (
+    HttpAdapter,
     TransportError,
 )
 from wiktionary_per_word.ledger import (
     BatchAuthorization,
+    BatchLedger,
 )
 from wiktionary_per_word.offline_reparse import (
     Candidate,
@@ -57,63 +60,19 @@ DEFAULT_MAX_RETRIES = 2
 
 
 class CliError(Exception):
-    """CLI 参数/授权校验失败。绝不触发联网。"""
+    """CLI 参数/授权拒绝，以及执行期间的 fail-closed 错误。"""
 
 
-@dataclass(frozen=True)
-class ApplyConfig:
-    """真实采集所需的最小显式配置。"""
-
-    heads_file: Path
-    user_agent: str
-    budget_heads: int
-    budget_decompressed_bytes: int
-    authorization: BatchAuthorization
-    interval_seconds: float
-    max_retries: int
-    checkpoint: Path
-    cache_dir: Path
-    endpoint: str
-    budget_requests: int = 600
-    binding: dict | None = None
+def _repository_root() -> Path:
+    return Path(__file__).resolve().parents[1]
 
 
-def _load_heads(path: Path) -> list[str]:
-    if not path.exists():
-        raise CliError(f"名单文件不存在: {path}")
-    heads = [
-        line.strip()
-        for line in path.read_text(encoding="utf-8").splitlines()
-        if line.strip() and not line.strip().startswith("#")
-    ]
-    if not heads:
-        raise CliError("名单文件为空")
-    return heads
-
-
-def validate_apply_config(args: argparse.Namespace) -> ApplyConfig:
-    """只读严格预检；成功也不构成执行许可（真实入口仍 NO-GO）。"""
+def validate_apply_config(args: argparse.Namespace) -> dict:
+    """只读严格预检，不缓存许可；执行入口会在锁内重新检查。"""
     try:
-        binding = preflight(args, repo=Path(__file__).resolve().parents[1])
+        return preflight(args, repo=_repository_root())
     except GateRejected as error:
         raise CliError(str(error)) from error
-    root = Path(binding["workspaceRoot"])
-    limits = binding["limits"]
-    return ApplyConfig(
-        heads_file=root / binding["paths"]["heads"],
-        user_agent=args.user_agent,
-        budget_heads=limits["distinctHeads"],
-        budget_decompressed_bytes=limits["decompressedBytesAll"],
-        authorization=BatchAuthorization(
-            limits["distinctHeads"], limits["decompressedBytesAll"], True,
-            "user-confirmation", requests=limits["requestAttempts"]),
-        interval_seconds=args.interval_seconds,
-        max_retries=args.max_retries,
-        checkpoint=root / binding["paths"]["checkpoint"],
-        cache_dir=root / binding["paths"]["cache"],
-        endpoint=args.endpoint,
-        budget_requests=limits["requestAttempts"], binding=binding,
-    )
 
 
 def _head_from_url(url: str) -> str | None:
@@ -254,9 +213,55 @@ def _build_urllib_transport(timeout: float = DEFAULT_HTTP_TIMEOUT_SECONDS):
     return transport
 
 
-def run_apply(config: ApplyConfig, *, now) -> None:
-    """No callable real-transport bypass while collection remains unauthorized."""
-    raise CliError("NO-GO: 真实采集尚未授权；run_apply 与 CLI 同样禁用")
+def run_apply(args: argparse.Namespace, *, now) -> dict:
+    """Only a freshly verified user confirmation can enter the locked collector.
+
+    There is no prevalidated-config/permit argument, injectable transport option,
+    or synthetic-authorization flag on this entry. Tests patch the transport
+    factory in memory while sockets are disabled.
+    """
+    if not isinstance(args, argparse.Namespace):
+        raise CliError("NO-GO: 执行需要原始调用参数，不能传入授权对象或预校验配置")
+    args = argparse.Namespace(**vars(args))
+    try:
+        with authorized_session(args, repo=_repository_root()) as session:
+            binding = session.binding
+            root, paths, limits, calls = (Path(binding["workspaceRoot"]), binding["paths"],
+                                         binding["limits"], binding["calls"])
+            checkpoint = root / paths["checkpoint"]
+            if checkpoint.exists():
+                ledger = BatchLedger.load(checkpoint)
+                ledger.resume()
+            else:
+                ledger = BatchLedger.create(
+                    batch_id=binding["batchId"], path=checkpoint, created_at=now(),
+                    authorization=BatchAuthorization(
+                        limits["distinctHeads"], limits["decompressedBytesAll"], True,
+                        "user-confirmation", requests=limits["requestAttempts"]),
+                    retry_limit=calls["maxRetriesPerOperation"],
+                )
+            cache = ResponseCache(root / paths["cache"])
+            adapter = HttpAdapter(
+                transport=_build_urllib_transport(timeout=calls["timeoutSeconds"]),
+                budget=ledger.budget, journal=ledger, user_agent=binding["userAgent"],
+                interval_seconds=calls["intervalSeconds"], max_retries=calls["maxRetriesPerOperation"],
+            )
+            report = Collector(
+                ledger=ledger, adapter=adapter, cache=cache, evidence_ledger=EvidenceLedger(),
+                now=now, endpoint=calls["endpoint"],
+            ).run_batch(session.heads)
+            candidates = run_offline_reparse(
+                cache_dir=root / paths["cache"], current_path=None,
+                output_path=root / paths["reports"][0],
+            )
+            result = {"batchId": binding["batchId"], "processed": report.processed,
+                      "pausedReason": report.paused_reason, "candidateCount": len(candidates),
+                      "budget": ledger.budget.to_json()}
+            with (root / paths["log"]).open("a", encoding="utf-8") as log:
+                log.write(json.dumps(result, ensure_ascii=False, sort_keys=True) + "\n")
+        return result
+    except GateRejected as error:
+        raise CliError(f"NO-GO: {error}") from error
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -268,12 +273,13 @@ def build_parser() -> argparse.ArgumentParser:
         ),
         formatter_class=argparse.RawDescriptionHelpFormatter,
     )
-    parser.add_argument("--offline-reparse", action="store_true", help="离线重解析缓存（默认）")
+    mode = parser.add_mutually_exclusive_group()
+    mode.add_argument("--offline-reparse", action="store_true", help="离线重解析缓存（默认）")
     parser.add_argument("--cache-dir", help="完整响应缓存目录")
     parser.add_argument("--current", help="当前正式音标 JSON（head -> phonetic）")
     parser.add_argument("--output", help="候选报告输出路径")
 
-    parser.add_argument("--apply", action="store_true", help="执行真实采集（需全部授权校验）")
+    mode.add_argument("--apply", action="store_true", help="执行真实采集（需全部授权校验）")
     parser.add_argument("--heads-file", help="首轮词头名单文件")
     parser.add_argument("--user-agent", help="真实合规 User-Agent（含联系信息）")
     parser.add_argument("--authorization-file", help="明确授权 JSON")
@@ -281,8 +287,8 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--batch-root", help="独立批次目录名（workspace 相对路径）")
     parser.add_argument("--execution-commit", help="最终执行版本的完整 commit SHA")
     parser.add_argument("--budget-requests", type=int, help="跨恢复全批 dispatch attempt 上限（最多600）")
-    parser.add_argument("--describe-binding", action="store_true", help="只读输出待确认绑定，不创建授权")
-    parser.add_argument("--check-authorization", action="store_true", help="只读预检用户提供的授权，不执行")
+    mode.add_argument("--describe-binding", action="store_true", help="只读输出待确认绑定，不创建授权")
+    mode.add_argument("--check-authorization", action="store_true", help="只读预检用户提供的授权，不执行")
     parser.add_argument("--budget-heads", type=int, help="授权 distinct head 上限")
     parser.add_argument(
         "--budget-decompressed-mib", type=float, help="授权解压后字节上限（MiB）"
@@ -301,18 +307,18 @@ def main(argv: Sequence[str] | None = None) -> int:
     args = parser.parse_args(argv)
 
     if args.apply:
-        # Independent guard: offline implementation/testing never grants collection.
-        print(
-            "拒绝真实采集（NO-GO）：gate 已实现离线校验，但本轮无真实采集授权；"
-            "--apply 保持禁用",
-            file=sys.stderr,
-        )
-        return 2
+        try:
+            result = run_apply(args, now=lambda: datetime.now(timezone.utc).isoformat())
+        except (CliError, OSError, RuntimeError, ValueError) as error:
+            print(f"拒绝/停止采集: {error}", file=sys.stderr)
+            return 2
+        print(json.dumps(result, ensure_ascii=False, sort_keys=True))
+        return 2 if result["pausedReason"] else 0
 
     if args.describe_binding or args.check_authorization:
         try:
             binding = (preflight if args.check_authorization else build_binding)(
-                args, repo=Path(__file__).resolve().parents[1])
+                args, repo=_repository_root())
         except GateRejected as error:
             print(f"绑定预检拒绝: {error}", file=sys.stderr)
             return 2

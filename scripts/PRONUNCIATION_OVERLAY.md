@@ -48,10 +48,10 @@ their previous references. Runtime manual corrections remain outside the snapsho
 Synthetic publication tests require both an explicit test option and a temporary
 root carrying `.synthetic-test-root`; the normal approval validator rejects their
 records. These test records and candidate/cache/checkpoint files are not packaged.
-Real collection remains explicitly disabled in both Python `--apply` and
-`run_apply`. Strict collection binding is implemented and tested offline; this
-does not remove the independent NO-GO guard or grant collection. Nothing
-here enables groups 10–12 or changes the existing dump generators.
+Python `--apply` and `run_apply` share a conditional authorization guard. They
+remain NO-GO without an exact user confirmation bound to the running clean commit.
+The code being executable does not grant collection. Groups 10–12 still need
+their separate permissions; existing dump generators are unchanged.
 
 ## Collection Confirmation Gate
 
@@ -76,7 +76,8 @@ operator must establish that it came from the user. A check passing never runs H
 Preflight rejects missing/mismatched confirmation, changed/duplicate/oversized
 lists, synthetic UA, changed calls/budgets/paths/version, dirty code, symlinks,
 hardlinks, unexpected files, orphan state/cache, damaged or rolled-back checkpoint,
-paused state and unsettled in-flight requests before any output write. Git reads
+paused state and unsettled in-flight requests before any output write. Cache
+integrity checks are read-only. Git reads
 disable optional index locks. Bootstrap flock uses the existing batch directory;
 the persistent `state/authorization.lock` is never replaced or unlinked. A second
 read-only preflight under flock precedes registry creation. Registry CAS binds the
@@ -91,9 +92,23 @@ exercise the same binding/registry protocol through collector/cache/candidate
 generation. No actual authorization input is emitted. Request cap is persisted in
 both authorization and budget; the strict gate requires explicit fields in saved
 state, while older offline ledger fixtures retain their default for compatibility.
-The real collection runner remains disabled even when the read-only check passes.
-Any later activation/change of executable code requires a newly bound execution
-commit and confirmation; the present commit cannot be used to start collection.
+CLI and direct calls both enter `authorized_session` using fresh invocation
+parameters; neither accepts a prevalidated config, a permit object, a synthetic
+flag, or a transport injection parameter. Ledger, adapter and fixed candidate JSON
+output paths come only from the verified binding. Transport construction happens
+after preflight and lock acquisition. The exact approved head bytes are hashed
+again before state writes and held in memory, so a subsequent file edit cannot
+introduce an unapproved dispatch; end-of-session binding recheck then fails closed.
+The collector writes the bound checkpoint
+and complete response cache; candidate reparse writes `reports/candidates.json`.
+The budget summary is printed to stdout and appended internally to `execution.log`
+after authorization. Do not redirect shell output to the batch log before the
+guard: shell redirection would create a file even when authorization is refused.
+Paused batches return nonzero and cannot resume around their limits.
+
+The execution commit can now be frozen before confirmation; providing the valid
+external input then allows execution on that same commit without editing code.
+Any code change invalidates that binding and requires a new confirmation.
 
 ## Host Integration
 

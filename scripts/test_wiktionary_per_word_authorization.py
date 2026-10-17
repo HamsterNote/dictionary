@@ -4,9 +4,11 @@ No inputs/authorization.json or actual granted permission is generated. The mock
 reader represents a future user confirmation and cannot be selected by CLI flags.
 """
 from contextlib import contextmanager
+from contextlib import redirect_stderr, redirect_stdout
 from copy import deepcopy
 import fcntl
 import json
+import io
 import os
 from pathlib import Path
 import socket
@@ -78,20 +80,36 @@ class StrictGateTests(unittest.TestCase):
                 else ("dir",) if p.is_dir() else ("file", p.read_bytes(), p.stat().st_mtime_ns)
                 for p in self.root.rglob("*")}
 
+    def argv(self):
+        result = ["--apply"]
+        for key, value in vars(self.args).items():
+            if key in {"apply", "offline_reparse", "describe_binding", "check_authorization"}:
+                continue
+            if value is not None:
+                result.extend(["--" + key.replace("_", "-"), str(value)])
+        return result
+
+    def assert_rejected_entries(self):
+        with self.assertRaises(gate.GateRejected):
+            with gate.authorized_session(self.args, repo=self.repo):
+                self.fail("rejected contract entered session")
+        with self.assertRaises(cli.CliError):
+            cli.run_apply(self.args, now=fixed_now())
+        with redirect_stderr(io.StringIO()), redirect_stdout(io.StringIO()):
+            self.assertNotEqual(cli.main(self.argv()), 0)
+
     def refused_without_effects(self, *, confirmed=True):
         before = self.snapshot()
         # Check filesystem mutators as well as the resulting bytes/file set.
         with mock.patch.object(cli, "_build_urllib_transport", side_effect=AssertionError("transport built")), \
+             mock.patch.object(cli, "_repository_root", return_value=self.repo), \
              mock.patch.object(Path, "mkdir", side_effect=AssertionError("mkdir on rejection")), \
              mock.patch.object(gate, "_atomic_json", side_effect=AssertionError("registry write on rejection")):
             if confirmed:
-                with self.confirmation(), self.assertRaises(gate.GateRejected):
-                    with gate.authorized_session(self.args, repo=self.repo):
-                        self.fail("rejected contract entered session")
+                with self.confirmation():
+                    self.assert_rejected_entries()
             else:
-                with self.assertRaises(gate.GateRejected):
-                    with gate.authorized_session(self.args, repo=self.repo):
-                        self.fail("missing user grant entered session")
+                self.assert_rejected_entries()
         self.assertEqual(before, self.snapshot())
 
     def make_checkpoint(self):
@@ -282,29 +300,87 @@ class StrictGateTests(unittest.TestCase):
         transport = ScriptedTransport([
             plain_response(tocdata_payload([{"level": "2", "line": "English", "number": "3"}])),
             plain_response(text_payload(english_html())),
+            plain_response(b'{"error":{"code":"missingtitle"}}'),
         ])
-        with self.confirmation(), gate.authorized_session(self.args, repo=self.repo):
-            ledger = self.make_checkpoint()
-            adapter = HttpAdapter(transport=transport, budget=ledger.budget, clock=FakeClock(),
-                                  user_agent=UA, interval_seconds=5, max_retries=2)
-            Collector(ledger=ledger, adapter=adapter, cache=ResponseCache(self.batch / "cache"),
-                      evidence_ledger=EvidenceLedger(), now=fixed_now()).run_batch(["read"])
+        with self.confirmation(), \
+             mock.patch.object(cli, "_repository_root", return_value=self.repo), \
+             mock.patch.object(cli, "_build_urllib_transport", return_value=transport) as factory, \
+             mock.patch.object(cli, "HttpAdapter", side_effect=lambda **kw: HttpAdapter(clock=FakeClock(), **kw)):
+            output = io.StringIO()
+            with redirect_stdout(output):
+                self.assertEqual(cli.main(self.argv()), 0)
+            first = json.loads(output.getvalue())
+            self.assertEqual(first["budget"]["request_count"], 3)
+            factory.assert_called_once_with(timeout=30)
             report = self.batch / "reports/candidates.json"
-            candidates = cli.run_offline_reparse(cache_dir=self.batch / "cache",
-                                                current_path=None, output_path=report)
-            self.assertTrue(candidates)
+            self.assertTrue(json.loads(report.read_text())["candidates"])
             self.assertTrue(report.exists())
-            self.assertEqual(ledger.budget.request_count, 2)
-            self.assertGreater(ledger.budget.decompressed_bytes, 0)
-        self.assertEqual(len(transport.calls), 2)
+            self.assertGreater(first["budget"]["decompressed_bytes"], 0)
+            second = cli.run_apply(self.args, now=fixed_now())
+            self.assertEqual(first["budget"], second["budget"])
+            self.assertEqual(second["processed"], [])
+        self.assertEqual(len(transport.calls), 3)
         self.assertIn("section=3", transport.calls[1][0])
-        with self.confirmation(), gate.authorized_session(self.args, repo=self.repo):
-            restored = BatchLedger.load(self.batch / "state/checkpoint.json")
-            restored.resume()
-            self.assertEqual(restored.budget.request_count, 2)
-            self.assertEqual(restored.budget.max_requests, 600)
-            self.assertEqual(restored.budget.distinct_heads_started, 1)
+        restored = BatchLedger.load(self.batch / "state/checkpoint.json")
+        self.assertEqual(restored.budget.request_count, 3)
+        self.assertEqual(restored.budget.max_requests, 600)
+        self.assertEqual(restored.budget.distinct_heads_started, 2)
         self.assertEqual(gate.read_json(self.batch / "state/authorization-registry.json")["revision"], 2)
+        self.assertEqual(len((self.batch / "execution.log").read_text().splitlines()), 2)
+
+    def test_damaged_cache_refuses_before_registry_or_transport(self):
+        self.test_mock_binding_through_http_cache_to_candidate_report_and_resume()
+        body = next((self.batch / "cache").glob("*.body"))
+        body.write_bytes(b"damaged")
+        self.refused_without_effects()
+
+    def test_changed_heads_during_run_cannot_dispatch_unapproved_head(self):
+        transport = ScriptedTransport([
+            plain_response(b'{"error":{"code":"missingtitle"}}'),
+            plain_response(b'{"error":{"code":"missingtitle"}}'),
+        ])
+        def factory(**kwargs):
+            (self.batch / "inputs/heads.txt").write_text("unapproved\n")
+            return transport
+        with self.confirmation(), \
+             mock.patch.object(cli, "_repository_root", return_value=self.repo), \
+             mock.patch.object(cli, "_build_urllib_transport", side_effect=factory), \
+             mock.patch.object(cli, "HttpAdapter", side_effect=lambda **kw: HttpAdapter(clock=FakeClock(), **kw)):
+            with self.assertRaises(cli.CliError):
+                cli.run_apply(self.args, now=fixed_now())
+        self.assertEqual(len(transport.calls), 2)
+        self.assertTrue(all("unapproved" not in url for url, _ in transport.calls))
+        self.assertEqual(gate.read_json(self.batch / "state/authorization-registry.json")["phase"], "active")
+        self.refused_without_effects()
+
+    def test_agent_sourced_confirmation_refuses_all_entries(self):
+        self.envelope["source"] = "agent-generated"
+        self.refused_without_effects()
+
+    def test_conflicting_read_only_and_apply_modes_refuse_before_gate(self):
+        before = self.snapshot()
+        with mock.patch.object(cli, "_build_urllib_transport", side_effect=AssertionError("transport built")):
+            for flag in ("--describe-binding", "--check-authorization", "--offline-reparse"):
+                with redirect_stderr(io.StringIO()), self.assertRaises(SystemExit) as rejected:
+                    cli.main(self.argv() + [flag])
+                self.assertEqual(rejected.exception.code, 2)
+        self.assertEqual(before, self.snapshot())
+
+    def test_read_only_cache_cannot_be_used_as_write_bypass(self):
+        self.test_mock_binding_through_http_cache_to_candidate_report_and_resume()
+        before = self.snapshot()
+        cache = ResponseCache(self.batch / "cache", read_only=True)
+        with self.assertRaises(RuntimeError):
+            cache.put(b"unexpected", content_type="text/html", complete=True,
+                      source_url="https://en.wiktionary.org/wiki/read", fetched_at=fixed_now()())
+        self.assertEqual(before, self.snapshot())
+
+    def test_prevalidated_binding_cannot_be_passed_as_execution_config(self):
+        before = self.snapshot()
+        with mock.patch.object(cli, "_build_urllib_transport", side_effect=AssertionError("real transport")):
+            with self.assertRaisesRegex(cli.CliError, "NO-GO"):
+                cli.run_apply({"binding": self.binding, "granted": True}, now=fixed_now())
+        self.assertEqual(before, self.snapshot())
 
     def test_request_cap_survives_reload_and_stops_retry_and_next_head(self):
         ledger = self.make_checkpoint()
