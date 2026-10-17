@@ -23,6 +23,7 @@ from .action_api import (
     DEFAULT_API_ENDPOINT,
     ActionApiError,
     PageStatus,
+    PageFetch,
     RetryableActionApiError,
     fetch_english_page,
 )
@@ -126,9 +127,28 @@ class Collector:
                 head, WordStatus.FAILED, note=f"transport:{error}"
             )
 
-        # 缓存 TOC / MAIN 响应（均需完整；adapter 已保证且已持久计账）。
-        for response in page.requests:
-            self._cache_response(response, fetched_at=fetched_at)
+        return self._cache_and_finish(page, fetched_at=fetched_at)
+
+    def _cache_and_finish(self, page: PageFetch, *, fetched_at: str) -> WordEntry:
+        head = page.page
+        try:
+            for response in page.requests:
+                self._cache_response(response, fetched_at=fetched_at)
+        except Exception as error:
+            # Bytes/attempts are already settled. Preserve the exact responses for
+            # local-only retry; never seal a word that has lost durable evidence.
+            self.ledger.checkpoint.pending_cache = page.cache_checkpoint(fetched_at)
+            entry = self.ledger.checkpoint.words[head]
+            entry.status = WordStatus.PAUSED
+            self.ledger.mark_paused("cache-persist-failed", f"word={head}: {error}")
+            self.ledger.persist()
+            return entry
+
+        if self.ledger.checkpoint.pending_cache is not None:
+            self.ledger.checkpoint.pending_cache = None
+            self.ledger.checkpoint.pause_reason = None
+            self.ledger.checkpoint.pause_detail = None
+            self.ledger.checkpoint.words[head].status = WordStatus.IN_FLIGHT
 
         if page.status is PageStatus.MISSING:
             return self.ledger.finish_word(head, WordStatus.MISSING, note="page-missing")
@@ -178,6 +198,13 @@ class Collector:
         :meth:`collect_word`（spec 未授权前不自动加 retry 功能）。
         """
         report = BatchRunReport()
+        pending = self.ledger.checkpoint.pending_cache
+        if pending is not None:
+            self.ledger._require_resumable()
+            page = PageFetch.from_cache_checkpoint(pending)
+            self._cache_and_finish(page, fetched_at=pending["fetchedAt"])
+            if not self.ledger.paused:
+                report.processed.append(page.page)
         for head in heads:
             if self.ledger.paused:
                 report.paused_reason = self.ledger.checkpoint.pause_reason
@@ -206,15 +233,10 @@ class Collector:
             if response.kind is RequestKind.TOC
             else "text/html"
         )
-        # 完整响应才写入缓存；adapter 已保证未截断。
-        try:
-            self.cache.put(
-                response.body,
-                content_type=content_type,
-                complete=True,
-                source_url=response.url,
-                fetched_at=fetched_at,
-            )
-        except Exception:
-            # 缓存失败不阻断候选；记录由调用方/测试断言。
-            pass
+        self.cache.put(
+            response.body,
+            content_type=content_type,
+            complete=True,
+            source_url=response.url,
+            fetched_at=fetched_at,
+        )

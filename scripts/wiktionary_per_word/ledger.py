@@ -30,6 +30,7 @@ from pathlib import Path
 from typing import Any, Final, Mapping
 
 from . import EXTRACTOR_VERSION, SCHEMA_VERSION, TAG_RULE_VERSION
+from .action_api import PageFetch
 from .http_adapter import RequestKind, RetryBudgetExhausted, RunBudget
 
 # 触限 / 消费不确定 / 结构性失败型暂停：恢复不得绕过（durable pause）。
@@ -190,6 +191,7 @@ class BatchCheckpoint:
     pause_reason: str | None = None
     pause_detail: str | None = None
     active_request: dict[str, Any] | None = None
+    pending_cache: dict[str, Any] | None = None
     # 请求级单调序号：request_started 自增，accounted 校验 id 匹配，防止清错请求。
     request_seq: int = 0
     # logical operation 重试上限（由 CLI config.max_retries 落盘，resume 不重置）。
@@ -212,6 +214,7 @@ class BatchCheckpoint:
             "pauseReason": self.pause_reason,
             "pauseDetail": self.pause_detail,
             "activeRequest": self.active_request,
+            "pendingCache": self.pending_cache,
             "requestSeq": self.request_seq,
             "retryLimit": self.retry_limit,
             "operations": {key: dict(value) for key, value in self.operations.items()},
@@ -293,6 +296,7 @@ class BatchCheckpoint:
             pause_reason=pause_reason,
             pause_detail=payload.get("pauseDetail"),
             active_request=dict(active_request) if active_request is not None else None,
+            pending_cache=payload.get("pendingCache"),
             request_seq=request_seq,
             retry_limit=retry_limit,
             operations=operations,
@@ -372,6 +376,22 @@ def _validate_checkpoint_invariants(checkpoint: BatchCheckpoint) -> None:
     """严格不变量：违反即拒绝加载，绝不修值/清零/取大。"""
     auth = checkpoint.authorization
     budget = checkpoint.budget
+
+    if checkpoint.pending_cache is not None:
+        try:
+            page = PageFetch.from_cache_checkpoint(checkpoint.pending_cache)
+        except (ValueError, TypeError, KeyError) as error:
+            raise CheckpointInvariantError("invalid pending cache payload") from error
+        word = checkpoint.words.get(page.page)
+        if (checkpoint.pause_reason != "cache-persist-failed" or
+                checkpoint.active_request is not None or word is None or
+                not word.started or word.status != WordStatus.PAUSED or
+                sum(len(r.body) for r in page.requests) > budget.decompressed_bytes or
+                len(page.requests) > budget.request_count or
+                any(e.status == WordStatus.IN_FLIGHT for e in checkpoint.words.values())):
+            raise CheckpointInvariantError("pending cache is not a settled, paused word")
+    elif checkpoint.pause_reason == "cache-persist-failed":
+        raise CheckpointInvariantError("cache pause requires recoverable responses")
 
     # 授权额度必须精确匹配（upper bound exact）。
     if budget.max_decompressed_bytes != auth.decompressed_bytes:

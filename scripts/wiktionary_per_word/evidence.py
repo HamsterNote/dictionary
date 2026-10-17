@@ -23,7 +23,9 @@ from __future__ import annotations
 
 import hashlib
 import json
+import os
 import re
+import tempfile
 import unicodedata
 from dataclasses import dataclass, field
 from html import unescape
@@ -498,26 +500,46 @@ class ResponseCache:
             fetched_at=fetched_at,
             provenance_id=provenance_id,
         )
-        self._index(entry)
         if self.directory is not None:
             self._persist(entry)
+        self._index(entry)
         return entry
 
     def _persist(self, entry: CacheEntry) -> None:
         assert self.directory is not None
         body_path = self.directory / f"{entry.http_sha256}.body"
-        if body_path.exists():
-            if body_path.read_bytes() != entry.body:
-                raise ImmutableViolation("缓存 body 已存在且内容不同")
-        else:
-            body_path.write_bytes(entry.body)
         meta_path = self.directory / f"{entry.provenance_id}.meta.json"
-        if meta_path.exists():
-            raise ImmutableViolation("缓存元信息文件已存在，拒绝覆盖")
-        meta_path.write_text(
-            json.dumps(entry.to_json(), ensure_ascii=False, sort_keys=True, indent=2),
-            encoding="utf-8",
-        )
+        metadata = json.dumps(entry.to_json(), ensure_ascii=False, sort_keys=True,
+                              indent=2).encode("utf-8")
+        self._persist_bytes(body_path, entry.body)
+        self._persist_bytes(meta_path, metadata)
+
+    @staticmethod
+    def _persist_bytes(path: Path, payload: bytes) -> None:
+        # Retry may find a body or metadata already committed by a failed put.
+        # Identical bytes are idempotent; different bytes remain immutable.
+        if path.exists():
+            if path.read_bytes() != payload:
+                raise ImmutableViolation("缓存文件已存在且内容不同")
+        else:
+            fd, temporary = tempfile.mkstemp(prefix=".cache-", suffix=".tmp", dir=path.parent)
+            try:
+                with os.fdopen(fd, "wb") as stream:
+                    stream.write(payload)
+                    stream.flush()
+                    os.fsync(stream.fileno())
+                os.replace(temporary, path)
+            finally:
+                if os.path.exists(temporary):
+                    os.unlink(temporary)
+        # Also sync on an idempotent retry after a previous directory-fsync failure.
+        directory = os.open(path.parent, os.O_RDONLY | os.O_DIRECTORY)
+        try:
+            os.fsync(directory)
+        finally:
+            os.close(directory)
+        if path.read_bytes() != payload:
+            raise CacheIntegrityError("缓存落盘后校验失败")
 
     def get(self, http_sha256: str) -> CacheEntry | None:
         """按 body hash 取唯一 provenance；多 provenance 时 fail closed，不默选第一条。"""

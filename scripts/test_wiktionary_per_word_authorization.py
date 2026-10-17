@@ -186,6 +186,50 @@ class StrictGateTests(unittest.TestCase):
         (self.repo / "changed.py").write_text("# uncommitted\n")
         self.refused_without_effects()
 
+    def test_git_environment_cannot_redirect_head_clean_or_binding(self):
+        other = self.root / "other"
+        subprocess.run(["git", "init", "-q", str(other)], check=True)
+        subprocess.run(["git", "-C", str(other), "-c", "user.name=OfflineFixture",
+                        "-c", "user.email=fixture@example.invalid", "commit", "-q", "--allow-empty",
+                        "-m", "different offline fixture"], check=True)
+        other_commit = gate._git(other, "rev-parse", "HEAD")
+        self.assertNotEqual(other_commit, self.commit)
+        polluted = {
+            "GIT_DIR": str(other / ".git"), "GIT_WORK_TREE": str(other),
+            "GIT_INDEX_FILE": str(other / ".git/index"), "GIT_COMMON_DIR": str(other / ".git"),
+            "GIT_OBJECT_DIRECTORY": str(other / ".git/objects"),
+            "GIT_ALTERNATE_OBJECT_DIRECTORIES": str(other / ".git/objects"),
+            "GIT_NAMESPACE": "other", "GIT_CONFIG": str(other / ".git/config"),
+            "GIT_CONFIG_GLOBAL": str(other / ".git/config"),
+            "GIT_CONFIG_SYSTEM": str(other / ".git/config"),
+            "GIT_CONFIG_NOSYSTEM": "0", "GIT_CONFIG_COUNT": "1",
+            "GIT_CONFIG_KEY_0": "core.worktree", "GIT_CONFIG_VALUE_0": str(other),
+            "GIT_CONFIG_PARAMETERS": "'core.worktree=" + str(other) + "'",
+            "GIT_CEILING_DIRECTORIES": str(self.root), "GIT_IMPLICIT_WORK_TREE": "0",
+        }
+        before = self.snapshot()
+        with mock.patch.dict(os.environ, polluted):
+            self.assertEqual(gate._git(self.repo, "rev-parse", "HEAD"), self.commit)
+            self.assertEqual(gate._git(self.repo, "status", "--porcelain"), "")
+            self.assertEqual(gate.build_binding(self.args, repo=self.repo), self.binding)
+            self.args.execution_commit = other_commit
+            self.refused_without_effects()
+            self.args.execution_commit = self.commit
+        self.assertEqual(before, self.snapshot())
+        (self.repo / "dirty.py").write_text("# actual dirty checkout\n")
+        with mock.patch.dict(os.environ, polluted):
+            self.assertIn("dirty.py", gate._git(self.repo, "status", "--porcelain"))
+            self.refused_without_effects()
+
+    def test_git_validation_supports_explicit_linked_checkout(self):
+        linked = self.root / "linked"
+        subprocess.run(["git", "-C", str(self.repo), "worktree", "add", "--detach", "-q",
+                        str(linked)], check=True)
+        self.assertTrue((linked / ".git").is_file())
+        self.assertEqual(gate._git(linked, "rev-parse", "HEAD"), self.commit)
+        (linked / "dirty.py").write_text("# linked checkout dirty\n")
+        self.assertIn("dirty.py", gate._git(linked, "status", "--porcelain"))
+
     def test_cache_symlink_and_hardlink_refuse(self):
         outside = self.root / "outside"
         outside.mkdir()
@@ -333,6 +377,129 @@ class StrictGateTests(unittest.TestCase):
         body = next((self.batch / "cache").glob("*.body"))
         body.write_bytes(b"damaged")
         self.refused_without_effects()
+
+    def test_cache_failure_pauses_and_recovers_evidence_without_refetch(self):
+        transport = ScriptedTransport([
+            plain_response(tocdata_payload([{"level": "2", "line": "English", "number": "3"}])),
+            plain_response(text_payload(english_html())),
+            plain_response(b'{"error":{"code":"missingtitle"}}'),
+        ])
+        with self.confirmation(), \
+             mock.patch.object(cli, "_repository_root", return_value=self.repo), \
+             mock.patch.object(cli, "_build_urllib_transport", return_value=transport), \
+             mock.patch.object(cli, "HttpAdapter", side_effect=lambda **kw: HttpAdapter(clock=FakeClock(), **kw)):
+            with mock.patch.object(ResponseCache, "put", side_effect=OSError("disk full")) as put, \
+                 mock.patch.object(cli, "run_offline_reparse", side_effect=AssertionError("missing evidence report")):
+                with redirect_stdout(io.StringIO()):
+                    self.assertEqual(cli.main(self.argv()), 2)
+                self.assertEqual(put.call_count, 1)
+            self.assertEqual(len(transport.calls), 2)
+            checkpoint = self.batch / "state/checkpoint.json"
+            saved = BatchLedger.load(checkpoint)
+            budget = saved.budget.to_json()
+            self.assertEqual(saved.checkpoint.words["read"].status, WordStatus.PAUSED)
+            self.assertNotIn("note", saved.checkpoint.words)
+            self.assertIsNone(saved.checkpoint.active_request)
+            self.assertEqual(saved.checkpoint.pause_reason, "cache-persist-failed")
+            self.assertFalse((self.batch / "reports/candidates.json").exists())
+            self.assertEqual(gate.read_json(self.batch / "state/authorization-registry.json")["phase"], "idle")
+            # Repeated failure retries persistence, never a dispatch or a skipped word.
+            with mock.patch.object(ResponseCache, "put", side_effect=OSError("still full")) as put:
+                again = cli.run_apply(self.args, now=fixed_now())
+                self.assertEqual(again["budget"], budget)
+                self.assertIsNone(again["candidateCount"])
+                self.assertEqual(put.call_count, 1)
+            self.assertEqual(len(transport.calls), 2)
+            real_put = ResponseCache.put
+            retried = []
+            def record_put(cache, body, **kwargs):
+                retried.append((body, kwargs))
+                if len(retried) <= 2:
+                    self.assertEqual(len(transport.calls), 2)
+                    self.assertEqual(BatchLedger.load(checkpoint).budget.to_json(), budget)
+                return real_put(cache, body, **kwargs)
+            with mock.patch.object(ResponseCache, "put", record_put):
+                recovered = cli.run_apply(self.args, now=fixed_now())
+            self.assertEqual(len(retried), 3)
+            self.assertEqual(len(transport.calls), 3)
+            self.assertGreater(recovered["candidateCount"], 0)
+            final = BatchLedger.load(checkpoint)
+            self.assertEqual(final.checkpoint.words["read"].status, WordStatus.EXTRACTED)
+            self.assertEqual(final.checkpoint.words["read"].attempts, 1)
+            self.assertIsNone(final.checkpoint.pending_cache)
+            self.assertIsNone(final.checkpoint.pause_reason)
+            self.assertEqual(final.budget.request_count, 3)
+            self.assertEqual(final.budget.distinct_heads_started, 2)
+            self.assertEqual(cli.run_apply(self.args, now=fixed_now())["budget"], recovered["budget"])
+
+    def test_damaged_pending_evidence_refuses_without_effects(self):
+        # A cache pause without complete, verifiable response bytes is not resumable.
+        self.initial_session()
+        cp = self.batch / "state/checkpoint.json"
+        reg = self.batch / "state/authorization-registry.json"
+        payload = json.loads(cp.read_text())
+        payload["pauseReason"] = "cache-persist-failed"
+        for pending in (None, {}, {"responses": []}):
+            payload["pendingCache"] = pending
+            cp.write_text(json.dumps(payload))
+            registry = json.loads(reg.read_text())
+            registry["checkpointSha256"] = gate.digest(cp.read_bytes())
+            reg.write_text(json.dumps(registry))
+            self.refused_without_effects()
+
+    def test_partial_cache_commit_recovers_with_api_retries(self):
+        transport = ScriptedTransport([
+            plain_response(b'{"error":{"code":"maxlag"}}'),
+            plain_response(tocdata_payload([{"level": "2", "line": "English", "number": "3"}])),
+            plain_response(text_payload(english_html())),
+            plain_response(b'{"error":{"code":"missingtitle"}}'),
+        ])
+        real_replace = os.replace
+        committed_metadata = []
+        def fail_second_metadata(source, target):
+            if str(target).endswith(".meta.json"):
+                if committed_metadata:
+                    raise OSError("metadata volume failure")
+                committed_metadata.append(str(target))
+            return real_replace(source, target)
+        with self.confirmation(), \
+             mock.patch.object(cli, "_repository_root", return_value=self.repo), \
+             mock.patch.object(cli, "_build_urllib_transport", return_value=transport), \
+             mock.patch.object(cli, "HttpAdapter", side_effect=lambda **kw: HttpAdapter(clock=FakeClock(), **kw)):
+            with mock.patch("wiktionary_per_word.evidence.os.replace", side_effect=fail_second_metadata):
+                first = cli.run_apply(self.args, now=fixed_now())
+            self.assertEqual(first["pausedReason"], "cache-persist-failed")
+            self.assertEqual(first["budget"]["request_count"], 3)
+            self.assertEqual(len(transport.calls), 3)
+            self.assertEqual(len(ResponseCache(self.batch / "cache", read_only=True)), 1)
+            self.assertEqual(list((self.batch / "cache").glob(".cache-*.tmp")), [])
+            saved = BatchLedger.load(self.batch / "state/checkpoint.json")
+            self.assertEqual(len(saved.checkpoint.pending_cache["responses"]), 3)
+            cp, reg = self.batch / "state/checkpoint.json", self.batch / "state/authorization-registry.json"
+            cp_bytes, reg_bytes = cp.read_bytes(), reg.read_bytes()
+            for corruption in ("body", "sha256", "terminal", "inflight"):
+                with self.subTest(corruption=corruption):
+                    payload = json.loads(cp_bytes)
+                    if corruption in ("body", "sha256"):
+                        payload["pendingCache"]["responses"][0][corruption] = "corrupted"
+                    elif corruption == "terminal":
+                        payload["words"]["read"]["status"] = "extracted"
+                    else:
+                        payload["activeRequest"] = {"unsettled": True}
+                    cp.write_text(json.dumps(payload))
+                    registry = json.loads(reg_bytes)
+                    registry["checkpointSha256"] = gate.digest(cp.read_bytes())
+                    reg.write_text(json.dumps(registry))
+                    self.refused_without_effects()
+            cp.write_bytes(cp_bytes)
+            reg.write_bytes(reg_bytes)
+            recovered = cli.run_apply(self.args, now=fixed_now())
+            self.assertIsNone(recovered["pausedReason"])
+            self.assertGreater(recovered["candidateCount"], 0)
+            self.assertEqual(recovered["budget"]["request_count"], 4)
+            self.assertEqual(recovered["budget"]["retry_count"], 1)
+            self.assertEqual(len(transport.calls), 4)
+            self.assertEqual(len(ResponseCache(self.batch / "cache", read_only=True)), 4)
 
     def test_changed_heads_during_run_cannot_dispatch_unapproved_head(self):
         transport = ScriptedTransport([

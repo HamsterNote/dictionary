@@ -65,8 +65,20 @@ def read_json(path: Path):
 
 
 def _git(repo: Path, *args: str) -> str:
-    return subprocess.check_output(["git", "-C", str(repo), *args], text=True,
-                                   env={**os.environ, "GIT_OPTIONAL_LOCKS": "0"}).strip()
+    # Do not let a caller's repository/index/config selectors redirect validation.
+    repo = repo.resolve(strict=True)
+    env = {"PATH": os.defpath, "LC_ALL": "C", "GIT_OPTIONAL_LOCKS": "0",
+           "GIT_CONFIG_GLOBAL": os.devnull, "GIT_CONFIG_SYSTEM": os.devnull,
+           "GIT_CONFIG_NOSYSTEM": "1"}
+    if not (repo / ".git").exists():
+        raise GateRejected("execution checkout has no .git entry")
+    git_dir = subprocess.check_output(
+        ["git", "-C", str(repo), "rev-parse", "--absolute-git-dir"],
+        text=True, env=env).strip()
+    return subprocess.check_output(
+        ["git", "--git-dir", git_dir, "--work-tree", str(repo),
+         "-c", "core.fsmonitor=false",
+         "-C", str(repo), *args], text=True, env=env).strip()
 
 
 def _safe_path(workspace: Path, relative: str) -> Path:
@@ -107,7 +119,8 @@ def build_binding(args, *, repo: Path) -> dict:
             "reports": [f"{batch}/reports/{name}" for name in
                         ("candidates.json", "candidates.md", "costs.json", "evidence.json")],
             "temporaryPrefixes": [f"{batch}/state/{name}" for name in
-                                  ("checkpoint.json", "authorization-registry.json")],
+                                  ("checkpoint.json", "authorization-registry.json")] +
+                                 [f"{batch}/cache/.cache-"],
         }
         for key in ("heads", "authorization", "checkpoint", "cache"):
             supplied = getattr(args, {"heads": "heads_file", "authorization": "authorization_file",
@@ -183,7 +196,7 @@ def build_binding(args, *, repo: Path) -> dict:
         }
     except GateRejected:
         raise
-    except (AttributeError, OSError, ValueError, TypeError, RuntimeError,
+    except (AttributeError, OSError, ValueError, TypeError, RuntimeError, subprocess.SubprocessError,
             InvalidUserAgentError, MissingUserAgentError) as error:
         raise GateRejected(f"invalid binding: {error}") from error
 
@@ -244,7 +257,7 @@ def read_state(binding: dict) -> dict | None:
         cp, budget, limits = ledger.checkpoint, ledger.budget, binding["limits"]
         heads = (root / binding["paths"]["heads"]).read_text().splitlines()
         if (cp.batch_id != binding["batchId"] or cp.active_request is not None or
-                cp.pause_reason is not None or
+                cp.pause_reason not in (None, "cache-persist-failed") or
                 any(entry.status == WordStatus.IN_FLIGHT for entry in cp.words.values()) or
                 not set(cp.words).issubset(heads) or
                 cp.retry_limit != binding["calls"]["maxRetriesPerOperation"] or

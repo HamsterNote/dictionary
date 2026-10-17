@@ -13,6 +13,8 @@
 from __future__ import annotations
 
 import json
+import base64
+import hashlib
 import urllib.parse
 from dataclasses import dataclass, field
 from enum import Enum
@@ -54,6 +56,58 @@ class PageFetch:
     toc_sections: list[dict[str, Any]] = field(default_factory=list)
     requests: list[FetchedResponse] = field(default_factory=list)
     warnings: list[str] = field(default_factory=list)
+
+    def cache_checkpoint(self, fetched_at: str) -> dict:
+        """Only fully received, already accounted responses enter local recovery."""
+        return {
+            "head": self.page, "status": self.status.value, "html": self.html,
+            "revid": self.revid, "fetchedAt": fetched_at,
+            "responses": [{"url": r.url, "kind": r.kind.value,
+                           "body": base64.b64encode(r.body).decode("ascii"),
+                           "sha256": hashlib.sha256(r.body).hexdigest()}
+                          for r in self.requests],
+        }
+
+    @classmethod
+    def from_cache_checkpoint(cls, value: dict) -> "PageFetch":
+        if not isinstance(value, dict) or set(value) != {
+            "head", "status", "html", "revid", "fetchedAt", "responses"
+        }:
+            raise ValueError("invalid pending cache page")
+        if (not isinstance(value["head"], str) or not value["head"] or
+                not isinstance(value["fetchedAt"], str) or not value["fetchedAt"] or
+                (value["revid"] is not None and type(value["revid"]) is not int)):
+            raise ValueError("invalid pending cache identity")
+        status = PageStatus(value["status"])
+        if ((status == PageStatus.FOUND and not isinstance(value["html"], str)) or
+                (status != PageStatus.FOUND and value["html"] is not None)):
+            raise ValueError("invalid pending cache HTML")
+        responses = value["responses"]
+        if not isinstance(responses, list) or not 1 <= len(responses) <= 6:
+            raise ValueError("invalid pending cache response count")
+        requests = []
+        seen_main = False
+        for index, item in enumerate(responses):
+            if not isinstance(item, dict) or set(item) != {"url", "kind", "body", "sha256"}:
+                raise ValueError("invalid pending cache response")
+            if (not isinstance(item["url"], str) or not item["url"] or
+                    not isinstance(item["body"], str) or
+                    item["kind"] not in ("toc", "main") or
+                    (index == 0 and item["kind"] != "toc") or
+                    (seen_main and item["kind"] != "main")):
+                raise ValueError("invalid pending cache provenance")
+            seen_main = seen_main or item["kind"] == "main"
+            body = base64.b64decode(item["body"], validate=True)
+            if hashlib.sha256(body).hexdigest() != item["sha256"]:
+                raise ValueError("pending cache body hash differs")
+            requests.append(FetchedResponse(
+                url=item["url"], kind=RequestKind(item["kind"]), body=body,
+                status=200, headers={}, network_bytes=0, decompressed_bytes=len(body),
+                attempts=0, retried=False))
+        if (status == PageStatus.FOUND and not seen_main) or (status == PageStatus.NO_ENGLISH and seen_main):
+            raise ValueError("pending cache response kinds differ from page status")
+        return cls(page=value["head"], status=status, html=value["html"],
+                   revid=value["revid"], requests=requests)
 
 
 def build_tocdata_url(page: str, *, endpoint: str = DEFAULT_API_ENDPOINT) -> str:

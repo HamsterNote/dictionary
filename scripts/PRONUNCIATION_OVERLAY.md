@@ -76,9 +76,11 @@ operator must establish that it came from the user. A check passing never runs H
 Preflight rejects missing/mismatched confirmation, changed/duplicate/oversized
 lists, synthetic UA, changed calls/budgets/paths/version, dirty code, symlinks,
 hardlinks, unexpected files, orphan state/cache, damaged or rolled-back checkpoint,
-paused state and unsettled in-flight requests before any output write. Cache
+budget/uncertain paused state and unsettled in-flight requests before any output write. Cache
 integrity checks are read-only. Git reads
-disable optional index locks. Bootstrap flock uses the existing batch directory;
+use a minimal environment (no inherited Git selectors/configuration), explicitly
+select the actual checkout, disable global/system config and optional index locks.
+Bootstrap flock uses the existing batch directory;
 the persistent `state/authorization.lock` is never replaced or unlinked. A second
 read-only preflight under flock precedes registry creation. Registry CAS binds the
 confirmation, contract and checkpoint digest. Its write-ahead `active` phase means
@@ -86,6 +88,13 @@ an interrupted session fails closed; a complete session atomically seals the new
 checkpoint hash and increments the revision. Deleting/recreating state to reset
 consumption is not a recovery operation. Cooperating processes must use this gate;
 local filesystem owners can modify JSON and are outside its trust boundary.
+
+Advisory flock only coordinates writers that honor it. It does not lock external
+writers of Git HEAD, source files, authorization or checkpoint inputs. HEAD and
+authorization are checked again at session exit, not before every dispatch.
+Concurrent modification of these inputs during execution is prohibited. Mid-run
+revocation is not supported. Local CAS does not detect an owner rolling back both
+registry and checkpoint together.
 
 The fake-HTTP tests mock confirmation reads in memory and disable sockets. They
 exercise the same binding/registry protocol through collector/cache/candidate
@@ -105,6 +114,19 @@ The budget summary is printed to stdout and appended internally to `execution.lo
 after authorization. Do not redirect shell output to the batch log before the
 guard: shell redirection would create a file even when authorization is refused.
 Paused batches return nonzero and cannot resume around their limits.
+
+Cache body and metadata writes use same-directory `.cache-*.tmp` files, fsync,
+rename, directory fsync and exact read-back verification before in-memory indexing.
+Identical partial writes can be retried; conflicting content is rejected. Temporary
+files are removed on handled failures; leftovers after a crash fail closed at the
+path gate. A cache write failure immediately persists `cache-persist-failed` and
+the already-accounted complete responses in `checkpoint.pendingCache`. The word
+stays paused and nonterminal, no further head/request is dispatched, and candidate
+generation is deferred (`candidateCount: null`; any older report is not updated).
+A normally sealed session may resume this specific settled pause within its bound
+budgets: it retries cache writes from checkpoint bytes before any new request,
+without charging or fetching the page again. Unsettled requests, exhausted budgets,
+invalid pending payloads and interrupted/active registries still refuse recovery.
 
 The execution commit can now be frozen before confirmation; providing the valid
 external input then allows execution on that same commit without editing code.

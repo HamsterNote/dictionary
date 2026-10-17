@@ -13,6 +13,7 @@ import os
 import sys
 import tempfile
 import unittest
+from unittest import mock
 from pathlib import Path
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
@@ -117,6 +118,45 @@ class FingerprintTest(unittest.TestCase):
 
 
 class CacheTest(unittest.TestCase):
+    def test_atomic_write_failures_are_unindexed_and_retryable(self) -> None:
+        for suffix in (".body", ".meta.json"):
+            with self.subTest(suffix=suffix), tempfile.TemporaryDirectory() as directory:
+                cache = ResponseCache(Path(directory))
+                arguments = dict(content_type="text/html", complete=True,
+                                 source_url="https://en.wiktionary.org/wiki/read",
+                                 fetched_at="2026-10-17T00:00:00Z")
+                real_replace = os.replace
+                def fail_replace(source, target):
+                    if str(target).endswith(suffix):
+                        raise OSError("injected rename failure")
+                    return real_replace(source, target)
+                with mock.patch("wiktionary_per_word.evidence.os.replace", side_effect=fail_replace):
+                    with self.assertRaises(OSError):
+                        cache.put(b"complete response", **arguments)
+                self.assertEqual(len(cache), 0)
+                self.assertEqual(list(Path(directory).glob(".cache-*.tmp")), [])
+                # Metadata failure can leave a complete body, never a partial file.
+                for path in Path(directory).glob("*.body"):
+                    self.assertEqual(path.read_bytes(), b"complete response")
+                entry = cache.put(b"complete response", **arguments)
+                self.assertEqual(len(cache), 1)
+                self.assertEqual(ResponseCache(Path(directory)).get_by_provenance(entry.provenance_id), entry)
+
+    def test_readback_failure_never_indexes_unverified_write(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            cache = ResponseCache(Path(directory))
+            arguments = dict(content_type="text/html", complete=True,
+                             source_url="https://en.wiktionary.org/wiki/read", fetched_at="offline")
+            real_read = Path.read_bytes
+            def bad_read(path):
+                return b"corrupt readback" if path.suffix == ".body" else real_read(path)
+            with mock.patch.object(Path, "read_bytes", bad_read):
+                with self.assertRaises(CacheIntegrityError):
+                    cache.put(b"complete response", **arguments)
+            self.assertEqual(len(cache), 0)
+            self.assertEqual(list(Path(directory).glob("*.meta.json")), [])
+            self.assertEqual(len(cache.put(b"complete response", **arguments).body), 17)
+
     def test_truncated_not_cached(self) -> None:
         cache = ResponseCache()
         with self.assertRaises(IncompleteCacheError):

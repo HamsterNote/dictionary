@@ -250,12 +250,13 @@ def run_apply(args: argparse.Namespace, *, now) -> dict:
                 ledger=ledger, adapter=adapter, cache=cache, evidence_ledger=EvidenceLedger(),
                 now=now, endpoint=calls["endpoint"],
             ).run_batch(session.heads)
-            candidates = run_offline_reparse(
+            candidates = None if ledger.checkpoint.pending_cache is not None else run_offline_reparse(
                 cache_dir=root / paths["cache"], current_path=None,
                 output_path=root / paths["reports"][0],
             )
             result = {"batchId": binding["batchId"], "processed": report.processed,
-                      "pausedReason": report.paused_reason, "candidateCount": len(candidates),
+                      "pausedReason": report.paused_reason,
+                      "candidateCount": None if candidates is None else len(candidates),
                       "budget": ledger.budget.to_json()}
             with (root / paths["log"]).open("a", encoding="utf-8") as log:
                 log.write(json.dumps(result, ensure_ascii=False, sort_keys=True) + "\n")
