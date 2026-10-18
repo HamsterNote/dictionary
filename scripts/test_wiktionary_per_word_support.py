@@ -70,10 +70,10 @@ class ScriptedTransport:
         return self.responses.pop(0)
 
 
-def tocdata_payload(sections: list[dict[str, object]]) -> bytes:
+def tocdata_payload(sections: list[dict[str, object]], *, revid: int = 12345) -> bytes:
     import json
 
-    return json.dumps({"parse": {"tocdata": {"sections": sections}}}).encode("utf-8")
+    return json.dumps({"parse": {"tocdata": {"sections": sections}, "revid": revid}}).encode("utf-8")
 
 
 def text_payload(html: str, *, revid: int = 12345) -> bytes:

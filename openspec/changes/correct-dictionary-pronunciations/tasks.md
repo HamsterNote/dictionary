@@ -34,7 +34,7 @@
 ## 5. 独立 Python 按词解析与 HTTP 适配
 
 - [x] 5.1 建立 Python 3.12 标准库工具入口，分离 HTTP adapter、HTMLParser 结构提取、离线重解析与候选生成；完成证据：工具帮助/模块边界及离线 unittest，默认不联网、不加载巨型 dump、不依赖 Kaikki/requests/新后端/新框架，旧 dump/inflections 生成器及产物不变。
-- [x] 5.2 实现 Action API parse/tocdata 动态选择 English 且 hLevel=2，再获取完整 English 展开文本；完成证据：假 HTTP JSON 夹具覆盖 English 非 index 1、多语言、缺页/缺 English、可选对照不可用，不写死 section=1、不自行展开模板、不使缺页清空正式结果。（真实 schema 修复：严格 hLevel=2、index 定位、tocLevel/number 不代用，MAIN 显式 text|revid；100 份真实 TOC 离线全部通过、35 词 index/number 不同，零 dispatch；320 项 Python 及 Node 集成退出 0。仓库根 `evidence/17-real-toc-schema-repair.md` 和逐词附件。无真实 MAIN/新采集成功声明。）
+- [x] 5.2 实现 Action API parse/tocdata 动态选择 English 且 hLevel=2，再获取完整 English 展开文本；完成证据：假 HTTP JSON 夹具覆盖 English 非 index 1、多语言、缺页/缺 English、可选对照不可用，不写死 section=1、不自行展开模板、不使缺页清空正式结果。（真实 schema 修复及版本/语言补闸：严格 hLevel=2、index 定位，TOC 同请求 tocdata|revid，MAIN oldid+index/text|revid 且 revision 必须一致、正文唯一 English h2 根；100 份真实 TOC 离线全部通过、35 词 index/number 不同，零 dispatch；332 项 Python 及 Node 集成退出 0。仓库根 `evidence/17-real-toc-schema-repair.md`、`evidence/18-revision-language-binding.md` 和逐词附件。无真实 MAIN/新采集成功声明。）
 - [x] 5.3 实现结构栈提取多个 Etymology/Pronunciation/POS/form 的 IPA、父级 qualifiers、全部原 tags 与路径；完成证据：synthetic HTML unittest 验证多层关联、邻音频不借口音、关联不明保 unresolved、片段留证据、缺失 POS/词义/role 不猜，保留全部观测而非只取首项。（证据：`evidence/05-parser-recovery.md` 与 `evidence/logs/parser-extract.log`，39 项结构测试通过；主编排独立负例复核合法嵌套父标签、内部标签隔离、EOF 残片及未知限制标签变化通过。正式标签准入仍待 3.2，不将完整观测冒充默认合格读法。）
 - [x] 5.4 实现串行低速、有效 contact User-Agent 检查、显式间隔/有限重试及退避；完成证据：假 HTTP/假时钟 unittest 验证 429/503 Retry-After、不可用时至少 5 秒指数退避、无并发且重试受预算；真实联网只可在第 10 组独立采集授权后发生，缺 UA 或只有规划/apply 同意时不得请求。
 

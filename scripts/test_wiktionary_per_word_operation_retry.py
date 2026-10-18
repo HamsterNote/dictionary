@@ -234,7 +234,9 @@ class OperationQuotaTest(unittest.TestCase):
         urls = [url for url, _ in adapter._transport.calls]
         self.assertEqual(len(urls), 3)
         # TOC 只抓 1 次；MAIN 抓 2 次（错误只重抓 MAIN，绝不回退重跑 TOC）。
-        self.assertEqual(sum("prop=tocdata" in url for url in urls), 1)
+        from urllib.parse import parse_qs, urlparse
+        self.assertEqual(sum(parse_qs(urlparse(url).query).get("prop") == ["tocdata|revid"]
+                             for url in urls), 1)
         self.assertEqual(sum("prop=text" in url for url in urls), 2)
 
     def test_claim_persist_failure_no_free_retry(self) -> None:

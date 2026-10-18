@@ -2,9 +2,9 @@
 
 对应 task 5.2。要点：
 
-- 用 ``parse`` + ``tocdata`` 动态选择 ``line == "English"`` 且 ``hLevel == 2`` 的
+- 用 ``parse`` + ``tocdata|revid`` 动态选择 ``line == "English"`` 且 ``hLevel == 2`` 的
   section，**不写死 section=1**。
-- 再对选中 index 取 ``prop=text|revid`` 的完整展开 HTML 与 revision（官方展开已含模板输出，
+- 再以该 revision 的 oldid 对选中 index 取 ``prop=text|revid`` 并核对版本和语言根（官方展开已含模板输出，
   主线不自行展开模板）。
 - 缺页 / 无 English 成为明确状态，**不清空正式结果**。
 - Kaikki 只作可选对照，其不可用不阻断官方流程。
@@ -22,6 +22,7 @@ from enum import Enum
 from typing import Any, Final, Mapping
 
 from .http_adapter import FetchedResponse, HttpAdapter, RequestKind
+from .html_extract import extract_observations
 
 DEFAULT_API_ENDPOINT: Final = "https://en.wiktionary.org/w/api.php"
 ENGLISH_HEADING: Final = "English"
@@ -116,7 +117,7 @@ def build_tocdata_url(page: str, *, endpoint: str = DEFAULT_API_ENDPOINT) -> str
         {
             "action": "parse",
             "page": page,
-            "prop": "tocdata",
+            "prop": "tocdata|revid",
             "format": "json",
             "redirects": "1",
         }
@@ -125,19 +126,30 @@ def build_tocdata_url(page: str, *, endpoint: str = DEFAULT_API_ENDPOINT) -> str
 
 
 def build_parse_text_url(
-    page: str, section_index: str, *, endpoint: str = DEFAULT_API_ENDPOINT
+    oldid: int, section_index: str, *, endpoint: str = DEFAULT_API_ENDPOINT
 ) -> str:
+    if type(oldid) is not int or oldid <= 0:
+        raise ActionApiError("MAIN requires a positive integer oldid from TOC")
+    if not isinstance(section_index, str) or re.fullmatch(r"[1-9][0-9]*", section_index) is None:
+        raise ActionApiError("MAIN requires a valid section index from TOC")
     query = urllib.parse.urlencode(
         {
             "action": "parse",
-            "page": page,
-            "section": str(section_index),
+            "oldid": oldid,
+            "section": section_index,
             "prop": "text|revid",
             "format": "json",
-            "redirects": "1",
         }
     )
     return f"{endpoint}?{query}"
+
+
+def _revision(payload: Mapping[str, Any], kind: str) -> int:
+    parse = payload.get("parse")
+    revid = parse.get("revid") if isinstance(parse, Mapping) else None
+    if type(revid) is not int or revid <= 0:
+        raise ActionApiError(f"{kind} response requires a positive integer revid")
+    return revid
 
 
 def _decode_json(response: FetchedResponse) -> Mapping[str, Any]:
@@ -259,6 +271,8 @@ def fetch_english_page(
             continue
         raise ActionApiError(f"tocdata-api-error:{api_error}")
 
+    toc_revid = _revision(toc_payload, "TOC")
+    fetch.revid = toc_revid
     section_index, sections = select_english_section(toc_payload)
     fetch.toc_sections = sections
     if section_index is None:
@@ -270,7 +284,7 @@ def fetch_english_page(
     # --- MAIN：独立循环；MAIN 错误绝不重跑 TOC ---
     while True:
         text_response = adapter.fetch(
-            build_parse_text_url(page, section_index, endpoint=endpoint),
+            build_parse_text_url(toc_revid, section_index, endpoint=endpoint),
             kind=RequestKind.MAIN,
             head=page,
         )
@@ -282,8 +296,9 @@ def fetch_english_page(
         fetch.warnings.append(f"parse-api-error:{api_error}")
         category = classify_api_error(api_error)
         if category == "missing":
-            fetch.status = PageStatus.MISSING
-            return fetch
+            # TOC already resolved a page revision. An unavailable oldid is a
+            # failed snapshot fetch, not proof that the head/page is missing.
+            raise ActionApiError(f"MAIN snapshot unavailable:{api_error}")
         if category == "retriable":
             _claim_api_retry(adapter, head=page, kind=RequestKind.MAIN, api_error=api_error)
             continue
@@ -299,10 +314,12 @@ def fetch_english_page(
         html = text
     if not isinstance(html, str):
         raise ActionApiError("parse 文本响应缺少展开 HTML")
-    revid = parse.get("revid")
-    if type(revid) is not int or revid <= 0:
-        raise ActionApiError("parse 文本响应缺少有效 revid")
-    fetch.revid = revid
+    if _revision(text_payload, "MAIN") != toc_revid:
+        raise ActionApiError("MAIN revid differs from TOC revision")
+    try:
+        extract_observations(html, expected_language=ENGLISH_HEADING)
+    except ValueError as error:
+        raise ActionApiError(f"MAIN language root rejected: {error}") from error
     fetch.html = html
     fetch.status = PageStatus.FOUND
     return fetch

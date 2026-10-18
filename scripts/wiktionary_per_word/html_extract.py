@@ -383,6 +383,7 @@ class WiktionaryHTMLExtractor(HTMLParser):
         self._heading_stack: list[tuple[int, str]] = []
         self._heading_level: int | None = None
         self._heading_text: list[str] = []
+        self.language_roots: list[tuple[int, str]] = []
         self._blocks: list[_BlockFrame] = [_BlockFrame("#root", ())]
         self._elem_stack: list[tuple[str, tuple[str, ...]]] = []
         self._capture_kind: str | None = None
@@ -412,6 +413,10 @@ class WiktionaryHTMLExtractor(HTMLParser):
     # ---- 标题栈 ----
     def _push_heading(self, level: int, text: str) -> None:
         text = text.strip()
+        if level <= 2:
+            self.language_roots.append((level, unescape(text)))
+        if level == 2:
+            self.result.languages.append(unescape(text))
         while self._heading_stack and self._heading_stack[-1][0] >= level:
             self._heading_stack.pop()
         self._heading_stack.append((level, text))
@@ -508,7 +513,9 @@ class WiktionaryHTMLExtractor(HTMLParser):
         self._capture_text_data(f"&#{name};")
 
     def _capture_text_data(self, data: str) -> None:
-        if self._heading_level is not None:
+        if self._heading_level is not None and not any(
+            "mw-editsection" in classes for _, classes in self._elem_stack
+        ):
             self._heading_text.append(data)
         if self._in_audio():
             return
@@ -619,13 +626,14 @@ class WiktionaryHTMLExtractor(HTMLParser):
         roles = detect_roles(scope_text)
         role = roles[0] if roles else None
 
+        language = next((unescape(text) for level, text in self._heading_stack if level == 2), None)
         section = next(
             (
                 text
                 for level, text in reversed(self._heading_stack)
                 if unescape(text).lower() in ("pronunciation", "etymology", "english")
             ),
-            "English",
+            language or "",
         )
 
         # tags：祖先链上的 class tokens + 捕获元素自身 class + 标题文本，保留顺序去重。
@@ -668,6 +676,8 @@ class WiktionaryHTMLExtractor(HTMLParser):
                     unclassified_tags.append(token)
 
         unresolved: list[str] = []
+        if not language:
+            unresolved.append("language-not-determinable")
         fragment: list[str] = []
         if truncated:
             fragment.append("truncated-capture")
@@ -687,7 +697,7 @@ class WiktionaryHTMLExtractor(HTMLParser):
             unresolved.append("unknown-restriction-classification-pending")
 
         applicability = Applicability(
-            language=Scope.known(["English"]),
+            language=Scope.known([language]) if language else Scope.unknown("language-not-determinable"),
             entry=Scope.unknown("entry-not-determinable"),
             lexeme=Scope.unknown("lexeme-not-determinable"),
             role=Scope.known(list(roles)) if roles else Scope.unknown("role-not-determinable"),
@@ -723,9 +733,14 @@ class WiktionaryHTMLExtractor(HTMLParser):
         )
 
 
-def extract_observations(html: str) -> ExtractionResult:
-    """便捷入口：解析一段展开后的 English HTML，返回全部观测。"""
+def extract_observations(html: str, *, expected_language: str | None = None) -> ExtractionResult:
+    """从正文标题推导语言；采集路径还要求唯一且一致的语言根。"""
     extractor = WiktionaryHTMLExtractor()
     extractor.feed(html)
     extractor.close()
+    if expected_language is not None:
+        if (extractor.language_roots != [(2, expected_language)] or
+                any(o.applicability.language.values != (expected_language,)
+                    for o in extractor.result.observations)):
+            raise ValueError(f"expected one {expected_language} h2 language root and scoped observations")
     return extractor.result

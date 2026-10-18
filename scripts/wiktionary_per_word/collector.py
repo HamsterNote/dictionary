@@ -165,7 +165,10 @@ class Collector:
             return self.ledger.finish_word(head, WordStatus.NO_QUALIFIED, note="no-english-section")
         assert page.html is not None
 
-        extraction = extract_observations(page.html)
+        try:
+            extraction = extract_observations(page.html, expected_language="English")
+        except ValueError as error:
+            return self.ledger.finish_word(head, WordStatus.FAILED, note=f"language-root:{error}")
         main_body = page.requests[-1].body if page.requests else page.html.encode("utf-8")
         evidence = build_source_evidence(
             word=head,

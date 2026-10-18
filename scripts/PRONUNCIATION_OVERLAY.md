@@ -172,23 +172,39 @@ Any code change invalidates that binding and requires a new confirmation.
 relative TOC depth, while `number` is only a display ordinal; neither locates the
 parse section. Missing/malformed heading fields, invalid English indices or
 duplicate English roots raise structural errors instead of becoming false missing
-English results. MAIN explicitly requests `prop=text|revid` and requires a positive
-integer revision. This adds no request but changes the bound MAIN parameters.
-The extractor version is now 2; old checkpoints cannot be upgraded or reset.
+English results. The same TOC request takes `prop=tocdata|revid` and requires a
+positive integer revision. MAIN takes `oldid=<that revision>` plus the selected
+`section`, with `prop=text|revid`; it does not send `page` or `redirects`. MAIN's
+returned revision must exactly match TOC. Missing/invalid revisions, an unavailable
+oldid or an out-of-range section fail the word without candidate evidence.
+This still uses two normal requests per head, but changes both bound calls.
+The extractor version is now 3; old checkpoints cannot be upgraded or reset.
+
+Before a page becomes FOUND, its expanded HTML must have exactly one h2 language
+root, English, and every IPA observation must lie under that root. Missing,
+foreign, duplicate or additional language roots fail closed, even with a matching
+revision. Nested headline markup and edit links are handled structurally. The
+collector also enforces this on cache-persistence recovery. The generic HTML
+extractor derives each observation's language from the actual h2 heading, leaving
+it unknown without a root; it never assumes English. This language check is a
+second gate: **oldid does not freeze templates/modules**, so a historical page
+revision alone cannot guarantee identical expanded HTML across retrievals.
 
 The consumed `ham37-first-round-v1` batch is kept intact. Its 100 cached TOCs are
 complete, attributed and licensed, but none contains `revid`. They can be audited
 offline with `audit_wiktionary_toc_cache.py`; that command prohibits sockets and
 adapter dispatch and verifies original evidence bytes/mtimes remain unchanged.
-The output lists every cached English index/title and projected MAIN parameters.
-Those parameters are an offline view, not permission to dispatch them later.
+The output lists every cached English index/title. Without a valid cached revid,
+executable MAIN URL/parameters are null; it does not invent an oldid. The previous
+freeze's unbound page/index projections are superseded and must not be dispatched.
 
 The prepared `ham37-second-round-v1` uses the same ordered 100 heads but requires
 a new execution/budget confirmation. The CLI supports fresh TOC then MAIN, not a
 cache-seeded MAIN-only mode. Reusing an old index against a changing live page
 without a revision binding is unsafe. No consumed ledger/cache is copied into the
 new batch, no grant is created, and no new session is started by preparation.
-The exact binding changes for execution commit, isolated paths and MAIN's
+The exact binding changes for execution commit, isolated paths, TOC's
+`tocdata|revid`, and MAIN's `oldid=validated-TOC-revid` /
 `dynamic-English-hLevel-2-index` / `text|revid` parameters; it must be confirmed
 again. Existing gate, registry, consumption-uncertainty and pause limits apply.
 

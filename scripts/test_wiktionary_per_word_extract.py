@@ -102,7 +102,7 @@ class SelectEnglishSectionTest(unittest.TestCase):
         self.assertIsNone(number)
 
     def test_parse_text_url_uses_selected_section(self) -> None:
-        url = build_parse_text_url("read", "3")
+        url = build_parse_text_url(12345, "3")
         self.assertIn("section=3", url)
         self.assertNotIn("section=1", url)
 
@@ -112,14 +112,14 @@ class FetchEnglishPageTest(unittest.TestCase):
         from urllib.parse import parse_qs, urlparse
         sections = [{"tocLevel": 1, "hLevel": 2, "line": "English",
                      "number": "2", "index": "9", "fromTitle": "as"}]
-        adapter = build_adapter([plain_response(tocdata_payload(sections)),
+        adapter = build_adapter([plain_response(tocdata_payload(sections, revid=999)),
                                  plain_response(text_payload(english_html(), revid=999))])
         page = fetch_english_page(adapter, "as")
         self.assertEqual(page.english_section_index, "9")
         self.assertEqual(page.revid, 999)
         query = parse_qs(urlparse(adapter._transport.calls[1][0]).query)
-        self.assertEqual(query, {"action": ["parse"], "page": ["as"], "section": ["9"],
-                                 "prop": ["text|revid"], "format": ["json"], "redirects": ["1"]})
+        self.assertEqual(query, {"action": ["parse"], "oldid": ["999"], "section": ["9"],
+                                 "prop": ["text|revid"], "format": ["json"]})
         self.assertEqual(len(adapter._transport.calls), 2)
 
     def test_missing_or_invalid_requested_revision_is_not_success(self) -> None:
@@ -136,7 +136,7 @@ class FetchEnglishPageTest(unittest.TestCase):
     def test_selects_english_section_and_fetches_html(self) -> None:
         adapter = build_adapter(
             [
-                plain_response(tocdata_payload(MULTI_LANG_SECTIONS)),
+                plain_response(tocdata_payload(MULTI_LANG_SECTIONS, revid=999)),
                 plain_response(text_payload(english_html(), revid=999)),
             ]
         )

@@ -40,10 +40,14 @@ class StrictGateTests(unittest.TestCase):
         from wiktionary_per_word.action_api import build_tocdata_url, build_parse_text_url
         calls = self.binding["calls"]
         for name, url in (("toc", build_tocdata_url("as")),
-                          ("main", build_parse_text_url("as", "9"))):
+                          ("main", build_parse_text_url(12345, "9"))):
             query = {k: v[0] for k, v in parse_qs(urlparse(url).query).items()}
-            expected = {**calls[name], "page": "as"}
+            expected = dict(calls[name])
+            if name == "toc":
+                expected["page"] = "as"
             if name == "main":
+                self.assertEqual(expected["oldid"], "validated-TOC-revid")
+                expected["oldid"] = "12345"
                 self.assertEqual(expected["section"], "dynamic-English-hLevel-2-index")
                 expected["section"] = "9"
             self.assertEqual(query, expected)

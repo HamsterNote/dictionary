@@ -46,14 +46,17 @@ def audit(cache_dir: Path, heads_file: Path) -> dict:
         if index is None:
             raise ValueError(f"real source has no English hLevel=2: {head}")
         section = next(s for s in sections if s.get("line") == "English" and s.get("hLevel") == 2)
-        main_url = build_parse_text_url(head, index)
+        revision = payload["parse"].get("revid")
+        main_url = (build_parse_text_url(revision, index)
+                    if type(revision) is int and revision > 0 else None)
         rows.append({"head": head, "pageTitle": payload["parse"]["title"],
                      "sectionTitle": section["line"], "hLevel": section["hLevel"],
                      "tocLevel": section.get("tocLevel"), "displayNumber": section.get("number"),
                      "sectionIndex": index, "fromTitle": section.get("fromTitle"),
-                     "revision": payload["parse"].get("revid"),
+                     "revision": revision,
                      "mainUrlFromCachedView": main_url,
-                     "mainParametersFromCachedView": {k: v[0] for k, v in parse_qs(urlparse(main_url).query).items()},
+                     "mainParametersFromCachedView": ({k: v[0] for k, v in parse_qs(urlparse(main_url).query).items()}
+                                                      if main_url else None),
                      "sourceUrl": entry.source_url, "fetchedAt": entry.fetched_at,
                      "httpSha256": entry.http_sha256, "provenanceId": entry.provenance_id,
                      "license": entry.license_id, "licenseUrl": entry.license_url,
@@ -66,7 +69,7 @@ def audit(cache_dir: Path, heads_file: Path) -> dict:
             "newRequests": 0, "sourceBatchUnchanged": True,
             "revisionAvailableCount": sum(r["revision"] is not None for r in rows),
             "reuseDecision": "offline evidence only; live MAIN requires fresh TOC under a new grant",
-            "mainParameterCaveat": "Cached-view parameters are an audit projection. Fresh authorized TOC must select the current index before MAIN.",
+            "mainParameterCaveat": "Without a valid cached revid no executable MAIN parameters exist. Fresh authorized TOC must supply both revision and index.",
             "words": rows}
 
 

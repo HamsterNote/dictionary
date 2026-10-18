@@ -45,5 +45,5 @@ __all__ = [
 # 提取器 / 标签规则 / schema 版本。任何版本变化都会让旧 checkpoint 拒绝恢复，
 # 也不能把升级重算成新批次并清零预算（见 tasks 6.3）。
 SCHEMA_VERSION = "wiktionary-per-word/schema/1"
-EXTRACTOR_VERSION = "wiktionary-per-word/extractor/2"
+EXTRACTOR_VERSION = "wiktionary-per-word/extractor/3"
 TAG_RULE_VERSION = "wiktionary-per-word/tags/1"
