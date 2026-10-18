@@ -21,8 +21,12 @@ import refresh_wiktionary_pronunciations as cli
 from wiktionary_per_word import authorization as gate
 from wiktionary_per_word.collector import Collector
 from wiktionary_per_word.evidence import EvidenceLedger, ResponseCache
-from wiktionary_per_word.http_adapter import FakeClock, HttpAdapter, RunBudget, RequestKind, BudgetPaused
-from wiktionary_per_word.ledger import BatchAuthorization, BatchLedger, ResumeRejected, WordStatus
+from wiktionary_per_word.http_adapter import (
+    RECOVERABLE_SERVICE_PAUSES, FakeClock, HttpAdapter, RunBudget, RequestKind, BudgetPaused,
+)
+from wiktionary_per_word.ledger import (
+    BUDGET_PAUSE_REASONS, BatchAuthorization, BatchLedger, ResumeRejected, WordStatus,
+)
 from test_wiktionary_per_word_support import (
     ScriptedTransport, english_html, fixed_now, plain_response, text_payload, tocdata_payload,
 )
@@ -383,6 +387,195 @@ class StrictGateTests(unittest.TestCase):
         body = next((self.batch / "cache").glob("*.body"))
         body.write_bytes(b"damaged")
         self.refused_without_effects()
+
+    def assert_cli_service_resume(self, status):
+        attempts = 1 if status in (403, 407, 451) else 3
+        reason = f"http-{status}" + ("" if attempts == 1 else "-retries-exhausted")
+        failed = ScriptedTransport([plain_response(b"denied", status=status)
+                                    for _ in range(attempts)])
+        toc = tocdata_payload([{"level": "2", "line": "English", "number": "3"}])
+        main = text_payload(english_html())
+        missing = b'{"error":{"code":"missingtitle"}}'
+        recovered = ScriptedTransport([
+            plain_response(toc), plain_response(main), plain_response(missing),
+        ])
+        cp_path = self.batch / "state/checkpoint.json"
+        registry = self.batch / "state/authorization-registry.json"
+        passed = []
+        transports = iter([failed, recovered])
+        expected_budget = None
+        real_preflight = gate.preflight
+
+        def preflight(*args, **kwargs):
+            binding = real_preflight(*args, **kwargs)
+            passed.append("gate-passed")
+            return binding
+
+        def factory(**kwargs):
+            self.assertEqual(kwargs, {"timeout": 30})
+            # Both initial and locked preflights must succeed before construction.
+            self.assertEqual(passed, ["gate-passed", "gate-passed"])
+            self.assertEqual(gate.read_json(registry)["phase"], "active")
+            if expected_budget is not None:
+                self.assertEqual(BatchLedger.load(cp_path).budget.to_json(), expected_budget)
+            passed.append("transport-built")
+            return next(transports)
+
+        with self.confirmation(), \
+             mock.patch.object(cli, "_repository_root", return_value=self.repo), \
+             mock.patch.object(gate, "preflight", side_effect=preflight), \
+             mock.patch.object(cli, "_build_urllib_transport", side_effect=factory) as build, \
+             mock.patch.object(cli, "HttpAdapter", side_effect=lambda **kw: HttpAdapter(clock=FakeClock(), **kw)):
+            output = io.StringIO()
+            with redirect_stdout(output):
+                self.assertEqual(cli.main(self.argv()), 2)
+            first = json.loads(output.getvalue())
+            self.assertEqual(first["pausedReason"], reason)
+            self.assertEqual(first["budget"]["request_count"], attempts)
+            self.assertEqual(first["budget"]["network_bytes"], 6 * attempts)
+            self.assertEqual(first["budget"]["decompressed_bytes"], 6 * attempts)
+            self.assertEqual(first["budget"]["distinct_heads_started"], 1)
+            self.assertEqual(first["budget"]["retry_count"], attempts - 1)
+            self.assertEqual(len(failed.calls), attempts)
+            self.assertEqual(len(recovered.calls), 0)
+            saved = BatchLedger.load(cp_path)
+            self.assertEqual(saved.checkpoint.words["read"].status, WordStatus.PAUSED)
+            self.assertNotIn("note", saved.checkpoint.words)
+            self.assertIsNone(saved.checkpoint.active_request)
+            self.assertIsNone(saved.checkpoint.pending_cache)
+            self.assertEqual(gate.read_json(registry)["phase"], "idle")
+
+            # Positive resume preflight is read-only too, before opening a session.
+            before = self.snapshot()
+            with mock.patch.object(Path, "mkdir", side_effect=AssertionError("preflight mkdir")), \
+                 mock.patch.object(gate, "_atomic_json", side_effect=AssertionError("preflight registry write")), \
+                 mock.patch.object(BatchLedger, "persist", side_effect=AssertionError("preflight checkpoint write")):
+                self.assertEqual(gate.preflight(self.args, repo=self.repo), self.binding)
+            self.assertEqual(before, self.snapshot())
+            self.assertEqual(build.call_count, 1)
+            self.assertEqual(len(recovered.calls), 0)
+            passed.clear()
+            expected_budget = first["budget"]
+            output = io.StringIO()
+            with redirect_stdout(output):
+                self.assertEqual(cli.main(self.argv()), 0)
+            second = json.loads(output.getvalue())
+            self.assertEqual(build.call_count, 2)
+            self.assertEqual(passed, ["gate-passed", "gate-passed", "transport-built"])
+
+        self.assertEqual(second["processed"], ["read", "note"])
+        self.assertIsNone(second["pausedReason"])
+        self.assertGreater(second["candidateCount"], 0)
+        self.assertEqual(len(recovered.calls), 3)
+        self.assertIn("page=read", recovered.calls[0][0])
+        self.assertIn("section=3", recovered.calls[1][0])
+        self.assertIn("page=note", recovered.calls[2][0])
+        final = BatchLedger.load(cp_path)
+        self.assertEqual(final.checkpoint.words["read"].attempts, 2)
+        self.assertEqual(final.checkpoint.words["read"].status, WordStatus.EXTRACTED)
+        self.assertEqual(final.checkpoint.words["note"].status, WordStatus.MISSING)
+        self.assertEqual(final.budget.request_count, attempts + 3)
+        self.assertEqual(final.budget.distinct_heads_started, 2)
+        self.assertEqual(final.budget.retry_count, attempts - 1)
+        self.assertEqual(final.budget.network_bytes, 6 * attempts + len(toc) + len(main) + len(missing))
+        self.assertEqual(final.budget.decompressed_bytes, final.budget.network_bytes)
+        self.assertEqual(gate.read_json(registry)["revision"], 2)
+        self.assertEqual(gate.read_json(registry)["checkpointSha256"], gate.digest(cp_path.read_bytes()))
+        self.assertTrue(json.loads((self.batch / "reports/candidates.json").read_text())["candidates"])
+        print("Synthetic CLI service resume evidence: " + json.dumps({
+            "httpStatus": status, "pauseReason": reason, "firstRequests": attempts,
+            "resumedRequests": 3, "totalRequests": final.budget.request_count,
+            "totalNetworkBytes": final.budget.network_bytes,
+            "totalDecodedBytes": final.budget.decompressed_bytes,
+            "headsBefore": 1, "headsAfter": 2, "retriedWordAttempts": 2,
+            "readOnlyPreflightZeroWrites": True, "preflightsBeforeSecondTransport": 2,
+            "candidateCount": second["candidateCount"], "registryRevision": 2,
+        }, sort_keys=True))
+
+    def test_403_full_cli_resume_retries_word_then_continues_without_reset(self):
+        self.assert_cli_service_resume(403)
+
+    def test_429_exhaustion_full_cli_resume_without_reset(self):
+        self.assert_cli_service_resume(429)
+
+    def test_503_exhaustion_full_cli_resume_without_reset(self):
+        self.assert_cli_service_resume(503)
+
+    def assert_uncertain_cli_stays_closed(self, error):
+        calls = []
+
+        def broken(url, headers):
+            calls.append(url)
+            raise error
+
+        with self.confirmation(), \
+             mock.patch.object(cli, "_repository_root", return_value=self.repo), \
+             mock.patch.object(cli, "_build_urllib_transport", return_value=broken), \
+             mock.patch.object(cli, "HttpAdapter", side_effect=lambda **kw: HttpAdapter(clock=FakeClock(), **kw)):
+            output = io.StringIO()
+            with redirect_stdout(output):
+                self.assertEqual(cli.main(self.argv()), 2)
+            first = json.loads(output.getvalue())
+        self.assertEqual(first["pausedReason"], "consumption-uncertain")
+        self.assertEqual(first["budget"]["request_count"], 1)
+        self.assertEqual(len(calls), 1)
+        saved = BatchLedger.load(self.batch / "state/checkpoint.json")
+        self.assertEqual(saved.checkpoint.words["read"].status, WordStatus.PAUSED)
+        self.assertNotIn("note", saved.checkpoint.words)
+        self.assertTrue(saved.checkpoint.active_request["uncertain"])
+        self.assertIsNone(saved.checkpoint.pending_cache)
+        self.refused_without_effects()
+        self.assertEqual(len(calls), 1)
+
+    def test_uncertain_oserror_full_cli_resume_rejected_without_effects(self):
+        self.assert_uncertain_cli_stays_closed(OSError("synthetic connection failure"))
+
+    def test_uncertain_timeout_full_cli_resume_rejected_without_effects(self):
+        self.assert_uncertain_cli_stays_closed(TimeoutError("synthetic timeout"))
+
+    def test_nonwhitelisted_pauses_refuse_resume_without_effects(self):
+        self.assertFalse(RECOVERABLE_SERVICE_PAUSES & BUDGET_PAUSE_REASONS)
+        self.initial_session()
+        cp = self.batch / "state/checkpoint.json"
+        reg = self.batch / "state/authorization-registry.json"
+        for reason in sorted(BUDGET_PAUSE_REASONS | {
+                "mystery-pause", "http-404", "http-429", "http-503", "http-403-changed"}):
+            with self.subTest(reason=reason):
+                payload = json.loads(cp.read_text())
+                payload["pauseReason"] = reason
+                cp.write_text(json.dumps(payload))
+                registry = json.loads(reg.read_text())
+                registry["checkpointSha256"] = gate.digest(cp.read_bytes())
+                reg.write_text(json.dumps(registry))
+                self.refused_without_effects()
+
+    def test_service_pause_cannot_bypass_budget_or_inflight_checks(self):
+        self.initial_session()
+        cp = self.batch / "state/checkpoint.json"
+        reg = self.batch / "state/authorization-registry.json"
+        original = json.loads(cp.read_text())
+        original["pauseReason"] = "http-403"
+        for mutation in ("active-request", "uncertain-request", "word-inflight", "requests", "bytes"):
+            with self.subTest(mutation=mutation):
+                payload = deepcopy(original)
+                if mutation in ("active-request", "uncertain-request"):
+                    payload["activeRequest"] = {"settled": False, "uncertain": mutation == "uncertain-request"}
+                elif mutation == "word-inflight":
+                    payload["words"]["read"] = {
+                        "head": "read", "status": "in-flight", "started": True, "attempts": 1,
+                    }
+                    payload["budget"]["distinct_heads_started"] = 1
+                elif mutation == "requests":
+                    payload["budget"]["request_count"] = 600
+                    payload["budget"]["requests_by_kind"] = {"toc": 600}
+                    payload["requestSeq"] = 600
+                else:
+                    payload["budget"]["decompressed_bytes"] = 20 * 1048576
+                cp.write_text(json.dumps(payload))
+                registry = json.loads(reg.read_text())
+                registry["checkpointSha256"] = gate.digest(cp.read_bytes())
+                reg.write_text(json.dumps(registry))
+                self.refused_without_effects()
 
     def test_cache_failure_pauses_and_recovers_evidence_without_refetch(self):
         transport = ScriptedTransport([

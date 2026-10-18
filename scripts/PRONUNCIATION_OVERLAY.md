@@ -115,6 +115,26 @@ after authorization. Do not redirect shell output to the batch log before the
 guard: shell redirection would create a file even when authorization is refused.
 Paused batches return nonzero and cannot resume around their limits.
 
+HTTP 403/407/451 pause immediately after bounded response accounting. HTTP 429
+and 5xx pause when their shared operation retry quota is exhausted. The word
+stays nonterminal. An explicit same-batch CLI invocation may resume these service
+pauses once the fault is resolved, provided the original confirmation still
+matches and all existing registry, budget, cache and in-flight checks pass.
+Read-only preflight makes no writes; transport is constructed only after the
+locked gate passes. Resume retains all accumulated head/byte/request/retry counts
+and charges the retried word's requests without another distinct-head slot.
+An explicitly proven known-zero transport exhaustion has the same recovery path.
+Budget and uncertain-consumption pauses are never on this recovery whitelist.
+
+Generic DNS/connection OSError and timeouts cannot prove zero consumption. They
+stop dispatch immediately, preserve the nonterminal word, known byte counts and
+uncertain request record, and fail closed. Resolving the network fault alone does
+not make that batch resumable. It cannot automatically continue; the operator must
+ask the user whether to authorize a new batch or explicitly dispose of the
+unsettled consumption. Neither action is authorized or implemented by this resume
+whitelist. Do not clear the pause, delete the ledger/registry, reset counters or
+reuse the first-round grant to bypass that decision.
+
 Cache body and metadata writes use same-directory `.cache-*.tmp` files, fsync,
 rename, directory fsync and exact read-back verification before in-memory indexing.
 Disk-backed `put` hits (including entries indexed by `_load` after a restart) also

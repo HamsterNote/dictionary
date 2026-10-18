@@ -23,7 +23,9 @@ except ImportError:
 
 from .action_api import DEFAULT_API_ENDPOINT
 from .evidence import ResponseCache
-from .http_adapter import validate_user_agent, InvalidUserAgentError, MissingUserAgentError
+from .http_adapter import (
+    RECOVERABLE_SERVICE_PAUSES, validate_user_agent, InvalidUserAgentError, MissingUserAgentError,
+)
 from .ledger import BatchLedger, WordStatus
 
 
@@ -257,7 +259,8 @@ def read_state(binding: dict) -> dict | None:
         cp, budget, limits = ledger.checkpoint, ledger.budget, binding["limits"]
         heads = (root / binding["paths"]["heads"]).read_text().splitlines()
         if (cp.batch_id != binding["batchId"] or cp.active_request is not None or
-                cp.pause_reason not in (None, "cache-persist-failed") or
+                (cp.pause_reason not in (None, "cache-persist-failed") and
+                 cp.pause_reason not in RECOVERABLE_SERVICE_PAUSES) or
                 any(entry.status == WordStatus.IN_FLIGHT for entry in cp.words.values()) or
                 not set(cp.words).issubset(heads) or
                 cp.retry_limit != binding["calls"]["maxRetriesPerOperation"] or
