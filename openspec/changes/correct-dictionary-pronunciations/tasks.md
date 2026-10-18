@@ -1,6 +1,6 @@
 # Tasks
 
-第 2–9 组本轮验收的逐项测试映射、实际命令及退出码见 `evidence/08-offline-acceptance.md`、`evidence/ham37-test-results.json` 与 `evidence/logs/ham37-*`。10.1 已取得绑定确认且授权预检通过；冻结版本的 403/429 暂停行为与本轮执行指令不符，真实采集尚未启动，10.2–10.4 未完成，详见 `evidence/13-first-round-authorization-blocked.md`。第 11–12 组仍须各自独立授权，未执行。
+第 2–9 组既有离线验收的逐项测试映射、实际命令及退出码见 `evidence/08-offline-acceptance.md`、`evidence/ham37-test-results.json` 与 `evidence/logs/ham37-*`。最终版本 7085cc4a 已按最新绑定完成 100 词 TOC 试采并触限暂停；10.2–10.4 的执行、恢复审计与失败报告证据见仓库根 `evidence/16-first-round-real-collection.md` 及附件。真实响应暴露 hLevel/level 不匹配，5.2 重新打开：0 MAIN、0 候选、100 词解析待解决，不声称 IPA 采集成功。第 11–12 组仍须各自独立授权，未执行。
 
 ## 1. 实施授权与不可变基线
 
@@ -32,7 +32,7 @@
 ## 5. 独立 Python 按词解析与 HTTP 适配
 
 - [x] 5.1 建立 Python 3.12 标准库工具入口，分离 HTTP adapter、HTMLParser 结构提取、离线重解析与候选生成；完成证据：工具帮助/模块边界及离线 unittest，默认不联网、不加载巨型 dump、不依赖 Kaikki/requests/新后端/新框架，旧 dump/inflections 生成器及产物不变。
-- [x] 5.2 实现 Action API parse/tocdata 动态选择 English 且 hLevel=2，再获取完整 English 展开文本；完成证据：假 HTTP JSON 夹具覆盖 English 非 index 1、多语言、缺页/缺 English、可选对照不可用，不写死 section=1、不自行展开模板、不使缺页清空正式结果。
+- [ ] 5.2 实现 Action API parse/tocdata 动态选择 English 且 hLevel=2，再获取完整 English 展开文本；完成证据：假 HTTP JSON 夹具覆盖 English 非 index 1、多语言、缺页/缺 English、可选对照不可用，不写死 section=1、不自行展开模板、不使缺页清空正式结果。（真实试采重新打开：响应为 hLevel，当前读取 level；还需区分请求 index 与展示 number。100 词均有 English 却误记 no-english-section，详见仓库根 `evidence/16-first-round-real-collection.md`。）
 - [x] 5.3 实现结构栈提取多个 Etymology/Pronunciation/POS/form 的 IPA、父级 qualifiers、全部原 tags 与路径；完成证据：synthetic HTML unittest 验证多层关联、邻音频不借口音、关联不明保 unresolved、片段留证据、缺失 POS/词义/role 不猜，保留全部观测而非只取首项。（证据：`evidence/05-parser-recovery.md` 与 `evidence/logs/parser-extract.log`，39 项结构测试通过；主编排独立负例复核合法嵌套父标签、内部标签隔离、EOF 残片及未知限制标签变化通过。正式标签准入仍待 3.2，不将完整观测冒充默认合格读法。）
 - [x] 5.4 实现串行低速、有效 contact User-Agent 检查、显式间隔/有限重试及退避；完成证据：假 HTTP/假时钟 unittest 验证 429/503 Retry-After、不可用时至少 5 秒指数退避、无并发且重试受预算；真实联网只可在第 10 组独立采集授权后发生，缺 UA 或只有规划/apply 同意时不得请求。
 
@@ -65,10 +65,10 @@
 
 ## 10. 独立授权后的真实首轮试采
 
-- [x] 10.1 离线实施与第 9 组证据完成后提交具体首轮词头、真实 UA/contact、调用及落盘范围，取得仅首轮采集的独立明确授权；完成证据：用户确认绑定清单/调用/100 distinct heads 和 20 MiB ALL 解压响应上限，无确认停止此组，不复制规划同意或 apply 请求作为凭证。（证据：`evidence/13-first-round-authorization-blocked.md`；成员确认评论 `01a14d84-29f0-7f31-8d55-c5e16de8e279`、冻结版本授权预检 exit 0；真实执行因停止语义不符尚未开始。）
-- [ ] 10.2 仅在 10.1 授权有效时串行低速执行首轮并持久记账，任一限额暂停、不补成功词、不启动第 101 词/新 run；完成证据：真实 checkpoint、逐请求账本、逐词状态及实际网络/解压/request 报告，截断无有效候选、正式 manifest 未写、ECDICT/v1 未改，采集完成不授权发布。
-- [ ] 10.3 在原采集授权内演示停止/恢复或审计实际中断状态，不为演示额外联网；完成证据：同批计数不重置、未触限才继续、触限/不确定消费仍暂停的记录；无实际中断则以离线演练加真实 checkpoint 审计说明、不声称真实恢复发生，不自动申请/使用新额度。
-- [ ] 10.4 汇总真实首轮所有尝试词的候选/失败/no change/范围不明和来源许可，量测请求、网络、解压成本与观测覆盖；完成证据：固定候选 JSON+Markdown 与真实测量报告，synthetic/真实证据分开、不保证全库准确率/流量/覆盖率，正式结果不变，报告不是批准。
+- [x] 10.1 离线实施与第 9 组证据完成后提交具体首轮词头、真实 UA/contact、调用及落盘范围，取得仅首轮采集的独立明确授权；完成证据：用户确认绑定清单/调用/100 distinct heads 和 20 MiB ALL 解压响应上限，无确认停止此组，不复制规划同意或 apply 请求作为凭证。（最终确认 `01a14e5a-0cd6-7e9e-b259-02e1a80f8fdb`，执行指令 `01a14e5b-0cfa-70d5-9151-e9dea3b9a1f2`；7085cc4a 授权预检 exit 0。证据见仓库根 `evidence/16-first-round-real-collection.md` 与本批 reports/evidence.json。）
+- [x] 10.2 仅在 10.1 授权有效时串行低速执行首轮并持久记账，任一限额暂停、不补成功词、不启动第 101 词/新 run；完成证据：真实 checkpoint、逐请求账本、逐词状态及实际网络/解压/request 报告，截断无有效候选、正式 manifest 未写、ECDICT/v1 未改，采集完成不授权发布。（真实 apply exit 2，100 TOC/0 MAIN，224908 network bytes/1688166 decoded bytes；distinct-head-budget 持久暂停，无额外词或补抓。完整账本/缓存见批次附件；解析缺陷不算成功覆盖。）
+- [x] 10.3 在原采集授权内演示停止/恢复或审计实际中断状态，不为演示额外联网；完成证据：同批计数不重置、未触限才继续、触限/不确定消费仍暂停的记录；无实际中断则以离线演练加真实 checkpoint 审计说明、不声称真实恢复发生，不自动申请/使用新额度。（无真实中断/恢复；8 项离线测试 exit 0，真实 checkpoint/registry 审计通过，触限后只读 CLI preflight exit 2 且零写入；见仓库根 evidence/16。）
+- [x] 10.4 汇总真实首轮所有尝试词的候选/失败/no change/范围不明和来源许可，量测请求、网络、解压成本与观测覆盖；完成证据：固定候选 JSON+Markdown 与真实测量报告，synthetic/真实证据分开、不保证全库准确率/流量/覆盖率，正式结果不变，报告不是批准。（四份 reports 已生成；0 候选/0 no change/100 unresolved-parser-schema，与原始 no-qualified 状态分列；来源/历史/许可逐词列明，源响应与 checkpoint 一字未改。）
 
 ## 11. 人工范围确认与逐批正式发布
 
