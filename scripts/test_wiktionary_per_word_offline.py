@@ -621,8 +621,8 @@ class CollectorIntegrationTest(unittest.TestCase):
         report = collector_instance.run_batch(["read", "next"])
         self.assertIsNotNone(report.paused_reason)
         self.assertEqual(report.stopped_before, "next")
-        # 第一个词失败且批次暂停；不启动第二个词。
-        self.assertEqual(ledger.checkpoint.words["read"].status, WordStatus.FAILED)
+        # 第一个词保留非终态且批次暂停；不启动第二个词。
+        self.assertEqual(ledger.checkpoint.words["read"].status, WordStatus.PAUSED)
         self.assertNotIn("next", ledger.checkpoint.words)
         # 截断的 text 响应不进入成功缓存（只缓存了完整的 tocdata）。
         self.assertLessEqual(len(cache), 1)

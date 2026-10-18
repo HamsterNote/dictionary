@@ -226,7 +226,7 @@ class AccountingTest(unittest.TestCase):
                 plain_response(b"", status=500),
             ]
         )
-        adapter = build_adapter(transport, budget=budget)
+        adapter = build_adapter(transport, budget=budget, max_retries=0)
         adapter.fetch("https://example/toc", kind=RequestKind.TOC)
         adapter.fetch("https://example/main", kind=RequestKind.MAIN)
         with self.assertRaises(TransportError):

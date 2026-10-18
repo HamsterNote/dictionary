@@ -199,7 +199,8 @@ class OperationQuotaTest(unittest.TestCase):
             ]
             adapter = make_adapter(ScriptedTransport(responses), ledger, max_retries=1)
             entry = make_collector(ledger, adapter).collect_word("read")
-            self.assertEqual(entry.status, WordStatus.FAILED)
+            self.assertEqual(entry.status, WordStatus.PAUSED)
+            self.assertEqual(ledger.checkpoint.pause_reason, "http-503-retries-exhausted")
             # 最多 1 次重试：首次 maxlag claim 用掉额度，503 时 HTTP 层 claim 被拒。
             self.assertEqual(len(adapter._transport.calls), 2)
             self.assertEqual(ledger.budget.retry_count, 1)

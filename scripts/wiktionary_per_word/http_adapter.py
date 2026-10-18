@@ -38,6 +38,12 @@ DEFAULT_CHUNK_SIZE: Final = 64 * 1024
 MIN_BACKOFF_SECONDS: Final = 5.0
 MAX_BACKOFF_SECONDS: Final = 300.0
 
+RECOVERABLE_SERVICE_PAUSES: Final = frozenset(
+    {"http-403", "http-407", "http-451", "http-429-retries-exhausted",
+     "transport-known-zero-exhausted"}
+    | {f"http-{status}-retries-exhausted" for status in range(500, 600)}
+)
+
 # 合规 UA 必须能标识采集者并提供联系信息（邮箱或 URL）。
 _CONTACT_PATTERN: Final = re.compile(
     r"[^@\s]+@[^@\s]+\.[^@\s]+|https?://[^\s]+"
@@ -91,6 +97,14 @@ class KnownZeroTransportError(TransportError):
     仅当调用方能够证明“一个字节都没有发出/收到”时使用；此时可安全重试。
     不提供此显式类型时，任何传输异常都按 unknown（uncertain）处理。
     """
+
+
+class ServicePaused(TransportError):
+    """Service/transport failure: retain the word for explicit same-batch resume."""
+
+    def __init__(self, reason: str, detail: str) -> None:
+        super().__init__(detail)
+        self.reason = reason
 
 
 class BudgetPaused(_Failure):
@@ -713,12 +727,14 @@ class HttpAdapter:
                     request_id=request_id,
                 )
                 if attempts > self.max_retries:
-                    raise TransportError(f"known-zero 传输失败: {error}") from error
+                    self._pause("transport-known-zero-exhausted")
+                    raise ServicePaused("transport-known-zero-exhausted", str(error)) from error
                 retry_index = self.claim_operation_retry(
                     head=head, kind=kind, reason="transport-known-zero"
                 )
                 if retry_index is None:
-                    raise TransportError(f"known-zero 重试额度耗尽: {error}") from error
+                    self._pause("transport-known-zero-exhausted")
+                    raise ServicePaused("transport-known-zero-exhausted", str(error)) from error
                 self.operation_retry_wait(retry_index)
                 continue
             except (TransportError, TimeoutError, OSError) as error:
@@ -739,8 +755,8 @@ class HttpAdapter:
                     request_id=request_id,
                 )
                 self._pause("consumption-uncertain")
-                raise TransportError(
-                    f"传输异常（消费不确定，禁止重试）: {error}"
+                raise ServicePaused(
+                    "consumption-uncertain", f"{type(error).__name__}: {error}"
                 ) from error
             except Exception as error:  # noqa: BLE001
                 # 未预期的 dispatch 异常：同样无法证明零消费，立即 durable 暂停并
@@ -759,7 +775,7 @@ class HttpAdapter:
                     request_id=request_id,
                 )
                 self._pause("consumption-uncertain")
-                raise TransportError(f"未知传输异常: {error}") from error
+                raise ServicePaused("consumption-uncertain", f"未知传输异常: {error}") from error
 
             status = getattr(response, "status", 200)
             response_headers = normalize_headers(getattr(response, "headers", {}) or {})
@@ -778,7 +794,16 @@ class HttpAdapter:
                 )
                 raise TransportError(f"HTTP {status} 重定向未跟随（拒绝自动 follow）")
 
-            if status in self.retry_statuses:
+            if status in (403, 407, 451):
+                self.budget.note_error()
+                self._consume_and_account(
+                    response, head=head, kind=kind, headers=response_headers,
+                    accept_gzip=accept_gzip, request_id=request_id,
+                )
+                self._pause(f"http-{status}")
+                raise ServicePaused(f"http-{status}", f"HTTP {status}")
+
+            if status == 429 or 500 <= status < 600 or status in self.retry_statuses:
                 self.budget.note_error()
                 # 错误/限流响应体同样计入预算，即使随后不再重试。
                 self._consume_and_account(
@@ -790,11 +815,17 @@ class HttpAdapter:
                     request_id=request_id,
                 )
                 if attempts > self.max_retries:
+                    if status == 429 or 500 <= status < 600:
+                        self._pause(f"http-{status}-retries-exhausted")
+                        raise ServicePaused(f"http-{status}-retries-exhausted", f"HTTP {status}")
                     raise TransportError(f"上游持续不可用: HTTP {status}")
                 retry_index = self.claim_operation_retry(
                     head=head, kind=kind, reason=f"http-{status}"
                 )
                 if retry_index is None:
+                    if status == 429 or 500 <= status < 600:
+                        self._pause(f"http-{status}-retries-exhausted")
+                        raise ServicePaused(f"http-{status}-retries-exhausted", f"HTTP {status}")
                     raise TransportError(f"重试额度耗尽: HTTP {status}")
                 wait = parse_retry_after(response_headers.get("retry-after"))
                 if wait is None:

@@ -31,7 +31,9 @@ from typing import Any, Final, Mapping
 
 from . import EXTRACTOR_VERSION, SCHEMA_VERSION, TAG_RULE_VERSION
 from .action_api import PageFetch
-from .http_adapter import RequestKind, RetryBudgetExhausted, RunBudget
+from .http_adapter import (
+    RECOVERABLE_SERVICE_PAUSES, RequestKind, RetryBudgetExhausted, RunBudget,
+)
 
 # 触限 / 消费不确定 / 结构性失败型暂停：恢复不得绕过（durable pause）。
 # ``unsupported-encoding`` / ``incomplete-response`` 同样必须持久暂停，不能只靠
@@ -576,6 +578,17 @@ class BatchLedger:
             self.mark_paused("consumption-uncertain", f"in-flight: {sorted(inflight)}")
             self.persist()
             raise ResumeRejected("存在 in-flight 且消费不确定，fail closed")
+        if self.checkpoint.pause_reason in RECOVERABLE_SERVICE_PAUSES:
+            previous_reason, previous_detail = (self.checkpoint.pause_reason,
+                                                self.checkpoint.pause_detail)
+            self.checkpoint.pause_reason = None
+            self.checkpoint.pause_detail = None
+            try:
+                self.persist()
+            except BaseException:
+                self.checkpoint.pause_reason = previous_reason
+                self.checkpoint.pause_detail = previous_detail
+                raise
         self.resumable = True
 
     # ------------------------------------------------------------------

@@ -36,6 +36,7 @@ from .http_adapter import (
     JournalError,
     PausedError,
     RequestKind,
+    ServicePaused,
     TransportError,
 )
 from .ledger import (
@@ -87,7 +88,7 @@ class Collector:
 
     # ------------------------------------------------------------------
     def collect_word(self, head: str) -> WordEntry:
-        """采集一个词。返回其终态 WordEntry。
+        """采集一个词。返回终态或持久暂停的 WordEntry。
 
         **同词重试**：对已存在（含终态）的词再次调用是显式重试——不增加 distinct，
         响应照常计费（``start_word`` 的 attempts 递增）。**恢复**时的“跳过终态”由
@@ -107,27 +108,35 @@ class Collector:
                 head, WordStatus.FAILED, note=f"api-retriable-exhausted:{error}"
             )
         except BudgetPaused as error:
-            self.ledger.mark_paused(error.reason, f"word={head}")
-            return self.ledger.finish_word(
-                head, WordStatus.FAILED, note=f"budget-pause:{error.reason}"
-            )
+            return self._pause_word(head, error.reason, str(error))
         except (JournalError, PausedError) as error:
-            self.ledger.mark_paused("journal-persist-failed", f"word={head}: {error}")
-            return self.ledger.finish_word(
-                head, WordStatus.FAILED, note=f"fail-closed:{error}"
-            )
+            return self._pause_word(head, "journal-persist-failed", str(error))
         except ActionApiError as error:
             # 结构性 API 错误（坏 JSON/UTF8/缺 parse 等）：持久 FAILED 收尾，
             # 绝不留 in-flight，也不清空正式结果。
             return self.ledger.finish_word(
                 head, WordStatus.FAILED, note=f"api-error:{error}"
             )
-        except (TransportError, OSError) as error:
+        except ServicePaused as error:
+            return self._pause_word(head, error.reason, str(error))
+        except OSError as error:
+            return self._pause_word(head, "consumption-uncertain", str(error))
+        except TransportError as error:
             return self.ledger.finish_word(
                 head, WordStatus.FAILED, note=f"transport:{error}"
             )
 
         return self._cache_and_finish(page, fetched_at=fetched_at)
+
+    def _pause_word(self, head: str, reason: str, detail: str) -> WordEntry:
+        entry = self.ledger.checkpoint.words[head]
+        entry.status = WordStatus.PAUSED
+        entry.note = f"service-pause:{reason}: {detail}"
+        # Preserve stricter pauses already persisted by the request journal.
+        if not self.ledger.paused:
+            self.ledger.mark_paused(reason, f"word={head}: {detail}")
+        self.ledger.persist()
+        return entry
 
     def _cache_and_finish(self, page: PageFetch, *, fetched_at: str) -> WordEntry:
         head = page.page
