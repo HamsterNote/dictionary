@@ -52,8 +52,8 @@ from wiktionary_per_word.offline_reparse import (  # noqa: E402
 )
 
 MULTI_LANG_SECTIONS = [
-    {"toclevel": 1, "level": "2", "line": "German", "number": "1"},
-    {"toclevel": 1, "level": "2", "line": "English", "number": "2"},
+    {"tocLevel": 1, "hLevel": 2, "line": "German", "number": "1", "index": "1"},
+    {"tocLevel": 1, "hLevel": 2, "line": "English", "number": "2", "index": "2"},
 ]
 
 

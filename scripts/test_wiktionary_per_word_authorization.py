@@ -35,6 +35,19 @@ UA = "HamsterDictionaryPronunciationCollector/0.1 (+https://github.com/HamsterNo
 
 
 class StrictGateTests(unittest.TestCase):
+    def test_binding_calls_match_actual_action_api_parameters(self):
+        from urllib.parse import parse_qs, urlparse
+        from wiktionary_per_word.action_api import build_tocdata_url, build_parse_text_url
+        calls = self.binding["calls"]
+        for name, url in (("toc", build_tocdata_url("as")),
+                          ("main", build_parse_text_url("as", "9"))):
+            query = {k: v[0] for k, v in parse_qs(urlparse(url).query).items()}
+            expected = {**calls[name], "page": "as"}
+            if name == "main":
+                self.assertEqual(expected["section"], "dynamic-English-hLevel-2-index")
+                expected["section"] = "9"
+            self.assertEqual(query, expected)
+
     def setUp(self):
         temporary = tempfile.TemporaryDirectory()
         self.addCleanup(temporary.cleanup)
@@ -352,7 +365,7 @@ class StrictGateTests(unittest.TestCase):
 
     def test_mock_binding_through_http_cache_to_candidate_report_and_resume(self):
         transport = ScriptedTransport([
-            plain_response(tocdata_payload([{"level": "2", "line": "English", "number": "3"}])),
+            plain_response(tocdata_payload([{"hLevel": 2, "line": "English", "number": "3", "index": "3"}])),
             plain_response(text_payload(english_html())),
             plain_response(b'{"error":{"code":"missingtitle"}}'),
         ])
@@ -393,7 +406,7 @@ class StrictGateTests(unittest.TestCase):
         reason = f"http-{status}" + ("" if attempts == 1 else "-retries-exhausted")
         failed = ScriptedTransport([plain_response(b"denied", status=status)
                                     for _ in range(attempts)])
-        toc = tocdata_payload([{"level": "2", "line": "English", "number": "3"}])
+        toc = tocdata_payload([{"hLevel": 2, "line": "English", "number": "3", "index": "3"}])
         main = text_payload(english_html())
         missing = b'{"error":{"code":"missingtitle"}}'
         recovered = ScriptedTransport([
@@ -579,7 +592,7 @@ class StrictGateTests(unittest.TestCase):
 
     def test_cache_failure_pauses_and_recovers_evidence_without_refetch(self):
         transport = ScriptedTransport([
-            plain_response(tocdata_payload([{"level": "2", "line": "English", "number": "3"}])),
+            plain_response(tocdata_payload([{"hLevel": 2, "line": "English", "number": "3", "index": "3"}])),
             plain_response(text_payload(english_html())),
             plain_response(b'{"error":{"code":"missingtitle"}}'),
         ])
@@ -649,7 +662,7 @@ class StrictGateTests(unittest.TestCase):
     def test_partial_cache_commit_recovers_with_api_retries(self):
         transport = ScriptedTransport([
             plain_response(b'{"error":{"code":"maxlag"}}'),
-            plain_response(tocdata_payload([{"level": "2", "line": "English", "number": "3"}])),
+            plain_response(tocdata_payload([{"hLevel": 2, "line": "English", "number": "3", "index": "3"}])),
             plain_response(text_payload(english_html())),
             plain_response(b'{"error":{"code":"missingtitle"}}'),
         ])
@@ -796,7 +809,7 @@ class StrictGateTests(unittest.TestCase):
         ledger.budget.requests_by_kind = {"toc": 599}
         ledger.checkpoint.request_seq = 599
         transport = ScriptedTransport([
-            plain_response(tocdata_payload([{"level": "2", "line": "English", "number": "3"}])),
+            plain_response(tocdata_payload([{"hLevel": 2, "line": "English", "number": "3", "index": "3"}])),
         ])
         adapter = HttpAdapter(transport=transport, budget=ledger.budget, clock=FakeClock(),
                               user_agent=UA, interval_seconds=5)

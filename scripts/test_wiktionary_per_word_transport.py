@@ -129,8 +129,8 @@ def patch_urlopen(script: UrlopenScript):
 class WrapperChainTest(unittest.TestCase):
     def test_wrapper_adapter_actionapi_full_chain(self) -> None:
         sections = [
-            {"toclevel": 1, "level": "2", "line": "German", "number": "1"},
-            {"toclevel": 1, "level": "2", "line": "English", "number": "2"},
+            {"tocLevel": 1, "hLevel": 2, "line": "German", "number": "1", "index": "1"},
+            {"tocLevel": 1, "hLevel": 2, "line": "English", "number": "2", "index": "2"},
         ]
         toc = RawResponse([tocdata_payload(sections)], headers={"Content-Type": "application/json"})
         text = RawResponse(

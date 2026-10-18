@@ -186,7 +186,7 @@ def build_binding(args, *, repo: Path) -> dict:
             "paths": paths,
             "calls": {"endpoint": args.endpoint,
                       "toc": {"action": "parse", "page": "exact-head", "prop": "tocdata", "format": "json", "redirects": "1"},
-                      "main": {"action": "parse", "page": "exact-head", "section": "dynamic-English-level-2-number", "prop": "text", "format": "json", "redirects": "1"},
+                      "main": {"action": "parse", "page": "exact-head", "section": "dynamic-English-hLevel-2-index", "prop": "text|revid", "format": "json", "redirects": "1"},
                       "optionalRequests": 0, "followHttpRedirects": False,
                       "intervalSeconds": 5, "timeoutSeconds": 30,
                       "maxRetriesPerOperation": 2, "backoffSeconds": [5, 10], "respectRetryAfter": True},

@@ -248,14 +248,14 @@ def reparse_cached_entry(entry: CacheEntry) -> ReparseResult:
                 )
             return reparse_html(html.encode("utf-8"))
         if "tocdata" in parse:
-            section_number, sections = select_english_section(payload)
-            warnings = [] if section_number else ["no-english-section"]
+            section_index, sections = select_english_section(payload)
+            warnings = [] if section_index else ["no-english-section"]
             return ReparseResult(
                 observations=[],
                 semantic_fingerprint=_sha256_json(
                     {
                         "sections": [section.get("line") for section in sections],
-                        "english": section_number,
+                        "english": section_index,
                     }
                 ),
                 warnings=warnings,

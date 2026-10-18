@@ -19,6 +19,7 @@ from test_wiktionary_per_word_support import (  # noqa: E402
 )
 
 from wiktionary_per_word.action_api import (  # noqa: E402
+    ActionApiError,
     PageStatus,
     build_parse_text_url,
     fetch_english_page,
@@ -40,13 +41,48 @@ def build_adapter(responses) -> HttpAdapter:
 
 
 MULTI_LANG_SECTIONS = [
-    {"toclevel": 1, "level": "2", "line": "German", "number": "1", "anchor": "German"},
-    {"toclevel": 1, "level": "2", "line": "English", "number": "2", "anchor": "English"},
-    {"toclevel": 1, "level": "2", "line": "French", "number": "3", "anchor": "French"},
+    {"tocLevel": 1, "hLevel": 2, "line": "German", "number": "1", "index": "1", "anchor": "German"},
+    {"tocLevel": 1, "hLevel": 2, "line": "English", "number": "2", "index": "2", "anchor": "English"},
+    {"tocLevel": 1, "hLevel": 2, "line": "French", "number": "3", "index": "3", "anchor": "French"},
 ]
 
 
 class SelectEnglishSectionTest(unittest.TestCase):
+    def test_real_toc_fields_use_index_not_number_or_toc_level(self) -> None:
+        section = {"tocLevel": 1, "hLevel": 2, "line": "English", "number": "2",
+                   "index": "9", "fromTitle": "as", "codepointOffset": 489,
+                   "anchor": "English"}
+        index, _ = select_english_section({"parse": {"tocdata": {"sections": [section]}}})
+        self.assertEqual(index, "9")
+        # The relative TOC nesting field never overrides the actual heading level.
+        index, _ = select_english_section({"parse": {"tocdata": {"sections": [
+            {**section, "tocLevel": 2, "hLevel": 3}]}}})
+        self.assertIsNone(index)
+
+    def test_legacy_schema_and_bad_indices_fail_structurally(self) -> None:
+        section = {"line": "English", "hLevel": 2, "number": "2", "index": "9"}
+        for malformed in (
+            {"line": "English", "level": "2", "number": "2", "index": "9"},
+            {**section, "hLevel": "2"}, {**section, "hLevel": True},
+            *({**section, "index": value} for value in (None, 9, True, "", "0", "2.1", " 9")),
+        ):
+            with self.subTest(section=malformed), self.assertRaises(ActionApiError):
+                select_english_section({"parse": {"tocdata": {"sections": [malformed]}}})
+
+    def test_missing_sections_and_duplicate_english_fail_structurally(self) -> None:
+        with self.assertRaises(ActionApiError):
+            select_english_section({"parse": {"tocdata": {}}})
+        section = {"line": "English", "hLevel": 2, "index": "9"}
+        with self.assertRaises(ActionApiError):
+            select_english_section({"parse": {"tocdata": {"sections": [section, section]}}})
+
+    def test_line_is_exact_language_heading_not_html_or_case_folded(self) -> None:
+        for line in ("english", "Old English", "<b>English</b>", " English "):
+            with self.subTest(line=line):
+                index, _ = select_english_section({"parse": {"tocdata": {"sections": [
+                    {"line": line, "hLevel": 2, "index": "9"}]}}})
+                self.assertIsNone(index)
+
     def test_english_not_at_index_one(self) -> None:
         number, sections = select_english_section(
             {"parse": {"tocdata": {"sections": MULTI_LANG_SECTIONS}}}
@@ -61,7 +97,7 @@ class SelectEnglishSectionTest(unittest.TestCase):
         self.assertIsNone(number)
 
     def test_ignore_english_at_wrong_level(self) -> None:
-        sections = [{"toclevel": 1, "level": "3", "line": "English", "number": "5"}]
+        sections = [{"tocLevel": 1, "hLevel": 3, "line": "English", "number": "5", "index": "5"}]
         number, _ = select_english_section({"parse": {"tocdata": {"sections": sections}}})
         self.assertIsNone(number)
 
@@ -72,6 +108,31 @@ class SelectEnglishSectionTest(unittest.TestCase):
 
 
 class FetchEnglishPageTest(unittest.TestCase):
+    def test_real_as_toc_fetches_index_nine_and_explicit_revision(self) -> None:
+        from urllib.parse import parse_qs, urlparse
+        sections = [{"tocLevel": 1, "hLevel": 2, "line": "English",
+                     "number": "2", "index": "9", "fromTitle": "as"}]
+        adapter = build_adapter([plain_response(tocdata_payload(sections)),
+                                 plain_response(text_payload(english_html(), revid=999))])
+        page = fetch_english_page(adapter, "as")
+        self.assertEqual(page.english_section_index, "9")
+        self.assertEqual(page.revid, 999)
+        query = parse_qs(urlparse(adapter._transport.calls[1][0]).query)
+        self.assertEqual(query, {"action": ["parse"], "page": ["as"], "section": ["9"],
+                                 "prop": ["text|revid"], "format": ["json"], "redirects": ["1"]})
+        self.assertEqual(len(adapter._transport.calls), 2)
+
+    def test_missing_or_invalid_requested_revision_is_not_success(self) -> None:
+        import json
+        for value in (None, True, "999", 0, -1):
+            with self.subTest(revid=value):
+                adapter = build_adapter([plain_response(tocdata_payload(MULTI_LANG_SECTIONS)),
+                    plain_response(json.dumps({"parse": {"text": {"*": english_html()},
+                                                        "revid": value}}).encode())])
+                with self.assertRaises(ActionApiError):
+                    fetch_english_page(adapter, "read")
+                self.assertEqual(len(adapter._transport.calls), 2)
+
     def test_selects_english_section_and_fetches_html(self) -> None:
         adapter = build_adapter(
             [
@@ -81,7 +142,7 @@ class FetchEnglishPageTest(unittest.TestCase):
         )
         page = fetch_english_page(adapter, "read")
         self.assertEqual(page.status, PageStatus.FOUND)
-        self.assertEqual(page.english_section_number, "2")
+        self.assertEqual(page.english_section_index, "2")
         self.assertEqual(page.revid, 999)
         self.assertIn('class="IPA"', page.html or "")
         # 第二个请求 URL 必须是选中的 section，而不是写死 1。

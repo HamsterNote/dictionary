@@ -68,7 +68,7 @@ class ServicePauseTest(unittest.TestCase):
         ledger.resume()
         self.assertFalse(ledger.paused)
         self.assertEqual(ledger.budget.to_json(), budget_before)
-        toc = tocdata_payload([{"line": "English", "level": "2", "number": "3"}])
+        toc = tocdata_payload([{"line": "English", "hLevel": 2, "number": "3", "index": "3"}])
         main = text_payload(english_html())
         script = ScriptedTransport([plain_response(toc), plain_response(main)])
         report = self.collector(ledger, script).run_batch(["note"])
@@ -210,7 +210,7 @@ class ServicePauseTest(unittest.TestCase):
         with tempfile.TemporaryDirectory() as directory:
             path = Path(directory) / "checkpoint.json"
             ledger = self.ledger(path)
-            toc = tocdata_payload([{"line": "English", "level": "2", "number": "3"}])
+            toc = tocdata_payload([{"line": "English", "hLevel": 2, "number": "3", "index": "3"}])
             script = ScriptedTransport([
                 plain_response(toc), plain_response(b"denied", status=403),
             ])

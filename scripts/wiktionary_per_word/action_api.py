@@ -2,9 +2,9 @@
 
 对应 task 5.2。要点：
 
-- 用 ``parse`` + ``tocdata`` 动态选择 ``line == "English"`` 且 ``level == 2`` 的
+- 用 ``parse`` + ``tocdata`` 动态选择 ``line == "English"`` 且 ``hLevel == 2`` 的
   section，**不写死 section=1**。
-- 再对选中 section 取 ``prop=text`` 的完整展开 HTML（官方展开已含模板输出，
+- 再对选中 index 取 ``prop=text|revid`` 的完整展开 HTML 与 revision（官方展开已含模板输出，
   主线不自行展开模板）。
 - 缺页 / 无 English 成为明确状态，**不清空正式结果**。
 - Kaikki 只作可选对照，其不可用不阻断官方流程。
@@ -15,6 +15,7 @@ from __future__ import annotations
 import json
 import base64
 import hashlib
+import re
 import urllib.parse
 from dataclasses import dataclass, field
 from enum import Enum
@@ -50,7 +51,7 @@ _RETRIABLE_CODES = ("maxlag", "ratelimited", "readonly", "internal_api_error", "
 class PageFetch:
     page: str
     status: PageStatus
-    english_section_number: str | None = None
+    english_section_index: str | None = None
     revid: int | None = None
     html: str | None = None
     toc_sections: list[dict[str, Any]] = field(default_factory=list)
@@ -124,14 +125,14 @@ def build_tocdata_url(page: str, *, endpoint: str = DEFAULT_API_ENDPOINT) -> str
 
 
 def build_parse_text_url(
-    page: str, section_number: str, *, endpoint: str = DEFAULT_API_ENDPOINT
+    page: str, section_index: str, *, endpoint: str = DEFAULT_API_ENDPOINT
 ) -> str:
     query = urllib.parse.urlencode(
         {
             "action": "parse",
             "page": page,
-            "section": str(section_number),
-            "prop": "text",
+            "section": str(section_index),
+            "prop": "text|revid",
             "format": "json",
             "redirects": "1",
         }
@@ -157,9 +158,10 @@ def _decode_json(response: FetchedResponse) -> Mapping[str, Any]:
 def select_english_section(
     payload: Mapping[str, Any],
 ) -> tuple[str | None, list[dict[str, Any]]]:
-    """从 tocdata 中选出 English hLevel=2 的 section number。
+    """从 tocdata 中选出 English hLevel=2 的 parse section index。
 
-    返回 ``(section_number_or_None, sections)``。动态扫描，绝不假设 index=1。
+    ``number`` 是目录展示编号，``tocLevel`` 是相对嵌套层级，均不能定位章节。
+    只接受原始标题 English，不把 HTML、大小写或缺失字段猜成目标语言。
     """
     parse = payload.get("parse")
     if not isinstance(parse, Mapping):
@@ -170,26 +172,23 @@ def select_english_section(
     if not isinstance(tocdata, Mapping):
         raise ActionApiError("tocdata.tocdata 结构异常")
     sections = tocdata.get("sections")
-    if sections is None:
-        sections = []
     if not isinstance(sections, list):
         raise ActionApiError("tocdata.sections 结构异常")
+    selected = None
     for section in sections:
-        # 非对象的 section 无法携带 line/level：结构性失败，不静默跳过。
         if not isinstance(section, Mapping):
             raise ActionApiError("tocdata.sections 元素必须是对象")
-        line = str(section.get("line", "")).strip()
-        level = section.get("level")
-        try:
-            level_int = int(level)
-        except (TypeError, ValueError):
-            continue
-        if line == ENGLISH_HEADING and level_int == 2:
-            number = section.get("number")
-            if number is None:
-                continue
-            return str(number), list(sections)
-    return None, list(sections)
+        line, level = section.get("line"), section.get("hLevel")
+        if not isinstance(line, str) or type(level) is not int or level < 1:
+            raise ActionApiError("tocdata section 缺少有效 line/hLevel")
+        if line == ENGLISH_HEADING and level == 2:
+            index = section.get("index")
+            if not isinstance(index, str) or re.fullmatch(r"[1-9][0-9]*", index) is None:
+                raise ActionApiError("English section 缺少有效 parse index")
+            if selected is not None:
+                raise ActionApiError("多个 English hLevel=2 section，拒绝猜测")
+            selected = index
+    return selected, list(sections)
 
 
 def _has_api_error(payload: Mapping[str, Any]) -> str | None:
@@ -260,18 +259,18 @@ def fetch_english_page(
             continue
         raise ActionApiError(f"tocdata-api-error:{api_error}")
 
-    section_number, sections = select_english_section(toc_payload)
+    section_index, sections = select_english_section(toc_payload)
     fetch.toc_sections = sections
-    if section_number is None:
+    if section_index is None:
         fetch.status = PageStatus.NO_ENGLISH
         return fetch
 
-    fetch.english_section_number = section_number
+    fetch.english_section_index = section_index
 
     # --- MAIN：独立循环；MAIN 错误绝不重跑 TOC ---
     while True:
         text_response = adapter.fetch(
-            build_parse_text_url(page, section_number, endpoint=endpoint),
+            build_parse_text_url(page, section_index, endpoint=endpoint),
             kind=RequestKind.MAIN,
             head=page,
         )
@@ -301,7 +300,9 @@ def fetch_english_page(
     if not isinstance(html, str):
         raise ActionApiError("parse 文本响应缺少展开 HTML")
     revid = parse.get("revid")
-    fetch.revid = int(revid) if isinstance(revid, int) else None
+    if type(revid) is not int or revid <= 0:
+        raise ActionApiError("parse 文本响应缺少有效 revid")
+    fetch.revid = revid
     fetch.html = html
     fetch.status = PageStatus.FOUND
     return fetch

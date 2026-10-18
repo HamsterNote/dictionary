@@ -1,8 +1,10 @@
 # Tasks
 
-第 2–9 组既有离线验收的逐项测试映射、实际命令及退出码见 `evidence/08-offline-acceptance.md`、`evidence/ham37-test-results.json` 与 `evidence/logs/ham37-*`。最终版本 7085cc4a 已按最新绑定完成 100 词 TOC 试采并触限暂停；10.2–10.4 的执行、恢复审计与失败报告证据见仓库根 `evidence/16-first-round-real-collection.md` 及附件。真实响应暴露 hLevel/level 不匹配，5.2 重新打开：0 MAIN、0 候选、100 词解析待解决，不声称 IPA 采集成功。第 11–12 组仍须各自独立授权，未执行。
+第 2–9 组既有离线验收的逐项测试映射、实际命令及退出码见 `evidence/08-offline-acceptance.md`、`evidence/ham37-test-results.json` 与 `evidence/logs/ham37-*`。版本 7085cc4a 已完成 100 词 TOC 试采并触限暂停；10.2–10.4 的历史执行/恢复审计/失败报告见仓库根 `evidence/16-first-round-real-collection.md`。首批 0 MAIN/0 候选不算 IPA 覆盖；5.2 的 hLevel/index 修复与 100 份缓存离线验证现已通过，见仓库根 `evidence/17-real-toc-schema-repair.md`。第二批仅准备新绑定，尚无预算/执行确认。第 11–13 组保持未勾选、未执行。
 
 ## 1. 实施授权与不可变基线
+
+2026-10-18 已同意并合入产品经理 Propose 的唯一系统音标权威方向。新增第 13 组及第 11–12 组修订仅作规划，所有新增项保持未勾选；须第 13 组离线能力完成后才进入第 11 组真实发布，第 12 组另需长期预算。7085cc4a 的首次采集已触限，不能借文档合入或修复续跑；第二批使用新冻结版本、隔离路径并另获明确预算/执行确认。此处不授权采集、落库或发布。
 
 - [x] 1.1 开始实施前记录独立实施授权与允许写入范围；当前仅规划授权时所有任务均不可执行，将来 apply 请求也不代替首轮采集、正式发布、长期预算各自授权；完成证据：可核对的用户授权记录与执行边界清单，不将本文件或已完成规划作为执行凭证。（证据：`evidence/00-authorization.md`）
 - [x] 1.2 在实施授权内记录 ECDICT TSV、metadata、释义及既有词形/dump 产物 hash，保存旧查询、v1 payload/callback 基线并运行现有 `test:dictionary-data`、`test:dictionary-corrections`、`test:pronunciation-audit`、`test:inflections`、`test:phonetics`；完成证据：基线清单与实际回归日志，不运行原生成器或写入式审计，不改 46,803 词头基线。（证据：`evidence/01-baseline-hashes.md`、`evidence/02-legacy-contract-baseline.md`、`evidence/03-test-run-report.md`、`evidence/logs/`；5 项测试退出码均为 0，运行前后不可变数据 sha256 逐字节一致）
@@ -32,7 +34,7 @@
 ## 5. 独立 Python 按词解析与 HTTP 适配
 
 - [x] 5.1 建立 Python 3.12 标准库工具入口，分离 HTTP adapter、HTMLParser 结构提取、离线重解析与候选生成；完成证据：工具帮助/模块边界及离线 unittest，默认不联网、不加载巨型 dump、不依赖 Kaikki/requests/新后端/新框架，旧 dump/inflections 生成器及产物不变。
-- [ ] 5.2 实现 Action API parse/tocdata 动态选择 English 且 hLevel=2，再获取完整 English 展开文本；完成证据：假 HTTP JSON 夹具覆盖 English 非 index 1、多语言、缺页/缺 English、可选对照不可用，不写死 section=1、不自行展开模板、不使缺页清空正式结果。（真实试采重新打开：响应为 hLevel，当前读取 level；还需区分请求 index 与展示 number。100 词均有 English 却误记 no-english-section，详见仓库根 `evidence/16-first-round-real-collection.md`。）
+- [x] 5.2 实现 Action API parse/tocdata 动态选择 English 且 hLevel=2，再获取完整 English 展开文本；完成证据：假 HTTP JSON 夹具覆盖 English 非 index 1、多语言、缺页/缺 English、可选对照不可用，不写死 section=1、不自行展开模板、不使缺页清空正式结果。（真实 schema 修复：严格 hLevel=2、index 定位、tocLevel/number 不代用，MAIN 显式 text|revid；100 份真实 TOC 离线全部通过、35 词 index/number 不同，零 dispatch；320 项 Python 及 Node 集成退出 0。仓库根 `evidence/17-real-toc-schema-repair.md` 和逐词附件。无真实 MAIN/新采集成功声明。）
 - [x] 5.3 实现结构栈提取多个 Etymology/Pronunciation/POS/form 的 IPA、父级 qualifiers、全部原 tags 与路径；完成证据：synthetic HTML unittest 验证多层关联、邻音频不借口音、关联不明保 unresolved、片段留证据、缺失 POS/词义/role 不猜，保留全部观测而非只取首项。（证据：`evidence/05-parser-recovery.md` 与 `evidence/logs/parser-extract.log`，39 项结构测试通过；主编排独立负例复核合法嵌套父标签、内部标签隔离、EOF 残片及未知限制标签变化通过。正式标签准入仍待 3.2，不将完整观测冒充默认合格读法。）
 - [x] 5.4 实现串行低速、有效 contact User-Agent 检查、显式间隔/有限重试及退避；完成证据：假 HTTP/假时钟 unittest 验证 429/503 Retry-After、不可用时至少 5 秒指数退避、无并发且重试受预算；真实联网只可在第 10 组独立采集授权后发生，缺 UA 或只有规划/apply 同意时不得请求。
 
@@ -73,12 +75,23 @@
 ## 11. 人工范围确认与逐批正式发布
 
 - [ ] 11.1 提交旧 phonetic（含有意清空）及必要范围不明的逐项对照，只按用户明确确认记录 scope resolution/纠错撤销或替代及可选独立核验事件；完成证据：绑定当前 patch fingerprint 的确认记录，未确认词保护、不批量补时间/复制多 entry，scope 确认后仍未发布，归属变更重生成差异。
-- [ ] 11.2 提交固定候选内容、scope/纠错归属、纳入/排除名单和正式 baseline 的最终差异，取得该版本独立明确发布批准；完成证据：批准记录含 candidate hash/base/名单/批准者时间与明确操作，允许 exclude，无批准停止，规划/采集/范围确认不能替代，仅排版变化不要求无意义重批。
-- [ ] 11.3 仅在 11.2 批准有效且必要条件可确定时重校验并原子发布获准结果；完成证据：真实批准输入、manifest/资产校验日志与 pointer 前后 snapshot，IPA/scope/纠错归属/名单实质变化或 baseline 改变时不写正式、返回 diff/重批，excluded/unapproved/unresolved/no change 保旧结果，许可或构建通过不当发布许可。
-- [ ] 11.4 核验正式结果、归因和消费者保护并准备回滚说明；完成证据：获准词展示/归因可达、全局发布仍受宿主 unresolved v1 保护、旧回调/声音不变的检查记录，以及目标旧 manifest/影响/授权要求清单；不主动真实回滚，需要时另获明确操作授权。
+- [ ] 11.2 在第 13 组离线能力验收后，提交固定候选、scope/纠错归属、词头及规则纳入/排除名单、系统权威/兼容投影/归因版本、目标内容版本和当前正式 baseline 的最终差异，取得该版本独立明确落库与发布批准；完成证据：修勾或其明确授权审批人的稳定身份、真实确认引用、时间与明确操作、candidate hash/base/全部实质摘要，整批可排除词或角色，无批准停止，规划/采集/范围确认不能替代，排版变化不重复批准。
+- [ ] 11.3 仅在 11.2 批准有效时持久落库获准系统纠正、生成兼容 JSON 及 overlay、以相同输入重建并激活完整 release bundle；完成证据：获准源码变更集、规则/投影/归因摘要、构建日志与产物清单、release pointer 前后版本；baseline 或实质输入改变返回 diff/重批，excluded/unapproved/受阻范围/no change 保旧结果，不能仅改 JSON 或 sidecar 就宣称产品生效，不改 TSV/生成快照。
+- [ ] 11.4 按首轮固定 100 词逐项核验正式产品及准备完整版本回滚说明；完成证据：每词原值/证据/核验/批准/阻塞/旧接口值/overlay 角色值/实际 release 的验收表，核验/批准/落库/生效词头与规则数分报，归因可达、用户保护和声音保持，阻塞项不计全词完成；给出目标旧 bundle、影响及绑定授权要求，不主动真实回滚。
 
 ## 12. 首轮量测后的长期预算与月度轮换
 
-- [ ] 12.1 首轮真实量测后提交长期月度请求/词头/字节限额与调度建议，另获明确预算及执行授权；完成证据：量测依据与用户批准配置/范围，未批准 scheduled disabled/fail closed，不现在追问额度、不沿用 100/20 MiB、不把首轮批准当长期授权。
-- [ ] 12.2 在 12.1 预算授权后实现并离线验证月度初次覆盖、覆盖后轮换及重渲染调度，真实启用前核对有效授权；完成证据：假时钟/假 HTTP 夹具及配置检查证明逐步覆盖约 46,803 词头、非每月全库、same revid 按预算重 render、所有请求守 ledger、无预算默认禁用且只产候选，启用记录不越授权范围。
+- [ ] 12.1 首轮真实质量/成本验收后提交每批及每月 heads/attempts/ALL 解压字节、时间窗口、单并发、重试、存储与人工复核容量限额，另获明确范围、预算及执行授权；完成证据：首轮合格率/失败率/产品生效率、请求/网络/解压量、核验耗时与去重队列建议，3,786（含 ASCII 2,386）及遗留记法 33,962 分列，不重复计首轮或 ASCII 子集、不承诺一次全库；未批准 scheduled disabled，不沿用首轮预算。
+- [ ] 12.2 在 12.1 授权后实现并离线验证获准队列内月度初次核验、覆盖后轮换及重渲染调度，真实启用前核对有效授权；完成证据：假时钟/假 HTTP 验证串行单批、单批与月度取较小剩余额度、same revid 重 render、触限停止且不重置、缺额度默认禁用、只产候选而不自动发布；46,803 仅作库盘点基线，启用不越批准队列。
 - [ ] 12.3 仅在有效长期执行授权/预算内运行后续月度候选流程，每批发布分别执行第 11 组版本绑定核验与独立批准；完成证据：该月账本、覆盖/轮换状态、固定差异及各批独立批准/发布或未批准未发布记录，旧批准不复用、实质变化重 diff/重批、触限不扩大、定时任务永不自动发布。
+
+## 13. 系统落库与同源交付增量（须先于第 11 组真实发布）
+
+- [ ] 13.1 在独立实施授权内扩展现有系统 rule 合同及版本引用，规划并实现唯一 `dictionarySystemPronunciationRules.json` 权威维护入口；完成证据：Node/Python 合成夹具验证原词头、target/scope、原值/修正值、证据、核验者时间、状态与批准引用，工作树草稿不能激活，缺真实批准不得写正式。
+- [ ] 13.2 保真导入旧三条勘误及历史依据，建立旧 JSON phonetic 的确定性兼容投影，保留 word/meaning；完成证据：旧值/回调/v1/用户优先回归，未知时间/许可/范围不伪造，旧 patch fingerprint 保护生效，read 四角色互不污染；仅唯一无损或明确核验版本投影通过，多条任取 first 和直接手改投影被拒绝。
+- [ ] 13.3 使审计 `verifiedErrors` 引用同一权威核验记录，移除新增真值常量维护路径，分离核验/批准/落库/产品生效统计；完成证据：`test:pronunciation-audit` 与只读审计比对同值同范围及状态引用，未批准不生效、启发式不判错，原始 packs/hash 与分桶规则不变，三条历史依据不丢失。
+- [ ] 13.4 为旧投影与 overlay 统一提供逐项归因及独立许可分发，更新 `SYSTEM_CORRECTIONS.md` 维护说明；完成证据：包清单、旧视图/宿主与 overlay 均能取得 page/history/许可/变更声明，缺许可或缺引用拒新增正式规则，历史引用不冒充新 CC 许可，原应用/ECDICT notices 保留。
+- [ ] 13.5 扩展现有 approval/publication 合同到系统权威版本、词/角色列表、投影/归因、内容版本和 baseline，校验审批者身份与确认引用；完成证据：离线夹具覆盖真确认缺失、伪批准、IPA/scope/名单/基线变化拒旧批准及排版变化保持有效，后批不能复用前批授权。
+- [ ] 13.6 实现 staging 派生与同输入产品构建、不可变 release bundle 和完整版本原子激活，接入版本检查；完成证据：扩展 `test_pronunciation_publication.mjs` 与 query 测试证明生成/构建/指针故障、旧构建新 sidecar、资产或归因损坏均不暴露混合结果，旧客户端固定旧完整版本；只在合成隔离目录操作。
+- [ ] 13.7 实现完整 release 目标绑定回滚并保留历史；完成证据：合成演练同时恢复旧构建/系统投影/overlay/归因，不删除独立用户纠错或批准证据，目标 hash/授权不符不切换，回滚 baseline 使旧待发布批准失效；本项不授权真实回滚。
+- [ ] 13.8 分离采集冻结与正式纠错允许清单，执行落库链离线集成、兼容回归、类型检查和构建；完成证据：`yarn test:dictionary-corrections`、`yarn test:pronunciation-audit`、`yarn test:dictionary-data`、`yarn test:pronunciation-overlay`、`python3 -B scripts/run_pronunciation_python_tests.py`、`yarn typecheck`、`yarn build:types`、`yarn build:lib`、`yarn build:demo` 的实际退出码及打包检查；采集 55/57/19 文件冻结仍有效，发布仅改获准纠错资产且所有 ECDICT/释义/词形/旧 dump hash 不变，旧基线不改；合成证据不冒充首轮真实纠正。

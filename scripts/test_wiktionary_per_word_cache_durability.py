@@ -45,7 +45,7 @@ else:
 cache = ResponseCache(root / "cache")
 loaded_entries = len(cache)
 responses = [
-    plain_response(tocdata_payload([{"level": "2", "line": "English", "number": "3"}])),
+    plain_response(tocdata_payload([{"hLevel": 2, "line": "English", "number": "3", "index": "3"}])),
     plain_response(text_payload(english_html())),
 ] if phase == "initial" else []
 transport = ScriptedTransport(responses)

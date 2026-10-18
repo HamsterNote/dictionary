@@ -165,6 +165,49 @@ The execution commit can now be frozen before confirmation; providing the valid
 external input then allows execution on that same commit without editing code.
 Any code change invalidates that binding and requires a new confirmation.
 
+## Real TOC Schema and Second-Batch Preparation
+
+`action_api.select_english_section` accepts exact `line == "English"` with integer
+`hLevel == 2` and uses its string `index` as the parse `section`. `tocLevel` is the
+relative TOC depth, while `number` is only a display ordinal; neither locates the
+parse section. Missing/malformed heading fields, invalid English indices or
+duplicate English roots raise structural errors instead of becoming false missing
+English results. MAIN explicitly requests `prop=text|revid` and requires a positive
+integer revision. This adds no request but changes the bound MAIN parameters.
+The extractor version is now 2; old checkpoints cannot be upgraded or reset.
+
+The consumed `ham37-first-round-v1` batch is kept intact. Its 100 cached TOCs are
+complete, attributed and licensed, but none contains `revid`. They can be audited
+offline with `audit_wiktionary_toc_cache.py`; that command prohibits sockets and
+adapter dispatch and verifies original evidence bytes/mtimes remain unchanged.
+The output lists every cached English index/title and projected MAIN parameters.
+Those parameters are an offline view, not permission to dispatch them later.
+
+The prepared `ham37-second-round-v1` uses the same ordered 100 heads but requires
+a new execution/budget confirmation. The CLI supports fresh TOC then MAIN, not a
+cache-seeded MAIN-only mode. Reusing an old index against a changing live page
+without a revision binding is unsafe. No consumed ledger/cache is copied into the
+new batch, no grant is created, and no new session is started by preparation.
+The exact binding changes for execution commit, isolated paths and MAIN's
+`dynamic-English-hLevel-2-index` / `text|revid` parameters; it must be confirmed
+again. Existing gate, registry, consumption-uncertainty and pause limits apply.
+
+Proposed second-batch limits: 100 heads, 600 dispatch attempts across recovery,
+20,971,520 ALL decoded body bytes, serial 5 seconds, timeout 30 seconds per
+transport, two operation retries with 5/10-second backoff and Retry-After.
+Normally at most 200 requests (100 TOC and 100 MAIN); missing/error/early pause may
+reduce that. Two hundred dispatches alone require at least 995 seconds; roughly
+19-25 minutes is a planning estimate using the first run's TOC latency, not a
+deadline or a guarantee. MAIN body size/latency has not been measured. TOC decoded
+bytes were 1,688,166 in the previous batch; total second-batch bytes cannot be
+estimated reliably yet and may exhaust 20 MiB. Encoded network bytes remain a
+separate measured counter with no independent encoded-byte cap in this contract.
+Do not claim cost or time halves merely because a TOC cache exists.
+
+Product-manager authority-migration planning is now incorporated into the same
+OpenSpec change. Groups 11-13 remain unchecked; candidate approval, migration
+implementation, publication and long-term budgets are not granted by this repair.
+
 ## Host Integration
 
 The opt-in package subpath `@hamster-note/dictionary/pronunciation-overlay`

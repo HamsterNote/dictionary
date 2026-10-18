@@ -73,8 +73,8 @@ from wiktionary_per_word.ledger import (  # noqa: E402
 
 NOW = "2026-01-01T00:00:00Z"
 MULTI_LANG = [
-    {"toclevel": 1, "level": "2", "line": "German", "number": "1"},
-    {"toclevel": 1, "level": "2", "line": "English", "number": "2"},
+    {"tocLevel": 1, "hLevel": 2, "line": "German", "number": "1", "index": "1"},
+    {"tocLevel": 1, "hLevel": 2, "line": "English", "number": "2", "index": "2"},
 ]
 
 
