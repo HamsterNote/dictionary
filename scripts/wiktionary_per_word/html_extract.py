@@ -178,6 +178,11 @@ ROLE_HINTS: Final = (
     ("unstressed", "unstressed"),
     ("stressed", "stressed"),
 )
+# 非语言 h2 白名单：Wiktionary 长语言列表页的 “More languages” 折叠块在 section
+# HTML 里表现为第二个 h2，但它不是语言。只排除这个已证实伪根，其他未知 h2 照旧
+# 触发语言根校验拒绝（fail closed）。
+NON_LANGUAGE_H2: Final = frozenset(("More languages",))
+
 # 口音/地域白名单：仅这些规范化后的 qualifier 片段（实体解码、去外层括号、
 # 按逗号切分、小写比较）可进入 accent 维度；不在表内的一律留在 other，
 # 不把未知限定词猜成口音。值为展示用 canonical 名。
@@ -473,9 +478,12 @@ class WiktionaryHTMLExtractor(HTMLParser):
     # ---- 标题栈 ----
     def _push_heading(self, level: int, text: str) -> None:
         text = text.strip()
-        if level <= 2:
+        # “More languages” 是长语言列表页的折叠块伪 h2，不是语言根；白名单式
+        # 排除（不认识的新 h2 仍视为语言根，校验继续 fail closed）。
+        is_pseudo_root = level == 2 and unescape(text) in NON_LANGUAGE_H2
+        if level <= 2 and not is_pseudo_root:
             self.language_roots.append((level, unescape(text)))
-        if level == 2:
+        if level == 2 and not is_pseudo_root:
             self.result.languages.append(unescape(text))
         while self._heading_stack and self._heading_stack[-1][0] >= level:
             self._heading_stack.pop()

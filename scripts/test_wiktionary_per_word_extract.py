@@ -278,6 +278,32 @@ class HtmlExtractionTest(unittest.TestCase):
         self.assertEqual(result.observations[0].pos, "Verb")
 
 
+    def test_more_languages_pseudo_root_excluded(self) -> None:
+        # 真实案例（第三批 a/i 留证）：长语言列表页 English 节尾部带
+        # “More languages” 折叠块伪 h2，不应触发语言根拒绝。
+        html = (
+            '<h2 id="English">English</h2>'
+            '<h4 id="Pronunciation">Pronunciation</h4>'
+            '<ul><li><span class="IPA">/&#601;/</span></li></ul>'
+            '<h2 id="More_languages">More languages</h2>'
+            '<p>teaser</p>'
+        )
+        result = extract_observations(html, expected_language="English")
+        self.assertEqual(len(result.observations), 1)
+
+    def test_ipa_under_pseudo_root_still_rejected(self) -> None:
+        # 伪根之下的 IPA 不归属 English，仍 fail closed。
+        html = (
+            '<h2 id="English">English</h2>'
+            '<h4 id="Pronunciation">Pronunciation</h4>'
+            '<ul><li><span class="IPA">/&#601;/</span></li></ul>'
+            '<h2 id="More_languages">More languages</h2>'
+            '<ul><li><span class="IPA">/x/</span></li></ul>'
+        )
+        with self.assertRaises(ValueError):
+            extract_observations(html, expected_language="English")
+
+
 class ParserRecoveryTest(unittest.TestCase):
     """复核发现的解析缺口逐项回归：5.3。"""
 
