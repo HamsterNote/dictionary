@@ -76,7 +76,8 @@ try {
     /纠错该读音/u,
   );
   const props = {
-    keyword: 'read',
+    // 夹具词必须没有系统纠错（read 已获批准纠正，会覆盖 props.phonetic）。
+    keyword: 'renderer-fixture-word',
     phonetic: '/old/',
     meanings: [{ id: 'read', definition: 'synthetic' }],
     corrections: { user: {} },
@@ -93,7 +94,7 @@ try {
   const blocked = renderToStaticMarkup(
     createElement(DictionaryContent, {
       ...props,
-      corrections: { user: { read: { phonetic: '' } } },
+      corrections: { user: { 'renderer-fixture-word': { phonetic: '' } } },
       pronunciationOverlay: createElement(DictionaryPronunciationOverlay, { entries }),
       pronunciationCandidates: 'synthetic comparison',
     }),

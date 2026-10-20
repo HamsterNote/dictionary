@@ -32,13 +32,13 @@ const authority = loadAuthority(authorityText);
 
 test('迁移保真：三条历史纠正值与旧 JSON 完全一致', () => {
   const legacy = JSON.parse(legacyText);
-  assert.equal(authority.rules.length, 3);
-  for (const rule of authority.rules) {
+  const migrated = authority.rules.filter((r) => r.lifecycle.migratedFromLegacy);
+  assert.equal(migrated.length, 3);
+  for (const rule of migrated) {
     const word = rule.target.word;
     const op = rule.operations.find((o) => o.field === 'phonetic');
     assert.equal(op.op, 'set');
     assert.equal(legacy[word].phonetic, op.value);
-    assert.equal(rule.lifecycle.migratedFromLegacy, true);
     assert.equal(rule.lifecycle.approvalRef.kind, 'grandfathered-legacy-correction');
     // 历史依据不冒充 CC BY-SA；时间缺失如实记录。
     assert.equal(rule.reviewStatus, 'pending-review');
@@ -48,6 +48,25 @@ test('迁移保真：三条历史纠正值与旧 JSON 完全一致', () => {
       assert.equal(ref.license.kind, 'unknown');
     }
     assert.ok(rule.lifecycle.legacyRawValue, `${word} 缺 ECDICT 原值记录`);
+  }
+});
+
+test('第二批 61 条批准规则：active + batch-approval + CC BY-SA 证据齐全', () => {
+  const batch = authority.rules.filter((r) => r.ruleId.startsWith('ham37-r2-'));
+  assert.equal(batch.length, 61);
+  for (const rule of batch) {
+    assert.equal(rule.reviewStatus, 'active');
+    assert.equal(rule.lifecycle.approvalRef.kind, 'batch-approval');
+    assert.ok(rule.lifecycle.approvalRef.ref.includes('01a1595d-427d-726f-8d81-c8b6b7b48f73'));
+    const ref = rule.evidenceRefs[0];
+    assert.equal(ref.license.id, 'CC BY-SA 4.0');
+    assert.ok(ref.permalinkUrl.includes('oldid='));
+    assert.ok(ref.historyUrl.includes('action=history'));
+    // B 口径落值抽查在投影层做；这里保证未定词不在内。
+  }
+  const heads = new Set(batch.map((r) => r.target.word));
+  for (const absent of ['with', 'do', 'this', 'but', 'which', 'there']) {
+    assert.ok(!heads.has(absent), `${absent} 是未定词，不应写入`);
   }
 });
 
@@ -76,10 +95,10 @@ test('草稿规则（pending、无批准）不投影', () => {
   const draft = JSON.parse(authorityText);
   draft.rules.push({
     schema: 'pronunciation-rule/1',
-    ruleId: 'ham37-r2-note',
+    ruleId: 'ham37-draft-unwritten',
     origin: 'system',
-    target: { kind: 'legacy-headword', word: 'note' },
-    operations: [{ field: 'phonetic', op: 'set', value: '/nəʊt/' }],
+    target: { kind: 'legacy-headword', word: 'unwritten-draft' },
+    operations: [{ field: 'phonetic', op: 'set', value: '/x/' }],
     conditions: {
       language: { kind: 'known', values: ['English'] },
       entry: { kind: 'known', values: ['Etymology 1'] },
@@ -92,8 +111,8 @@ test('草稿规则（pending、无批准）不投影', () => {
     },
     evidenceRefs: [{
       license: { id: 'CC BY-SA 4.0', url: 'https://creativecommons.org/licenses/by-sa/4.0/' },
-      permalinkUrl: 'https://en.wiktionary.org/w/index.php?title=note&oldid=93710887',
-      historyUrl: 'https://en.wiktionary.org/w/index.php?title=note&action=history',
+      permalinkUrl: 'https://en.wiktionary.org/w/index.php?title=unwritten-draft&oldid=1',
+      historyUrl: 'https://en.wiktionary.org/w/index.php?title=unwritten-draft&action=history',
     }],
     lifecycle: {
       migratedFromLegacy: false,
@@ -104,8 +123,8 @@ test('草稿规则（pending、无批准）不投影', () => {
     reviewStatus: 'pending-review',
   });
   const result = project(loadAuthority(JSON.stringify(draft)));
-  assert.equal(Object.keys(result.phoneticPatch).length, 3);
-  assert.ok(!result.overlayView.rules.some((r) => r.ruleId === 'ham37-r2-note'));
+  assert.equal(Object.keys(result.phoneticPatch).length, authority.rules.length);
+  assert.ok(!result.overlayView.rules.some((r) => r.ruleId === 'ham37-draft-unwritten'));
 });
 
 test('新增正式规则缺 CC BY-SA permalink/history 证据即拒绝', () => {
@@ -150,7 +169,8 @@ test('回滚：投影是权威+手工部分的纯函数，恢复旧权威即恢�
   older.rules = older.rules.filter((r) => r.target.word !== 'god');
   const result = project(loadAuthority(JSON.stringify(older)));
   // 旧权威补丁不含 god；合并到任何基线都不会重写 god。
-  assert.deepEqual(Object.keys(result.phoneticPatch).sort(), ['curiosity', 'pronunciation']);
+  assert.equal(result.phoneticPatch.god, undefined);
+  assert.equal(Object.keys(result.phoneticPatch).length, authority.rules.length - 1);
   // 反向：当前权威补丁合并进缺 god 的旧基线，精确恢复该条目。
   const legacyWithoutGod = JSON.parse(legacyText);
   delete legacyWithoutGod.god;
@@ -168,7 +188,7 @@ test('回滚：投影是权威+手工部分的纯函数，恢复旧权威即恢�
 test('overlay 视图同源：规则与归因摘要来自同一权威', () => {
   const result = project(authority);
   assert.equal(result.overlayView.sourceRulesVersion, authority.rulesVersion);
-  assert.equal(result.overlayView.rules.length, 3);
+  assert.equal(result.overlayView.rules.length, authority.rules.length);
   assert.ok(result.overlayView.attribution.licenses.includes('historical-reference-license-not-recorded'));
 });
 

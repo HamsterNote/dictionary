@@ -56,10 +56,35 @@ assert.equal(
 const corrections = JSON.parse(
   await readFile(new URL('../src/data/dictionarySystemCorrections.json', import.meta.url), 'utf8'),
 );
-assert.deepEqual(
-  Object.fromEntries(audit.verifiedErrors.map(({ correction, word }) => [word, correction])),
-  corrections,
+// 13.3 衔接：已发布 phonetic 必须逐条来自系统音标权威（迁移或批准规则）且同值；
+// 审计 verifiedErrors 仍须全部在交付中且值不变。
+const authority = JSON.parse(
+  await readFile(new URL('../src/data/dictionarySystemPronunciationRules.json', import.meta.url), 'utf8'),
 );
+const authorityPhonetics = new Map(
+  authority.rules
+    .filter((rule) => rule.lifecycle.migratedFromLegacy
+      || (rule.reviewStatus === 'active' && rule.lifecycle.approvalRef?.kind === 'batch-approval'))
+    .map((rule) => [
+      rule.target.word,
+      rule.operations.find((op) => op.field === 'phonetic')?.value,
+    ]),
+);
+for (const [word, patch] of Object.entries(corrections)) {
+  if (patch.phonetic === undefined) continue;
+  assert.equal(
+    authorityPhonetics.get(word),
+    patch.phonetic,
+    `${word} 的已发布音标没有同值的权威规则背书`,
+  );
+}
+for (const { correction, word } of audit.verifiedErrors) {
+  assert.deepEqual(
+    corrections[word],
+    correction,
+    `${word} 的已核验纠错必须原样交付`,
+  );
+}
 for (const review of audit.verifiedErrors) {
   assert.ok(review.evidence.length >= 2, `${review.word} needs two independent evidence sources`);
   assert.ok(review.rawPhonetics.length > 0, `${review.word} must exist in a vocabulary pack`);

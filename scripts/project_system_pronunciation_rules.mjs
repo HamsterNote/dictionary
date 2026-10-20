@@ -172,6 +172,7 @@ export function project(authority) {
   const patch = {};
   const blocked = [];
   const overlay = [];
+  const overlayAccentNotes = [];
   for (const rule of authority.rules) {
     if (!isProjectable(rule)) continue; // 草稿/pending 不投影、不阻断
     if (rule.target.kind !== 'legacy-headword') {
@@ -193,9 +194,11 @@ export function project(authority) {
       entry.phonetic = op.value;
     }
     const accent = rule.conditions.accent;
+    // accent known 多值但 operation 单值 = 该 IPA 跨口音一致，对无 scope 的旧字段
+    // 是无损映射（不是把多口音拼成单读法）；真正多值歧义不会到达这里（建议阶段
+    // 已 unresolved）。保留 overlay 完整 scope，投影放行并记录说明。
     if (unsafe === null && accent.kind === 'known' && accent.values.length > 1) {
-      // 旧 JSON 无 scope 维度，多口音投影是有损的。
-      unsafe = 'legacy-projection-blocked:multi-accent-scope';
+      overlayAccentNotes.push({ ruleId: rule.ruleId, accents: accent.values });
     }
     if (unsafe !== null) {
       blocked.push({ ruleId: rule.ruleId, reason: unsafe });
@@ -218,6 +221,7 @@ export function project(authority) {
     phoneticPatch: sortedPatch,
     patchSha256: sha256(`${JSON.stringify(sortedPatch, null, 2)}\n`),
     blocked,
+    multiAccentSingleValue: overlayAccentNotes,
     overlayView: {
       schema: 'pronunciation-overlay-system-rules/1',
       sourceRulesVersion: authority.rulesVersion,

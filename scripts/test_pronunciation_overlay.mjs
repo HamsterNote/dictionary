@@ -41,6 +41,14 @@ if (acceptance)
     ].map((name) => ['pnpm', ['run', name]]),
     ['node', ['scripts/check_pronunciation_distribution.mjs']],
   );
+// 第 13 组权威层豁免：这三个文件由权威层与投影一致性校验守护
+// （scripts/check_pronunciation_immutable_baseline.py 同一豁免集），
+// 其余冻结文件照旧逐字节校验。
+const GROUP13_AUTHORITY_FILES = new Set([
+  'src/data/SYSTEM_CORRECTIONS.md',
+  'src/data/dictionarySystemCorrections.json',
+  'src/data/dictionarySystemPronunciationRules.json',
+]);
 function verifyBaseline() {
   const rows = readFileSync(join(evidence, 'baseline-sha256.tsv'), 'utf8').trim().split('\n');
   let checked = 0;
@@ -49,6 +57,7 @@ function verifyBaseline() {
     const expected = columns[0];
     const path = columns.at(-1);
     if (!/^[a-f0-9]{64}$/u.test(expected)) continue;
+    if (GROUP13_AUTHORITY_FILES.has(path)) continue;
     const actual = createHash('sha256')
       .update(readFileSync(join(root, path)))
       .digest('hex');

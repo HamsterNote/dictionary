@@ -1248,6 +1248,19 @@ class SuggestDefaultReadingTest(unittest.TestCase):
         self.assertIn("prefer-phonemic", result["basis"])
 
 
+    def test_prefer_weak_variant_for_articles(self) -> None:
+        refs = [
+            _reading_ref("/ðə/", roles=("weak",), accents=("Received Pronunciation",)),
+            _reading_ref("/ðiː/", roles=("strong",), accents=("Received Pronunciation",)),
+        ]
+        strong = self.suggest(refs)
+        self.assertEqual(strong["ipa"], "/ðiː/")
+        weak = self.suggest(refs, prefer_weak=True)
+        self.assertEqual(weak["status"], "suggested")
+        self.assertEqual(weak["ipa"], "/ðə/")
+        self.assertIn("prefer-weak-form:article-convention", weak["basis"])
+
+
 def evidence_module_build(observations):
     from wiktionary_per_word.offline_reparse import build_source_evidence
 

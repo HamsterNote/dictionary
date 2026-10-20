@@ -574,7 +574,8 @@ def _accent_values(ref: "ReadingRef") -> tuple[str, ...]:
     return ()
 
 
-def suggest_default_reading(reading_refs: Iterable["ReadingRef"]) -> dict[str, Any]:
+def suggest_default_reading(reading_refs: Iterable["ReadingRef"], *,
+                            prefer_weak: bool = False) -> dict[str, Any]:
     """每词一条建议默认读法的确定性规则（不改写候选，仅产出建议+判定依据）。
 
     规则顺序（每步记录依据，任一阶段为空或多值即 unresolved，绝不猜）：
@@ -584,12 +585,13 @@ def suggest_default_reading(reading_refs: Iterable["ReadingRef"]) -> dict[str, A
        的读法。
     3. 词源：pool 跨多个可解析 Etymology 时只保留序号最小者（Wiktionary 主词条
        在前约定）；无法解析词源的读法在无可用词源时才保留。
-    4. 角色：存在非 weak/unstressed 读法时，排除弱读/非重读（citation form 优先）。
+    4. 角色：默认排除弱读/非重读（citation form 优先）；``prefer_weak=True``
+       （已批准的冠词口径 B）时反转，有弱读可选时只保留弱读。
     5. 口音：按 RP → SSB/UK → GA → US 顺序取第一个非空层；都不命中则保留现状
        并记 ``no-preferred-accent-evidence``（不算失败）。
     6. 记法：pool 同时有 phonemic/phonetic 时只保留 phonemic。
     7. 剩余不同 IPA 恰一条 → suggested；多条 → unresolved(multiple-final-candidates)；
-       零条 → unresolved(对应阶段原因)。
+       零条 → unresolved(对应阶段原因）。
     """
     refs = [ref for ref in reading_refs if ref.complete]
     basis: list[str] = []
@@ -621,7 +623,12 @@ def suggest_default_reading(reading_refs: Iterable["ReadingRef"]) -> dict[str, A
         return {"ruleVersion": SUGGEST_RULE_VERSION, "status": "unresolved",
                 "reason": "entry-filter-empty", "basis": basis, "ipa": None}
 
-    if any(not _SUGGEST_WEAK_ROLES.intersection(ref.roles) for ref in kept):
+    if prefer_weak:
+        weak = [ref for ref in kept if _SUGGEST_WEAK_ROLES.intersection(ref.roles)]
+        if weak:
+            kept = weak
+            basis.append("prefer-weak-form:article-convention")
+    elif any(not _SUGGEST_WEAK_ROLES.intersection(ref.roles) for ref in kept):
         reduced = [ref for ref in kept if not _SUGGEST_WEAK_ROLES.intersection(ref.roles)]
         if len(reduced) != len(kept):
             basis.append("exclude-weak-unstressed-when-citation-available")
