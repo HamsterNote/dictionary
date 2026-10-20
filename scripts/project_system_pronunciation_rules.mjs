@@ -164,6 +164,8 @@ export function loadAuthority(text) {
 }
 
 function isProjectable(rule) {
+  // 显式撤销/替代的规则一律不投影——历史迁移身份不豁免失效状态。
+  if (rule.reviewStatus === 'revoked' || rule.reviewStatus === 'replaced') return false;
   if (rule.lifecycle.migratedFromLegacy) return true;
   return rule.reviewStatus === 'active' && rule.lifecycle.approvalRef?.kind === 'batch-approval';
 }
@@ -238,9 +240,24 @@ export function project(authority) {
 /**
  * 把音标补丁合并进旧 JSON 文本：规则覆盖的词头只接管 phonetic 字段，
  * word/meaning 与无规则条目原样保留；输出保持 2 空格缩进 + 末尾换行。
+ *
+ * phonetic 的唯一来源是权威层（维护文档禁止手改派生 phonetic），因此
+ * **不在补丁中的既有 phonetic 一律清除**（撤销/删除规则后旧派生不得残留）；
+ * 清空后只剩空对象的条目整条移除，带 word/meaning 的手工条目保留其余字段。
  */
 export function mergeLegacy(legacyText, phoneticPatch) {
   const legacy = JSON.parse(legacyText);
+  for (const [word, entry] of Object.entries(legacy)) {
+    if (Object.hasOwn(phoneticPatch, word)) continue;
+    if (entry !== null && typeof entry === 'object' && 'phonetic' in entry) {
+      const { phonetic: _dropped, ...rest } = entry;
+      if (Object.keys(rest).length === 0) {
+        delete legacy[word];
+      } else {
+        legacy[word] = rest;
+      }
+    }
+  }
   for (const [word, patch] of Object.entries(phoneticPatch)) {
     legacy[word] = { ...(legacy[word] ?? {}), ...patch };
   }

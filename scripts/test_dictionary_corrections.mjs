@@ -488,10 +488,23 @@ try {
   assert.ok(theAttribution.historyUrl.includes('action=history'));
   assert.equal(theAttribution.attribution, 'Wiktionary contributors');
   assert.ok(theAttribution.changeNotice.includes('ham37-second-round-v1'));
-  // 历史迁移条目如实标注，不冒充 CC 许可。
+  // 历史迁移条目如实标注，不冒充 CC 许可；来源取记录在案的 evidenceRefs.url。
   const godAttribution = SYSTEM_CORRECTION_ATTRIBUTION.god;
   assert.equal(godAttribution.licenseId, 'unknown');
   assert.ok(godAttribution.changeNotice.includes('保真迁移'));
+  assert.equal(
+    godAttribution.pageUrl,
+    'https://www.oxfordlearnersdictionaries.com/definition/english/god_1',
+  );
+  assert.equal(
+    SYSTEM_CORRECTION_ATTRIBUTION.curiosity.pageUrl,
+    'https://www.oxfordlearnersdictionaries.com/definition/english/curiosity',
+  );
+  assert.equal(
+    SYSTEM_CORRECTION_ATTRIBUTION.pronunciation.pageUrl,
+    'https://www.oxfordlearnersdictionaries.com/definition/english/pronunciation',
+  );
+  assert.equal(godAttribution.historyUrl, 'unknown');
   await checkOverlayCorrections(server);
 } finally {
   await server.close();

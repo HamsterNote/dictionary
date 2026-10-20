@@ -30,6 +30,8 @@ interface AuthorityEvidenceRef {
   readonly historyUrl?: string;
   readonly license?: { readonly id?: string; readonly url?: string };
   readonly permalinkUrl?: string;
+  /** 历史依据的原始来源地址（如 Oxford 词条页）。 */
+  readonly url?: string;
 }
 
 interface AuthorityRule {
@@ -51,20 +53,24 @@ function buildSystemCorrectionAttribution(): Readonly<
     if (rule.target.kind !== 'legacy-headword' || typeof rule.target.word !== 'string') {
       continue;
     }
-    // 与投影器同一准入：历史迁移或已批准 active 规则才有正式归因条目。
+    // 与投影器同一准入：历史迁移或已批准 active 规则才有正式归因条目；
+    // 显式撤销/替代的规则除外（与 project_system_pronunciation_rules.mjs 一致）。
+    if (rule.reviewStatus === 'revoked' || rule.reviewStatus === 'replaced') continue;
     const projectable =
       rule.lifecycle?.migratedFromLegacy === true ||
       (rule.reviewStatus === 'active' &&
         rule.lifecycle?.approvalRef?.kind === 'batch-approval');
     if (!projectable) continue;
     const evidence = rule.evidenceRefs?.[0];
+    // 历史条目来源取记录在案的 evidenceRefs.url（如 Oxford）；确实没有记录
+    // 来源时如实标 unknown，绝不构造一个看似官方的地址。
+    const pageUrl =
+      evidence?.permalinkUrl ?? evidence?.url ?? 'unknown';
     map[rule.target.word] = {
-      pageUrl:
-        evidence?.permalinkUrl ??
-        `https://en.wiktionary.org/wiki/${encodeURIComponent(rule.target.word)}`,
-      historyUrl: evidence?.historyUrl ?? '',
+      pageUrl,
+      historyUrl: evidence?.historyUrl ?? 'unknown',
       licenseId: evidence?.license?.id ?? 'unknown',
-      licenseUrl: evidence?.license?.url ?? '',
+      licenseUrl: evidence?.license?.url ?? 'unknown',
       attribution: evidence?.attribution ?? 'unknown',
       changeNotice:
         rule.lifecycle?.migratedFromLegacy === true

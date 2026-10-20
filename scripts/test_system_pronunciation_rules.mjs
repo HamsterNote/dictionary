@@ -180,20 +180,27 @@ test('active 规则必须有 batch-approval 批准引用', () => {
   assert.throws(() => loadAuthority(JSON.stringify(forgedActive)), /batch-approval/u);
 });
 
-test('回滚：投影是权威+手工部分的纯函数，恢复旧权威即恢复旧派生', () => {
-  const older = JSON.parse(authorityText);
-  older.rules = older.rules.filter((r) => r.target.word !== 'god');
-  const result = project(loadAuthority(JSON.stringify(older)));
-  // 旧权威补丁不含 god；合并到任何基线都不会重写 god。
-  assert.equal(result.phoneticPatch.god, undefined);
-  assert.equal(Object.keys(result.phoneticPatch).length, authority.rules.length - 1);
-  // 反向：当前权威补丁合并进缺 god 的旧基线，精确恢复该条目。
-  const legacyWithoutGod = JSON.parse(legacyText);
-  delete legacyWithoutGod.god;
-  const restored = JSON.parse(mergeLegacy(`${JSON.stringify(legacyWithoutGod, null, 2)}\n`,
-    project(authority).phoneticPatch));
-  assert.deepEqual(restored.god, { phonetic: '/ɡɒd/' });
-  // 手工维护的 word/meaning 条目不被投影触碰。
+test('撤销/删除权威后派生失效，恢复后重现（真实方向）', () => {
+  // 删除已批准的 note 规则：重投影后补丁不含 note；合并进当前旧 JSON 必须
+  // 清掉失去依据的 phonetic（整条移除，因为该条目只有 phonetic）。
+  const without = JSON.parse(authorityText);
+  without.rules = without.rules.filter((r) => r.target.word !== 'note');
+  const reduced = project(loadAuthority(JSON.stringify(without)));
+  assert.equal(reduced.phoneticPatch.note, undefined);
+  const pruned = JSON.parse(mergeLegacy(legacyText, reduced.phoneticPatch));
+  assert.equal(pruned.note, undefined, '删除权威后旧派生必须消失');
+  assert.ok(Object.keys(pruned).length === Object.keys(JSON.parse(legacyText)).length - 1);
+  // 恢复权威后重投影：note 精确回到原值。
+  const restored = JSON.parse(mergeLegacy(JSON.stringify(pruned), project(authority).phoneticPatch));
+  assert.equal(restored.note.phonetic, JSON.parse(legacyText).note.phonetic);
+  // 显式撤销历史 god 规则：迁移身份不豁免，投影排除、派生被清除。
+  const revoked = JSON.parse(authorityText);
+  revoked.rules.find((r) => r.target.word === 'god').reviewStatus = 'revoked';
+  const revokedResult = project(loadAuthority(JSON.stringify(revoked)));
+  assert.equal(revokedResult.phoneticPatch.god, undefined);
+  const prunedGod = JSON.parse(mergeLegacy(legacyText, revokedResult.phoneticPatch));
+  assert.equal(prunedGod.god, undefined);
+  // 手工维护的 word/meaning 条目不被投影或清理触碰。
   const withManual = JSON.parse(legacyText);
   withManual.example = { word: 'example', meaning: '手工释义纠正' };
   const merged = JSON.parse(mergeLegacy(`${JSON.stringify(withManual, null, 2)}\n`,

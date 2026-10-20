@@ -165,6 +165,81 @@ try {
     }).readings[0].tier,
     'default',
   );
+  // major-1 回归：既有用户纠错 + 新增系统规则（完全重叠）。
+  // 系统规则不得把同范围 user 读法降级为 retained，字段以用户覆盖为准。
+  const fullOverlap = resolveEntry({
+    ...input,
+    observations: [],
+    previousReadings: [priorManual],
+    rules: [
+      f.rule({
+        ruleId: 'sys-new',
+        origin: 'system',
+        operations: [{ field: 'phonetic', op: 'set', value: '/s/' }],
+      }),
+    ],
+  });
+  assert.equal(
+    fullOverlap.readings.find((reading) => reading.ref === 'prior-user').tier,
+    'default',
+  );
+  assert.equal(fullOverlap.fields.phonetic, '/manual/');
+  assert.equal(
+    fullOverlap.fieldProvenance.find((p) => p.field === 'phonetic').source,
+    'user',
+  );
+  assert.equal(
+    selectEffectiveReadings(fullOverlap.readings, f.scope())[0].ipa,
+    '/manual/',
+  );
+  // 部分重叠：用户覆盖 UK、系统规则覆盖 [UK,US]；交集归用户，其余归系统。
+  const ukOnly = f.scope({ accent: contracts.knownScope(['UK']) });
+  const ukUs = f.scope({ accent: contracts.knownScope(['UK', 'US']) });
+  const partialOverlap = resolveEntry({
+    ...input,
+    scope: ukUs,
+    observations: [],
+    legacyFields: { word: 'read', meaning: 'legacy' },
+    previousReadings: [{ ...priorManual, scope: ukOnly }],
+    rules: [
+      f.rule({
+        ruleId: 'sys-new',
+        origin: 'system',
+        conditions: ukUs,
+        operations: [{ field: 'phonetic', op: 'set', value: '/s/' }],
+      }),
+    ],
+  });
+  assert.equal(
+    partialOverlap.readings.find((reading) => reading.ref === 'prior-user').tier,
+    'default',
+  );
+  assert.equal(
+    selectEffectiveReadings(partialOverlap.readings, ukOnly)[0].ipa,
+    '/manual/',
+  );
+  assert.equal(
+    selectEffectiveReadings(
+      partialOverlap.readings,
+      f.scope({ accent: contracts.knownScope(['US']) }),
+    )[0].ipa,
+    '/s/',
+  );
+  // 用户已有纠错被明确撤销后，系统规则才生效。
+  const revokedUser = resolveEntry({
+    ...input,
+    observations: [],
+    previousReadings: [priorManual],
+    rules: [
+      f.rule({ ruleId: 'prior-user', reviewStatus: 'revoked' }),
+      f.rule({
+        ruleId: 'sys-new',
+        origin: 'system',
+        operations: [{ field: 'phonetic', op: 'set', value: '/s/' }],
+      }),
+    ],
+  });
+  assert.equal(revokedUser.fields.phonetic, '/s/');
   assert.equal(
     resolveEntry({ ...input, evidence: [{ ...f.evidence, license: { spdx: 'MIT' } }] }).readings[1]
       .tier,

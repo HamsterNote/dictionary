@@ -28,12 +28,20 @@ export interface EntryResolution {
   readonly unresolvedReasons: readonly string[];
 }
 
+/** 来源优先级：user > system > qualified-source > legacy。supersede 与字段赋值共用。 */
+const SOURCE_PRIORITY: Readonly<Record<FieldProvenance['source'], number>> = {
+  user: 4,
+  system: 3,
+  'qualified-source': 2,
+  legacy: 1,
+};
+
 /** Resolve one explicit query cell without pretending an intersection covers a broader result. */
 export function selectEffectiveReadings(
   readings: readonly ResolvedReading[],
   conditions: ApplicabilityScope,
 ): readonly ResolvedReading[] {
-  const priority = { user: 4, system: 3, 'qualified-source': 2, legacy: 1 };
+  const priority = SOURCE_PRIORITY;
   const applicable = readings.filter(
     (reading) => reading.tier === 'default' && scopeCovers(reading.scope, conditions),
   );
@@ -106,12 +114,18 @@ function supersede(
   reason: string,
   manual: boolean,
   eligibleRefs?: ReadonlySet<string>,
+  incomingSource?: FieldProvenance['source'],
 ): void {
   const originalLength = readings.length;
+  const incomingPriority = incomingSource === undefined ? 0 : SOURCE_PRIORITY[incomingSource];
   for (let index = 0; index < originalLength; index += 1) {
     const old = readings[index];
     if (old !== undefined && eligibleRefs !== undefined && !eligibleRefs.has(old.ref)) continue;
     if (old?.tier !== 'default' || (!manual && ['user', 'system'].includes(old.provenance.source)))
+      continue;
+    // 高优先级来源不被低优先级降级：新增 system 规则不得把仍有效的同范围
+    // user 读法改为 retained；交集部分同样保留给用户（逐格选择按优先级裁定）。
+    if (incomingSource !== undefined && SOURCE_PRIORITY[old.provenance.source] > incomingPriority)
       continue;
     const rest = scopeCovers(scope, old.scope) ? [] : remainingScopes(old.scope, scope);
     if (rest === undefined) continue;
@@ -170,6 +184,7 @@ export function resolveEntry(input: ResolveEntryInput): EntryResolution {
           '同范围合格来源优先，旧值留存',
           false,
           new Set(input.previousReadings.map((reading) => reading.ref)),
+          'qualified-source',
         );
       }
       if (
@@ -229,7 +244,7 @@ export function resolveEntry(input: ResolveEntryInput): EntryResolution {
         unresolvedReasons.push(`${rule.ruleId}: 纠错范围尚未完整归属目标`);
         continue;
       }
-      supersede(readings, rule.conditions, '人工同范围纠错优先，原值留存', true);
+      supersede(readings, rule.conditions, '人工同范围纠错优先，原值留存', true, undefined, rule.origin);
       readings.push({
         ref: rule.ruleId,
         ipa: operation.op === 'set' ? (operation.value ?? '') : '',
@@ -239,8 +254,19 @@ export function resolveEntry(input: ResolveEntryInput): EntryResolution {
         ...(operation.op === 'set' ? {} : { reason: '明确范围内有意清空' }),
       });
       if (scopeCovers(rule.conditions, input.scope)) {
-        fields.phonetic = operation.op === 'set' ? (operation.value ?? '') : '';
-        provenance.set('phonetic', from);
+        // 字段赋值同样按来源优先级：已有更高优先级（user）默认读法完整覆盖
+        // 查询范围时，低优先级（system）规则不得占用字段。
+        const higherPriorityCovers = readings.some(
+          (reading) =>
+            reading.tier === 'default' &&
+            reading.ref !== rule.ruleId &&
+            SOURCE_PRIORITY[reading.provenance.source] > SOURCE_PRIORITY[rule.origin] &&
+            scopeCovers(reading.scope, input.scope),
+        );
+        if (!higherPriorityCovers) {
+          fields.phonetic = operation.op === 'set' ? (operation.value ?? '') : '';
+          provenance.set('phonetic', from);
+        }
       }
     }
   }
@@ -261,15 +287,17 @@ export function resolveEntry(input: ResolveEntryInput): EntryResolution {
       readings[index] = { ...reading, tier: 'excluded', reason: exclusion.reason };
     }
   }
-  const defaults = readings.filter((reading) => reading.tier === 'default');
+  // 字段终值取逐格有效选择的唯一胜者：多个 default 重叠时由优先级裁定
+  // （user > system > source > legacy），而不是按处理顺序先到先得。
+  const effective = selectEffectiveReadings(readings, input.scope);
   if (
-    defaults.length === 1 &&
-    defaults[0] !== undefined &&
-    scopeCovers(defaults[0].scope, input.scope) &&
-    scopeCovers(input.scope, defaults[0].scope)
+    effective.length === 1 &&
+    effective[0] !== undefined &&
+    scopeCovers(effective[0].scope, input.scope) &&
+    scopeCovers(input.scope, effective[0].scope)
   ) {
-    fields.phonetic = defaults[0].ipa;
-    provenance.set('phonetic', defaults[0].provenance);
+    fields.phonetic = effective[0].ipa;
+    provenance.set('phonetic', effective[0].provenance);
   }
   return {
     entryId: input.entryId,
