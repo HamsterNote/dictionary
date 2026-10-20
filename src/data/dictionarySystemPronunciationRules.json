@@ -1,0 +1,294 @@
+{
+  "schema": "dictionary-system-pronunciation-rules/1",
+  "rulesVersion": 1,
+  "legacyProjectionSha256": "1cb6ecd0c595c74fb93aff10105d43ef6158f8a1a745461a3aa23d4f40455080",
+  "rules": [
+    {
+      "schema": "pronunciation-rule/1",
+      "ruleId": "system-legacy-curiosity",
+      "origin": "system",
+      "target": {
+        "kind": "legacy-headword",
+        "word": "curiosity"
+      },
+      "operations": [
+        {
+          "field": "phonetic",
+          "op": "set",
+          "value": "/ˌkjʊəriˈɒsəti/"
+        }
+      ],
+      "conditions": {
+        "language": {
+          "kind": "known",
+          "values": [
+            "English"
+          ]
+        },
+        "entry": {
+          "kind": "unknown",
+          "reason": "legacy-entry-scope-not-recorded"
+        },
+        "lexeme": {
+          "kind": "unknown",
+          "reason": "legacy-lexeme-scope-not-recorded"
+        },
+        "role": {
+          "kind": "unknown",
+          "reason": "legacy-role-scope-not-recorded"
+        },
+        "pos": {
+          "kind": "unknown",
+          "reason": "legacy-pos-scope-not-recorded"
+        },
+        "sense": {
+          "kind": "unknown",
+          "reason": "legacy-sense-scope-not-recorded"
+        },
+        "accent": {
+          "kind": "known",
+          "values": [
+            "UK"
+          ]
+        },
+        "other": {
+          "kind": "unknown",
+          "reason": "legacy-other-scope-not-recorded"
+        }
+      },
+      "evidenceRefs": [
+        {
+          "claim": "Oxford lists UK /ˌkjʊəriˈɒsəti/ and US /ˌkjʊriˈɑːsəti/.",
+          "retrieved": "2026-09-06",
+          "url": "https://www.oxfordlearnersdictionaries.com/definition/english/curiosity",
+          "license": {
+            "kind": "unknown",
+            "reason": "historical-reference-license-not-recorded"
+          }
+        },
+        {
+          "claim": "The Dictionary API response derived from Wiktionary gives /ˌkjʊəɹɪˈɒsɪti/.",
+          "retrieved": "2026-09-06",
+          "url": "https://api.dictionaryapi.dev/api/v2/entries/en/curiosity",
+          "license": {
+            "kind": "unknown",
+            "reason": "historical-reference-license-not-recorded"
+          }
+        }
+      ],
+      "lifecycle": {
+        "migratedFromLegacy": true,
+        "legacyRawValue": ".kjuәri'ɒsiti",
+        "previousPatchValue": "/.kjuәri'ɒsəti/",
+        "verification": {
+          "status": "verified",
+          "verifiedAt": "2026-09-06",
+          "verifier": {
+            "kind": "unknown",
+            "reason": "historical-verifier-identity-not-recorded"
+          },
+          "verificationRef": "git:5782387",
+          "conclusion": "The existing patch still used ECDICT legacy symbols; use Oxford’s standard UK IPA. The sources support the UK /kjʊə.r/ sequence; Oxford separately lists a US /kjʊr/ form."
+        },
+        "approvalRef": {
+          "kind": "grandfathered-legacy-correction",
+          "ref": "git:5782387",
+          "note": "Migrated from dictionarySystemCorrections.json; predates the batch-approval contract."
+        }
+      },
+      "createdAtUnknownReason": "historical-correction-timestamp-not-recorded",
+      "reviewStatus": "pending-review"
+    },
+    {
+      "schema": "pronunciation-rule/1",
+      "ruleId": "system-legacy-god",
+      "origin": "system",
+      "target": {
+        "kind": "legacy-headword",
+        "word": "god"
+      },
+      "operations": [
+        {
+          "field": "phonetic",
+          "op": "set",
+          "value": "/ɡɒd/"
+        }
+      ],
+      "conditions": {
+        "language": {
+          "kind": "known",
+          "values": [
+            "English"
+          ]
+        },
+        "entry": {
+          "kind": "unknown",
+          "reason": "legacy-entry-scope-not-recorded"
+        },
+        "lexeme": {
+          "kind": "unknown",
+          "reason": "legacy-lexeme-scope-not-recorded"
+        },
+        "role": {
+          "kind": "unknown",
+          "reason": "legacy-role-scope-not-recorded"
+        },
+        "pos": {
+          "kind": "unknown",
+          "reason": "legacy-pos-scope-not-recorded"
+        },
+        "sense": {
+          "kind": "unknown",
+          "reason": "legacy-sense-scope-not-recorded"
+        },
+        "accent": {
+          "kind": "known",
+          "values": [
+            "UK"
+          ]
+        },
+        "other": {
+          "kind": "unknown",
+          "reason": "legacy-other-scope-not-recorded"
+        }
+      },
+      "evidenceRefs": [
+        {
+          "claim": "Oxford lists UK /ɡɒd/ and US /ɡɑːd/.",
+          "retrieved": "2026-09-06",
+          "url": "https://www.oxfordlearnersdictionaries.com/definition/english/god_1",
+          "license": {
+            "kind": "unknown",
+            "reason": "historical-reference-license-not-recorded"
+          }
+        },
+        {
+          "claim": "The Dictionary API response derived from Wiktionary includes /ɡɒd/ and other dialect variants, all beginning /ɡ/.",
+          "retrieved": "2026-09-06",
+          "url": "https://api.dictionaryapi.dev/api/v2/entries/en/god",
+          "license": {
+            "kind": "unknown",
+            "reason": "historical-reference-license-not-recorded"
+          }
+        }
+      ],
+      "lifecycle": {
+        "migratedFromLegacy": true,
+        "legacyRawValue": "^ɔd",
+        "verification": {
+          "status": "verified",
+          "verifiedAt": "2026-09-06",
+          "verifier": {
+            "kind": "unknown",
+            "reason": "historical-verifier-identity-not-recorded"
+          },
+          "verificationRef": "git:5782387",
+          "conclusion": "ECDICT's '^ɔd' contains a corrupted initial consonant; both references begin with IPA /ɡ/."
+        },
+        "approvalRef": {
+          "kind": "grandfathered-legacy-correction",
+          "ref": "git:5782387",
+          "note": "Migrated from dictionarySystemCorrections.json; predates the batch-approval contract."
+        }
+      },
+      "createdAtUnknownReason": "historical-correction-timestamp-not-recorded",
+      "reviewStatus": "pending-review"
+    },
+    {
+      "schema": "pronunciation-rule/1",
+      "ruleId": "system-legacy-pronunciation",
+      "origin": "system",
+      "target": {
+        "kind": "legacy-headword",
+        "word": "pronunciation"
+      },
+      "operations": [
+        {
+          "field": "phonetic",
+          "op": "set",
+          "value": "/prəˌnʌnsiˈeɪʃn/"
+        }
+      ],
+      "conditions": {
+        "language": {
+          "kind": "known",
+          "values": [
+            "English"
+          ]
+        },
+        "entry": {
+          "kind": "unknown",
+          "reason": "legacy-entry-scope-not-recorded"
+        },
+        "lexeme": {
+          "kind": "unknown",
+          "reason": "legacy-lexeme-scope-not-recorded"
+        },
+        "role": {
+          "kind": "unknown",
+          "reason": "legacy-role-scope-not-recorded"
+        },
+        "pos": {
+          "kind": "unknown",
+          "reason": "legacy-pos-scope-not-recorded"
+        },
+        "sense": {
+          "kind": "unknown",
+          "reason": "legacy-sense-scope-not-recorded"
+        },
+        "accent": {
+          "kind": "explicit-all",
+          "evidence": [
+            "evidence:oxford-pronunciation-both-varieties"
+          ]
+        },
+        "other": {
+          "kind": "unknown",
+          "reason": "legacy-other-scope-not-recorded"
+        }
+      },
+      "evidenceRefs": [
+        {
+          "evidenceId": "oxford-pronunciation-both-varieties",
+          "claim": "Oxford gives /prəˌnʌnsiˈeɪʃn/ for both listed varieties.",
+          "retrieved": "2026-09-06",
+          "url": "https://www.oxfordlearnersdictionaries.com/definition/english/pronunciation",
+          "license": {
+            "kind": "unknown",
+            "reason": "historical-reference-license-not-recorded"
+          }
+        },
+        {
+          "claim": "Merriam-Webster gives prə-ˌnən(t)-sē-ˈā-shən and labels the /aʊ/ form nonstandard.",
+          "retrieved": "2026-09-06",
+          "url": "https://www.merriam-webster.com/dictionary/pronunciation",
+          "license": {
+            "kind": "unknown",
+            "reason": "historical-reference-license-not-recorded"
+          }
+        }
+      ],
+      "lifecycle": {
+        "migratedFromLegacy": true,
+        "legacyRawValue": "prәu.nʌnsi'eiʃәn",
+        "verification": {
+          "status": "verified",
+          "verifiedAt": "2026-09-06",
+          "verifier": {
+            "kind": "unknown",
+            "reason": "historical-verifier-identity-not-recorded"
+          },
+          "verificationRef": "git:5782387",
+          "conclusion": "ECDICT starts with /prəʊ-/, but both sources support standard /prə-/; Oxford directly supplies final IPA /ʃn/."
+        },
+        "approvalRef": {
+          "kind": "grandfathered-legacy-correction",
+          "ref": "git:5782387",
+          "note": "Migrated from dictionarySystemCorrections.json; predates the batch-approval contract."
+        }
+      },
+      "createdAtUnknownReason": "historical-correction-timestamp-not-recorded",
+      "reviewStatus": "pending-review"
+    }
+  ]
+}
