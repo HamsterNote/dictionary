@@ -12,7 +12,7 @@ import json
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-EVIDENCE = ROOT / "openspec/changes/correct-dictionary-pronunciations/evidence"
+EVIDENCE = ROOT / "openspec/changes/archive/2026-10-20-correct-dictionary-pronunciations/evidence"
 
 GROUP13_AUTHORITY_FILES = frozenset({
     "src/data/SYSTEM_CORRECTIONS.md",

@@ -12,10 +12,14 @@ import urllib.request
 from playwright.sync_api import sync_playwright
 
 ROOT = Path(__file__).resolve().parent.parent
-EVIDENCE = ROOT / "openspec/changes/correct-dictionary-pronunciations/evidence/logs"
+# 归档 change 只读：截图写到稳定输出目录，可用环境变量覆盖。
+SCREENSHOT_DIRECTORY = Path(
+    os.environ.get("PRONUNCIATION_UI_SCREENSHOT_DIR", str(ROOT / "reports/pronunciation-ui"))
+)
 
 
 def main() -> None:
+    SCREENSHOT_DIRECTORY.mkdir(parents=True, exist_ok=True)
     with socket.socket() as sock:
         sock.bind(("127.0.0.1", 0))
         port = sock.getsockname()[1]
@@ -48,7 +52,7 @@ def main() -> None:
                     assert page.get_by_text("待复核", exact=True).first.is_visible()
                     assert page.get_by_text("复核时间未知", exact=True).first.is_visible()
                     assert page.locator(".dictionary-pronunciations").inner_text().count("[x]") == 2
-                    page.screenshot(path=str(EVIDENCE / "ham37-ui-desktop.png"), full_page=True)
+                    page.screenshot(path=str(SCREENSHOT_DIRECTORY / "ham37-ui-desktop.png"), full_page=True)
                     page.get_by_role("checkbox", name="模拟持久化失败").check()
                     page.get_by_role("button", name="纠错该读音").first.click()
                     page.get_by_role("textbox", name="音标").fill("[test]")
@@ -68,7 +72,7 @@ def main() -> None:
                     assert page.get_by_test_id("spoken").inner_text() == "read"
                     page.set_viewport_size({"width": 360, "height": 800})
                     assert page.evaluate("document.documentElement.scrollWidth <= innerWidth")
-                    page.screenshot(path=str(EVIDENCE / "ham37-ui-mobile.png"), full_page=True)
+                    page.screenshot(path=str(SCREENSHOT_DIRECTORY / "ham37-ui-mobile.png"), full_page=True)
                     page.goto(url + "?readonly")
                     page.locator(".dictionary-pronunciations section").first.wait_for()
                     assert page.get_by_role("button", name="纠错该读音").count() == 0

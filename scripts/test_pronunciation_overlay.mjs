@@ -5,7 +5,12 @@ import { fileURLToPath } from 'node:url';
 import { join } from 'node:path';
 
 const root = fileURLToPath(new URL('..', import.meta.url));
-const evidence = join(root, 'openspec/changes/correct-dictionary-pronunciations/evidence');
+const evidence = join(
+  root,
+  'openspec/changes/archive/2026-10-20-correct-dictionary-pronunciations/evidence',
+);
+// 归档目录只读：--record-evidence 的产物写到稳定输出目录，不回写已归档 change。
+const outputDirectory = join(root, 'reports/pronunciation-overlay');
 const record = process.argv.includes('--record-evidence');
 const acceptance = process.argv.includes('--acceptance');
 const guard = fileURLToPath(new URL('./offline-network-guard.cjs', import.meta.url));
@@ -69,7 +74,7 @@ function verifyBaseline() {
 }
 const before = verifyBaseline();
 const results = [];
-if (record) mkdirSync(join(evidence, 'logs'), { recursive: true });
+if (record) mkdirSync(join(outputDirectory, 'logs'), { recursive: true });
 for (const [command, args] of commands) {
   const result = spawnSync(command, args, {
     cwd: root,
@@ -80,7 +85,7 @@ for (const [command, args] of commands) {
   const name = args.at(-1).replace(/[^a-zA-Z0-9_-]/gu, '-');
   if (record)
     writeFileSync(
-      join(evidence, 'logs', `ham37-${name}.log`),
+      join(outputDirectory, 'logs', `ham37-${name}.log`),
       `${result.stdout ?? ''}${result.stderr ?? ''}\nExit code: ${result.status}\n`,
     );
   results.push({ command: [command, ...args].join(' '), exitCode: result.status });
@@ -94,7 +99,7 @@ for (const [command, args] of commands) {
 const after = verifyBaseline();
 if (record)
   writeFileSync(
-    join(evidence, 'ham37-test-results.json'),
+    join(outputDirectory, 'ham37-test-results.json'),
     JSON.stringify({ results, immutableFilesBefore: before, immutableFilesAfter: after }, null, 2) +
       '\n',
   );
