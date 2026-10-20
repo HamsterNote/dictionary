@@ -1041,6 +1041,161 @@ class ContractAlignmentTest(unittest.TestCase):
         self.assertEqual(issues, [], f"checkpoint 未通过合同校验: {issues}")
 
 
+class OldidHeadResolutionTest(unittest.TestCase):
+    """oldid+section URL 的 MAIN 词头判定回归（第二轮真实缓存暴露的缺陷）。"""
+
+    TOC_URL = "https://en.wiktionary.org/w/api.php?action=parse&page=read&prop=tocdata%7Crevid&format=json&redirects=1"
+    MAIN_URL = "https://en.wiktionary.org/w/api.php?action=parse&oldid=12345&section=2&prop=text%7Crevid&format=json"
+
+    def _cache(self, directory, entries) -> None:
+        cache = ResponseCache(directory=Path(directory))
+        for body, url in entries:
+            cache.put(
+                body,
+                content_type="application/json",
+                complete=True,
+                source_url=url,
+                fetched_at="2026-01-01T00:00:00Z",
+            )
+
+    def test_oldid_main_resolved_via_title_and_toc_revid(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            self._cache(directory, [
+                (tocdata_payload(MULTI_LANG_SECTIONS, revid=12345), self.TOC_URL),
+                (main_text_json(english_html(), revid=12345), self.MAIN_URL),
+            ])
+            candidates = cli.run_offline_reparse(
+                cache_dir=Path(directory), current_path=None, output_path=None
+            )
+            heads = {candidate.head for candidate in candidates}
+            self.assertIn("read", heads)
+            self.assertTrue(any(candidate.readings for candidate in candidates))
+
+    def test_oldid_main_without_toc_still_resolves_by_title(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            self._cache(directory, [
+                (main_text_json(english_html(), revid=12345), self.MAIN_URL),
+            ])
+            candidates = cli.run_offline_reparse(
+                cache_dir=Path(directory), current_path=None, output_path=None
+            )
+            self.assertIn("read", {candidate.head for candidate in candidates})
+
+    def test_oldid_payload_revid_mismatch_skipped(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            self._cache(directory, [
+                (main_text_json(english_html(), revid=999),
+                 self.MAIN_URL),  # URL oldid=12345 != payload revid=999
+            ])
+            candidates = cli.run_offline_reparse(
+                cache_dir=Path(directory), current_path=None, output_path=None
+            )
+            self.assertEqual(candidates, [])
+
+    def test_oldid_title_conflicts_with_toc_head_skipped(self) -> None:
+        conflicting = json.dumps(
+            {"parse": {"title": "reads", "pageid": 1, "revid": 12345,
+                       "text": {"*": english_html()}}}
+        ).encode("utf-8")
+        with tempfile.TemporaryDirectory() as directory:
+            self._cache(directory, [
+                (tocdata_payload(MULTI_LANG_SECTIONS, revid=12345), self.TOC_URL),
+                (conflicting, self.MAIN_URL),
+            ])
+            candidates = cli.run_offline_reparse(
+                cache_dir=Path(directory), current_path=None, output_path=None
+            )
+            self.assertEqual(candidates, [])
+
+
+def _reading_ref(ipa, *, notation="phonemic", qualifiers=(), etymology=None,
+                 roles=(), usage_labels=(), accents=(), complete=True):
+    from wiktionary_per_word.offline_reparse import ReadingRef
+
+    return ReadingRef(
+        ref=f"test#obs:0", indices=(0,), raw_ipa=ipa, ipa=ipa, notation=notation,
+        complete=complete, qualifiers=tuple(qualifiers), tags=(), path=(),
+        section="Pronunciation", etymology=etymology, pos=None, form=None,
+        role=roles[0] if roles else None, roles=tuple(roles),
+        usage_labels=tuple(usage_labels), unclassified_tags=(),
+        applicability={"accent": ({"kind": "known", "values": list(accents)}
+                                  if accents else
+                                  {"kind": "unknown", "reason": "accent-not-determinable"})},
+        qualification="classification-pending" if complete else "evidence-only",
+    )
+
+
+class SuggestDefaultReadingTest(unittest.TestCase):
+    def setUp(self) -> None:
+        from wiktionary_per_word.offline_reparse import suggest_default_reading
+
+        self.suggest = suggest_default_reading
+
+    def test_single_rp_reading_suggested(self) -> None:
+        result = self.suggest([
+            _reading_ref("/nəʊt/", accents=("Received Pronunciation",)),
+            _reading_ref("/noʊt/", accents=("General American",)),
+        ])
+        self.assertEqual(result["status"], "suggested")
+        self.assertEqual(result["ipa"], "/nəʊt/")
+        self.assertIn("prefer-accent:Received Pronunciation", result["basis"])
+
+    def test_weak_forms_excluded_when_citation_available(self) -> None:
+        result = self.suggest([
+            _reading_ref("/ðə/", roles=("weak",), accents=("Received Pronunciation",)),
+            _reading_ref("/ðiː/", roles=("strong",), accents=("Received Pronunciation",)),
+        ])
+        self.assertEqual(result["status"], "suggested")
+        self.assertEqual(result["ipa"], "/ðiː/")
+        self.assertIn("exclude-weak-unstressed-when-citation-available", result["basis"])
+
+    def test_later_etymology_excluded(self) -> None:
+        result = self.suggest([
+            _reading_ref("/rɛd/", etymology="Etymology 2"),
+            _reading_ref("/riːd/", etymology="Etymology 1"),
+        ])
+        self.assertEqual(result["status"], "suggested")
+        self.assertEqual(result["ipa"], "/riːd/")
+        self.assertIn("restrict-first-etymology:1", result["basis"])
+
+    def test_dated_usage_excluded(self) -> None:
+        result = self.suggest([
+            _reading_ref("/rɛːd/", qualifiers=("Early Modern",)),
+            _reading_ref("/ɹɛd/", accents=("General American",)),
+        ])
+        self.assertEqual(result["status"], "suggested")
+        self.assertEqual(result["ipa"], "/ɹɛd/")
+
+    def test_multiple_final_candidates_unresolved(self) -> None:
+        result = self.suggest([
+            _reading_ref("/wɪð/", accents=("Received Pronunciation",)),
+            _reading_ref("/wɪθ/", accents=("Received Pronunciation",)),
+        ])
+        self.assertEqual(result["status"], "unresolved")
+        self.assertEqual(result["reason"], "multiple-final-candidates")
+        self.assertEqual(result["remaining"], ["/wɪð/", "/wɪθ/"])
+
+    def test_no_complete_readings_unresolved(self) -> None:
+        result = self.suggest([_reading_ref("/x/", complete=False)])
+        self.assertEqual(result["status"], "unresolved")
+        self.assertEqual(result["reason"], "no-complete-readings")
+
+    def test_no_preferred_accent_still_suggests_single(self) -> None:
+        result = self.suggest([_reading_ref("/baɪ/")])
+        self.assertEqual(result["status"], "suggested")
+        self.assertEqual(result["ipa"], "/baɪ/")
+        self.assertIn("no-preferred-accent-evidence", result["basis"])
+
+    def test_phonetic_dropped_when_phonemic_same_accent(self) -> None:
+        result = self.suggest([
+            _reading_ref("/meɪk/", accents=("Received Pronunciation",)),
+            _reading_ref("[meɪkʲ]", notation="phonetic", accents=("Received Pronunciation",)),
+        ])
+        self.assertEqual(result["status"], "suggested")
+        self.assertEqual(result["ipa"], "/meɪk/")
+        self.assertIn("prefer-phonemic", result["basis"])
+
+
 def evidence_module_build(observations):
     from wiktionary_per_word.offline_reparse import build_source_evidence
 

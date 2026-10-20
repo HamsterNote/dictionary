@@ -206,6 +206,49 @@ class HtmlExtractionTest(unittest.TestCase):
         second = self.result.observations[1]
         self.assertIn("(General American)", second.qualifiers)
 
+    def test_accent_and_entry_wired_into_applicability(self) -> None:
+        second = self.result.observations[1]
+        accent = second.applicability.accent
+        self.assertEqual(accent.kind, "known")
+        self.assertEqual(accent.values, ("General American",))
+        entry = second.applicability.entry
+        self.assertEqual(entry.kind, "known")
+        self.assertEqual(entry.values, ("Etymology 1",))
+        # 未命中白名单的 qualifier 不进 accent。
+        first = self.result.observations[0]
+        self.assertTrue(first.applicability.accent.is_unknown)
+
+    def test_citation_form_roles_detected_with_word_boundaries(self) -> None:
+        html = (
+            '<h2 id="English">English</h2>'
+            '<h4 id="Pronunciation">Pronunciation</h4>'
+            "<ul>"
+            '<li><span class="qualifier-content">(Received Pronunciation,&#32;weak form)</span> '
+            '<span class="IPA">/&#240;&#601;/</span></li>'
+            '<li><span class="qualifier-content">(unstressed form)</span> '
+            '<span class="IPA">/&#240;i/</span></li>'
+            '<li><span class="qualifier-content">(strong form)</span> '
+            '<span class="IPA">/&#240;i&#720;/</span></li>'
+            "</ul>"
+        )
+        result = extract_observations(html)
+        weak, unstressed, strong = result.observations
+        self.assertEqual(weak.roles, ("weak",))
+        self.assertEqual(unstressed.roles, ("unstressed",))
+        self.assertEqual(strong.roles, ("strong",))
+        self.assertEqual(weak.applicability.accent.values, ("Received Pronunciation",))
+        # 多口音逗号切分。
+        html_multi = (
+            '<h2 id="English">English</h2>'
+            '<h4 id="Pronunciation">Pronunciation</h4>'
+            "<ul>"
+            '<li><span class="qualifier-content">(General American,&#32;Canada)</span> '
+            '<span class="IPA">/n&#601;u&#815;t/</span></li>'
+            "</ul>"
+        )
+        multi = extract_observations(html_multi).observations[0]
+        self.assertEqual(multi.applicability.accent.values, ("General American", "Canada"))
+
     def test_fragment_is_preserved_but_not_complete(self) -> None:
         fragment = next(o for o in self.result.observations if not o.complete)
         self.assertFalse(fragment.complete)

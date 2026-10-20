@@ -19,11 +19,12 @@
 
 from __future__ import annotations
 
+import re
 import unicodedata
 from dataclasses import dataclass, field
 from html import unescape
 from html.parser import HTMLParser
-from typing import Final
+from typing import Final, Iterable
 
 from .scope_model import Applicability, Scope
 
@@ -161,7 +162,9 @@ POS_HEADINGS: Final = frozenset(
     )
 )
 # 词形角色提示：全部扫描而不是首个命中即停，因此“past tense and past participle”
-# 会同时得到 past 与 past-participle 两个角色。
+# 会同时得到 past 与 past-participle 两个角色。词边界匹配（\b），避免
+# “unstressed form” 误中 “stressed”。引文形式角色（strong/weak/stressed/
+# unstressed）与变位角色同列，供资格层区分弱读与 citation form。
 ROLE_HINTS: Final = (
     ("past participle", "past-participle"),
     ("present participle", "present-participle"),
@@ -170,7 +173,62 @@ ROLE_HINTS: Final = (
     ("third-person singular", "present"),
     ("simple past", "past"),
     ("base form", "base"),
+    ("weak form", "weak"),
+    ("strong form", "strong"),
+    ("unstressed", "unstressed"),
+    ("stressed", "stressed"),
 )
+# 口音/地域白名单：仅这些规范化后的 qualifier 片段（实体解码、去外层括号、
+# 按逗号切分、小写比较）可进入 accent 维度；不在表内的一律留在 other，
+# 不把未知限定词猜成口音。值为展示用 canonical 名。
+ACCENT_TOKENS: Final = {
+    "received pronunciation": "Received Pronunciation",
+    "rp": "Received Pronunciation",
+    "standard southern british": "Standard Southern British",
+    "general american": "General American",
+    "ga": "General American",
+    "uk": "UK",
+    "us": "US",
+    "australia": "Australia",
+    "new zealand": "New Zealand",
+    "canada": "Canada",
+    "scotland": "Scotland",
+    "ireland": "Ireland",
+    "northern ireland": "Northern Ireland",
+    "northumbria": "Northumbria",
+    "general south african": "General South African",
+    "south asia": "South Asia",
+    "singapore": "Singapore",
+    "singlish": "Singlish",
+    "manglish": "Manglish",
+    "african-american vernacular": "African-American Vernacular",
+    "northwestern us": "Northwestern US",
+    "ottawa valley": "Ottawa Valley",
+}
+
+
+def _normalize_qualifier(text: str) -> str:
+    """实体解码 + 去边界空白 + 去一层外层括号；不改动语义内容。"""
+    value = unescape(text).strip()
+    if len(value) >= 2 and value.startswith("(") and value.endswith(")"):
+        value = value[1:-1].strip()
+    return value
+
+
+def classify_accents(qualifiers: Iterable[str]) -> tuple[str, ...]:
+    """从 qualifier 中按白名单提取口音/地域标签；判不出返回空。
+
+    匹配用规范化片段（实体解码、去一层外层括号、逗号切分、小写）；不改写
+    qualifier 原值。
+    """
+    accents: list[str] = []
+    for qualifier in qualifiers:
+        for segment in _normalize_qualifier(qualifier).split(","):
+            token = segment.strip().lower()
+            accent = ACCENT_TOKENS.get(token)
+            if accent is not None and accent not in accents:
+                accents.append(accent)
+    return tuple(accents)
 # 语义用途/地域标签：这些 class token 参与语义 fingerprint；纯排版类（mw-*、
 # IPA、音频等）不参与，因此无关排版变化不会误触。
 SEMANTIC_USAGE_TOKENS: Final = frozenset(
@@ -282,11 +340,13 @@ def detect_roles(text: str) -> tuple[str, ...]:
     """扫描全部角色提示，返回去重后按提示表顺序的角色元组（非首个命中即停）。
 
     比较前解码 HTML 实体，避免把 ``&quot;past tense&quot;`` 之类当普通文本。
+    词边界匹配：``unstressed form`` 不会误中 ``stressed``。
     """
     lowered = unescape(text).lower()
     roles: list[str] = []
     for hint, role_name in ROLE_HINTS:
-        if hint in lowered and role_name not in roles:
+        pattern = r"\b" + re.escape(hint) + r"\b"
+        if re.search(pattern, lowered) and role_name not in roles:
             roles.append(role_name)
     return tuple(roles)
 
@@ -622,9 +682,11 @@ class WiktionaryHTMLExtractor(HTMLParser):
         )
         # 只使用 IPA 起始时的快照 qualifiers，不借用同一帧中其后出现的标签，
         # 更不借用相邻音频的标签。扫描全部角色提示（非首个命中即停）；比较前解码实体。
+        # qualifiers 字段保留原值（既有契约）；口音分类内部用规范化片段匹配白名单。
         scope_text = " ".join(filter(None, list(qualifiers) + [form or ""]))
         roles = detect_roles(scope_text)
         role = roles[0] if roles else None
+        accents = classify_accents(qualifiers)
 
         language = next((unescape(text) for level, text in self._heading_stack if level == 2), None)
         section = next(
@@ -698,12 +760,12 @@ class WiktionaryHTMLExtractor(HTMLParser):
 
         applicability = Applicability(
             language=Scope.known([language]) if language else Scope.unknown("language-not-determinable"),
-            entry=Scope.unknown("entry-not-determinable"),
+            entry=Scope.known([etymology]) if etymology else Scope.unknown("entry-not-determinable"),
             lexeme=Scope.unknown("lexeme-not-determinable"),
             role=Scope.known(list(roles)) if roles else Scope.unknown("role-not-determinable"),
             pos=Scope.known([pos]) if pos else Scope.unknown("pos-not-determinable"),
             sense=Scope.unknown("sense-not-determinable"),
-            accent=Scope.unknown("accent-not-determinable"),
+            accent=Scope.known(list(accents)) if accents else Scope.unknown("accent-not-determinable"),
             other=Scope.known(list(qualifiers))
             if qualifiers
             else Scope.unknown("no-qualifier"),

@@ -81,6 +81,46 @@ def _head_from_url(url: str) -> str | None:
     return values[0] if values else None
 
 
+def _oldid_from_url(url: str) -> int | None:
+    query = parse_qs(urlparse(url).query)
+    values = query.get("oldid")
+    if not values:
+        return None
+    try:
+        oldid = int(values[0])
+    except ValueError:
+        return None
+    return oldid if oldid > 0 else None
+
+
+def _resolve_main_head(
+    payload: dict, entry_url: str, toc_revids: dict[int, str]
+) -> str | None:
+    """MAIN 响应的词头判定：oldid URL 无 page 参数时用 ``parse.title``。
+
+    三重 fail-closed 校验：URL oldid 必须等于响应 ``parse.revid``；缓存中同
+    revision 的 TOC 词头（若有）必须与 ``parse.title`` 一致；任一不符返回
+    ``None``（跳过该条目，绝不猜词头）。
+    """
+    head = _head_from_url(entry_url)
+    if head is not None:
+        return head
+    oldid = _oldid_from_url(entry_url)
+    parse = payload.get("parse") if isinstance(payload, dict) else None
+    if oldid is None or not isinstance(parse, dict):
+        return None
+    title = parse.get("title")
+    revid = parse.get("revid")
+    if not isinstance(title, str) or not title.strip():
+        return None
+    if type(revid) is not int or revid != oldid:
+        return None
+    toc_head = toc_revids.get(revid)
+    if toc_head is not None and toc_head != title:
+        return None
+    return title
+
+
 def run_offline_reparse(
     *, cache_dir: Path, current_path: Path | None, output_path: Path | None
 ) -> list[Candidate]:
@@ -93,17 +133,39 @@ def run_offline_reparse(
         current = json.loads(current_path.read_text(encoding="utf-8"))
 
     candidates: list[Candidate] = []
-    for entry in cache.entries():  # 稳定顺序，便于审查
+    entries = list(cache.entries())  # 稳定顺序，便于审查
+
+    def _payload(entry) -> dict | None:
         try:
-            payload = json.loads(entry.body)
+            value = json.loads(entry.body)
         except (ValueError, UnicodeDecodeError):
-            payload = None
-        if isinstance(payload, dict) and not payload.get("error"):
+            return None
+        return value if isinstance(value, dict) and not value.get("error") else None
+
+    # 第一遍：TOC（prop=tocdata|revid）建立 revid -> head 映射，供 MAIN 校验。
+    toc_revids: dict[int, str] = {}
+    for entry in entries:
+        payload = _payload(entry)
+        if payload is None:
+            continue
+        parse = payload.get("parse")
+        if not isinstance(parse, dict) or "tocdata" not in parse or "text" in parse:
+            continue
+        head = _head_from_url(entry.source_url)
+        revid = parse.get("revid")
+        if head is not None and type(revid) is int and revid > 0:
+            toc_revids.setdefault(revid, head)
+
+    # 第二遍：MAIN（parse.text）重解析并生成候选。根级 error / 畸形 JSON 不跳过，
+    # 交给 reparse_cached_entry 统一 fail closed（保持旧语义）。
+    for entry in entries:
+        payload = _payload(entry)
+        if payload is not None:
             parse = payload.get("parse")
             # TOC is navigation evidence, whereas parse.text is the main response.
             if isinstance(parse, dict) and "tocdata" in parse and "text" not in parse:
                 continue
-        head = _head_from_url(entry.source_url)
+        head = _resolve_main_head(payload or {}, entry.source_url, toc_revids)
         if head is None:
             continue
         result = reparse_cached_entry(entry)

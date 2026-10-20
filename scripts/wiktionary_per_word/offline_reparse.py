@@ -18,6 +18,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+import re
 import unicodedata
 from dataclasses import dataclass, field
 from enum import Enum
@@ -536,3 +537,117 @@ def generate_candidates(
             )
         )
     return candidates
+
+
+SUGGEST_RULE_VERSION = "wiktionary-per-word/suggest/1"
+
+# 建议规则用的保守排除/偏好表。全部是显式名单，未命中不猜。
+_SUGGEST_EXCLUDED_QUALIFIER_TOKENS: Final = frozenset(
+    ("early modern", "dated", "archaic", "obsolete", "historical")
+)
+_SUGGEST_WEAK_ROLES: Final = frozenset(("weak", "unstressed"))
+_SUGGEST_ACCENT_TIERS: Final = (
+    ("Received Pronunciation",),
+    ("Standard Southern British", "UK"),
+    ("General American",),
+    ("US",),
+)
+
+
+def _entry_order(etymology: str | None) -> int | None:
+    """``Etymology`` 视同 1；``Etymology N`` 取 N；无法解析返回 None。"""
+    if etymology is None:
+        return None
+    value = unescape(etymology).strip().lower()
+    if value == "etymology":
+        return 1
+    match = re.fullmatch(r"etymology\s+([0-9]+)", value)
+    return int(match.group(1)) if match else None
+
+
+def _accent_values(ref: "ReadingRef") -> tuple[str, ...]:
+    accent = ref.applicability.get("accent") if isinstance(ref.applicability, Mapping) else None
+    if isinstance(accent, Mapping) and accent.get("kind") == "known":
+        values = accent.get("values")
+        if isinstance(values, list):
+            return tuple(str(value) for value in values)
+    return ()
+
+
+def suggest_default_reading(reading_refs: Iterable["ReadingRef"]) -> dict[str, Any]:
+    """每词一条建议默认读法的确定性规则（不改写候选，仅产出建议+判定依据）。
+
+    规则顺序（每步记录依据，任一阶段为空或多值即 unresolved，绝不猜）：
+
+    1. 只考虑完整来源读法（pending）；evidence-only 片段不参与。
+    2. 排除带 usage 标签（archaic/dated/…）或排除性 qualifier（Early Modern 等）
+       的读法。
+    3. 词源：pool 跨多个可解析 Etymology 时只保留序号最小者（Wiktionary 主词条
+       在前约定）；无法解析词源的读法在无可用词源时才保留。
+    4. 角色：存在非 weak/unstressed 读法时，排除弱读/非重读（citation form 优先）。
+    5. 口音：按 RP → SSB/UK → GA → US 顺序取第一个非空层；都不命中则保留现状
+       并记 ``no-preferred-accent-evidence``（不算失败）。
+    6. 记法：pool 同时有 phonemic/phonetic 时只保留 phonemic。
+    7. 剩余不同 IPA 恰一条 → suggested；多条 → unresolved(multiple-final-candidates)；
+       零条 → unresolved(对应阶段原因)。
+    """
+    refs = [ref for ref in reading_refs if ref.complete]
+    basis: list[str] = []
+    if not refs:
+        return {"ruleVersion": SUGGEST_RULE_VERSION, "status": "unresolved",
+                "reason": "no-complete-readings", "basis": basis, "ipa": None}
+
+    kept = [
+        ref for ref in refs
+        if not ref.usage_labels
+        and not any(
+            segment.strip().lower() in _SUGGEST_EXCLUDED_QUALIFIER_TOKENS
+            for qualifier in ref.qualifiers
+            for segment in unescape(qualifier).split(",")
+        )
+    ]
+    if len(kept) != len(refs):
+        basis.append("exclude-usage-or-dated")
+    if not kept:
+        return {"ruleVersion": SUGGEST_RULE_VERSION, "status": "unresolved",
+                "reason": "all-readings-usage-or-dated", "basis": basis, "ipa": None}
+
+    orders = {order for order in (_entry_order(ref.etymology) for ref in kept) if order is not None}
+    if len(orders) > 1:
+        first = min(orders)
+        kept = [ref for ref in kept if _entry_order(ref.etymology) in (None, first)]
+        basis.append(f"restrict-first-etymology:{first}")
+    if not kept:
+        return {"ruleVersion": SUGGEST_RULE_VERSION, "status": "unresolved",
+                "reason": "entry-filter-empty", "basis": basis, "ipa": None}
+
+    if any(not _SUGGEST_WEAK_ROLES.intersection(ref.roles) for ref in kept):
+        reduced = [ref for ref in kept if not _SUGGEST_WEAK_ROLES.intersection(ref.roles)]
+        if len(reduced) != len(kept):
+            basis.append("exclude-weak-unstressed-when-citation-available")
+        kept = reduced
+
+    accented = False
+    for tier in _SUGGEST_ACCENT_TIERS:
+        pool = [ref for ref in kept if set(tier).intersection(_accent_values(ref))]
+        if pool:
+            kept = pool
+            basis.append("prefer-accent:" + "/".join(tier))
+            accented = True
+            break
+    if not accented:
+        basis.append("no-preferred-accent-evidence")
+
+    phonemic = [ref for ref in kept if ref.notation == "phonemic"]
+    if phonemic and len(phonemic) != len(kept):
+        kept = phonemic
+        basis.append("prefer-phonemic")
+
+    distinct = list(dict.fromkeys(ref.ipa for ref in kept))
+    if len(distinct) == 1:
+        return {"ruleVersion": SUGGEST_RULE_VERSION, "status": "suggested",
+                "ipa": distinct[0], "basis": basis,
+                "reason": None}
+    return {"ruleVersion": SUGGEST_RULE_VERSION, "status": "unresolved",
+            "reason": "multiple-final-candidates", "remaining": distinct,
+            "basis": basis, "ipa": None}
