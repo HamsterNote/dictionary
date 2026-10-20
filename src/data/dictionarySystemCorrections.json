@@ -5,11 +5,17 @@
   "all": {
     "phonetic": "/ɔːl/"
   },
+  "also": {
+    "phonetic": "/ˈɔːl.səʊ/"
+  },
   "an": {
     "phonetic": "/ən/"
   },
   "and": {
     "phonetic": "/ˈænd/"
+  },
+  "any": {
+    "phonetic": "/ɛni/"
   },
   "as": {
     "phonetic": "/æz/"
@@ -34,6 +40,12 @@
   },
   "curiosity": {
     "phonetic": "/ˌkjʊəriˈɒsəti/"
+  },
+  "day": {
+    "phonetic": "/deɪ̯/"
+  },
+  "first": {
+    "phonetic": "/fɜːst/"
   },
   "for": {
     "phonetic": "/fɔː/"
@@ -68,6 +80,9 @@
   "his": {
     "phonetic": "/hɪz/"
   },
+  "how": {
+    "phonetic": "/haʊ/"
+  },
   "in": {
     "phonetic": "/ɪn/"
   },
@@ -83,11 +98,17 @@
   "know": {
     "phonetic": "/nəʊ/"
   },
+  "may": {
+    "phonetic": "/meɪ/"
+  },
   "me": {
     "phonetic": "/miː/"
   },
   "more": {
     "phonetic": "/mɔː/"
+  },
+  "new": {
+    "phonetic": "/njuː/"
   },
   "no": {
     "phonetic": "/nəʊ/"
@@ -113,6 +134,9 @@
   "other": {
     "phonetic": "/ˈʌ.ðə/"
   },
+  "our": {
+    "phonetic": "/ˈaʊə(ɹ)/"
+  },
   "out": {
     "phonetic": "/ˈäʊ̯t/"
   },
@@ -133,6 +157,9 @@
   },
   "she": {
     "phonetic": "/ʃiː/"
+  },
+  "should": {
+    "phonetic": "/ʃɵd/"
   },
   "some": {
     "phonetic": "/sʌm/"
@@ -169,6 +196,18 @@
   },
   "up": {
     "phonetic": "/ʌp/"
+  },
+  "use": {
+    "phonetic": "/juːs/"
+  },
+  "very": {
+    "phonetic": "/ˈvɛɹi/"
+  },
+  "want": {
+    "phonetic": "/wɒnt/"
+  },
+  "way": {
+    "phonetic": "/weɪ/"
   },
   "we": {
     "phonetic": "/wiː/"

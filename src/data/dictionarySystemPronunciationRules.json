@@ -1,7 +1,7 @@
 {
   "schema": "dictionary-system-pronunciation-rules/1",
-  "rulesVersion": 2,
-  "legacyProjectionSha256": "19c3f5a4d3dc9817e4d49a93b6b28248c4022f88a41a147dcc654632e3f33f04",
+  "rulesVersion": 3,
+  "legacyProjectionSha256": "dc4d99458c17a9610ed153f8272e529fb362f2f70ccf720e5c35d278d64612e9",
   "rules": [
     {
       "schema": "pronunciation-rule/1",
@@ -6338,6 +6338,1281 @@
         "prefer-accent:Received Pronunciation"
       ],
       "createdAt": "2026-10-20T12:50:46Z",
+      "reviewStatus": "active"
+    },
+    {
+      "schema": "pronunciation-rule/1",
+      "ruleId": "ham37-r3-how",
+      "origin": "system",
+      "target": {
+        "kind": "legacy-headword",
+        "word": "how"
+      },
+      "operations": [
+        {
+          "field": "phonetic",
+          "op": "set",
+          "value": "/haʊ/",
+          "observationRefs": [
+            "98b26dbccbbcd3790c9ab682e7cea0901d16d48fe68e367d55e29d5107f1f672#obs:0"
+          ]
+        }
+      ],
+      "conditions": {
+        "language": {
+          "kind": "known",
+          "values": [
+            "English"
+          ]
+        },
+        "entry": {
+          "kind": "unknown",
+          "reason": "entry-not-determinable"
+        },
+        "lexeme": {
+          "kind": "unknown",
+          "reason": "lexeme-not-determinable"
+        },
+        "role": {
+          "kind": "unknown",
+          "reason": "role-not-determinable"
+        },
+        "pos": {
+          "kind": "unknown",
+          "reason": "pos-not-determinable"
+        },
+        "sense": {
+          "kind": "unknown",
+          "reason": "sense-not-determinable"
+        },
+        "accent": {
+          "kind": "known",
+          "values": [
+            "UK",
+            "Received Pronunciation"
+          ]
+        },
+        "other": {
+          "kind": "known",
+          "values": [
+            "(UK)",
+            "Received Pronunciation"
+          ]
+        }
+      },
+      "evidenceRefs": [
+        {
+          "provenanceId": "98b26dbccbbcd3790c9ab682e7cea0901d16d48fe68e367d55e29d5107f1f672",
+          "permalinkUrl": "https://en.wiktionary.org/w/index.php?title=how&oldid=93700365",
+          "historyUrl": "https://en.wiktionary.org/w/index.php?title=how&action=history",
+          "revid": 93700365,
+          "httpSha256": "37df150c96046a6187bd369c060d16f1cb03e561f6f97b4da843125b3a5cd952",
+          "license": {
+            "id": "CC BY-SA 4.0",
+            "url": "https://creativecommons.org/licenses/by-sa/4.0/"
+          },
+          "attribution": "Wiktionary contributors"
+        }
+      ],
+      "lifecycle": {
+        "migratedFromLegacy": false,
+        "previousValue": "hau",
+        "verification": {
+          "status": "verified",
+          "verifiedAt": "2026-10-20T14:18:00Z",
+          "verifier": "修勾经 issue 评论确认（选 A）（Multica member 0767d05c-3aed-4f8b-ad71-42dd6914c79d）",
+          "verificationRef": "multica:issue:01a14974-c5e6-7beb-b279-7791d9fa6874:comment:01a159ad-1f6b-7739-8edc-522f6180a727",
+          "conclusion": "选 A 收口：默认批准第三批 14 条建议（look 跳过不写）。"
+        },
+        "approvalRef": {
+          "kind": "batch-approval",
+          "ref": "multica:issue:01a14974-c5e6-7beb-b279-7791d9fa6874:comment:01a159ad-1f6b-7739-8edc-522f6180a727",
+          "batch": "ham37-third-round-v1",
+          "variant": "A",
+          "note": "第三批 13 条（look 跳过）；well/because 未定与 a/i/n't 不在批准范围。"
+        }
+      },
+      "suggestedBasis": [
+        "prefer-accent:Received Pronunciation"
+      ],
+      "createdAt": "2026-10-20T14:18:00Z",
+      "reviewStatus": "active"
+    },
+    {
+      "schema": "pronunciation-rule/1",
+      "ruleId": "ham37-r3-also",
+      "origin": "system",
+      "target": {
+        "kind": "legacy-headword",
+        "word": "also"
+      },
+      "operations": [
+        {
+          "field": "phonetic",
+          "op": "set",
+          "value": "/ˈɔːl.səʊ/",
+          "observationRefs": [
+            "da03a9ee45265825a58b6eafe5819a232a1d3f5eccb2deed4cb64a93bbc051c0#obs:0"
+          ]
+        }
+      ],
+      "conditions": {
+        "language": {
+          "kind": "known",
+          "values": [
+            "English"
+          ]
+        },
+        "entry": {
+          "kind": "unknown",
+          "reason": "entry-not-determinable"
+        },
+        "lexeme": {
+          "kind": "unknown",
+          "reason": "lexeme-not-determinable"
+        },
+        "role": {
+          "kind": "unknown",
+          "reason": "role-not-determinable"
+        },
+        "pos": {
+          "kind": "unknown",
+          "reason": "pos-not-determinable"
+        },
+        "sense": {
+          "kind": "unknown",
+          "reason": "sense-not-determinable"
+        },
+        "accent": {
+          "kind": "known",
+          "values": [
+            "Received Pronunciation"
+          ]
+        },
+        "other": {
+          "kind": "known",
+          "values": [
+            "Received Pronunciation"
+          ]
+        }
+      },
+      "evidenceRefs": [
+        {
+          "provenanceId": "da03a9ee45265825a58b6eafe5819a232a1d3f5eccb2deed4cb64a93bbc051c0",
+          "permalinkUrl": "https://en.wiktionary.org/w/index.php?title=also&oldid=93744177",
+          "historyUrl": "https://en.wiktionary.org/w/index.php?title=also&action=history",
+          "revid": 93744177,
+          "httpSha256": "2c96bd72da7c7c0d3cf64d1cb3173a2dac518d604fd03ac54303c0d7e496e758",
+          "license": {
+            "id": "CC BY-SA 4.0",
+            "url": "https://creativecommons.org/licenses/by-sa/4.0/"
+          },
+          "attribution": "Wiktionary contributors"
+        }
+      ],
+      "lifecycle": {
+        "migratedFromLegacy": false,
+        "previousValue": "'ɒ:lsәu",
+        "verification": {
+          "status": "verified",
+          "verifiedAt": "2026-10-20T14:18:00Z",
+          "verifier": "修勾经 issue 评论确认（选 A）（Multica member 0767d05c-3aed-4f8b-ad71-42dd6914c79d）",
+          "verificationRef": "multica:issue:01a14974-c5e6-7beb-b279-7791d9fa6874:comment:01a159ad-1f6b-7739-8edc-522f6180a727",
+          "conclusion": "选 A 收口：默认批准第三批 14 条建议（look 跳过不写）。"
+        },
+        "approvalRef": {
+          "kind": "batch-approval",
+          "ref": "multica:issue:01a14974-c5e6-7beb-b279-7791d9fa6874:comment:01a159ad-1f6b-7739-8edc-522f6180a727",
+          "batch": "ham37-third-round-v1",
+          "variant": "A",
+          "note": "第三批 13 条（look 跳过）；well/because 未定与 a/i/n't 不在批准范围。"
+        }
+      },
+      "suggestedBasis": [
+        "prefer-accent:Received Pronunciation"
+      ],
+      "createdAt": "2026-10-20T14:18:00Z",
+      "reviewStatus": "active"
+    },
+    {
+      "schema": "pronunciation-rule/1",
+      "ruleId": "ham37-r3-any",
+      "origin": "system",
+      "target": {
+        "kind": "legacy-headword",
+        "word": "any"
+      },
+      "operations": [
+        {
+          "field": "phonetic",
+          "op": "set",
+          "value": "/ɛni/",
+          "observationRefs": [
+            "6c54a66c1841dd28cfd2fe4190b6e7f15a41ec6edfc4e6630170805bd45289e6#obs:0"
+          ]
+        }
+      ],
+      "conditions": {
+        "language": {
+          "kind": "known",
+          "values": [
+            "English"
+          ]
+        },
+        "entry": {
+          "kind": "unknown",
+          "reason": "entry-not-determinable"
+        },
+        "lexeme": {
+          "kind": "unknown",
+          "reason": "lexeme-not-determinable"
+        },
+        "role": {
+          "kind": "unknown",
+          "reason": "role-not-determinable"
+        },
+        "pos": {
+          "kind": "unknown",
+          "reason": "pos-not-determinable"
+        },
+        "sense": {
+          "kind": "unknown",
+          "reason": "sense-not-determinable"
+        },
+        "accent": {
+          "kind": "known",
+          "values": [
+            "Received Pronunciation",
+            "General American"
+          ]
+        },
+        "other": {
+          "kind": "known",
+          "values": [
+            "Received Pronunciation,&#32;General American"
+          ]
+        }
+      },
+      "evidenceRefs": [
+        {
+          "provenanceId": "6c54a66c1841dd28cfd2fe4190b6e7f15a41ec6edfc4e6630170805bd45289e6",
+          "permalinkUrl": "https://en.wiktionary.org/w/index.php?title=any&oldid=93379810",
+          "historyUrl": "https://en.wiktionary.org/w/index.php?title=any&action=history",
+          "revid": 93379810,
+          "httpSha256": "d4ccc9b503775edc3ce1e55a7a0ae3b3b6b06deefd8317e91cf63854c339ac69",
+          "license": {
+            "id": "CC BY-SA 4.0",
+            "url": "https://creativecommons.org/licenses/by-sa/4.0/"
+          },
+          "attribution": "Wiktionary contributors"
+        }
+      ],
+      "lifecycle": {
+        "migratedFromLegacy": false,
+        "previousValue": "'eni",
+        "verification": {
+          "status": "verified",
+          "verifiedAt": "2026-10-20T14:18:00Z",
+          "verifier": "修勾经 issue 评论确认（选 A）（Multica member 0767d05c-3aed-4f8b-ad71-42dd6914c79d）",
+          "verificationRef": "multica:issue:01a14974-c5e6-7beb-b279-7791d9fa6874:comment:01a159ad-1f6b-7739-8edc-522f6180a727",
+          "conclusion": "选 A 收口：默认批准第三批 14 条建议（look 跳过不写）。"
+        },
+        "approvalRef": {
+          "kind": "batch-approval",
+          "ref": "multica:issue:01a14974-c5e6-7beb-b279-7791d9fa6874:comment:01a159ad-1f6b-7739-8edc-522f6180a727",
+          "batch": "ham37-third-round-v1",
+          "variant": "A",
+          "note": "第三批 13 条（look 跳过）；well/because 未定与 a/i/n't 不在批准范围。"
+        }
+      },
+      "suggestedBasis": [
+        "prefer-accent:Received Pronunciation"
+      ],
+      "createdAt": "2026-10-20T14:18:00Z",
+      "reviewStatus": "active"
+    },
+    {
+      "schema": "pronunciation-rule/1",
+      "ruleId": "ham37-r3-first",
+      "origin": "system",
+      "target": {
+        "kind": "legacy-headword",
+        "word": "first"
+      },
+      "operations": [
+        {
+          "field": "phonetic",
+          "op": "set",
+          "value": "/fɜːst/",
+          "observationRefs": [
+            "5bad1c064ecb788a431bb109cb301d7003bf731306d57918e7fbca7bc5287814#obs:0"
+          ]
+        }
+      ],
+      "conditions": {
+        "language": {
+          "kind": "known",
+          "values": [
+            "English"
+          ]
+        },
+        "entry": {
+          "kind": "unknown",
+          "reason": "entry-not-determinable"
+        },
+        "lexeme": {
+          "kind": "unknown",
+          "reason": "lexeme-not-determinable"
+        },
+        "role": {
+          "kind": "unknown",
+          "reason": "role-not-determinable"
+        },
+        "pos": {
+          "kind": "unknown",
+          "reason": "pos-not-determinable"
+        },
+        "sense": {
+          "kind": "unknown",
+          "reason": "sense-not-determinable"
+        },
+        "accent": {
+          "kind": "known",
+          "values": [
+            "UK",
+            "Received Pronunciation"
+          ]
+        },
+        "other": {
+          "kind": "known",
+          "values": [
+            "(UK)",
+            "Received Pronunciation"
+          ]
+        }
+      },
+      "evidenceRefs": [
+        {
+          "provenanceId": "5bad1c064ecb788a431bb109cb301d7003bf731306d57918e7fbca7bc5287814",
+          "permalinkUrl": "https://en.wiktionary.org/w/index.php?title=first&oldid=93740307",
+          "historyUrl": "https://en.wiktionary.org/w/index.php?title=first&action=history",
+          "revid": 93740307,
+          "httpSha256": "6f32bbc1dbe7f96bf8cfc4a46372e562b31759512783e6649227a4b0c110e7f0",
+          "license": {
+            "id": "CC BY-SA 4.0",
+            "url": "https://creativecommons.org/licenses/by-sa/4.0/"
+          },
+          "attribution": "Wiktionary contributors"
+        }
+      ],
+      "lifecycle": {
+        "migratedFromLegacy": false,
+        "previousValue": "fә:st",
+        "verification": {
+          "status": "verified",
+          "verifiedAt": "2026-10-20T14:18:00Z",
+          "verifier": "修勾经 issue 评论确认（选 A）（Multica member 0767d05c-3aed-4f8b-ad71-42dd6914c79d）",
+          "verificationRef": "multica:issue:01a14974-c5e6-7beb-b279-7791d9fa6874:comment:01a159ad-1f6b-7739-8edc-522f6180a727",
+          "conclusion": "选 A 收口：默认批准第三批 14 条建议（look 跳过不写）。"
+        },
+        "approvalRef": {
+          "kind": "batch-approval",
+          "ref": "multica:issue:01a14974-c5e6-7beb-b279-7791d9fa6874:comment:01a159ad-1f6b-7739-8edc-522f6180a727",
+          "batch": "ham37-third-round-v1",
+          "variant": "A",
+          "note": "第三批 13 条（look 跳过）；well/because 未定与 a/i/n't 不在批准范围。"
+        }
+      },
+      "suggestedBasis": [
+        "exclude-usage-or-dated",
+        "prefer-accent:Received Pronunciation"
+      ],
+      "createdAt": "2026-10-20T14:18:00Z",
+      "reviewStatus": "active"
+    },
+    {
+      "schema": "pronunciation-rule/1",
+      "ruleId": "ham37-r3-our",
+      "origin": "system",
+      "target": {
+        "kind": "legacy-headword",
+        "word": "our"
+      },
+      "operations": [
+        {
+          "field": "phonetic",
+          "op": "set",
+          "value": "/ˈaʊə(ɹ)/",
+          "observationRefs": [
+            "ab5236dc4b7be069c635c16151e813d6f62865310d1212686399fc69d9f5f0f5#obs:0"
+          ]
+        }
+      ],
+      "conditions": {
+        "language": {
+          "kind": "known",
+          "values": [
+            "English"
+          ]
+        },
+        "entry": {
+          "kind": "unknown",
+          "reason": "entry-not-determinable"
+        },
+        "lexeme": {
+          "kind": "unknown",
+          "reason": "lexeme-not-determinable"
+        },
+        "role": {
+          "kind": "known",
+          "values": [
+            "strong"
+          ]
+        },
+        "pos": {
+          "kind": "unknown",
+          "reason": "pos-not-determinable"
+        },
+        "sense": {
+          "kind": "unknown",
+          "reason": "sense-not-determinable"
+        },
+        "accent": {
+          "kind": "known",
+          "values": [
+            "UK",
+            "Received Pronunciation"
+          ]
+        },
+        "other": {
+          "kind": "known",
+          "values": [
+            "(non-rhotic)",
+            "(UK)",
+            "(Received Pronunciation)",
+            "strong form"
+          ]
+        }
+      },
+      "evidenceRefs": [
+        {
+          "provenanceId": "ab5236dc4b7be069c635c16151e813d6f62865310d1212686399fc69d9f5f0f5",
+          "permalinkUrl": "https://en.wiktionary.org/w/index.php?title=our&oldid=93712125",
+          "historyUrl": "https://en.wiktionary.org/w/index.php?title=our&action=history",
+          "revid": 93712125,
+          "httpSha256": "dd9dbe9d3ae414e349797f702c97352a1c26436a432c35e0d115813b7c4891c4",
+          "license": {
+            "id": "CC BY-SA 4.0",
+            "url": "https://creativecommons.org/licenses/by-sa/4.0/"
+          },
+          "attribution": "Wiktionary contributors"
+        }
+      ],
+      "lifecycle": {
+        "migratedFromLegacy": false,
+        "previousValue": "'auә",
+        "verification": {
+          "status": "verified",
+          "verifiedAt": "2026-10-20T14:18:00Z",
+          "verifier": "修勾经 issue 评论确认（选 A）（Multica member 0767d05c-3aed-4f8b-ad71-42dd6914c79d）",
+          "verificationRef": "multica:issue:01a14974-c5e6-7beb-b279-7791d9fa6874:comment:01a159ad-1f6b-7739-8edc-522f6180a727",
+          "conclusion": "选 A 收口：默认批准第三批 14 条建议（look 跳过不写）。"
+        },
+        "approvalRef": {
+          "kind": "batch-approval",
+          "ref": "multica:issue:01a14974-c5e6-7beb-b279-7791d9fa6874:comment:01a159ad-1f6b-7739-8edc-522f6180a727",
+          "batch": "ham37-third-round-v1",
+          "variant": "A",
+          "note": "第三批 13 条（look 跳过）；well/because 未定与 a/i/n't 不在批准范围。"
+        }
+      },
+      "suggestedBasis": [
+        "exclude-weak-unstressed-when-citation-available",
+        "prefer-accent:Received Pronunciation"
+      ],
+      "createdAt": "2026-10-20T14:18:00Z",
+      "reviewStatus": "active"
+    },
+    {
+      "schema": "pronunciation-rule/1",
+      "ruleId": "ham37-r3-very",
+      "origin": "system",
+      "target": {
+        "kind": "legacy-headword",
+        "word": "very"
+      },
+      "operations": [
+        {
+          "field": "phonetic",
+          "op": "set",
+          "value": "/ˈvɛɹi/",
+          "observationRefs": [
+            "cf2f3dbb2da4ad591a278758c6194fbae8790c5e997ec60f1b31dbfb1ddf0de5#obs:0"
+          ]
+        }
+      ],
+      "conditions": {
+        "language": {
+          "kind": "known",
+          "values": [
+            "English"
+          ]
+        },
+        "entry": {
+          "kind": "unknown",
+          "reason": "entry-not-determinable"
+        },
+        "lexeme": {
+          "kind": "unknown",
+          "reason": "lexeme-not-determinable"
+        },
+        "role": {
+          "kind": "unknown",
+          "reason": "role-not-determinable"
+        },
+        "pos": {
+          "kind": "unknown",
+          "reason": "pos-not-determinable"
+        },
+        "sense": {
+          "kind": "unknown",
+          "reason": "sense-not-determinable"
+        },
+        "accent": {
+          "kind": "known",
+          "values": [
+            "Received Pronunciation",
+            "General American"
+          ]
+        },
+        "other": {
+          "kind": "known",
+          "values": [
+            "Received Pronunciation,&#32;General American"
+          ]
+        }
+      },
+      "evidenceRefs": [
+        {
+          "provenanceId": "cf2f3dbb2da4ad591a278758c6194fbae8790c5e997ec60f1b31dbfb1ddf0de5",
+          "permalinkUrl": "https://en.wiktionary.org/w/index.php?title=very&oldid=93733163",
+          "historyUrl": "https://en.wiktionary.org/w/index.php?title=very&action=history",
+          "revid": 93733163,
+          "httpSha256": "f4f66eb60b0f7273757b6626f98d6e6971fcda22e89d4defd94ce453553e52b3",
+          "license": {
+            "id": "CC BY-SA 4.0",
+            "url": "https://creativecommons.org/licenses/by-sa/4.0/"
+          },
+          "attribution": "Wiktionary contributors"
+        }
+      ],
+      "lifecycle": {
+        "migratedFromLegacy": false,
+        "previousValue": "'veri",
+        "verification": {
+          "status": "verified",
+          "verifiedAt": "2026-10-20T14:18:00Z",
+          "verifier": "修勾经 issue 评论确认（选 A）（Multica member 0767d05c-3aed-4f8b-ad71-42dd6914c79d）",
+          "verificationRef": "multica:issue:01a14974-c5e6-7beb-b279-7791d9fa6874:comment:01a159ad-1f6b-7739-8edc-522f6180a727",
+          "conclusion": "选 A 收口：默认批准第三批 14 条建议（look 跳过不写）。"
+        },
+        "approvalRef": {
+          "kind": "batch-approval",
+          "ref": "multica:issue:01a14974-c5e6-7beb-b279-7791d9fa6874:comment:01a159ad-1f6b-7739-8edc-522f6180a727",
+          "batch": "ham37-third-round-v1",
+          "variant": "A",
+          "note": "第三批 13 条（look 跳过）；well/because 未定与 a/i/n't 不在批准范围。"
+        }
+      },
+      "suggestedBasis": [
+        "prefer-accent:Received Pronunciation"
+      ],
+      "createdAt": "2026-10-20T14:18:00Z",
+      "reviewStatus": "active"
+    },
+    {
+      "schema": "pronunciation-rule/1",
+      "ruleId": "ham37-r3-new",
+      "origin": "system",
+      "target": {
+        "kind": "legacy-headword",
+        "word": "new"
+      },
+      "operations": [
+        {
+          "field": "phonetic",
+          "op": "set",
+          "value": "/njuː/",
+          "observationRefs": [
+            "8788caa676d9eb7f8c4c231a347a96be567968890cbb0052700246baaa02da42#obs:1"
+          ]
+        }
+      ],
+      "conditions": {
+        "language": {
+          "kind": "known",
+          "values": [
+            "English"
+          ]
+        },
+        "entry": {
+          "kind": "unknown",
+          "reason": "entry-not-determinable"
+        },
+        "lexeme": {
+          "kind": "unknown",
+          "reason": "lexeme-not-determinable"
+        },
+        "role": {
+          "kind": "unknown",
+          "reason": "role-not-determinable"
+        },
+        "pos": {
+          "kind": "unknown",
+          "reason": "pos-not-determinable"
+        },
+        "sense": {
+          "kind": "unknown",
+          "reason": "sense-not-determinable"
+        },
+        "accent": {
+          "kind": "known",
+          "values": [
+            "Received Pronunciation"
+          ]
+        },
+        "other": {
+          "kind": "known",
+          "values": [
+            "Received Pronunciation"
+          ]
+        }
+      },
+      "evidenceRefs": [
+        {
+          "provenanceId": "8788caa676d9eb7f8c4c231a347a96be567968890cbb0052700246baaa02da42",
+          "permalinkUrl": "https://en.wiktionary.org/w/index.php?title=new&oldid=93709758",
+          "historyUrl": "https://en.wiktionary.org/w/index.php?title=new&action=history",
+          "revid": 93709758,
+          "httpSha256": "091f72b0c4f7a69175d5f2cd25b0a1c3677ea52dc37fe7c454f8d50a72176711",
+          "license": {
+            "id": "CC BY-SA 4.0",
+            "url": "https://creativecommons.org/licenses/by-sa/4.0/"
+          },
+          "attribution": "Wiktionary contributors"
+        }
+      ],
+      "lifecycle": {
+        "migratedFromLegacy": false,
+        "previousValue": "nju:",
+        "verification": {
+          "status": "verified",
+          "verifiedAt": "2026-10-20T14:18:00Z",
+          "verifier": "修勾经 issue 评论确认（选 A）（Multica member 0767d05c-3aed-4f8b-ad71-42dd6914c79d）",
+          "verificationRef": "multica:issue:01a14974-c5e6-7beb-b279-7791d9fa6874:comment:01a159ad-1f6b-7739-8edc-522f6180a727",
+          "conclusion": "选 A 收口：默认批准第三批 14 条建议（look 跳过不写）。"
+        },
+        "approvalRef": {
+          "kind": "batch-approval",
+          "ref": "multica:issue:01a14974-c5e6-7beb-b279-7791d9fa6874:comment:01a159ad-1f6b-7739-8edc-522f6180a727",
+          "batch": "ham37-third-round-v1",
+          "variant": "A",
+          "note": "第三批 13 条（look 跳过）；well/because 未定与 a/i/n't 不在批准范围。"
+        }
+      },
+      "suggestedBasis": [
+        "prefer-accent:Received Pronunciation"
+      ],
+      "createdAt": "2026-10-20T14:18:00Z",
+      "reviewStatus": "active"
+    },
+    {
+      "schema": "pronunciation-rule/1",
+      "ruleId": "ham37-r3-want",
+      "origin": "system",
+      "target": {
+        "kind": "legacy-headword",
+        "word": "want"
+      },
+      "operations": [
+        {
+          "field": "phonetic",
+          "op": "set",
+          "value": "/wɒnt/",
+          "observationRefs": [
+            "3f604d5df7684f631b9adeb31cfd44cf259fcdb7da07d15110eeaab27ed2839b#obs:0"
+          ]
+        }
+      ],
+      "conditions": {
+        "language": {
+          "kind": "known",
+          "values": [
+            "English"
+          ]
+        },
+        "entry": {
+          "kind": "known",
+          "values": [
+            "Etymology 1"
+          ]
+        },
+        "lexeme": {
+          "kind": "unknown",
+          "reason": "lexeme-not-determinable"
+        },
+        "role": {
+          "kind": "unknown",
+          "reason": "role-not-determinable"
+        },
+        "pos": {
+          "kind": "unknown",
+          "reason": "pos-not-determinable"
+        },
+        "sense": {
+          "kind": "unknown",
+          "reason": "sense-not-determinable"
+        },
+        "accent": {
+          "kind": "known",
+          "values": [
+            "Received Pronunciation"
+          ]
+        },
+        "other": {
+          "kind": "known",
+          "values": [
+            "Received Pronunciation"
+          ]
+        }
+      },
+      "evidenceRefs": [
+        {
+          "provenanceId": "3f604d5df7684f631b9adeb31cfd44cf259fcdb7da07d15110eeaab27ed2839b",
+          "permalinkUrl": "https://en.wiktionary.org/w/index.php?title=want&oldid=93733859",
+          "historyUrl": "https://en.wiktionary.org/w/index.php?title=want&action=history",
+          "revid": 93733859,
+          "httpSha256": "21abab04e0aed592d034a849086e7781e27e1b4f816c669a6eb361963dada912",
+          "license": {
+            "id": "CC BY-SA 4.0",
+            "url": "https://creativecommons.org/licenses/by-sa/4.0/"
+          },
+          "attribution": "Wiktionary contributors"
+        }
+      ],
+      "lifecycle": {
+        "migratedFromLegacy": false,
+        "previousValue": "wɒnt",
+        "verification": {
+          "status": "verified",
+          "verifiedAt": "2026-10-20T14:18:00Z",
+          "verifier": "修勾经 issue 评论确认（选 A）（Multica member 0767d05c-3aed-4f8b-ad71-42dd6914c79d）",
+          "verificationRef": "multica:issue:01a14974-c5e6-7beb-b279-7791d9fa6874:comment:01a159ad-1f6b-7739-8edc-522f6180a727",
+          "conclusion": "选 A 收口：默认批准第三批 14 条建议（look 跳过不写）。"
+        },
+        "approvalRef": {
+          "kind": "batch-approval",
+          "ref": "multica:issue:01a14974-c5e6-7beb-b279-7791d9fa6874:comment:01a159ad-1f6b-7739-8edc-522f6180a727",
+          "batch": "ham37-third-round-v1",
+          "variant": "A",
+          "note": "第三批 13 条（look 跳过）；well/because 未定与 a/i/n't 不在批准范围。"
+        }
+      },
+      "suggestedBasis": [
+        "restrict-first-etymology:1",
+        "prefer-accent:Received Pronunciation"
+      ],
+      "createdAt": "2026-10-20T14:18:00Z",
+      "reviewStatus": "active"
+    },
+    {
+      "schema": "pronunciation-rule/1",
+      "ruleId": "ham37-r3-may",
+      "origin": "system",
+      "target": {
+        "kind": "legacy-headword",
+        "word": "may"
+      },
+      "operations": [
+        {
+          "field": "phonetic",
+          "op": "set",
+          "value": "/meɪ/",
+          "observationRefs": [
+            "2273bbdeff6331178bf3c669887e4ac913e91fe27a7642f6480ab17012f3e755#obs:0"
+          ]
+        }
+      ],
+      "conditions": {
+        "language": {
+          "kind": "known",
+          "values": [
+            "English"
+          ]
+        },
+        "entry": {
+          "kind": "unknown",
+          "reason": "entry-not-determinable"
+        },
+        "lexeme": {
+          "kind": "unknown",
+          "reason": "lexeme-not-determinable"
+        },
+        "role": {
+          "kind": "unknown",
+          "reason": "role-not-determinable"
+        },
+        "pos": {
+          "kind": "unknown",
+          "reason": "pos-not-determinable"
+        },
+        "sense": {
+          "kind": "unknown",
+          "reason": "sense-not-determinable"
+        },
+        "accent": {
+          "kind": "known",
+          "values": [
+            "Received Pronunciation",
+            "General American"
+          ]
+        },
+        "other": {
+          "kind": "known",
+          "values": [
+            "Received Pronunciation,&#32;General American"
+          ]
+        }
+      },
+      "evidenceRefs": [
+        {
+          "provenanceId": "2273bbdeff6331178bf3c669887e4ac913e91fe27a7642f6480ab17012f3e755",
+          "permalinkUrl": "https://en.wiktionary.org/w/index.php?title=may&oldid=93630759",
+          "historyUrl": "https://en.wiktionary.org/w/index.php?title=may&action=history",
+          "revid": 93630759,
+          "httpSha256": "3c98284d21e57a667e09c7ba7af092174bd26dd71e62e59af79b140acdf9a12e",
+          "license": {
+            "id": "CC BY-SA 4.0",
+            "url": "https://creativecommons.org/licenses/by-sa/4.0/"
+          },
+          "attribution": "Wiktionary contributors"
+        }
+      ],
+      "lifecycle": {
+        "migratedFromLegacy": false,
+        "previousValue": "mei",
+        "verification": {
+          "status": "verified",
+          "verifiedAt": "2026-10-20T14:18:00Z",
+          "verifier": "修勾经 issue 评论确认（选 A）（Multica member 0767d05c-3aed-4f8b-ad71-42dd6914c79d）",
+          "verificationRef": "multica:issue:01a14974-c5e6-7beb-b279-7791d9fa6874:comment:01a159ad-1f6b-7739-8edc-522f6180a727",
+          "conclusion": "选 A 收口：默认批准第三批 14 条建议（look 跳过不写）。"
+        },
+        "approvalRef": {
+          "kind": "batch-approval",
+          "ref": "multica:issue:01a14974-c5e6-7beb-b279-7791d9fa6874:comment:01a159ad-1f6b-7739-8edc-522f6180a727",
+          "batch": "ham37-third-round-v1",
+          "variant": "A",
+          "note": "第三批 13 条（look 跳过）；well/because 未定与 a/i/n't 不在批准范围。"
+        }
+      },
+      "suggestedBasis": [
+        "prefer-accent:Received Pronunciation"
+      ],
+      "createdAt": "2026-10-20T14:18:00Z",
+      "reviewStatus": "active"
+    },
+    {
+      "schema": "pronunciation-rule/1",
+      "ruleId": "ham37-r3-way",
+      "origin": "system",
+      "target": {
+        "kind": "legacy-headword",
+        "word": "way"
+      },
+      "operations": [
+        {
+          "field": "phonetic",
+          "op": "set",
+          "value": "/weɪ/",
+          "observationRefs": [
+            "e2bdf3f82237880ab9d8712e1e0e71df1f085dbab9ad50a12181e43c97bc11a1#obs:0"
+          ]
+        }
+      ],
+      "conditions": {
+        "language": {
+          "kind": "known",
+          "values": [
+            "English"
+          ]
+        },
+        "entry": {
+          "kind": "unknown",
+          "reason": "entry-not-determinable"
+        },
+        "lexeme": {
+          "kind": "unknown",
+          "reason": "lexeme-not-determinable"
+        },
+        "role": {
+          "kind": "unknown",
+          "reason": "role-not-determinable"
+        },
+        "pos": {
+          "kind": "unknown",
+          "reason": "pos-not-determinable"
+        },
+        "sense": {
+          "kind": "unknown",
+          "reason": "sense-not-determinable"
+        },
+        "accent": {
+          "kind": "known",
+          "values": [
+            "General American",
+            "Received Pronunciation"
+          ]
+        },
+        "other": {
+          "kind": "known",
+          "values": [
+            "General American,&#32;Received Pronunciation"
+          ]
+        }
+      },
+      "evidenceRefs": [
+        {
+          "provenanceId": "e2bdf3f82237880ab9d8712e1e0e71df1f085dbab9ad50a12181e43c97bc11a1",
+          "permalinkUrl": "https://en.wiktionary.org/w/index.php?title=way&oldid=93746516",
+          "historyUrl": "https://en.wiktionary.org/w/index.php?title=way&action=history",
+          "revid": 93746516,
+          "httpSha256": "83d66a4a062301986aa361b3f26c3fc41f841f8a0dc418859d129360f712a628",
+          "license": {
+            "id": "CC BY-SA 4.0",
+            "url": "https://creativecommons.org/licenses/by-sa/4.0/"
+          },
+          "attribution": "Wiktionary contributors"
+        }
+      ],
+      "lifecycle": {
+        "migratedFromLegacy": false,
+        "previousValue": "wei",
+        "verification": {
+          "status": "verified",
+          "verifiedAt": "2026-10-20T14:18:00Z",
+          "verifier": "修勾经 issue 评论确认（选 A）（Multica member 0767d05c-3aed-4f8b-ad71-42dd6914c79d）",
+          "verificationRef": "multica:issue:01a14974-c5e6-7beb-b279-7791d9fa6874:comment:01a159ad-1f6b-7739-8edc-522f6180a727",
+          "conclusion": "选 A 收口：默认批准第三批 14 条建议（look 跳过不写）。"
+        },
+        "approvalRef": {
+          "kind": "batch-approval",
+          "ref": "multica:issue:01a14974-c5e6-7beb-b279-7791d9fa6874:comment:01a159ad-1f6b-7739-8edc-522f6180a727",
+          "batch": "ham37-third-round-v1",
+          "variant": "A",
+          "note": "第三批 13 条（look 跳过）；well/because 未定与 a/i/n't 不在批准范围。"
+        }
+      },
+      "suggestedBasis": [
+        "prefer-accent:Received Pronunciation"
+      ],
+      "createdAt": "2026-10-20T14:18:00Z",
+      "reviewStatus": "active"
+    },
+    {
+      "schema": "pronunciation-rule/1",
+      "ruleId": "ham37-r3-should",
+      "origin": "system",
+      "target": {
+        "kind": "legacy-headword",
+        "word": "should"
+      },
+      "operations": [
+        {
+          "field": "phonetic",
+          "op": "set",
+          "value": "/ʃɵd/",
+          "observationRefs": [
+            "623f3fa7798303eed35c6f2c0ff2d4553bceb157d89ef072928cda61321dbcae#obs:4"
+          ]
+        }
+      ],
+      "conditions": {
+        "language": {
+          "kind": "known",
+          "values": [
+            "English"
+          ]
+        },
+        "entry": {
+          "kind": "unknown",
+          "reason": "entry-not-determinable"
+        },
+        "lexeme": {
+          "kind": "unknown",
+          "reason": "lexeme-not-determinable"
+        },
+        "role": {
+          "kind": "known",
+          "values": [
+            "strong"
+          ]
+        },
+        "pos": {
+          "kind": "unknown",
+          "reason": "pos-not-determinable"
+        },
+        "sense": {
+          "kind": "unknown",
+          "reason": "sense-not-determinable"
+        },
+        "accent": {
+          "kind": "known",
+          "values": [
+            "Standard Southern British"
+          ]
+        },
+        "other": {
+          "kind": "known",
+          "values": [
+            "Standard Southern British,&#32;strong form"
+          ]
+        }
+      },
+      "evidenceRefs": [
+        {
+          "provenanceId": "623f3fa7798303eed35c6f2c0ff2d4553bceb157d89ef072928cda61321dbcae",
+          "permalinkUrl": "https://en.wiktionary.org/w/index.php?title=should&oldid=93722211",
+          "historyUrl": "https://en.wiktionary.org/w/index.php?title=should&action=history",
+          "revid": 93722211,
+          "httpSha256": "428defc8fc31c0f9476ea4cca53051f1f3b22cd7707a7af9322a445016b0e7dd",
+          "license": {
+            "id": "CC BY-SA 4.0",
+            "url": "https://creativecommons.org/licenses/by-sa/4.0/"
+          },
+          "attribution": "Wiktionary contributors"
+        }
+      ],
+      "lifecycle": {
+        "migratedFromLegacy": false,
+        "previousValue": "ʃud",
+        "verification": {
+          "status": "verified",
+          "verifiedAt": "2026-10-20T14:18:00Z",
+          "verifier": "修勾经 issue 评论确认（选 A）（Multica member 0767d05c-3aed-4f8b-ad71-42dd6914c79d）",
+          "verificationRef": "multica:issue:01a14974-c5e6-7beb-b279-7791d9fa6874:comment:01a159ad-1f6b-7739-8edc-522f6180a727",
+          "conclusion": "选 A 收口：默认批准第三批 14 条建议（look 跳过不写）。"
+        },
+        "approvalRef": {
+          "kind": "batch-approval",
+          "ref": "multica:issue:01a14974-c5e6-7beb-b279-7791d9fa6874:comment:01a159ad-1f6b-7739-8edc-522f6180a727",
+          "batch": "ham37-third-round-v1",
+          "variant": "A",
+          "note": "第三批 13 条（look 跳过）；well/because 未定与 a/i/n't 不在批准范围。"
+        }
+      },
+      "suggestedBasis": [
+        "exclude-weak-unstressed-when-citation-available",
+        "prefer-accent:Standard Southern British/UK"
+      ],
+      "createdAt": "2026-10-20T14:18:00Z",
+      "reviewStatus": "active"
+    },
+    {
+      "schema": "pronunciation-rule/1",
+      "ruleId": "ham37-r3-use",
+      "origin": "system",
+      "target": {
+        "kind": "legacy-headword",
+        "word": "use"
+      },
+      "operations": [
+        {
+          "field": "phonetic",
+          "op": "set",
+          "value": "/juːs/",
+          "observationRefs": [
+            "eafaa2a6f4d1ae0466517d977b46a4d3574be78e904e6cc5d4a90b95ef1960d2#obs:0"
+          ]
+        }
+      ],
+      "conditions": {
+        "language": {
+          "kind": "known",
+          "values": [
+            "English"
+          ]
+        },
+        "entry": {
+          "kind": "known",
+          "values": [
+            "Etymology 1"
+          ]
+        },
+        "lexeme": {
+          "kind": "unknown",
+          "reason": "lexeme-not-determinable"
+        },
+        "role": {
+          "kind": "unknown",
+          "reason": "role-not-determinable"
+        },
+        "pos": {
+          "kind": "unknown",
+          "reason": "pos-not-determinable"
+        },
+        "sense": {
+          "kind": "unknown",
+          "reason": "sense-not-determinable"
+        },
+        "accent": {
+          "kind": "known",
+          "values": [
+            "Received Pronunciation"
+          ]
+        },
+        "other": {
+          "kind": "known",
+          "values": [
+            "Received Pronunciation"
+          ]
+        }
+      },
+      "evidenceRefs": [
+        {
+          "provenanceId": "eafaa2a6f4d1ae0466517d977b46a4d3574be78e904e6cc5d4a90b95ef1960d2",
+          "permalinkUrl": "https://en.wiktionary.org/w/index.php?title=use&oldid=93732727",
+          "historyUrl": "https://en.wiktionary.org/w/index.php?title=use&action=history",
+          "revid": 93732727,
+          "httpSha256": "f93f305b0509ec4151ea4407b6d640cb6f2c948b7adad7d885a39f8a9f28e3e5",
+          "license": {
+            "id": "CC BY-SA 4.0",
+            "url": "https://creativecommons.org/licenses/by-sa/4.0/"
+          },
+          "attribution": "Wiktionary contributors"
+        }
+      ],
+      "lifecycle": {
+        "migratedFromLegacy": false,
+        "previousValue": "ju:s",
+        "verification": {
+          "status": "verified",
+          "verifiedAt": "2026-10-20T14:18:00Z",
+          "verifier": "修勾经 issue 评论确认（选 A）（Multica member 0767d05c-3aed-4f8b-ad71-42dd6914c79d）",
+          "verificationRef": "multica:issue:01a14974-c5e6-7beb-b279-7791d9fa6874:comment:01a159ad-1f6b-7739-8edc-522f6180a727",
+          "conclusion": "选 A 收口：默认批准第三批 14 条建议（look 跳过不写）。"
+        },
+        "approvalRef": {
+          "kind": "batch-approval",
+          "ref": "multica:issue:01a14974-c5e6-7beb-b279-7791d9fa6874:comment:01a159ad-1f6b-7739-8edc-522f6180a727",
+          "batch": "ham37-third-round-v1",
+          "variant": "A",
+          "note": "第三批 13 条（look 跳过）；well/because 未定与 a/i/n't 不在批准范围。"
+        }
+      },
+      "suggestedBasis": [
+        "restrict-first-etymology:1",
+        "prefer-accent:Received Pronunciation"
+      ],
+      "createdAt": "2026-10-20T14:18:00Z",
+      "reviewStatus": "active"
+    },
+    {
+      "schema": "pronunciation-rule/1",
+      "ruleId": "ham37-r3-day",
+      "origin": "system",
+      "target": {
+        "kind": "legacy-headword",
+        "word": "day"
+      },
+      "operations": [
+        {
+          "field": "phonetic",
+          "op": "set",
+          "value": "/deɪ̯/",
+          "observationRefs": [
+            "65c35af8d864639c7f59e606b4b61f21fd78f3130711d52aa489f4e2f53cab31#obs:0"
+          ]
+        }
+      ],
+      "conditions": {
+        "language": {
+          "kind": "known",
+          "values": [
+            "English"
+          ]
+        },
+        "entry": {
+          "kind": "unknown",
+          "reason": "entry-not-determinable"
+        },
+        "lexeme": {
+          "kind": "unknown",
+          "reason": "lexeme-not-determinable"
+        },
+        "role": {
+          "kind": "unknown",
+          "reason": "role-not-determinable"
+        },
+        "pos": {
+          "kind": "unknown",
+          "reason": "pos-not-determinable"
+        },
+        "sense": {
+          "kind": "unknown",
+          "reason": "sense-not-determinable"
+        },
+        "accent": {
+          "kind": "known",
+          "values": [
+            "Received Pronunciation",
+            "General American"
+          ]
+        },
+        "other": {
+          "kind": "known",
+          "values": [
+            "Received Pronunciation,&#32;General American"
+          ]
+        }
+      },
+      "evidenceRefs": [
+        {
+          "provenanceId": "65c35af8d864639c7f59e606b4b61f21fd78f3130711d52aa489f4e2f53cab31",
+          "permalinkUrl": "https://en.wiktionary.org/w/index.php?title=day&oldid=93609983",
+          "historyUrl": "https://en.wiktionary.org/w/index.php?title=day&action=history",
+          "revid": 93609983,
+          "httpSha256": "14a706622e4459e21ad55d04b0184fe50cf336ad4d199e514a9f91d22cd5c063",
+          "license": {
+            "id": "CC BY-SA 4.0",
+            "url": "https://creativecommons.org/licenses/by-sa/4.0/"
+          },
+          "attribution": "Wiktionary contributors"
+        }
+      ],
+      "lifecycle": {
+        "migratedFromLegacy": false,
+        "previousValue": "dei",
+        "verification": {
+          "status": "verified",
+          "verifiedAt": "2026-10-20T14:18:00Z",
+          "verifier": "修勾经 issue 评论确认（选 A）（Multica member 0767d05c-3aed-4f8b-ad71-42dd6914c79d）",
+          "verificationRef": "multica:issue:01a14974-c5e6-7beb-b279-7791d9fa6874:comment:01a159ad-1f6b-7739-8edc-522f6180a727",
+          "conclusion": "选 A 收口：默认批准第三批 14 条建议（look 跳过不写）。"
+        },
+        "approvalRef": {
+          "kind": "batch-approval",
+          "ref": "multica:issue:01a14974-c5e6-7beb-b279-7791d9fa6874:comment:01a159ad-1f6b-7739-8edc-522f6180a727",
+          "batch": "ham37-third-round-v1",
+          "variant": "A",
+          "note": "第三批 13 条（look 跳过）；well/because 未定与 a/i/n't 不在批准范围。"
+        }
+      },
+      "suggestedBasis": [
+        "prefer-accent:Received Pronunciation",
+        "prefer-phonemic"
+      ],
+      "createdAt": "2026-10-20T14:18:00Z",
       "reviewStatus": "active"
     }
   ]

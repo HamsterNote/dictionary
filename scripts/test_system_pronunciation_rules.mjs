@@ -70,6 +70,22 @@ test('第二批 61 条批准规则：active + batch-approval + CC BY-SA 证据�
   }
 });
 
+test('第三批 13 条批准规则：active + batch-approval 绑定选 A 评论，look 未写入', () => {
+  const batch = authority.rules.filter((r) => r.ruleId.startsWith('ham37-r3-'));
+  assert.equal(batch.length, 13);
+  for (const rule of batch) {
+    assert.equal(rule.reviewStatus, 'active');
+    assert.equal(rule.lifecycle.approvalRef.kind, 'batch-approval');
+    assert.ok(rule.lifecycle.approvalRef.ref.includes('01a159ad-1f6b-7739-8edc-522f6180a727'));
+    assert.equal(rule.lifecycle.approvalRef.batch, 'ham37-third-round-v1');
+    const ref = rule.evidenceRefs[0];
+    assert.equal(ref.license.id, 'CC BY-SA 4.0');
+    assert.ok(ref.permalinkUrl.includes('oldid='));
+  }
+  assert.ok(!authority.rules.some((r) => r.target.word === 'look'),
+    'look 只有 phonetic 记法证据，不应写入');
+});
+
 test('兼容投影与正式文件逐字节一致（行为不变）', () => {
   const { result, problems } = checkAuthorityAgainstLegacy(authorityText, legacyText);
   assert.deepEqual(problems, []);
