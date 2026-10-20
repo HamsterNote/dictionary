@@ -1,6 +1,0 @@
-
-> @hamster-note/dictionary@0.1.1-beta.2 typecheck /home/zhangxiao/multica_workspaces/hamster-arm-d6b65621f809/ham-37-447aee136aa2/workdir/dictionary
-> tsc -b --pretty false
-
-
-Exit code: 0

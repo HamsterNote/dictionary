@@ -1,6 +1,0 @@
-
-> @hamster-note/dictionary@0.1.1-beta.2 build:types /home/zhangxiao/multica_workspaces/hamster-arm-d6b65621f809/ham-37-447aee136aa2/workdir/dictionary
-> tsc -p tsconfig.build.json
-
-
-Exit code: 0
