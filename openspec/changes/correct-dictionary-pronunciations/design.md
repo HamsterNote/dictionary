@@ -2,42 +2,15 @@
 
 ## Context
 
-动机与行为边界见 `proposal.md` 的 Why / What Changes。行为契约见同 change 的三份 spec。2026-10-18 产品经理基于 `7085cc4a` 提出的五文件规划增量现已并入，唯一权威方向获用户同意。本轮另做离线 TOC 解析修复与第二批准备，不发采集请求、不改正式数据或发布。原第 1–11 节保留已规划合同，第 12–15 节定义尚未实施的正式系统落库及批量闭环；既有测试证据不代表新增设计已实现。
+动机与拆分关系见 proposal；requirement 逐条去向见 `../publish-pronunciation-corrections/requirement-migration.md`。本 change 保留第 1–10 组、13.1–13.4 的既有工具、兼容查询、系统权威/投影和逐条归因，以及三轮采集和获准 61+13 条数据落库事实。77 = 3 历史 + 61 + 13；look 被排除。完整发布链及长期调度属于后续 change。
 
-当前实现对设计有以下约束：
-
-- `src/englishChineseVocabularyPack.ts` 把 TSV 解析为 `Map<string, readonly [phonetic, translation]>`，元数据描述原始包；不能把新增读法塞回此 Map 或改其计数、体积、释义。
-- `src/lookupEnglishChinese.ts` 的查询键为 NFKC、空白归一与英文小写；直接命中词头后不再查询反向词形。返回合同只有一个可选 `phonetic` 字符串，ECDICT 音标外包 `/.../`；释义分隔生成的 `word-index` ID 只是展示 ID，不是可靠的词义或语法身份。
-- `src/englishInflectionPack.ts` 已以数组保存词形及来源，区分 `p` 过去式与 `d` 过去分词；`scripts/generate_ecdict_inflections.py:88` 排除 `form == word`，故不能从旧反向包证明所有同形角色都不存在。
-- `src/dictionaryCorrections.ts` 的旧合同是 `Record<word, {word?, meaning?, phonetic?}>`、`hamster-dictionary-corrections/v1` 和 `onChange(word, patch)`，且已逐字段合并 user/system。空 `phonetic` 是有意义的人工清空，不等于字段缺失。`src/useDictionaryCorrections.ts` 保证托管缺回调不编辑、不静默保存，写成功后才更新缓存。
-- 仓库没有 `DictionaryDetail.tsx`；实际 `DictionaryDetail` 位于 `src/dictionaryData.ts`，仍为 single `phonetic`。`src/DictionaryContent.tsx` 用它显示 IPA，声音由独立的 `pronounce(word)` 回调提供。`src/formatDictionaryPhonetic.ts` 对非中文一律加“英：”，不能作为 UK 证据。
-- `scripts/generate_wiktionary_phonetics.py` 是固定巨型 Kaikki/Wiktextract dump 流程，依赖 requests，未知标签与多种地域/rare 标签被排除，无口音候选可进入 UK/US 两列，现有许可常量也不是本次新数据的 CC BY-SA 4.0 合同。新路径不复用这些筛选与双列选择规则。
-- `package.json` 使用 TypeScript、React、Vite；测试主要为 Node `assert` + Vite `ssrLoadModule` / SSR 与 Python `unittest`，没有本设计必须引入的新测试框架或后端。`scripts/test_dictionary_pronunciation_audit.mjs:37` 静态断言去重词头为 46,803；这不是新来源覆盖率或准确率证据。
-- 本轮核对：`src/data/dictionarySystemCorrections.json` 已实际包含 `curiosity`、`god`、`pronunciation` 三条音标；`SYSTEM_CORRECTIONS.md` 只准收录 `verifiedErrors` 中有逐条外部依据的项目。审计当前由 `VERIFIED_REVIEWS` 常量独立维护这三条依据；overlay 查询接受独立正式 snapshot，发布工具目前只切换 sidecar `current.json`。两条路径尚无统一系统音标版本联动，这是新增设计要补齐的缺口。
-
-**已确认决策与后续执行授权边界：**
-
-1. 用户已明确选择 `read` 原形与普通同形一般现在时各自独立 entry；原形、一般现在时、过去式、过去分词共有四个稳定 ID，关联同一 verb lexeme，各自可独立纠错。相同 IPA 不合并身份，来源读法共享仍须有明确 applicability 证据；旧纠错归属不能据此自动确定。
-2. 用户已明确选择**版本绑定批准**：逐批批准固定候选内容、纳入/排除名单及正式 baseline；IPA、scope、纠错归属或名单的实质变化，以及 baseline 改变，都必须重新生成差异并重新审批。仅报告排版变化且内容无实质变化不需重批。核心版本绑定不再未定；下文 candidate hash / base manifest / atomic pointer 是本设计采用的技术落实，不声称用户逐项确认了全部内部格式。
-3. 长期预算仍在首轮实际量测后另获用户批准，当前不要求提前确定额度或另设规划确认门槛；预算未获批准时真实长期调度保持 disabled / fail closed，不以首轮 100 词 / 20 MiB 代替。规划授权不包括实施、首轮采集或正式发布。
-
-以下 Decisions 落实上述已确认行为边界；技术格式细节与未来执行授权分别说明，不能以待细化操作流程延迟或弱化已确认的核心决策。
+下列第 1–11 节保留既有工具设计。文中 manifest 发布/回滚指独立 sidecar 工具，不表示静态产品构建与 overlay 完整 release 同时切换已经实现；历史“第 11/12 组”操作引用现在指后续 change 同编号任务。旧单值查询、v1 payload/callback、受控宿主数据所有权、四角色 identity 及原始 ECDICT 不变。
 
 ## Goals / Non-Goals
 
-**Goals:**
+Goals：保留来源/规则/结果隔离、明确范围优先级、稳定身份、受预算采集和可追溯兼容出口的已实现合同。
 
-- 用独立、版本化 sidecar 承载身份、来源观测、规则与正式结果；查询时组合，不改原包。
-- 让范围匹配、来源准入、人工复核、审批与兼容投影分别有明确输入输出，能用离线夹具验证；不把“已取得来源”误作“已归属”或“已批准”。
-- 允许约 46,803 词头逐批覆盖，按证据需求拆语法条目；单词阻断不停止其他合格词。
-- 提供旧接口无损共存及可撤回的 opt-in 扩展接口，保留宿主受控数据的所有权。
-
-**Non-Goals:**
-
-- 不重写 ECDICT TSV / manifest / 释义或现有词形生成器，不全库构建 lexeme、POS、sense 本体。
-- 不修改 TTS、声音口音、学习系统、学习进度、查询历史标识。
-- 不建设后端、全量 dump 管线或自动批准服务；可选对照来源不进入主采集路径。
-- 本文只规定展示数据语义与归因合同，不决定布局、动效、编辑器交互或视觉 polish；这些由主编排安排 designer 评估。
+Non-Goals：本次拆分不实现代码、不联网采集、不改数据、不激活或归档。完整 bundle、真实批准身份扩展、全量审计状态统计、月度调度不再是本 change 的待交付范围。
 
 ## Decisions
 
@@ -163,7 +136,7 @@ unknown 标签有两种情况：不影响已明确准入条件的非限制信息
 - 任一上限已触发暂停后，同批恢复仍保持暂停，不能因 bytes 尚有剩余就补做请求或因词头名额尚有剩余就突破 byte 限额。已开始第 100 词但中断且消费状态不能确认的情况保守保持暂停，不借“未完成”免费重试绕过名额。
 - schema / extractor / rule 升级不得混在一个检查点里重算成新批次并清零预算；产生新候选版本需保存原计数与证据，明确记录续作/新授权关系。
 
-月度计划维护“首次覆盖队列”和“已覆盖轮换复查队列”，不承诺每月全库刷新。长期预算未经首轮量测与用户确认时，scheduled 模式默认 disabled / fail closed，不硬编码把 100 / 20 MiB 当常态。请求数量、网络 bytes、解压 bytes 分别报告，不由理论 API 响应大小宣称全库成本或覆盖率。
+月度预算和调度设计已迁往 `../publish-pronunciation-corrections/design.md`，不属于本 change 的交付。
 
 **理由与替代：**只按进程或成功词计数能被重启/失败绕过，gzip 与辅助请求会突破实际上限。持久 ledger 与保守暂停可能浪费未确认剩余额度，但优先保证授权边界。
 
@@ -196,11 +169,11 @@ unknown 标签有两种情况：不影响已明确准入条件的非限制信息
 
 **理由与替代：**仅 pack 头部写一个来源或在 UI 固定“英”无法完成逐项归因/正确口音语义；把全部 app 改 CC 又超出数据许可边界。许可隔离与机器可读归因同时支持 UI 和宿主。
 
-### 11. 验证采用离线夹具与兼容回归，本文不执行
+### 11. 离线夹具与兼容回归的验证设计
 
-沿用已有 Node `assert` + Vite SSR 和 Python `unittest`；以下是未来验证路径，不是本阶段测试结果。新 sidecar 纯解析/决策函数与 HTTP adapter 分离，所有主要证据用人工构造的小 HTML/JSON、假时钟、假存储、假 streaming response，避免测试访问 Wiktionary。
+沿用已有 Node `assert` + Vite SSR 和 Python `unittest`；以下保留验收设计，实际执行结果以 tasks 与 evidence 为准。新 sidecar 纯解析/决策函数与 HTTP adapter 分离，所有主要证据用人工构造的小 HTML/JSON、假时钟、假存储、假 streaming response，避免测试访问 Wiktionary。
 
-| 证据路径（未来） | 必须覆盖的场景 |
+| 证据路径 | 必须覆盖的场景 |
 | --- | --- |
 | 扩展身份/解析 Node 夹具 | `read` base / present / past / past-participle 四个稳定 ID 关联同一 verb lexeme，四 role 分别纠错且互不覆盖；base-only 不能认证 present、past-only 不能认证 participle，只有明确多角色 applicability 才共享证据；base/present 与 past/participle 相同 IPA 仍保独立身份，旧 legacy 不自动归属；同一身份的多 IPA、多口音不另拆身份；语言/exact spelling 不因 lowercase/NFKC 碰撞合并；属性更新保 ID；merge redirect 与 split 一对多 unresolved。 |
 | overlay 纯函数 Node 夹具 | unknown ≠ explicit-all；逐字段优先与限定范围匹配；未覆盖旧读法保留；来源失败/缺页 no change；明确旧错退出默认但历史保留；无口音单份不假英美；地域-only 标签展示、rare 地域规则、archaic/obsolete 补充；同条件 phonemic 优先与仅 phonetic 保 `[]`；片段证据不作完整读法；不丢未知合法标签；跨范围不按 IPA 去重。 |
@@ -211,102 +184,25 @@ unknown 标签有两种情况：不影响已明确准入条件的非限制信息
 | 新候选/manifest 夹具 | 未批准不 official；整批批准固定纳入/排除名单，unresolved 仅阻词；IPA、scope、纠错归属或名单实质变化必须重 diff / 重批，候选 hash / 必要 upstream 版本改变使旧批准失效；base 改变即使 IPA 相同也重 diff / 重批；仅报告排版变化且实质审批输入不变不使批准失效；后续批次不能复用旧批准；原子发布无半批；回滚 source manifest 不清人工；缺 license / broken reference 阻发布。 |
 | 不可变数据与既有脚本回归 | 比较实施前后 ECDICT TSV / metadata / 释义内容 hash；不调用旧生成器产生覆盖；保持 `scripts/test_generate_ecdict_inflections.py`、`scripts/test_generate_wiktionary_phonetics.py` 与 `scripts/test_dictionary_pronunciation_audit.mjs` 的既有数据基线，不以新 overlay 伪改审计计数或 dump 基线。 |
 
-规划验证由主编排负责全文/三 spec 一致性与 OpenSpec validate/status；实施后的类型检查、测试、构建与人工展示评估需要另一个实施阶段。本阶段未运行上述测试、未 build、未量测准确率/流量，也未形成真实首轮报告。
+本次拆分仅运行 OpenSpec 与文档完整性校验；已有测试/构建和真实采集证据参见 tasks 与 evidence，不宣称本次重跑产品测试。上述 sidecar 校验不是完整产品 release bundle。第 9 节涉及真实第 11 组的操作及月度调度均由后续 change 承接。
 
-### 12. 一个系统音标权威，两个派生消费路径
 
-**用户已同意、尚待实施的架构方向：**将系统音标修正规则集中到 `src/data/dictionarySystemPronunciationRules.json`，复用现有 `PronunciationRule` 的稳定 ID、范围与证据引用，补齐核验及生命周期记录，不引入第二套解析优先级或身份体系。该文件是维护与审计的唯一权威；某个运行版本的正式权威是已批准 manifest 对该记录的不可变版本引用，不能实时读取工作树草稿。
+### 12. 已交付的系统权威与派生边界
 
-| 资产 | 维护关系与用途 |
-| --- | --- |
-| 系统音标权威记录 | 版本、rule ID、原词头、entry/legacy target、scope、原值/修正 IPA、证据引用、核验者/时间/判定、状态、supersedes、批准引用；允许待核验/已核验待批准记录，但只能发布批准覆盖的子集 |
-| 不可变证据及归因资产 | 逐条 page/history/revision、提取时间、HTTP 与语义摘要、提取器/规则版本、原 tags、许可、变更及同许可声明；不复制为另一套可编辑 IPA 真值表 |
-| `src/data/dictionarySystemCorrections.json` | 旧合同保留；phonetic 由获准权威版本的兼容投影生成，word/meaning 原样保留并仍按既有流程维护；禁止直接手改派生 phonetic |
-| overlay 系统规则与 resolved snapshot | 从同一获准规则版本生成，携带权威摘要、投影摘要、归因摘要及批准 ID；合格来源仍是独立较低优先级来源，不自动升级为系统勘误 |
-| 审计 `verifiedErrors` | 从同一记录中筛选有明确外部核验结论的错误项，带状态与引用；没有新 IPA 常量副本，已核验不表示已发布 |
+`src/data/dictionarySystemPronunciationRules.json` 为系统 IPA 唯一维护权威；`scripts/project_system_pronunciation_rules.mjs` 提供确定性旧 JSON 投影、overlay 规则视图和摘要检查。legacy grandfathered 与有 batch-approval 的 active 规则可投影，draft 不激活；手改投影、版本混配、多值任取 first 被拒绝。word/meaning 不由 IPA 迁移改写。归因由 `SYSTEM_CORRECTION_ATTRIBUTION` 及独立许可资产提供。
 
-**选择理由：**继续让旧 JSON 单独权威，会丢失 role/口音/多读法，无法落实 `read` 四角色纠正；同时手工维护旧 JSON 和 overlay 会造成双重真值。直接修改 TSV 又违反原始数据与许可隔离。故保留系统纠错层的产品落点，在该层内提升为结构化权威，旧 JSON 作为受核验兼容出口。用户同意此方向不等于批准任何具体数据迁移或发布。
+历史三条保真导入，未知信息不补造。新增规则有逐项来源与许可，不从启发式或模型知识补 IPA。三轮真实采集、真实授权引用、61+13 条落库记录与历史测试见 evidence/19；原第 12–15 节的完整交付设计迁入后续 change，不因本次拆分删除产品目标。
 
-兼容投影只在唯一无损映射或明确核验的版本绑定选择成立时生成；不把一个角色套给其他角色，不把多个口音拼成伪造的单读法。不能安全投影时保留旧值，报告 `legacy-projection-blocked`，角色级结果可独立评审，但该词不计入“两路径纠正完成”。用户本地/宿主纠错继续最高优先；有未归属旧 phonetic 或存储读取失败仍沿用既有保护，不将系统迁移当作用户数据迁移授权。
+### 13. 审计实际边界与历史记录
 
-### 13. 逐条依据、审计衔接和版本批准
-
-新增系统勘误必须逐条有外部依据、明确范围及核验事件；`[iueoa]`、遗留符号、模型知识与用户指出疑点仅用于选词。保留“合格新来源可优先于未证明错误的旧值”合同，但这类更新标为来源更新，不冒充 `verifiedErrors` 的已确认错误。
-
-新增证据除原有字段外，须保存核验人稳定身份、核验时间与结论理由；Wiktionary 衍生值随所有导出路径附 page、作者 history、CC BY-SA 4.0 URL、变更说明及同许可声明。旧 JSON 的字符串合同不塞 metadata；另行分发归因资产并提供旧视图/宿主可取得的逐项归因入口。构建与打包清单检查不能只检查 overlay notice。其他来源必须说明允许再分发的依据；不抓商业词典、不把链接存在当许可。
-
-历史三条勘误采用保真迁移：记录原 JSON 摘要及 `VERIFIED_REVIEWS` 的历史引用，旧接口值不变，范围/核验时间/许可缺失如实 unknown。历史引用不自动获得 CC BY-SA，也不删除既有值；缺许可的历史记录不进入新增 CC 衍生资产，需新证据及范围确认后才能作为新的 scoped 正式勘误发布。迁移时间与批准时间均不代替明确核验时间。
-
-未来调整 `scripts/audit_ecdict_pronunciations.mjs` 的读取来源，将当前三条常量保真导入一次，随后禁止新增常量 IPA。保持 ECDICT 原始 packs、hash、missing/notationFlag/unresolved 等分桶及独立字符信号语义；原始桶不因产品投影生效就消失。`verifiedErrors` 是逐条已核验错误的输出，另标 rule 状态与 release；增加 `verifiedHeadCount`、`approvedHeadCount`、`persistedHeadCount`、`effectiveHeadCount`、`blockedHeadCount` 及对应规则数，规则多于词头不虚增完成词数。发布校验新增正式勘误为同值同范围的已核验子集；保留/新来源更新另类统计。
-
-发布批准沿用整批批准可排除词的粒度，补充规则/角色排除列表。审批人默认为用户修勾的稳定成员身份（来自当前议题确认记录），或其明确指定的审批人；只存必要身份及确认引用，不收集联系方式。approval 必须绑定 batch ID、候选实质摘要、纳入/排除词及 rule/scope、当前正式 baseline、系统权威版本及其批准子集摘要、projection/attribution 摘要、目标内容版本、审批人/时间/操作与真实确认引用。实质摘要对规则内容和证据计算，不包含之后追加的批准/发布状态元数据，批准以独立不可变记录反向引用，防止批准引用和权威摘要循环依赖。排版不纳入实质摘要；最终压缩包等非语义构建差异用独立 artifact hash 留证，不制造自引用 hash。
-
-采集授权、核验/归属确认、正式落库与激活的批准、长期预算执行授权分别记录；“以后批量同理”仅确立流程需求，不补造任何授权。代理可准备审批输入，不能自填用户已批准。批准后 IPA、scope、纠错归属、纳入/排除列表、相关版本或 baseline 变化必须重 diff/重批；不单独按词追问已被固定整批批准明确覆盖的条目。
-
-### 14. 同版本落库、构建、激活及回滚
-
-现有 sidecar 原子指针不足以更新编译进旧产品的静态 JSON。不能将“先写 JSON，稍后更新 sidecar”称为跨文件原子事务。未来采用不可变 release bundle：系统权威获准子集、兼容 JSON、overlay snapshot、身份/证据及许可资产、产品构建、一个 release descriptor 共同绑定同一内容版本。descriptor 记录全部资产摘要与父版本；将现有 publication 的验证和 current 指针扩展到该完整交付。
-
-1. 依据固定批准内容在 staging 生成权威发布子集及派生资产，检查可比较范围、许可和全部引用；不修改服务中的正式文件。
-2. 用同一投影与 snapshot 构建产品并核对旧查询、overlay、归因和用户保护，记录 build 输入版本及产物 hash。产品内嵌期望 release ID，不能加载任意较新 sidecar。
-3. 持锁重校验 baseline 和批准，完整 bundle 入不可变发布目录后原子切换 release 指针；服务入口按同一 release 固定资源 URL。旧客户端继续消费它所属的完整旧版本，不在会话中拼接新旧快照；跨版本一致性比较必须使用相同 release ID。
-4. 仓库中正式权威记录及旧 JSON 作为同一获准变更集提交，保证可重建；源码已落库但服务仍旧构建时只报告“已落库，未生效”。仓库提交不等于激活。打包消费者须收到同一构建和归因资产。
-5. 核验实际服务 release ID、获准规则的产品值、旧兼容值和来源入口；失败保持/恢复上一完整交付，不能宣称纠正完成。
-
-故障测试覆盖生成中断、构建失败、投影/归因 hash 不符、切换前 baseline 变化、指针替换失败、旧客户端混配及新 bundle 缺文件：均不暴露半批。manifest 必须覆盖完整资产，不因旧 pointer 名字相同就视为可兼容。
-
-真实回滚另获绑定 current release、target release、影响及操作者的明确授权；校验目标完整 bundle 后切回对应构建、兼容 JSON、系统规则版本、overlay 和 notices。只切 sidecar 不算本轮系统纠错回滚。保存批准/证据/撤销链和独立用户新增纠错；回滚后的 baseline 变化使旧待发布批准失效。需要持久回退仓库状态时提交可审计的恢复变更，不删除历史、不重写用户数据。
-
-### 15. 首轮验收和后续节奏
-
-首轮只使用已经冻结的 100 heads，名单 SHA256 为 `aabdfceeda0cca922790c57fadddd13f7a50a321f35371ecbdf932cb1793b6f8`，其中 40 notationFlag、60 unresolved；不替换 `i` 或 `n't` 的 exact spelling。首批 execution `7085cc4a97d9637d10dc40cc6a4ca801264f6965` / canonical `64e4f05e78c965710a63e5c8c5b1223072972a31bd680563113e030e76f44fce` 已获确认并执行至词头上限，取得 100 TOC/0 MAIN；字段错配使 IPA 候选为 0，不能批准或落库。原账本/缓存保持不变。修复后的第二批沿用名单但使用隔离根 `ham37-second-round-v1`，仍须新 execution/调用/路径/预算的明确确认。
-
-首轮仍限 100 distinct heads / 600 dispatch attempts / 20,971,520 ALL 解压 bytes，串行至少 5 秒、超时 30 秒、每 operation 最多 2 次共享重试；网络 bytes 另记。触限不加词/不补成功数，同批恢复不清计数；消费不确定不可因网络恢复自动解锁，已结算服务暂停仅按现有 gate 显式恢复。本提案不执行任何请求、不创建有效授权。
-
-逐词验收表列出原值、外部 IPA、scope/role、判断（修正/来源更新/保留/失败/待核验）、许可、核验、批准、发布版本、旧接口实际值、overlay 实际值及阻塞原因。以 `note`、`in`、`read` 四角色和历史三条作为覆盖样本，但具体正确 IPA 必须来自以后真实证据，本轮不填推测值。所有新增正式纠正规则均须同源、已核验且获准；所有获准、证据和兼容条件充分的修正均须真正落库并在同版本产品生效。未满足条件的词明列受阻，不能把 100 attempted 叫作 100 corrected。
-
-未来验收入口：`yarn test:dictionary-corrections`（两份现有纠错测试）、`yarn test:pronunciation-audit`、`node scripts/audit_ecdict_pronunciations.mjs`（无 `--write` 的只读输出）、`yarn test:dictionary-data`、`yarn test:pronunciation-overlay`、`python3 -B scripts/run_pronunciation_python_tests.py`，并运行现有 `typecheck`、`build:types`、`build:lib`、`build:demo`。扩展现有 publication/query 测试验证 release 联动、重批和回滚，不用只断言增加条数的测试代替值/范围/证据检查。上述均为后续实施验收要求，本轮只执行 OpenSpec 文档校验。
-
-不可变边界分阶段保持：采集阶段继续冻结全 `src/data` 55 文件及既有 57/19 文件清单；落库发布阶段只有另获授权的系统音标权威、兼容 JSON、归因资产及流程文档可新增/修改，ECDICT TSV、metadata、释义、词形和旧 dump 产物持续逐字节不变。`check_pronunciation_immutable_baseline.py` 未来需分离采集冻结与发布允许清单，记录 before/after 和批准引用，不修改旧基线文件来掩盖差异。
-
-后续建议为先完成首轮质量/成本验收，再评估 3,786 未核验词中的 ASCII 简写嫌疑 2,386，然后其他 1,400，最后按损坏信号与用户遇到问题的优先级评估 33,962 遗留记法；这些是评论盘点基线而非本轮重新实测，必须与已处理名单去重。按 100 词粒度估算 24/38/340 批仅作工作量示意，不承诺成本或周期；ASCII 是 3,786 子集，不能重复相加，且首轮已覆盖部分词头。
-
-节奏采用一次只推进一个受预算约束的采集批次，生成可审查报告后进行核验与独立发布批准，再依据剩余预算推进；月度轮换只产候选，最终交付仍须走同一落库流程。长期配置必须经首轮实测后另批，包含每月与每批 heads/attempts/ALL bytes、时间窗口、单并发、重试、缓存存储和人工复核容量上限，取单批及月度剩余额度较小者。报告缺页/失败率、证据合格率、实际生效率、请求/网络/解压量、核验耗时和剩余队列；额度缺失或触限停调度，无自动 24 批授权或全库承诺。
+`scripts/audit_ecdict_pronunciations.mjs` 的 verifiedErrors 仍由三条历史 VERIFIED_REVIEWS 产生；现有回归检查正式投影有权威同值依据，并保留原始数据分桶。tasks 13.3 保留历史勾选及证据原文，但不据此声称已实现全量权威 verifiedErrors 或核验/批准/落库/生效/阻塞统计。这些剩余能力及完整 requirement 已迁入后续 change（13.8、11.4），前置 verify 应按本边界检查。
 
 ## Risks / Trade-offs
 
-- [Wiktionary 展开 HTML 或 qualifier 结构变化] → 版本化结构提取器与离线多结构夹具；关联失败保留 unresolved，不猜 scope、不清正式结果。
-- [旧值与来源范围未知导致很多候选暂不生效] → 单词阻断与其他词独立发布；报告明确人工需确认的具体范围，不用降低准入掩盖覆盖不足。
-- [opaque ID 在重新生成或 source anchor 移动时漂移] → 持久 canonical `byId`、alias 映射与显式身份核对；merge/split 保持旧引用与历史，禁止一对多自动重定向。
-- [未知标签造成误准入或误排除] → 保留全部原标签，分类与 default gate 分开；必要条件不明才待核验，非限制未知标签不一刀丢合法值。
-- [six-month 到期或采集成功误删/覆盖人工值] → review 状态与有效性分离，明确核验事件单独记录，v1 时间未知保效且提醒。
-- [模板依赖变化但 page revid 未变] → 按轮换预算重新 render，比较 IPA/qualifier/applicability 语义 fingerprint，缓存不是 revision-only shortcut。
-- [gzip、辅助请求、重试或崩溃恢复突破授权预算] → 限额 streaming decompress 与持久预算账本，所有 body 同口径，消费量不确定则保守阻断，不自动另开批次。
-- [审批后新数据、纠错归属或名单变化偷渡，以及部分正式更新] → candidate/base/version 与固定纳入/排除名单绑定批准，实质变化或 baseline 改变须重 diff / 重批，完整 manifest 原子切换；仅排版变化不误触重批，用户排除词与 unresolved 保持前版本。
-- [read 同 IPA 被误合并或新身份被当作旧纠错归属证据] → base / present / past / past-participle 四个稳定 ID 分别可纠错，明确 applicability 才共享读法，旧 phonetic 未归属仍保护该词。
-- [旧宿主接口无法表达多个 entry/读法] → opt-in 扩展与受核验单值 projection；范围待定保护优先，不取第一项、不静默 callback 迁移。
-- [独立 CC BY-SA 资产的归因/许可在打包或宿主展示丢失] → manifest/DTO 强制来源与许可引用，验证 notices 与分发白名单，工具 MIT 和数据许可分开。
-- [长期预算未批准却被当作可自动运行] → 首轮实际量测后另获长期预算批准，之前 scheduled disabled / fail closed，不现在另设额度规划门槛；publish 始终校验已确认的逐批版本绑定批准，不称全部实施就绪。
-- [结构化权威迁移增加兼容与构建成本] → 复用现有 rule/identity 合同、保真迁移旧值；第 13 组离线验证后才允许新的正式落库，不将其标为已完成能力。
-- [静态旧 JSON 与动态 overlay 无法跨路径同时切换] → 完整 release bundle 及产品版本检查，旧客户端固定旧 bundle；版本不符拒绝激活，验收按同一 release 对照。
+- 静态产品与动态 sidecar 版本可能不同：现有工具只保证其自身 snapshot；完整 release 一致性与目标回滚交后续 change。
+- 历史任务描述大于实际审计能力：以本节与收窄后的 spec 记录事实，保留原需求全文供后续实现。
+- 许可或范围缺失：新增正式规则校验拒绝，保留旧值及证据，不扩大角色范围。
 
 ## Migration Plan
 
-以下是未来实施与授权分界，不是 `tasks.md`，也不是本阶段执行记录。
-
-1. **schema 与纯夹具**：定义 identity / observation / rule / manifest / checkpoint 与 DTO 合同，验证范围与许可引用、`read` 四 role 的稳定身份及独立纠错、版本绑定批准输入；原始 ECDICT 与 v1 不改。
-2. **离线 dry candidate**：以小型合成来源和已有原值生成候选/报告，证明 parser、优先级、范围阻断、ID 生命周期与 budget 状态机，不访问网络、不发布。
-3. **兼容 opt-in 扩展**：保旧查询与纠错入口，接入只读 v1 adapter 和独立 scoped API / 存储；保护 scope 未归属词。多读法展示与核验交互由 designer 评估后再实现，不把旧界面强行升级为任意单值投影。
-4. **明确授权首轮试采**：用户批准具体首轮词头清单、有效 UA/contact 与执行，限制 100 distinct heads / 20 MiB ALL 解压响应。文档批准本身不授权此步；触限保存状态停止，报告实际请求/网络/解压量，不扩大批次。
-5. **差异与人工范围核验**：列出完整差异/失败/no change/未确定项；旧 phonetic 范围逐项确认独立记录，不批量伪造时间、不复制给多 entry；未确认词继续保护。
-6. **系统权威迁移与逐批发布**：先在单独获准的第 13 组实施中完成第 12–14 节的保真迁移、同源审计、投影与离线故障验证，旧三条不静默归属。用户整批批准固定候选、名单、scope、权威/投影/归因版本及正式 baseline 后，第 11 组才持久落库、重建并激活完整 release bundle，实际核对两路径与归因；不能仅切 sidecar pointer。实质变化重 diff/重批，排版变化无需重批；无有效批准不发布。
-7. **回滚与后续轮换**：按目标 release 授权切回旧构建、系统投影、overlay 和归因，保留证据/批准/规则历史及用户独立纠错。按首轮真实成本另批长期预算及范围后，才在获准队列内初次覆盖和轮换；后续每批沿用同一落库闭环但独立批准，不承诺一次性全库。
-
-## Open Questions
-
-仅以下不改变规格、架构与任务边界的细节可延后；`read` 四角色身份和版本绑定批准均已确认，不属于未决事项，长期预算按既定安排在首轮量测后另批：
-
-- sidecar 资产的最终文件名、导出名、schema/工具版本号命名和报告格式选 JSON+Markdown 或其他等价可审查形式。
-- 审批入口的操作步骤与批准记录展示形式；不能改变固定候选内容、名单和 baseline 的绑定，也不能放宽实质变化后重 diff / 重批的要求。若涉及实质规格或架构改变，须报告主编排而非在此延后。
-- 后续队列的具体批次名单和月份安排（首轮名单已经冻结，不在本提案中改动；长期额度及执行仍按首轮量测后独立批准）。
-- 已确定标签的中文文案、来源/许可入口的具体视觉位置与样式；不延后“未注明口音/地域/使用状态不可伪装”的语义要求，由 designer 评估。
+保留现有数据与证据。本次只拆分文档；原 change 由主编排另行 verify/归档，主规格仅吸收其剩余 spec。后续 change 依赖前置能力，以原第 13.5–13.8 组补齐工具，再执行独立批准的第 11 组及另批预算的第 12 组。
