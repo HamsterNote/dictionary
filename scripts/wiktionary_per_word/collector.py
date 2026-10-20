@@ -142,7 +142,13 @@ class Collector:
         head = page.page
         try:
             for response in page.requests:
-                self._cache_response(response, fetched_at=fetched_at)
+                # 语言根被拒的 MAIN 仅以 evidence-only 留证（诊断用），
+                # 不参与离线重解析与候选；TOC 等其余响应照常。
+                evidence_only = (page.language_rejection is not None and
+                                 response.kind is RequestKind.MAIN)
+                self._cache_response(
+                    response, fetched_at=fetched_at, evidence_only=evidence_only,
+                    rejection_reason=page.language_rejection if evidence_only else None)
         except Exception as error:
             # Bytes/attempts are already settled. Preserve the exact responses for
             # local-only retry; never seal a word that has lost durable evidence.
@@ -164,6 +170,10 @@ class Collector:
         if page.status is PageStatus.NO_ENGLISH:
             return self.ledger.finish_word(head, WordStatus.NO_QUALIFIED, note="no-english-section")
         assert page.html is not None
+        if page.language_rejection is not None:
+            # MAIN 已留证（evidence-only）；不重跑提取，直接按 FAILED 完成。
+            return self.ledger.finish_word(
+                head, WordStatus.FAILED, note=f"language-root:{page.language_rejection}")
 
         try:
             extraction = extract_observations(page.html, expected_language="English")
@@ -239,7 +249,9 @@ class Collector:
         return report
 
     # ------------------------------------------------------------------
-    def _cache_response(self, response: FetchedResponse, *, fetched_at: str) -> None:
+    def _cache_response(self, response: FetchedResponse, *, fetched_at: str,
+                        evidence_only: bool = False,
+                        rejection_reason: str | None = None) -> None:
         content_type = (
             "application/json"
             if response.kind is RequestKind.TOC
@@ -251,4 +263,6 @@ class Collector:
             complete=True,
             source_url=response.url,
             fetched_at=fetched_at,
+            evidence_only=evidence_only,
+            rejection_reason=rejection_reason,
         )

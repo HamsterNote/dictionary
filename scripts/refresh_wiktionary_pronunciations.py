@@ -143,8 +143,11 @@ def run_offline_reparse(
         return value if isinstance(value, dict) and not value.get("error") else None
 
     # 第一遍：TOC（prop=tocdata|revid）建立 revid -> head 映射，供 MAIN 校验。
+    # evidence-only 留证条目（被拒 MAIN）在两个阶段都跳过，绝不进候选。
     toc_revids: dict[int, str] = {}
     for entry in entries:
+        if entry.evidence_only:
+            continue
         payload = _payload(entry)
         if payload is None:
             continue
@@ -159,6 +162,8 @@ def run_offline_reparse(
     # 第二遍：MAIN（parse.text）重解析并生成候选。根级 error / 畸形 JSON 不跳过，
     # 交给 reparse_cached_entry 统一 fail closed（保持旧语义）。
     for entry in entries:
+        if entry.evidence_only:
+            continue
         payload = _payload(entry)
         if payload is not None:
             parse = payload.get("parse")

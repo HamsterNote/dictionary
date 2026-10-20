@@ -58,12 +58,16 @@ class PageFetch:
     toc_sections: list[dict[str, Any]] = field(default_factory=list)
     requests: list[FetchedResponse] = field(default_factory=list)
     warnings: list[str] = field(default_factory=list)
+    # MAIN 语言根校验拒绝原因：不抛中断，交由 collector 把被拒 MAIN 以
+    # evidence-only 留证持久化后仍按 FAILED 完成（fail-closed 语义不变）。
+    language_rejection: str | None = None
 
     def cache_checkpoint(self, fetched_at: str) -> dict:
         """Only fully received, already accounted responses enter local recovery."""
         return {
             "head": self.page, "status": self.status.value, "html": self.html,
             "revid": self.revid, "fetchedAt": fetched_at,
+            "languageRejection": self.language_rejection,
             "responses": [{"url": r.url, "kind": r.kind.value,
                            "body": base64.b64encode(r.body).decode("ascii"),
                            "sha256": hashlib.sha256(r.body).hexdigest()}
@@ -73,13 +77,17 @@ class PageFetch:
     @classmethod
     def from_cache_checkpoint(cls, value: dict) -> "PageFetch":
         if not isinstance(value, dict) or set(value) != {
-            "head", "status", "html", "revid", "fetchedAt", "responses"
+            "head", "status", "html", "revid", "fetchedAt", "responses",
+            "languageRejection",
         }:
             raise ValueError("invalid pending cache page")
         if (not isinstance(value["head"], str) or not value["head"] or
                 not isinstance(value["fetchedAt"], str) or not value["fetchedAt"] or
                 (value["revid"] is not None and type(value["revid"]) is not int)):
             raise ValueError("invalid pending cache identity")
+        rejection = value["languageRejection"]
+        if rejection is not None and (not isinstance(rejection, str) or not rejection.strip()):
+            raise ValueError("invalid pending cache language rejection")
         status = PageStatus(value["status"])
         if ((status == PageStatus.FOUND and not isinstance(value["html"], str)) or
                 (status != PageStatus.FOUND and value["html"] is not None)):
@@ -109,7 +117,8 @@ class PageFetch:
         if (status == PageStatus.FOUND and not seen_main) or (status == PageStatus.NO_ENGLISH and seen_main):
             raise ValueError("pending cache response kinds differ from page status")
         return cls(page=value["head"], status=status, html=value["html"],
-                   revid=value["revid"], requests=requests)
+                   revid=value["revid"], requests=requests,
+                   language_rejection=rejection)
 
 
 def build_tocdata_url(page: str, *, endpoint: str = DEFAULT_API_ENDPOINT) -> str:
@@ -319,7 +328,9 @@ def fetch_english_page(
     try:
         extract_observations(html, expected_language=ENGLISH_HEADING)
     except ValueError as error:
-        raise ActionApiError(f"MAIN language root rejected: {error}") from error
+        # 不抛中断：拒绝原因随 PageFetch 交给 collector，被拒 MAIN 以
+        # evidence-only 留证持久化（不进候选），词仍按 FAILED 完成。
+        fetch.language_rejection = f"MAIN language root rejected: {error}"
     fetch.html = html
     fetch.status = PageStatus.FOUND
     return fetch

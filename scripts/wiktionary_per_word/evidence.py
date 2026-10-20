@@ -302,9 +302,13 @@ class CacheEntry:
     attribution: str = DEFAULT_ATTRIBUTION
     fetched_at: str = ""
     provenance_id: str = ""
+    # 被拒响应的留证标记：仅诊断用途，离线重解析与候选生成必须跳过。
+    # 不进 provenance 身份；同 body+来源 的留证/正式写入冲突时拒绝覆盖。
+    evidence_only: bool = False
+    rejection_reason: str | None = None
 
     def to_json(self) -> dict[str, Any]:
-        return {
+        payload = {
             "httpSha256": self.http_sha256,
             "provenanceId": self.provenance_id,
             "bodyFile": f"{self.http_sha256}.body",
@@ -317,6 +321,10 @@ class CacheEntry:
             "fetchedAt": self.fetched_at,
             "bytes": len(self.body),
         }
+        if self.evidence_only:
+            payload["evidenceOnly"] = True
+            payload["rejectionReason"] = self.rejection_reason
+        return payload
 
 
 class ResponseCache:
@@ -432,6 +440,15 @@ class ResponseCache:
                 raise CacheIntegrityError(
                     f"缓存 provenance 身份不匹配: {metadata_path.name}"
                 )
+            evidence_only = payload.get("evidenceOnly", False)
+            rejection_reason = payload.get("rejectionReason")
+            if type(evidence_only) is not bool:
+                raise CacheIntegrityError(f"缓存 evidenceOnly 非布尔: {metadata_path.name}")
+            if evidence_only and (not isinstance(rejection_reason, str)
+                                  or not rejection_reason.strip()):
+                raise CacheIntegrityError(f"留证缓存缺少拒绝原因: {metadata_path.name}")
+            if not evidence_only and rejection_reason is not None:
+                raise CacheIntegrityError(f"正式缓存不得带拒绝原因: {metadata_path.name}")
             self._index(
                 CacheEntry(
                     http_sha256=digest,
@@ -444,6 +461,8 @@ class ResponseCache:
                     attribution=attribution,
                     fetched_at=fetched_at,
                     provenance_id=provenance_id,
+                    evidence_only=evidence_only,
+                    rejection_reason=rejection_reason,
                 )
             )
 
@@ -458,12 +477,21 @@ class ResponseCache:
         license_id: str = WIKTIONARY_LICENSE_ID,
         license_url: str = WIKTIONARY_LICENSE_URL,
         attribution: str = DEFAULT_ATTRIBUTION,
+        evidence_only: bool = False,
+        rejection_reason: str | None = None,
     ) -> CacheEntry:
         if self.read_only:
             raise CacheIntegrityError("只读缓存不得写入")
         # complete 必须是严格 True（字符串 "false"/其他真值不得当作完整）。
         if complete is not True:
             raise IncompleteCacheError("不完整/截断响应不得写入成功缓存")
+        if type(evidence_only) is not bool:
+            raise ValueError("evidence_only 必须是布尔")
+        if evidence_only and (not isinstance(rejection_reason, str)
+                              or not rejection_reason.strip()):
+            raise ValueError("留证缓存必须提供非空拒绝原因")
+        if not evidence_only and rejection_reason is not None:
+            raise ValueError("正式缓存不得带拒绝原因")
         if not isinstance(source_url, str) or not source_url.strip():
             raise ValueError("成功缓存必须提供非空 sourceURL")
         if not isinstance(attribution, str) or not attribution.strip():
@@ -487,6 +515,9 @@ class ResponseCache:
             if existing.body != body:
                 # 内容寻址下不应发生；保守拒绝覆盖。
                 raise ImmutableViolation("缓存 key 冲突且内容不同")
+            if existing.evidence_only != evidence_only:
+                # 留证与正式身份不一致：拒绝静默升降级。
+                raise ImmutableViolation("缓存 key 的留证身份冲突")
             # Loading a renamed file does not prove its directory was synced.
             # Recovery must finish persistence before discarding pending bytes.
             if self.directory is not None:
@@ -503,6 +534,8 @@ class ResponseCache:
             attribution=attribution,
             fetched_at=fetched_at,
             provenance_id=provenance_id,
+            evidence_only=evidence_only,
+            rejection_reason=rejection_reason,
         )
         if self.directory is not None:
             self._persist(entry)

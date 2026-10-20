@@ -606,6 +606,58 @@ class CollectorIntegrationTest(unittest.TestCase):
         entry = collector_instance.collect_word("nur")
         self.assertEqual(entry.status, WordStatus.NO_QUALIFIED)
 
+    def test_language_root_rejection_persisted_evidence_only(self) -> None:
+        # 被拒 MAIN 以 evidence-only 留证：词 FAILED、缓存可诊断、不进候选。
+        german_html = (
+            '<h2 id="German">German</h2>'
+            '<h4 id="Pronunciation">Pronunciation</h4>'
+            '<ul><li><span class="IPA">/x/</span></li></ul>'
+        )
+        with tempfile.TemporaryDirectory() as directory:
+            cache = ResponseCache(directory=Path(directory))
+            collector_instance, ledger = self._harness(
+                [
+                    plain_response(tocdata_payload(MULTI_LANG_SECTIONS)),
+                    plain_response(text_payload(german_html)),
+                ],
+                cache=cache,
+            )
+            entry = collector_instance.collect_word("read")
+            self.assertEqual(entry.status, WordStatus.FAILED)
+            self.assertIn("language-root", entry.note)
+            # 重新加载落盘缓存：留证标记与拒绝原因持久化。
+            reloaded = ResponseCache(directory=Path(directory), read_only=True)
+            flagged = [e for e in reloaded.entries() if e.evidence_only]
+            normal = [e for e in reloaded.entries() if not e.evidence_only]
+            self.assertEqual(len(flagged), 1)
+            self.assertIn("MAIN language root rejected", flagged[0].rejection_reason)
+            self.assertEqual(len(normal), 1)  # TOC 照常
+            # 留证条目不进离线候选。
+            candidates = cli.run_offline_reparse(
+                cache_dir=Path(directory), current_path=None, output_path=None
+            )
+            self.assertEqual(candidates, [])
+            # 同 body 不得静默升级为正式缓存。
+            with self.assertRaises(evidence.ImmutableViolation):
+                cache.put(
+                    flagged[0].body,
+                    content_type="text/html",
+                    complete=True,
+                    source_url=flagged[0].source_url,
+                    fetched_at="2026-01-01T00:00:00Z",
+                )
+
+    def test_evidence_only_requires_reason_and_vice_versa(self) -> None:
+        cache = ResponseCache()
+        with self.assertRaises(ValueError):
+            cache.put(b"{}", content_type="application/json", complete=True,
+                      source_url="https://en.wiktionary.org/w/api.php?oldid=1",
+                      fetched_at="2026-01-01T00:00:00Z", evidence_only=True)
+        with self.assertRaises(ValueError):
+            cache.put(b"{}", content_type="application/json", complete=True,
+                      source_url="https://en.wiktionary.org/w/api.php?oldid=1",
+                      fetched_at="2026-01-01T00:00:00Z", rejection_reason="x")
+
     def test_budget_pause_stops_batch_and_caches_nothing_truncated(self) -> None:
         # tocdata 小、text 巨大：text 触发限额，暂停。
         big_html = "<ul><li>" + ('<span class="IPA">/x/</span>' * 5000) + "</li></ul>"
