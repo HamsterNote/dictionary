@@ -68,8 +68,8 @@ def main() -> None:
                     assert '"role":{"kind":"known","values":["past"]}' in page.get_by_test_id("saved").inner_text()
                     page.get_by_role("button", name="确认核验").first.click()
                     assert page.get_by_test_id("verified").inner_text().startswith("ent_")
-                    page.get_by_role("button", name="朗读 read").click()
-                    assert page.get_by_test_id("spoken").inner_text() == "read"
+                    page.get_by_role("button", name="朗读 syntheticfixture").click()
+                    assert page.get_by_test_id("spoken").inner_text() == "syntheticfixture"
                     page.set_viewport_size({"width": 360, "height": 800})
                     assert page.evaluate("document.documentElement.scrollWidth <= innerWidth")
                     page.screenshot(path=str(SCREENSHOT_DIRECTORY / "ham37-ui-mobile.png"), full_page=True)

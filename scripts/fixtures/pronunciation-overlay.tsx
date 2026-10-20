@@ -14,6 +14,8 @@ import {
 import type { ScopedCorrection } from '../../src/pronunciation-overlay/corrections';
 import '../../src/dictionary.css';
 
+// 夹具词必须没有任何系统规则/行内纠错，否则 overlay 会按合同阻断（见 legacy.ts）。
+const fixtureWord = 'syntheticfixture';
 const roles: GrammarRole[] = ['base', 'present', 'past', 'past-participle'];
 const entries: PronunciationDisplayEntry[] = roles.map((role, index) => {
   const entryId = `ent_0000000${String(index + 1)}-0000-4000-8000-000000000001`;
@@ -30,7 +32,7 @@ const entries: PronunciationDisplayEntry[] = roles.map((role, index) => {
   const reading: PronunciationDisplayDto = {
     schema: 'pronunciation-display/1',
     entryId,
-    word: 'read',
+    word: fixtureWord,
     role,
     originalIpa: index > 1 ? '[x]' : '/x/',
     notation: index > 1 ? 'phonetic' : 'phonemic',
@@ -40,8 +42,8 @@ const entries: PronunciationDisplayEntry[] = roles.map((role, index) => {
     reviewStatus: index === 0 ? 'due' : index === 1 ? 'pending-review' : 'active',
     origin: 'qualified-source',
     attribution: {
-      pageUrl: 'https://en.wiktionary.org/wiki/read',
-      historyUrl: 'https://en.wiktionary.org/w/index.php?title=read&action=history',
+      pageUrl: 'https://fixture.invalid/wiki/syntheticfixture',
+      historyUrl: 'https://fixture.invalid/w/index.php?title=syntheticfixture&action=history',
       licenseUrl: 'https://creativecommons.org/licenses/by-sa/4.0/',
       licenseSpdx: 'CC-BY-SA-4.0',
       changeNotice: 'Synthetic fixture; no real source pronunciation asserted.',
@@ -50,7 +52,7 @@ const entries: PronunciationDisplayEntry[] = roles.map((role, index) => {
   };
   return {
     entryId,
-    word: 'read',
+    word: fixtureWord,
     role,
     conditions,
     readings: [
@@ -102,10 +104,12 @@ export function Fixture() {
       <output data-testid="verified">{verified}</output>
       <output data-testid="spoken">{spoken}</output>
       <DictionaryContent
-        keyword="read"
-        meanings={[{ id: 'read', definition: 'Synthetic fixture' }]}
+        keyword={fixtureWord}
+        meanings={[{ id: fixtureWord, definition: 'Synthetic fixture' }]}
         phonetic="/old/"
-        corrections={{ user: blocked ? { read: { phonetic: '/legacy/' } } : {} }}
+        corrections={{
+          user: blocked ? { [fixtureWord]: { phonetic: '/legacy/' } } : {},
+        }}
         pronounce={async (word) => {
           await Promise.resolve();
           setSpoken(word);
