@@ -130,7 +130,11 @@ export {
 } from './lookupEnglishChinese';
 export type { DictionaryCandidateSearchOptions } from './searchDictionaryCandidates';
 export { searchDictionaryCandidates } from './searchDictionaryCandidates';
-export { SYSTEM_DICTIONARY_CORRECTIONS } from './systemDictionaryCorrections';
+export {
+  SYSTEM_CORRECTION_ATTRIBUTION,
+  SYSTEM_DICTIONARY_CORRECTIONS,
+} from './systemDictionaryCorrections';
+export type { SystemCorrectionAttribution } from './systemDictionaryCorrections';
 export type { DictionaryCorrectionsManager } from './useDictionaryCorrections';
 export {
   resolveDictionaryCorrectionsControl,

@@ -87,10 +87,10 @@
 
 ## 13. 系统落库与同源交付增量（须先于第 11 组真实发布）
 
-- [ ] 13.1 在独立实施授权内扩展现有系统 rule 合同及版本引用，规划并实现唯一 `dictionarySystemPronunciationRules.json` 权威维护入口；完成证据：Node/Python 合成夹具验证原词头、target/scope、原值/修正值、证据、核验者时间、状态与批准引用，工作树草稿不能激活，缺真实批准不得写正式。
-- [ ] 13.2 保真导入旧三条勘误及历史依据，建立旧 JSON phonetic 的确定性兼容投影，保留 word/meaning；完成证据：旧值/回调/v1/用户优先回归，未知时间/许可/范围不伪造，旧 patch fingerprint 保护生效，read 四角色互不污染；仅唯一无损或明确核验版本投影通过，多条任取 first 和直接手改投影被拒绝。
-- [ ] 13.3 使审计 `verifiedErrors` 引用同一权威核验记录，移除新增真值常量维护路径，分离核验/批准/落库/产品生效统计；完成证据：`test:pronunciation-audit` 与只读审计比对同值同范围及状态引用，未批准不生效、启发式不判错，原始 packs/hash 与分桶规则不变，三条历史依据不丢失。
-- [ ] 13.4 为旧投影与 overlay 统一提供逐项归因及独立许可分发，更新 `SYSTEM_CORRECTIONS.md` 维护说明；完成证据：包清单、旧视图/宿主与 overlay 均能取得 page/history/许可/变更声明，缺许可或缺引用拒新增正式规则，历史引用不冒充新 CC 许可，原应用/ECDICT notices 保留。
+- [x] 13.1 在独立实施授权内扩展现有系统 rule 合同及版本引用，规划并实现唯一 `dictionarySystemPronunciationRules.json` 权威维护入口；完成证据：Node/Python 合成夹具验证原词头、target/scope、原值/修正值、证据、核验者时间、状态与批准引用，工作树草稿不能激活，缺真实批准不得写正式。（证据：`evidence/19-authority-layer-and-collection-rounds.md`；commit `77a83ad`；权威文件 + 纯 node 投影器 + 11 项合成夹具测试 exit 0，草稿不激活、缺批准拒写正式）
+- [x] 13.2 保真导入旧三条勘误及历史依据，建立旧 JSON phonetic 的确定性兼容投影，保留 word/meaning；完成证据：旧值/回调/v1/用户优先回归，未知时间/许可/范围不伪造，旧 patch fingerprint 保护生效，read 四角色互不污染；仅唯一无损或明确核验版本投影通过，多条任取 first 和直接手改投影被拒绝。（证据：同上；三条历史纠正逐字节保真迁移、未知项如实 unknown；`--check` 逐字节一致、版本混配/手改/多值任取拒绝；回滚纯函数测试；`test:dictionary-corrections` exit 0）
+- [x] 13.3 使审计 `verifiedErrors` 引用同一权威核验记录，移除新增真值常量维护路径，分离核验/批准/落库/产品生效统计；完成证据：`test:pronunciation-audit` 与只读审计比对同值同范围及状态引用，未批准不生效、启发式不判错，原始 packs/hash 与分桶规则不变，三条历史依据不丢失。（证据：同上；commit `7b3b053`；`test:pronunciation-audit` exit 0，已发布逐条权威同值背书、verifiedErrors 三条历史依据保留；VERIFIED_REVIEWS 转只读历史记录，新增真值只能经权威层批准进入；packs/hash/分桶不变）
+- [x] 13.4 为旧投影与 overlay 统一提供逐项归因及独立许可分发，更新 `SYSTEM_CORRECTIONS.md` 维护说明；完成证据：包清单、旧视图/宿主与 overlay 均能取得 page/history/许可/变更声明，缺许可或缺引用拒新增正式规则，历史引用不冒充新 CC 许可，原应用/ECDICT notices 保留。（证据：同上；LICENSES/WIKTIONARY-PRONUNCIATION-OVERLAY.md 更新为 61 条已分发；包清单含 notices/LICENSES；宿主可读 `SYSTEM_CORRECTION_ATTRIBUTION` 导出（64 条全量 SSR 断言）；缺许可/引用拒新增规则；原 notices 未改）
 - [ ] 13.5 扩展现有 approval/publication 合同到系统权威版本、词/角色列表、投影/归因、内容版本和 baseline，校验审批者身份与确认引用；完成证据：离线夹具覆盖真确认缺失、伪批准、IPA/scope/名单/基线变化拒旧批准及排版变化保持有效，后批不能复用前批授权。
 - [ ] 13.6 实现 staging 派生与同输入产品构建、不可变 release bundle 和完整版本原子激活，接入版本检查；完成证据：扩展 `test_pronunciation_publication.mjs` 与 query 测试证明生成/构建/指针故障、旧构建新 sidecar、资产或归因损坏均不暴露混合结果，旧客户端固定旧完整版本；只在合成隔离目录操作。
 - [ ] 13.7 实现完整 release 目标绑定回滚并保留历史；完成证据：合成演练同时恢复旧构建/系统投影/overlay/归因，不删除独立用户纠错或批准证据，目标 hash/授权不符不切换，回滚 baseline 使旧待发布批准失效；本项不授权真实回滚。

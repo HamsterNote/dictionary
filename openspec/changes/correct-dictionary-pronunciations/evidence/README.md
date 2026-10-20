@@ -13,6 +13,7 @@
 | `legacy-contract-sha256.tsv` | 1.2 | 合同源码 sha256 清单 |
 | `03-test-run-report.md` | 1.2 | 5 个测试的命令、退出码、环境说明与只读性验证 |
 | `logs/` | 1.2 | 5 个测试的原始日志与 `exit-codes.txt` |
+| `19-authority-layer-and-collection-rounds.md` | 10.2–10.4（第二/三批）、13.1–13.4 | 真实采集批次账本、A/B 投影、权威层与兼容投影、归因分发、验证矩阵 |
 
 ## 边界重申
 

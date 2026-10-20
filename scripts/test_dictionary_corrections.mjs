@@ -475,6 +475,23 @@ try {
     ),
     { activeKeyword: 'new-host-entry', useProvidedContent: true },
   );
+  // 13.4：逐条归因宿主可读——正式纠错带来源/许可/变更声明，草稿不出现。
+  const { SYSTEM_CORRECTION_ATTRIBUTION } =
+    await server.ssrLoadModule('/src/systemDictionaryCorrections.ts');
+  assert.equal(
+    Object.keys(SYSTEM_CORRECTION_ATTRIBUTION).length,
+    Object.keys(SYSTEM_DICTIONARY_CORRECTIONS).length,
+  );
+  const theAttribution = SYSTEM_CORRECTION_ATTRIBUTION.the;
+  assert.equal(theAttribution.licenseId, 'CC BY-SA 4.0');
+  assert.ok(theAttribution.pageUrl.includes('oldid='));
+  assert.ok(theAttribution.historyUrl.includes('action=history'));
+  assert.equal(theAttribution.attribution, 'Wiktionary contributors');
+  assert.ok(theAttribution.changeNotice.includes('ham37-second-round-v1'));
+  // 历史迁移条目如实标注，不冒充 CC 许可。
+  const godAttribution = SYSTEM_CORRECTION_ATTRIBUTION.god;
+  assert.equal(godAttribution.licenseId, 'unknown');
+  assert.ok(godAttribution.changeNotice.includes('保真迁移'));
   await checkOverlayCorrections(server);
 } finally {
   await server.close();
