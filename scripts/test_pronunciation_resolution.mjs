@@ -225,6 +225,57 @@ try {
     )[0].ipa,
     '/s/',
   );
+  // 子范围胜者不一致（UK=user、US=system）→ 单值字段不输出、provenance 不留。
+  assert.equal('phonetic' in partialOverlap.fields, false);
+  assert.equal(
+    partialOverlap.fieldProvenance.some((p) => p.field === 'phonetic'),
+    false,
+  );
+  // 即使旧值存在也不冒充整体：legacy 单值同样撤出。
+  const partialWithLegacy = resolveEntry({
+    ...input,
+    scope: ukUs,
+    observations: [],
+    previousReadings: [
+      { ...old, scope: ukUs },
+      { ...priorManual, scope: ukOnly },
+    ],
+    rules: [
+      f.rule({
+        ruleId: 'sys-new',
+        origin: 'system',
+        conditions: ukUs,
+        operations: [{ field: 'phonetic', op: 'set', value: '/s/' }],
+      }),
+    ],
+  });
+  assert.equal('phonetic' in partialWithLegacy.fields, false);
+  assert.equal(
+    selectEffectiveReadings(partialWithLegacy.readings, ukOnly)[0].ipa,
+    '/manual/',
+  );
+  // 宽范围/空范围选择器语义：没有任何读法覆盖的格返回空数组，不猜近似。
+  assert.deepEqual(
+    selectEffectiveReadings(
+      partialOverlap.readings,
+      f.scope({ accent: contracts.knownScope(['Scotland']) }),
+    ),
+    [],
+  );
+  // 同值竞争不视为不一致：两条同 IPA 的 default 不压制单值输出。
+  const sameValue = resolveEntry({
+    ...input,
+    observations: [],
+    previousReadings: [priorManual],
+    rules: [
+      f.rule({
+        ruleId: 'sys-new',
+        origin: 'system',
+        operations: [{ field: 'phonetic', op: 'set', value: '/manual/' }],
+      }),
+    ],
+  });
+  assert.equal(sameValue.fields.phonetic, '/manual/');
   // 用户已有纠错被明确撤销后，系统规则才生效。
   const revokedUser = resolveEntry({
     ...input,

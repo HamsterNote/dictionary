@@ -9,7 +9,12 @@ import type {
 } from './contracts';
 import { validateSourceEvidence, validateRule, knownScope } from './contracts';
 import { buildReadingPlan, classifyObservation } from './classification';
-import { matchApplicabilityScopes } from './scope';
+import { matchApplicabilityScopes, isDisjointScopeMatch } from './scope';
+
+/** 两个范围可能相交（不能证明不相交即按相交处理，fail closed）。 */
+function scopesMayOverlap(a: ApplicabilityScope, b: ApplicabilityScope): boolean {
+  return !isDisjointScopeMatch(matchApplicabilityScopes(a, b));
+}
 
 export interface ResolvedReading {
   readonly ref: string;
@@ -253,21 +258,7 @@ export function resolveEntry(input: ResolveEntryInput): EntryResolution {
         provenance: from,
         ...(operation.op === 'set' ? {} : { reason: '明确范围内有意清空' }),
       });
-      if (scopeCovers(rule.conditions, input.scope)) {
-        // 字段赋值同样按来源优先级：已有更高优先级（user）默认读法完整覆盖
-        // 查询范围时，低优先级（system）规则不得占用字段。
-        const higherPriorityCovers = readings.some(
-          (reading) =>
-            reading.tier === 'default' &&
-            reading.ref !== rule.ruleId &&
-            SOURCE_PRIORITY[reading.provenance.source] > SOURCE_PRIORITY[rule.origin] &&
-            scopeCovers(reading.scope, input.scope),
-        );
-        if (!higherPriorityCovers) {
-          fields.phonetic = operation.op === 'set' ? (operation.value ?? '') : '';
-          provenance.set('phonetic', from);
-        }
-      }
+      // 单值 fields.phonetic 不在此赋值：统一由末尾的"整范围胜者唯一"判定输出。
     }
   }
   for (const exclusion of input.confirmedExclusions ?? []) {
@@ -287,17 +278,38 @@ export function resolveEntry(input: ResolveEntryInput): EntryResolution {
       readings[index] = { ...reading, tier: 'excluded', reason: exclusion.reason };
     }
   }
-  // 字段终值取逐格有效选择的唯一胜者：多个 default 重叠时由优先级裁定
-  // （user > system > source > legacy），而不是按处理顺序先到先得。
+  // 单值字段只有在整个查询范围内最终胜者唯一时才输出。判定分两步：
+  // ① 逐格有效选择在整格上恰有一个胜者；② 不存在与胜者同级或更高级、
+  // 与查询范围可能相交（覆盖子范围即可，不要求整格相等）且值不同的其他
+  // default 读法。子范围胜者不一致时不输出：字段缺席、provenance 不留错误
+  // 来源，绝不用宽范围系统值冒充整体；纯 legacy 无竞争时保持原值。
   const effective = selectEffectiveReadings(readings, input.scope);
-  if (
-    effective.length === 1 &&
-    effective[0] !== undefined &&
-    scopeCovers(effective[0].scope, input.scope) &&
-    scopeCovers(input.scope, effective[0].scope)
+  const sole = effective.length === 1 ? effective[0] : undefined;
+  let consistent = sole !== undefined;
+  if (sole !== undefined) {
+    const winnerPriority = SOURCE_PRIORITY[sole.provenance.source];
+    consistent = !readings.some(
+      (reading) =>
+        reading.tier === 'default' &&
+        reading.ref !== sole.ref &&
+        SOURCE_PRIORITY[reading.provenance.source] >= winnerPriority &&
+        reading.ipa !== sole.ipa &&
+        scopesMayOverlap(reading.scope, input.scope),
+    );
+  }
+  if (consistent && sole !== undefined) {
+    fields.phonetic = sole.ipa;
+    provenance.set('phonetic', sole.provenance);
+  } else if (
+    readings.some(
+      (reading) =>
+        reading.tier === 'default' &&
+        reading.provenance.source !== 'legacy' &&
+        scopesMayOverlap(reading.scope, input.scope),
+    )
   ) {
-    fields.phonetic = effective[0].ipa;
-    provenance.set('phonetic', effective[0].provenance);
+    delete fields.phonetic;
+    provenance.delete('phonetic');
   }
   return {
     entryId: input.entryId,
