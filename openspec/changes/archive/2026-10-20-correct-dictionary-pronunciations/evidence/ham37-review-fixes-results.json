@@ -1,0 +1,35 @@
+{
+  "executionBase": "3eb0a1279eb80b28449b29b086e1742967496b07",
+  "results": [
+    {
+      "command": "python3 -B scripts/run_pronunciation_python_tests.py",
+      "exitCode": 0
+    },
+    {
+      "command": "node scripts/test_pronunciation_overlay.mjs",
+      "exitCode": 0
+    },
+    {
+      "command": "python3 -B scripts/check_pronunciation_immutable_baseline.py",
+      "exitCode": 0
+    },
+    {
+      "command": "git diff --check",
+      "exitCode": 0
+    }
+  ],
+  "pythonTests": 291,
+  "gateTestMethods": 33,
+  "nodeTestEntries": 7,
+  "realWiktionaryRequests": 0,
+  "actualAuthorizationCreated": false,
+  "immutable": {
+    "allSha256Unchanged": true,
+    "fileSetUnchanged": true,
+    "fullBaselineFiles": 57,
+    "fullBaselineSha256": "59daef043765d67d505947b2e93e0c8f713195564a2e5db827e268aef29a9cfe",
+    "legacyBaselineFiles": 19,
+    "legacyBaselineSha256": "5c276b787b38c094a4ccfe84b386f326091610271257ce3d1cf6cbbd32e38f14",
+    "srcDataFiles": 55
+  }
+}

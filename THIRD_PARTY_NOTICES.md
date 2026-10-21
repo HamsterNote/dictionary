@@ -177,3 +177,12 @@ Kaikki 当前说明其数据从 Wiktionary 抽取，并按 Wiktionary 的 CC-BY-
 - 本项目用途：运行时按需下载 q8 ONNX 权重，不把模型文件打包进 npm 产物。
 
 模型卡说明该模型仅支持英文，并列出其训练数据、使用限制和潜在偏差。宿主产品在公开或商业部署前应复核模型卡和 Apache License 2.0 条款；本项目不对生成语音的准确性、口音或特定用途适用性作保证。
+
+# 按词 Wiktionary 音标叠加层（独立新路径）
+
+新增按词来源观测及衍生数据按 CC BY-SA 4.0 管理，署名 Wiktionary contributors。
+许可全文见 `LICENSES/CC-BY-SA-4.0.txt`，数据边界见
+`LICENSES/WIKTIONARY-PRONUNCIATION-OVERLAY.md`。
+每项 DTO 提供具体来源页、作者历史、许可链接与变更标记；来源归因不会只留在开发缓存。
+该独立 notice 不修改下文既有 dump/Kaikki 数据的许可声明、ECDICT notices 或应用 MIT 许可。
+本实现尚不分发真实采集的新音标数据；候选、缓存、检查点和 synthetic 批准不纳入 npm 包。

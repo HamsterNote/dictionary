@@ -1,0 +1,24 @@
+{
+  "date": "2026-10-17",
+  "scope": "offline-only",
+  "realCollectionRequests": 0,
+  "actualAuthorizationFileCreated": false,
+  "tasks10Through12Checked": false,
+  "realApplyGuard": "NO-GO",
+  "results": [
+    {"command": "python3 -B scripts/run_pronunciation_python_tests.py", "exitCode": 0, "tests": 278},
+    {"command": "node scripts/test_pronunciation_overlay.mjs", "exitCode": 0},
+    {"command": "python3 -B scripts/check_pronunciation_immutable_baseline.py", "exitCode": 0},
+    {"command": "git diff --check", "exitCode": 0}
+  ],
+  "immutable": {
+    "srcDataFileSetUnchanged": true,
+    "srcDataFiles": 55,
+    "fullBaselineFiles": 57,
+    "legacyBaselineFiles": 19,
+    "allSha256Unchanged": true,
+    "fullBaselineSha256": "59daef043765d67d505947b2e93e0c8f713195564a2e5db827e268aef29a9cfe",
+    "legacyBaselineSha256": "5c276b787b38c094a4ccfe84b386f326091610271257ce3d1cf6cbbd32e38f14"
+  },
+  "limitations": ["Python 3.12 not installed", "POSIX flock required for state sessions", "Unconditional real-collection guard retained; future activation needs a new execution commit and confirmation"]
+}

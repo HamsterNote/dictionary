@@ -9,10 +9,12 @@ import type {
 import { normalizeDictionaryCorrectionKey } from './dictionaryCorrections';
 import { createLocalDictionaryCorrectionStore } from './dictionaryCorrectionStore';
 import { SYSTEM_DICTIONARY_CORRECTIONS } from './systemDictionaryCorrections';
+import type { LegacyReadState } from './pronunciation-overlay/legacy';
 
 const EMPTY_PATCHES: DictionaryCorrectionMap = {};
 
 export interface DictionaryCorrectionsManager {
+  readonly legacyReadState: LegacyReadState;
   readonly disabled: boolean;
   readonly editable: boolean;
   readonly managed: boolean;
@@ -73,7 +75,13 @@ export function createLocalCorrectionsCache(
   store: DictionaryCorrectionStore = createLocalDictionaryCorrectionStore(),
 ): LocalCorrectionsCache {
   try {
-    return { patches: store.load(), store };
+    const patches = store.load();
+    try {
+      store.loadForOverlay?.();
+    } catch (loadError) {
+      return { loadError: toError(loadError), patches, store };
+    }
+    return { patches, store };
   } catch (loadError) {
     return { loadError: toError(loadError), patches: EMPTY_PATCHES, store };
   }
@@ -152,6 +160,16 @@ export function useDictionaryCorrections(
 
   return useMemo(
     () => ({
+      legacyReadState: resolved.managed
+        ? { status: 'ready', user: resolved.user, system: resolved.system }
+        : typeof window === 'undefined'
+          ? { status: 'failed', reason: 'SSR 尚未读取本地纠错' }
+          : getLocalCorrectionsCache().loadError !== undefined
+            ? {
+                status: 'failed',
+                reason: getLocalCorrectionsCache().loadError?.message ?? '旧纠错读取失败',
+              }
+            : { status: 'ready', user: localPatches, system: resolved.system },
       disabled: resolved.disabled,
       editable: resolved.editable,
       managed: resolved.managed,

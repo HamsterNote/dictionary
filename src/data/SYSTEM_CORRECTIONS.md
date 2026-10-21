@@ -1,8 +1,15 @@
 # 填写系统纠错
 
-直接编辑同目录的 `dictionarySystemCorrections.json`，收录已核实的错误。不要编辑生成的词库快照。
+**音标纠错的唯一权威是 `dictionarySystemPronunciationRules.json`**；`dictionarySystemCorrections.json` 是由它确定性投影生成的派生文件，不要直接手改。非音标字段（`word`/`meaning`）的纠正仍直接编辑 `dictionarySystemCorrections.json`，并注意投影器只管理其中有对应规则的词头。
 
-`dictionarySystemCorrections.example.json` 是格式模板，不会加载到词典。将模板中的占位内容替换成真实数据，再把条目加入正式文件。
+新增/修改音标纠错的流程：
+
+1. 在 `dictionarySystemPronunciationRules.json` 中维护规则（`PronunciationRule` 合同：ruleId、target、operations、8 维 conditions、evidenceRefs、lifecycle、reviewStatus）。新正式规则必须逐条带 CC BY-SA 4.0 证据（permalink + history URL），缺许可或缺引用会被拒绝收录；草稿保持 `pending-review` 且无批准引用时不会投影。
+2. 运行 `node scripts/project_system_pronunciation_rules.mjs --write-legacy` 重新生成派生 JSON，并同步更新权威文件中的 `rulesVersion` 与 `legacyProjectionSha256`。
+3. 运行 `yarn test:dictionary-corrections`（含投影一致性校验）与 `yarn typecheck` 检查。派生文件与权威不一致（版本混配）会让校验失败。
+4. 回滚：恢复权威文件的旧版本后重新投影即可恢复旧派生，不删除历史记录。
+
+`dictionarySystemCorrections.example.json` 是旧派生格式的模板，不会加载到词典。
 
 - JSON 的键是原词头，英文建议小写，不能用修正后的拼写作为键。
 - 每条可填写 `word`（显示词头）、`phonetic`（音标）、`meaning`（释义）。只保留需要纠正的字段，至少填写一项。

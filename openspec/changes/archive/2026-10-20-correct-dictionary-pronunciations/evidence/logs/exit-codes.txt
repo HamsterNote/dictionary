@@ -1,0 +1,5 @@
+test:dictionary-data exit=0
+test:dictionary-corrections exit=0
+test:pronunciation-audit exit=0
+test:inflections exit=0
+test:phonetics exit=0

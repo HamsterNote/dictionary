@@ -1,0 +1,11 @@
+task=5.1-5.4,6.1-6.4  python3-offline  unittests  (recovery run)
+python3 --version = 3.14.4  (target >=3.12; 标准库 only)
+/usr/bin/python3 test_wiktionary_per_word_http.py      exit=0  (17 OK)
+/usr/bin/python3 test_wiktionary_per_word_extract.py   exit=0  (17 OK)
+/usr/bin/python3 test_wiktionary_per_word_ledger.py    exit=0  (12 OK)
+/usr/bin/python3 test_wiktionary_per_word_evidence.py  exit=0  (8 OK)
+/usr/bin/python3 test_wiktionary_per_word_offline.py   exit=0  (28 OK, skipped=4 deferred contract-align)
+/usr/bin/python3 -m unittest discover -p 'test_wiktionary_per_word_*.py'  exit=0  (82 OK, skipped=4)
+/usr/bin/python3 -m compileall -q <modules+tests>      exit=0
+# 全部离线，无网络请求；无真实联网/安装/采集/发布/迁移/长期启用。
+# 4 skipped = ContractAlignmentTest（依赖 live contracts.py；待另一 lane 终态由主编排机械 align）。

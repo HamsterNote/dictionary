@@ -22,6 +22,7 @@ import { PronunciationButton } from './PronunciationButton';
 import { formatDictionaryPhonetic } from './formatDictionaryPhonetic';
 import { useDictionaryCorrectedContent } from './useDictionaryCorrectedContent';
 import { useDictionaryCorrections } from './useDictionaryCorrections';
+import { legacyProtection, type LegacyScopeResolution } from './pronunciation-overlay/legacy';
 
 interface DictionaryContentStyle extends CSSProperties {
   readonly '--dictionary-accent'?: string;
@@ -42,6 +43,9 @@ export interface DictionaryContentProps extends Omit<HTMLAttributes<HTMLElement>
   readonly meanings?: readonly DictionaryMeaning[];
   readonly onOpenPreview?: (entry: DictionaryEntrySummary, anchor: HTMLButtonElement) => void;
   readonly phonetic?: string;
+  readonly pronunciationOverlay?: ReactNode;
+  readonly pronunciationCandidates?: ReactNode;
+  readonly pronunciationScopeResolutions?: readonly LegacyScopeResolution[];
   readonly pronounce?: (word: string) => Promise<void>;
   readonly resolveEntry?: (word: string) => DictionaryEntrySummary | undefined;
   readonly resolvedCorrections?: ResolvedDictionaryCorrectionsControl;
@@ -69,6 +73,9 @@ export function DictionaryContent({
   onOpenPreview,
   phonetic: providedPhonetic,
   pronounce,
+  pronunciationOverlay,
+  pronunciationCandidates,
+  pronunciationScopeResolutions = [],
   resolveEntry,
   resolvedCorrections,
   search = defaultSearch,
@@ -91,6 +98,20 @@ export function DictionaryContent({
     keyword,
   );
   const correctionStore = useDictionaryCorrections(corrections);
+  const overlayBlocked =
+    pronunciationOverlay === undefined
+      ? []
+      : legacyProtection(
+          activeKeyword,
+          resolvedCorrections === undefined
+            ? correctionStore.legacyReadState
+            : {
+                status: 'ready',
+                user: resolvedCorrections.user,
+                system: resolvedCorrections.system,
+              },
+          pronunciationScopeResolutions,
+        );
   const effectiveCorrections = resolvedCorrections ?? {
     disabled: correctionStore.disabled,
     editable: correctionStore.editable,
@@ -182,7 +203,16 @@ export function DictionaryContent({
               triggerRef={correctionTriggerRef}
             />
           </div>
-          {resolvedContent.phonetic ? (
+          {pronunciationOverlay !== undefined &&
+          useProvidedContent &&
+          overlayBlocked.length === 0 ? (
+            <>
+              {pronunciationOverlay}
+              {pronounce ? (
+                <PronunciationButton pronounce={pronounce} word={activeKeyword} />
+              ) : null}
+            </>
+          ) : resolvedContent.phonetic ? (
             <div className="dictionary-popover__pronunciation-row">
               <p className="dictionary-popover__phonetic">
                 {formatDictionaryPhonetic(activeKeyword, resolvedContent.phonetic)}
@@ -198,6 +228,17 @@ export function DictionaryContent({
                 <PronunciationButton pronounce={pronounce} word={activeKeyword} />
               ) : null}
             </div>
+          ) : null}
+          {pronunciationOverlay !== undefined && overlayBlocked.length > 0 ? (
+            <>
+              <p role="status">新读法暂未启用：{overlayBlocked.join('；')}</p>
+              {pronunciationCandidates === undefined ? null : (
+                <details>
+                  <summary>候选对照</summary>
+                  {pronunciationCandidates}
+                </details>
+              )}
+            </>
           ) : null}
         </div>
       </header>

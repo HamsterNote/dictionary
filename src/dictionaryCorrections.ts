@@ -99,6 +99,8 @@ export interface DictionaryCorrectedDetail {
 /** 词条纠错的最小存储合同，默认实现使用 localStorage，宿主可注入自己的后端。 */
 export interface DictionaryCorrectionStore {
   readonly load: () => DictionaryCorrectionMap;
+  /** Strict read for opt-in pronunciation protection; malformed data must not unlock it. */
+  readonly loadForOverlay?: () => DictionaryCorrectionMap;
   readonly save: (map: DictionaryCorrectionMap) => void;
 }
 

@@ -1,0 +1,26 @@
+=== ContractAlignmentTest + ContractShapeTest ===
+.............
+----------------------------------------------------------------------
+Ran 13 tests in 0.008s
+
+OK
+EXIT=0
+=== cross-language (Node/Vite SSR + Python) ===
+......
+----------------------------------------------------------------------
+Ran 6 tests in 1.283s
+
+OK
+EXIT=0
+=== python contracts ===
+...................
+----------------------------------------------------------------------
+Ran 19 tests in 0.007s
+
+OK
+EXIT=0
+=== node contracts mjs ===
+test_pronunciation_contracts: OK
+EXIT=0
+=== compileall ===
+EXIT=0

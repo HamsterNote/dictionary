@@ -1,11 +1,233 @@
 {
+  "about": {
+    "phonetic": "/əˈbaʊ̯t/"
+  },
+  "all": {
+    "phonetic": "/ɔːl/"
+  },
+  "also": {
+    "phonetic": "/ˈɔːl.səʊ/"
+  },
+  "an": {
+    "phonetic": "/ən/"
+  },
+  "and": {
+    "phonetic": "/ˈænd/"
+  },
+  "any": {
+    "phonetic": "/ɛni/"
+  },
+  "as": {
+    "phonetic": "/æz/"
+  },
+  "at": {
+    "phonetic": "/æt/"
+  },
+  "be": {
+    "phonetic": "/ˈbiː/"
+  },
+  "by": {
+    "phonetic": "/baɪ/"
+  },
+  "can": {
+    "phonetic": "/kæn/"
+  },
+  "come": {
+    "phonetic": "/kʌm/"
+  },
+  "could": {
+    "phonetic": "/kʊd/"
+  },
   "curiosity": {
     "phonetic": "/ˌkjʊəriˈɒsəti/"
+  },
+  "day": {
+    "phonetic": "/deɪ̯/"
+  },
+  "first": {
+    "phonetic": "/fɜːst/"
+  },
+  "for": {
+    "phonetic": "/fɔː/"
+  },
+  "from": {
+    "phonetic": "/ˈfɹɒm/"
+  },
+  "get": {
+    "phonetic": "/ɡɛt/"
+  },
+  "give": {
+    "phonetic": "/ˈɡɪv/"
+  },
+  "go": {
+    "phonetic": "/ɡəʊ/"
   },
   "god": {
     "phonetic": "/ɡɒd/"
   },
+  "good": {
+    "phonetic": "/ɡʊd/"
+  },
+  "have": {
+    "phonetic": "/ˈhæv/"
+  },
+  "he": {
+    "phonetic": "/ˈhiː/"
+  },
+  "him": {
+    "phonetic": "/ˈhɪm/"
+  },
+  "his": {
+    "phonetic": "/hɪz/"
+  },
+  "how": {
+    "phonetic": "/haʊ/"
+  },
+  "in": {
+    "phonetic": "/ɪn/"
+  },
+  "into": {
+    "phonetic": "/ˈɪn.tuː/"
+  },
+  "it": {
+    "phonetic": "/ɪt/"
+  },
+  "just": {
+    "phonetic": "/d͡ʒʌst/"
+  },
+  "know": {
+    "phonetic": "/nəʊ/"
+  },
+  "may": {
+    "phonetic": "/meɪ/"
+  },
+  "me": {
+    "phonetic": "/miː/"
+  },
+  "more": {
+    "phonetic": "/mɔː/"
+  },
+  "new": {
+    "phonetic": "/njuː/"
+  },
+  "no": {
+    "phonetic": "/nəʊ/"
+  },
+  "not": {
+    "phonetic": "/nɒt/"
+  },
+  "note": {
+    "phonetic": "/nəʊ̯t/"
+  },
+  "of": {
+    "phonetic": "/ʌv/"
+  },
+  "on": {
+    "phonetic": "/ɒn/"
+  },
+  "one": {
+    "phonetic": "/wʌn/"
+  },
+  "or": {
+    "phonetic": "/ɔː(ɹ)/"
+  },
+  "other": {
+    "phonetic": "/ˈʌ.ðə/"
+  },
+  "our": {
+    "phonetic": "/ˈaʊə(ɹ)/"
+  },
+  "out": {
+    "phonetic": "/ˈäʊ̯t/"
+  },
+  "people": {
+    "phonetic": "/ˈpiː.pəl/"
+  },
   "pronunciation": {
     "phonetic": "/prəˌnʌnsiˈeɪʃn/"
+  },
+  "read": {
+    "phonetic": "/ɹiːd/"
+  },
+  "say": {
+    "phonetic": "/seɪ/"
+  },
+  "see": {
+    "phonetic": "/siː/"
+  },
+  "she": {
+    "phonetic": "/ʃiː/"
+  },
+  "should": {
+    "phonetic": "/ʃɵd/"
+  },
+  "some": {
+    "phonetic": "/sʌm/"
+  },
+  "that": {
+    "phonetic": "/ðæt/"
+  },
+  "the": {
+    "phonetic": "/ðə/"
+  },
+  "their": {
+    "phonetic": "/ðɛə/"
+  },
+  "them": {
+    "phonetic": "/ˈðɛm/"
+  },
+  "then": {
+    "phonetic": "/ðɛn/"
+  },
+  "these": {
+    "phonetic": "/ðiːz/"
+  },
+  "they": {
+    "phonetic": "/ˈðeɪ̯/"
+  },
+  "think": {
+    "phonetic": "/ˈθɪŋk/"
+  },
+  "time": {
+    "phonetic": "/taɪm/"
+  },
+  "two": {
+    "phonetic": "/tu/"
+  },
+  "up": {
+    "phonetic": "/ʌp/"
+  },
+  "use": {
+    "phonetic": "/juːs/"
+  },
+  "very": {
+    "phonetic": "/ˈvɛɹi/"
+  },
+  "want": {
+    "phonetic": "/wɒnt/"
+  },
+  "way": {
+    "phonetic": "/weɪ/"
+  },
+  "we": {
+    "phonetic": "/wiː/"
+  },
+  "what": {
+    "phonetic": "/wɒt/"
+  },
+  "who": {
+    "phonetic": "/huː/"
+  },
+  "will": {
+    "phonetic": "[wɪɫ]"
+  },
+  "would": {
+    "phonetic": "/wʊd/"
+  },
+  "year": {
+    "phonetic": "/jɪə/"
+  },
+  "you": {
+    "phonetic": "/juː/"
   }
 }

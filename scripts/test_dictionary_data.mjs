@@ -2,6 +2,7 @@ import assert from 'node:assert/strict';
 import { createElement } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { createServer } from 'vite';
+import { checkOverlayQueries } from './pronunciation_compatibility_checks.mjs';
 
 const server = await createServer({ logLevel: 'error', server: { middlewareMode: true } });
 
@@ -125,6 +126,7 @@ try {
     }),
   );
   assert.doesNotMatch(prefixMarkup, /dictionary-popover__inline-word/);
+  await checkOverlayQueries(server);
 } finally {
   await server.close();
 }

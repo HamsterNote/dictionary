@@ -1,0 +1,78 @@
+{
+  "results": [
+    {
+      "command": "node scripts/test_pronunciation_contracts.mjs",
+      "exitCode": 0
+    },
+    {
+      "command": "node scripts/test_pronunciation_identity.mjs",
+      "exitCode": 0
+    },
+    {
+      "command": "node scripts/test_pronunciation_classification.mjs",
+      "exitCode": 0
+    },
+    {
+      "command": "node scripts/test_pronunciation_scope_review.mjs",
+      "exitCode": 0
+    },
+    {
+      "command": "node scripts/test_pronunciation_resolution.mjs",
+      "exitCode": 0
+    },
+    {
+      "command": "node scripts/test_pronunciation_publication.mjs",
+      "exitCode": 0
+    },
+    {
+      "command": "node scripts/test_pronunciation_renderer.mjs",
+      "exitCode": 0
+    },
+    {
+      "command": "python3 scripts/run_pronunciation_python_tests.py",
+      "exitCode": 0
+    },
+    {
+      "command": "pnpm run test:dictionary-data",
+      "exitCode": 0
+    },
+    {
+      "command": "pnpm run test:dictionary-corrections",
+      "exitCode": 0
+    },
+    {
+      "command": "pnpm run test:pronunciation-audit",
+      "exitCode": 0
+    },
+    {
+      "command": "pnpm run test:inflections",
+      "exitCode": 0
+    },
+    {
+      "command": "pnpm run test:phonetics",
+      "exitCode": 0
+    },
+    {
+      "command": "pnpm run typecheck",
+      "exitCode": 0
+    },
+    {
+      "command": "pnpm run build:types",
+      "exitCode": 0
+    },
+    {
+      "command": "pnpm run build:lib",
+      "exitCode": 0
+    },
+    {
+      "command": "pnpm run build:demo",
+      "exitCode": 0
+    },
+    {
+      "command": "node scripts/check_pronunciation_distribution.mjs",
+      "exitCode": 0
+    }
+  ],
+  "immutableFilesBefore": 19,
+  "immutableFilesAfter": 19
+}

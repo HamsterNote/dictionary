@@ -1217,3 +1217,13 @@
     transition: none;
   }
 }
+ .dictionary-pronunciations { color: var(--dictionary-text-primary, #222); width: 100%; min-width: 0; }
+ .dictionary-pronunciations section { border-top: 1px solid var(--dictionary-border, #ccc); padding: 10px 0; }
+ .dictionary-pronunciations__heading { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+ .dictionary-pronunciations h3 { font-size: 14px; margin: 0; }
+ .dictionary-pronunciations button, .dictionary-pronunciations summary { font: inherit; cursor: pointer; }
+ .dictionary-pronunciations ul { list-style: none; padding: 0; margin: 8px 0; }
+ .dictionary-pronunciations__reading { display: flex; flex-wrap: wrap; gap: 6px 10px; padding: 4px 0; font-size: 13px; overflow-wrap: anywhere; }
+ .dictionary-pronunciations__ipa { font-family: monospace; font-size: 15px; }
+ .dictionary-pronunciations__attribution { width: 100%; }
+ .dictionary-pronunciations__attribution p { margin: 4px 0; }

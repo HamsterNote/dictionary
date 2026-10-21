@@ -1,0 +1,3 @@
+9d1d3c833ab5712a4b66eac6f615ebcb50a31a1879b5bec489caf59a8923d176  src/pronunciation-overlay/scope.ts
+59672a6114596bd3d44fe5984f925ff751286d37c37e6a1b780a5db59b0ed3e8  src/pronunciation-overlay/review.ts
+0960586f8878ad622e706092accccc66d95f87adb7afd28d9bffa77f6d02689f  scripts/test_pronunciation_scope_review.mjs

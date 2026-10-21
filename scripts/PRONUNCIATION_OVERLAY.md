@@ -1,0 +1,250 @@
+# Offline Pronunciation Overlay Tools
+
+Run `COREPACK_ENABLE_STRICT=0 pnpm run test:pronunciation-overlay` for the Node
+assert/Vite SSR and standard-library Python suite. The runner blocks outbound
+network connections. Add `--record-evidence --acceptance` to the Node script to
+record logs, check the 19 immutable baseline hashes, run existing regressions and
+build the library, declarations and demo.
+
+`python3 scripts/test_pronunciation_ui.py` is an additional browser check using an
+already installed Python Playwright and Chromium. It serves an isolated synthetic
+fixture on localhost, denies other HTTP destinations, and closes the service on
+completion. `PLAYWRIGHT_CHROMIUM_EXECUTABLE` can select an existing browser.
+
+## Candidate Review
+
+`node scripts/review_pronunciation_candidate.mjs --input current-input.json
+--candidate candidate.json --report report.md` freezes the current input as JSON
+and a corresponding Markdown report. Input contains `batchId`,
+`baseManifestVersion`, identity/source/rule/projection `versions` and one
+`attempts` row per attempted word, including failures and no-change results.
+Each row includes current/proposed snapshots, status, same-scope reasons, unknown
+dimensions, retained manual values, complete source/license evidence,
+`legacyState` and `scopeResolutions`. The review tool recomputes known v1 blocks.
+Neither report generation nor scope confirmation approves publication.
+
+With `--approval approval.json --baseline manifest-version`, the same entry
+checks an externally supplied explicit approval against freshly generated
+candidate content, fixed include/exclude lists, versions and baseline. It rejects
+synthetic approvals. It never generates approval records or publishes.
+
+## Publication Module
+
+`pronunciation_publication.mjs` exports review/approval validation and filesystem
+snapshot functions. Callers must obtain a separate explicit batch approval before
+calling `publishCandidate`; implementation/apply permission is insufficient.
+`rollbackSnapshot` requires a separate action bound to the exact target manifest
+hash and current baseline. There is no autoapprove or scheduled publication path.
+
+The candidate hash covers substantive input, including scopes, corrections,
+projection, evidence and all necessary versions. Generated report formatting is
+outside that identity. A baseline change requires regeneration and new approval.
+Manifests, assets, candidate and approval history are immutable. Cooperating writers
+use an exclusive publication lock; an abandoned lock fails closed and needs operator
+inspection. Assets are validated before a fsynced atomic pointer replacement.
+Consumers load one complete snapshot; excluded, blocked and no-change words retain
+their previous references. Runtime manual corrections remain outside the snapshot.
+
+Synthetic publication tests require both an explicit test option and a temporary
+root carrying `.synthetic-test-root`; the normal approval validator rejects their
+records. These test records and candidate/cache/checkpoint files are not packaged.
+Python `--apply` and `run_apply` share a conditional authorization guard. They
+remain NO-GO without an exact user confirmation bound to the running clean commit.
+The code being executable does not grant collection. Groups 10–12 still need
+their separate permissions; existing dump generators are unchanged.
+
+## Collection Confirmation Gate
+
+`refresh_wiktionary_pronunciations.py --describe-binding` derives a read-only JSON
+contract from explicit workspace/batch roots, full clean HEAD, heads-file bytes,
+UA, fixed TOC/MAIN calls, budgets and the output whitelist. `--budget-requests`
+is mandatory for binding (maximum 600 attempts across all resumes). Use `python3
+-B` for read-only commands. Paths must be workspace-relative with no leading `./`.
+Only the reviewed five-second interval, two retries, 30-second timeout, 5/10-second
+backoff and Wiktionary endpoint are supported. HTTP redirects and auxiliary
+requests are forbidden. Limits are at most 100 heads and 20 MiB ALL decoded bytes.
+
+`--check-authorization` additionally reads the externally supplied
+`<batch>/inputs/authorization.json`. Its exact envelope keys are `schemaVersion: 1`,
+`granted: true`, `synthetic: false`, `source: "user-confirmation"`, a nonempty
+`confirmation` pointing to the user's explicit confirmation, and `binding` equal
+to the complete derived contract. Agents must not create or edit this input or
+turn a proposal into a grant. There is no grant-writing CLI. JSON is an external
+confirmation record, not a cryptographic proof of the author's identity; the
+operator must establish that it came from the user. A check passing never runs HTTP.
+
+Preflight rejects missing/mismatched confirmation, changed/duplicate/oversized
+lists, synthetic UA, changed calls/budgets/paths/version, dirty code, symlinks,
+hardlinks, unexpected files, orphan state/cache, damaged or rolled-back checkpoint,
+budget/uncertain paused state and unsettled in-flight requests before any output write. Cache
+integrity checks are read-only. Git reads
+use a minimal environment (no inherited Git selectors/configuration), explicitly
+select the actual checkout, disable global/system config and optional index locks.
+Bootstrap flock uses the existing batch directory;
+the persistent `state/authorization.lock` is never replaced or unlinked. A second
+read-only preflight under flock precedes registry creation. Registry CAS binds the
+confirmation, contract and checkpoint digest. Its write-ahead `active` phase means
+an interrupted session fails closed; a complete session atomically seals the new
+checkpoint hash and increments the revision. Deleting/recreating state to reset
+consumption is not a recovery operation. Cooperating processes must use this gate;
+local filesystem owners can modify JSON and are outside its trust boundary.
+
+Advisory flock only coordinates writers that honor it. It does not lock external
+writers of Git HEAD, source files, authorization or checkpoint inputs. HEAD and
+authorization are checked again at session exit, not before every dispatch.
+Concurrent modification of these inputs during execution is prohibited. Mid-run
+revocation is not supported. Local CAS does not detect an owner rolling back both
+registry and checkpoint together.
+
+The fake-HTTP tests mock confirmation reads in memory and disable sockets. They
+exercise the same binding/registry protocol through collector/cache/candidate
+generation. No actual authorization input is emitted. Request cap is persisted in
+both authorization and budget; the strict gate requires explicit fields in saved
+state, while older offline ledger fixtures retain their default for compatibility.
+CLI and direct calls both enter `authorized_session` using fresh invocation
+parameters; neither accepts a prevalidated config, a permit object, a synthetic
+flag, or a transport injection parameter. Ledger, adapter and fixed candidate JSON
+output paths come only from the verified binding. Transport construction happens
+after preflight and lock acquisition. The exact approved head bytes are hashed
+again before state writes and held in memory, so a subsequent file edit cannot
+introduce an unapproved dispatch; end-of-session binding recheck then fails closed.
+The collector writes the bound checkpoint
+and complete response cache; candidate reparse writes `reports/candidates.json`.
+The budget summary is printed to stdout and appended internally to `execution.log`
+after authorization. Do not redirect shell output to the batch log before the
+guard: shell redirection would create a file even when authorization is refused.
+Paused batches return nonzero and cannot resume around their limits.
+
+HTTP 403/407/451 pause immediately after bounded response accounting. HTTP 429
+and 5xx pause when their shared operation retry quota is exhausted. The word
+stays nonterminal. An explicit same-batch CLI invocation may resume these service
+pauses once the fault is resolved, provided the original confirmation still
+matches and all existing registry, budget, cache and in-flight checks pass.
+Read-only preflight makes no writes; transport is constructed only after the
+locked gate passes. Resume retains all accumulated head/byte/request/retry counts
+and charges the retried word's requests without another distinct-head slot.
+An explicitly proven known-zero transport exhaustion has the same recovery path.
+Budget and uncertain-consumption pauses are never on this recovery whitelist.
+
+Generic DNS/connection OSError and timeouts cannot prove zero consumption. They
+stop dispatch immediately, preserve the nonterminal word, known byte counts and
+uncertain request record, and fail closed. Resolving the network fault alone does
+not make that batch resumable. It cannot automatically continue; the operator must
+ask the user whether to authorize a new batch or explicitly dispose of the
+unsettled consumption. Neither action is authorized or implemented by this resume
+whitelist. Do not clear the pause, delete the ledger/registry, reset counters or
+reuse the first-round grant to bypass that decision.
+
+Cache body and metadata writes use same-directory `.cache-*.tmp` files, fsync,
+rename, directory fsync and exact read-back verification before in-memory indexing.
+Disk-backed `put` hits (including entries indexed by `_load` after a restart) also
+run idempotent persistence before returning: existing identical files are checked,
+the directory is fsynced and bytes are read back. A visible rename alone is not a
+durability acknowledgement; failed sync or verification keeps recovery pending.
+Identical partial writes can be retried; conflicting content is rejected.
+
+The bound `.cache-` temporary prefix permits transient files only while an
+authorized writer is inside a session. Preflight does not accept leftover
+`.cache-*.tmp` files: the existing-file scan permits only the declared permanent
+64hex body/metadata cache names. Handled failures remove their temporary files.
+Crash leftovers block entry with zero writes; there is no automatic deletion or
+cleanup bypass. Recovery requires no leftover temporary files, intact permanent
+cache files, a valid settled pending checkpoint, an idle sealed registry and
+remaining bound budgets. An interrupted/active registry still refuses recovery
+even if someone removes a leftover file; deleting or recreating state to reset
+consumption is prohibited. A cache write failure persists `cache-persist-failed` and
+the already-accounted complete responses in `checkpoint.pendingCache`. The word
+stays paused and nonterminal, no further head/request is dispatched, and candidate
+generation is deferred (`candidateCount: null`; any older report is not updated).
+A normally sealed session may resume this specific settled pause within its bound
+budgets: it retries cache writes from checkpoint bytes before any new request,
+without charging or fetching the page again. Unsettled requests, exhausted budgets,
+invalid pending payloads and interrupted/active registries still refuse recovery.
+
+The execution commit can now be frozen before confirmation; providing the valid
+external input then allows execution on that same commit without editing code.
+Any code change invalidates that binding and requires a new confirmation.
+
+## Real TOC Schema and Second-Batch Preparation
+
+`action_api.select_english_section` accepts exact `line == "English"` with integer
+`hLevel == 2` and uses its string `index` as the parse `section`. `tocLevel` is the
+relative TOC depth, while `number` is only a display ordinal; neither locates the
+parse section. Missing/malformed heading fields, invalid English indices or
+duplicate English roots raise structural errors instead of becoming false missing
+English results. The same TOC request takes `prop=tocdata|revid` and requires a
+positive integer revision. MAIN takes `oldid=<that revision>` plus the selected
+`section`, with `prop=text|revid`; it does not send `page` or `redirects`. MAIN's
+returned revision must exactly match TOC. Missing/invalid revisions, an unavailable
+oldid or an out-of-range section fail the word without candidate evidence.
+This still uses two normal requests per head, but changes both bound calls.
+The extractor version is now 3; old checkpoints cannot be upgraded or reset.
+
+Before a page becomes FOUND, its expanded HTML must have exactly one h2 language
+root, English, and every IPA observation must lie under that root. Missing,
+foreign, duplicate or additional language roots fail closed, even with a matching
+revision. Nested headline markup and edit links are handled structurally. The
+collector also enforces this on cache-persistence recovery. The generic HTML
+extractor derives each observation's language from the actual h2 heading, leaving
+it unknown without a root; it never assumes English. This language check is a
+second gate: **oldid does not freeze templates/modules**, so a historical page
+revision alone cannot guarantee identical expanded HTML across retrievals.
+
+The consumed `ham37-first-round-v1` batch is kept intact. Its 100 cached TOCs are
+complete, attributed and licensed, but none contains `revid`. They can be audited
+offline with `audit_wiktionary_toc_cache.py`; that command prohibits sockets and
+adapter dispatch and verifies original evidence bytes/mtimes remain unchanged.
+The output lists every cached English index/title. Without a valid cached revid,
+executable MAIN URL/parameters are null; it does not invent an oldid. The previous
+freeze's unbound page/index projections are superseded and must not be dispatched.
+
+The prepared `ham37-second-round-v1` uses the same ordered 100 heads but requires
+a new execution/budget confirmation. The CLI supports fresh TOC then MAIN, not a
+cache-seeded MAIN-only mode. Reusing an old index against a changing live page
+without a revision binding is unsafe. No consumed ledger/cache is copied into the
+new batch, no grant is created, and no new session is started by preparation.
+The exact binding changes for execution commit, isolated paths, TOC's
+`tocdata|revid`, and MAIN's `oldid=validated-TOC-revid` /
+`dynamic-English-hLevel-2-index` / `text|revid` parameters; it must be confirmed
+again. Existing gate, registry, consumption-uncertainty and pause limits apply.
+
+Proposed second-batch limits: 100 heads, 600 dispatch attempts across recovery,
+20,971,520 ALL decoded body bytes, serial 5 seconds, timeout 30 seconds per
+transport, two operation retries with 5/10-second backoff and Retry-After.
+Normally at most 200 requests (100 TOC and 100 MAIN); missing/error/early pause may
+reduce that. Two hundred dispatches alone require at least 995 seconds; roughly
+19-25 minutes is a planning estimate using the first run's TOC latency, not a
+deadline or a guarantee. MAIN body size/latency has not been measured. TOC decoded
+bytes were 1,688,166 in the previous batch; total second-batch bytes cannot be
+estimated reliably yet and may exhaust 20 MiB. Encoded network bytes remain a
+separate measured counter with no independent encoded-byte cap in this contract.
+Do not claim cost or time halves merely because a TOC cache exists.
+
+Product-manager authority-migration planning is now incorporated into the same
+OpenSpec change. Groups 11-13 remain unchecked; candidate approval, migration
+implementation, publication and long-term budgets are not granted by this repair.
+
+## Host Integration
+
+The opt-in package subpath `@hamster-note/dictionary/pronunciation-overlay`
+exports identity, resolution, review, scoped correction/storage, v1 protection,
+query and renderer APIs. The existing default query/callback/v1 contracts remain
+available. `createPronunciationQuery` accepts a validated published snapshot and
+the consumer's current v1 read state and fingerprint-bound resolutions; rebuild it
+when either changes. It returns all entries and readings without choosing a first
+entry for the old single-value contract. A lossy legacy projection requires explicit
+verification bound to the manifest version. Host-owned phonetic values are retained.
+After scope confirmation, a current v1 phonetic patch must also be represented by
+an active same-origin scoped rule with its exact value (including suppression).
+Otherwise the query and publication tools keep the word protected. Confirmation
+alone cannot drop the old patch; creating or migrating persisted rules still needs
+the corresponding explicit operation.
+
+`DictionaryContent.pronunciationOverlay` inserts an opt-in renderer. The component
+also checks its actual current controlled/local v1 state; SSR with unread local
+storage fails closed. `pronunciationCandidates` can supply a read-only comparison
+while blocked. New scoped corrections use their own callback and v2 storage key.
+The renderer never writes v1 or plays a specific IPA; word-level audio remains in
+the existing parent component. Source/history/license/change notices remain readable
+in the renderer and DTO. License files are distributed under `LICENSES/` separately
+from the MIT application and existing ECDICT/dump notices.

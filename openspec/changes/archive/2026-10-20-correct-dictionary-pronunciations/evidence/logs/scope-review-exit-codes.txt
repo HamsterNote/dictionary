@@ -1,0 +1,3 @@
+test_pronunciation_scope_review (node) = 0
+eslint (scope.ts, review.ts, test mjs) = 0
+typecheck (pnpm run typecheck) = 1 (失败仅在 src/pronunciation-overlay/classification.ts，属其他 lane；scope.ts/review.ts 无错误)

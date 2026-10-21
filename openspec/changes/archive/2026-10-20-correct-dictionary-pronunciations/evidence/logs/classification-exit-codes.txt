@@ -1,0 +1,7 @@
+=== eslint ===
+EXIT=0
+=== tsc -p tsconfig.app.json --noEmit ===
+EXIT=0
+=== node test ===
+test_pronunciation_classification: OK (30 checks)
+EXIT=0
