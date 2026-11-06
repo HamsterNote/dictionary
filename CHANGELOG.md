@@ -5,6 +5,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Changed
+
+- 新增 `--dictionary-radius-popover` 与 `--dictionary-radius-control` 设计变量，统一弹层、搜索、建议及操作按钮的圆角语言，并允许宿主映射自身设计系统。
+
 ## [0.1.1-beta.2] - 2026-08-18
 
 ### Added
