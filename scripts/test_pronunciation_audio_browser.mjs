@@ -51,6 +51,9 @@ try {
       if (this.behavior.play === 'reject') {
         return Promise.reject(new DOMException('gesture required', 'NotAllowedError'));
       }
+      if (this.behavior.play === 'unsupported') {
+        return Promise.reject(new DOMException('decode failed', 'NotSupportedError'));
+      }
       return Promise.resolve();
     }
 
@@ -260,6 +263,75 @@ try {
     await flush();
     assert.equal(retry.controller.getState().status, 'playing');
     assert.equal(requests, 3);
+    retry.audioElements[2].emit('ended');
+    await replay;
+  }
+
+  {
+    let online = true;
+    const requests = [];
+    const startupFallback = fixture({
+      canPlayType: () => 'probably',
+      isOnline: () => online,
+      audioBehavior: (index) => (index === 0 ? { play: 'unsupported' } : {}),
+      fetch: async (url) => {
+        requests.push(url);
+        return responseFor(url);
+      },
+    });
+    const playing = startupFallback.controller.play(contexts.hello);
+    await flush();
+    assert.equal(startupFallback.controller.getState().status, 'playing');
+    assert.equal(startupFallback.controller.getState().error, undefined);
+    assert.equal(requests.length, 2);
+    assert.ok(requests[0].includes('.ogg'));
+    assert.ok(requests[1].includes('.mp3'));
+    assert.equal(startupFallback.audioElements[0].playCount, 1);
+    assert.equal(startupFallback.audioElements[1].playCount, 1);
+    startupFallback.audioElements[1].emit('ended');
+    await playing;
+
+    online = false;
+    const offlineReplay = startupFallback.controller.play(contexts.hello);
+    await flush();
+    assert.equal(startupFallback.controller.getState().status, 'playing');
+    assert.equal(startupFallback.audioElements.length, 3);
+    assert.equal(requests.length, 2);
+    startupFallback.audioElements[2].emit('ended');
+    await offlineReplay;
+  }
+
+  {
+    let fail = true;
+    let online = true;
+    let requests = 0;
+    const retry = fixture({
+      canPlayType: () => 'probably',
+      isOnline: () => online,
+      audioBehavior: () => (fail ? { play: 'unsupported' } : {}),
+      fetch: async (url) => {
+        requests += 1;
+        return responseFor(url);
+      },
+    });
+    await retry.controller.play(contexts.hello);
+    assert.equal(retry.controller.getState().error, 'decode');
+    assert.equal(requests, 2);
+    assert.equal(retry.audioElements.length, 2);
+
+    online = false;
+    await retry.controller.play(contexts.hello);
+    assert.equal(retry.controller.getState().error, 'offline');
+    assert.equal(requests, 2);
+    assert.equal(retry.audioElements.length, 2);
+
+    online = true;
+    fail = false;
+    const replay = retry.controller.play(contexts.hello);
+    await flush();
+    assert.equal(retry.controller.getState().status, 'playing');
+    assert.equal(requests, 3);
+    assert.equal(retry.audioElements.length, 3);
     retry.audioElements[2].emit('ended');
     await replay;
   }

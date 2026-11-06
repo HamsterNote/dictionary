@@ -297,9 +297,23 @@ export function createPronunciationBrowserController(
             ));
           element = await prepareCandidate(blob, requestGeneration, deadline);
           cache.set(key, blob);
+          try {
+            await withTimeout(element.play(), PLAY_START_TIMEOUT_MS, requestGeneration, 'timeout');
+          } catch (error) {
+            if (
+              error instanceof PlaybackCancelled ||
+              error instanceof PlaybackFailure ||
+              isNotAllowed(error)
+            ) {
+              throw error;
+            }
+            throw new PlaybackFailure('decode', '启动时无法解码音频');
+          }
           break;
         } catch (error) {
-          if (error instanceof PlaybackCancelled) throw error;
+          if (error instanceof PlaybackCancelled || isNotAllowed(error)) throw error;
+          if (error instanceof PlaybackFailure && error.kind === 'timeout') throw error;
+          element = undefined;
           cache.delete(key);
           lastError = error;
           releasePlayback();
@@ -310,8 +324,6 @@ export function createPronunciationBrowserController(
           ? lastError
           : new PlaybackFailure('decode', '没有可解码媒体');
       }
-      assertCurrent(requestGeneration);
-      await withTimeout(element.play(), PLAY_START_TIMEOUT_MS, requestGeneration, 'timeout');
       assertCurrent(requestGeneration);
       publish({ status: 'playing', contextKey });
       const ended = new Promise<void>((resolve, reject) => {

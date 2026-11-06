@@ -2,7 +2,7 @@
 
 - 包名与拟发布版本：`@hamster-note/dictionary@0.1.1-beta.3`。
 - 联调 tarball：`hamster-note-dictionary-0.1.1-beta.3.tgz`。
-- SHA-256：`606ff7e7c9d540e1dd132c808dba73048d35e3bd4e8c4d9d542af876b0dfd7c9`。
+- SHA-256：`11e80b9a5bb06d1abe5db441808e588a51f6440adfefd12ac36e92434436a35b`。
 - 纯数据入口：`@hamster-note/dictionary/pronunciation-audio`。
 - 浏览器入口：`createPronunciationBrowserController()`，来自 `@hamster-note/dictionary/pronunciation-audio/browser`。
 - 共享组件：向 `DictionaryContent` 传入 `pronunciation={controller}`；每个内容实例一个 controller，卸载时 `dispose()`，停止但保留缓存时使用 `stop()`。
