@@ -7,3 +7,4 @@ pnpm-lock.yaml
 .playwright-mcp
 .paperclip-runtime
 src/data/ecdict-top-20000.tsv
+openspec/changes/add-dictionary-pronunciation-audio/evidence

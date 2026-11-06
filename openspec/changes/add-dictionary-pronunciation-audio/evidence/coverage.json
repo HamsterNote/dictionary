@@ -1,0 +1,607 @@
+{
+  "acceptedEntries": 5,
+  "frozenWords": [
+    "hello",
+    "note",
+    "apple",
+    "book",
+    "world",
+    "water",
+    "cat",
+    "dog",
+    "learn",
+    "word",
+    "dictionary",
+    "pronunciation",
+    "read",
+    "lead",
+    "live",
+    "record",
+    "wind",
+    "close",
+    "minute",
+    "present"
+  ],
+  "records": [
+    {
+      "accepted": true,
+      "audioTitles": [
+        "En-uk-hello.ogg",
+        "En-au-hello.ogg",
+        "en-uk-hello-1.ogg",
+        "en-us-hello.ogg",
+        "en-uk-hello-2.ogg",
+        "en-us-hello-2.ogg",
+        "en-uk-hello-3.ogg",
+        "en-us-hello-3.ogg",
+        "en-uk-hello-4.ogg",
+        "en-us-hello-4.ogg",
+        "en-uk-hello-5.ogg"
+      ],
+      "commons": {
+        "author": "Association Shtooka, Judith Franck",
+        "license": {
+          "name": "Creative Commons Attribution 3.0 United States",
+          "spdx": "CC-BY-3.0",
+          "url": "https://creativecommons.org/licenses/by/3.0/us/deed.en"
+        },
+        "media": [
+          {
+            "bytes": 14145,
+            "durationSeconds": 1.1,
+            "mime": "application/ogg",
+            "url": "https://upload.wikimedia.org/wikipedia/commons/4/48/En-uk-hello.ogg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+          },
+          {
+            "bytes": 18500,
+            "durationSeconds": 1.1,
+            "mime": "audio/mpeg",
+            "url": "https://upload.wikimedia.org/wikipedia/commons/transcoded/4/48/En-uk-hello.ogg/En-uk-hello.ogg.mp3"
+          }
+        ],
+        "metadataSha256": "d2eb32cbc35f755165acd58a4b8256e1a3bef71428701e5ecc1c30787c2e6058",
+        "pageUrl": "https://commons.wikimedia.org/wiki/File:En-uk-hello.ogg",
+        "rawResponse": "openspec/changes/add-dictionary-pronunciation-audio/evidence/raw/get-d4f8624e7200b7fdcb356b41799712fb550d0ab404cd1ed36733939f7221b09d.json",
+        "revisionId": 862483068
+      },
+      "currentPhonetic": "hә'lәu",
+      "gap": null,
+      "pageUrl": "https://en.wiktionary.org/wiki/hello",
+      "rawResponse": "openspec/changes/add-dictionary-pronunciation-audio/evidence/raw/get-0dfd459a62e035bc2ce86678d5b7c760482610b690d274c0e0c8607f7024852d.json",
+      "rawResponseSha256": "2a7c6e5e2a18d6cf9c05291023e4a30c1b134f1c55685ef7f0f8dd6d530b384c",
+      "reviewNote": "当前 ECDICT 的 ә/'/u 记法与 UK /həˈləʊ/ 的音素和重音一致；仅对应指定的 UK 文件。",
+      "revisionId": 95307852,
+      "revisionTimestamp": "2026-11-02T03:58:18Z",
+      "sourcePhonetics": [
+        "/hɛˈloʊ/",
+        "/hə-/",
+        "/ˈhɛloʊ/",
+        "/həˈləʊ/",
+        "/hɛ-/",
+        "/haˈlaʊ/",
+        "/həˈləʉ/",
+        "/hɛˈloː/",
+        "/ˈhɛlo(ː)/",
+        "/həˈlo(w)/"
+      ],
+      "word": "hello"
+    },
+    {
+      "accepted": false,
+      "audioTitles": [
+        "en-us-note.ogg"
+      ],
+      "currentPhonetic": "nәut",
+      "gap": "reading-review-missing",
+      "pageUrl": "https://en.wiktionary.org/wiki/note",
+      "rawResponse": "openspec/changes/add-dictionary-pronunciation-audio/evidence/raw/get-10b28cbf76b5d1f2148d498eaaf315e54775d847624c2ddb1f5af98c51dcfac5.json",
+      "rawResponseSha256": "80eefb25682560f29c61ff8a88db6f95cb0c5487524a94237508c5aff44764c3",
+      "revisionId": 95403004,
+      "revisionTimestamp": "2026-11-03T08:27:47Z",
+      "sourcePhonetics": [
+        "/nəʊ̯t/",
+        "/noʊ̯t/",
+        "/nəʉ̯t/",
+        "/nɐʉ̯t/"
+      ],
+      "word": "note"
+    },
+    {
+      "accepted": true,
+      "audioTitles": [
+        "LL-Q1860 (eng)-Naomi Persephone Amethyst (NaomiAmethyst)-apple.wav",
+        "En-us-apple.ogg",
+        "En-uk-apple.ogg",
+        "LL-Q1860 (eng)-Vealhurl-apple.wav"
+      ],
+      "commons": {
+        "author": "Association Shtooka, Judith Franck",
+        "license": {
+          "name": "Creative Commons Attribution 3.0 United States",
+          "spdx": "CC-BY-3.0",
+          "url": "https://creativecommons.org/licenses/by/3.0/us/deed.en"
+        },
+        "media": [
+          {
+            "bytes": 16265,
+            "durationSeconds": 1.2,
+            "mime": "application/ogg",
+            "url": "https://upload.wikimedia.org/wikipedia/commons/c/c8/En-uk-apple.ogg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+          },
+          {
+            "bytes": 24405,
+            "durationSeconds": 1.2,
+            "mime": "audio/mpeg",
+            "url": "https://upload.wikimedia.org/wikipedia/commons/transcoded/c/c8/En-uk-apple.ogg/En-uk-apple.ogg.mp3"
+          }
+        ],
+        "metadataSha256": "8a31c72f7cc53299a49cfc48d2f7841ce769acd9e49a1ba024a49fb544e9e77a",
+        "pageUrl": "https://commons.wikimedia.org/wiki/File:En-uk-apple.ogg",
+        "rawResponse": "openspec/changes/add-dictionary-pronunciation-audio/evidence/raw/get-c8b9c14979fba5fd42c083ca6ae1bac6210fd1af2f904d86e9b823da5c19ba71.json",
+        "revisionId": 1107694341
+      },
+      "currentPhonetic": "'æpl",
+      "gap": null,
+      "pageUrl": "https://en.wiktionary.org/wiki/apple",
+      "rawResponse": "openspec/changes/add-dictionary-pronunciation-audio/evidence/raw/get-beda0cffb8d958042cff67e4ad8fbfe3e032366edc6478cb38c24963ec49996d.json",
+      "rawResponseSha256": "a04b5ad39c0bab0132da65281e2091da983531688a06c725b618933bbe2eee13",
+      "reviewNote": "当前单音节词省略音节化 l 的显式写法；音素与 UK /ˈæpəl/ 一致，仅对应指定 UK 文件。",
+      "revisionId": 94495227,
+      "revisionTimestamp": "2026-10-27T19:15:06Z",
+      "sourcePhonetics": [
+        "/ˈæpəl/",
+        "[ˈæpəl]",
+        "[ˈæpl̩]",
+        "/ˈapəl/",
+        "[ˈapəl]",
+        "[ˈapl̩]",
+        "/ˈɛpəl/",
+        "[ˈɛpəl]",
+        "[ˈɛpl̩]",
+        "/ˈæː.pɘl/",
+        "/ˈɑː.pɘl/"
+      ],
+      "word": "apple"
+    },
+    {
+      "accepted": true,
+      "audioTitles": [
+        "en-us-book.ogg",
+        "En-uk-book.ogg"
+      ],
+      "commons": {
+        "author": "Association Shtooka, Judith Franck",
+        "license": {
+          "name": "Creative Commons Attribution 3.0 United States",
+          "spdx": "CC-BY-3.0",
+          "url": "https://creativecommons.org/licenses/by/3.0/us/deed.en"
+        },
+        "media": [
+          {
+            "bytes": 15015,
+            "durationSeconds": 1.2,
+            "mime": "application/ogg",
+            "url": "https://upload.wikimedia.org/wikipedia/commons/7/70/En-uk-book.ogg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+          },
+          {
+            "bytes": 20327,
+            "durationSeconds": 1.2,
+            "mime": "audio/mpeg",
+            "url": "https://upload.wikimedia.org/wikipedia/commons/transcoded/7/70/En-uk-book.ogg/En-uk-book.ogg.mp3"
+          }
+        ],
+        "metadataSha256": "fea3fae8f323444dcabb6bb23c309d2b0ed94afcb9324c1038ddee07065c0917",
+        "pageUrl": "https://commons.wikimedia.org/wiki/File:En-uk-book.ogg",
+        "rawResponse": "openspec/changes/add-dictionary-pronunciation-audio/evidence/raw/get-1821ce96d19b02e5f5e5d68e40c4fff8b113d427c64dfc2289d62ff43aca3a7d.json",
+        "revisionId": 1229077031
+      },
+      "currentPhonetic": "buk",
+      "gap": null,
+      "pageUrl": "https://en.wiktionary.org/wiki/book",
+      "rawResponse": "openspec/changes/add-dictionary-pronunciation-audio/evidence/raw/get-9a6eae507b279e9102b95819942cb6000149806803b1720c335b9519a90db2d4.json",
+      "rawResponseSha256": "7da558c05e79a3e3cfb04627bece92fb050a539c888342478d42bfa6796418d7",
+      "reviewNote": "ECDICT 旧记法以 u 表示 /ʊ/；当前读法与 UK /bʊk/ 一致，不使用其他口音文件。",
+      "revisionId": 94548435,
+      "revisionTimestamp": "2026-10-28T19:08:43Z",
+      "sourcePhonetics": [
+        "/bʊk/",
+        "/bɵk/",
+        "/buːk/",
+        "/bʉk/"
+      ],
+      "word": "book"
+    },
+    {
+      "accepted": false,
+      "audioTitles": [
+        "En-us-world.oga",
+        "En-ca-world.ogg"
+      ],
+      "currentPhonetic": "wә:ld",
+      "gap": "reading-review-missing",
+      "pageUrl": "https://en.wiktionary.org/wiki/world",
+      "rawResponse": "openspec/changes/add-dictionary-pronunciation-audio/evidence/raw/get-39c6b5c3eb7a231ec3138e0b080178d0ff90fdb2e206b38b6197438fa18a34d6.json",
+      "rawResponseSha256": "84a7293a015e6d5ad24351aeda257eae8ce05990baa0883ea0a3f15810f92aed",
+      "revisionId": 94578229,
+      "revisionTimestamp": "2026-10-28T20:42:38Z",
+      "sourcePhonetics": [
+        "/wɜːld/",
+        "/wɝld/",
+        "[wɝɫd]",
+        "/wɵːld/",
+        "[wɵːɯ̯d̥]"
+      ],
+      "word": "world"
+    },
+    {
+      "accepted": false,
+      "audioTitles": [
+        "En-uk-water.ogg",
+        "LL-Q1860 (eng)-Back ache-water.wav",
+        "LL-Q1860 (eng)-Nail123Real-water.wav",
+        "En-us-water.ogg",
+        "LL-Q1860 (eng)-Byrhtnoð-water.wav",
+        "Water - pronunciation in Australian English (2026).wav"
+      ],
+      "currentPhonetic": "'wɒ:tә",
+      "gap": "reading-review-missing",
+      "pageUrl": "https://en.wiktionary.org/wiki/water",
+      "rawResponse": "openspec/changes/add-dictionary-pronunciation-audio/evidence/raw/get-15454e3a126cfbdac6200d43153dd26129be2d509eb77f4c13055d6f6c0ab217.json",
+      "rawResponseSha256": "fd9796ef829563868e9942c185be03cdbb4bebb598a1a3a1e27efdd9638fb39c",
+      "revisionId": 95210102,
+      "revisionTimestamp": "2026-11-02T00:42:20Z",
+      "sourcePhonetics": [
+        "/ˈwɔː.tə/",
+        "[ˈwo̞ː.tʰə]",
+        "/ˈwa.tɐ/",
+        "/ˈwa.tə/",
+        "/ˈwɔ.tɚ/",
+        "[ˈwɔ.ɾɚ]",
+        "/ˈwɑ.tɚ/",
+        "[ˈwɑ.ɾɚ]",
+        "/ˈwɒ-/",
+        "[ˈwɒ-]",
+        "/ˈwʊ.tɚ/",
+        "[ˈwʊ.ɾɚ]",
+        "/ˈwoː.tə/",
+        "[ˈwoː.ɾə]",
+        "[ˈwoː.ɾʌ]",
+        "[ˈwoː.dʌ]",
+        "[ˈwoː.ʔɐ]",
+        "[-ʔə]",
+        "[ˈwoʊ̯.ʔə]",
+        "[ˈwɔo̯.ɾɐ]",
+        "[ˈwɔː.ʔə]",
+        "/ˈwæ.tə/",
+        "/ˈwɔ.təɾ/",
+        "[ˈwɔə̯.ɾə]",
+        "[-ɾɚ]",
+        "/ˈwɔɹ.tɚ/",
+        "[ˈwɔɹ.ɾɚ]",
+        "/ˈwɔː.tɚ/",
+        "[ˈwɒː.θ̠ɚ]",
+        "[ˈwɔː.ʔɚ]",
+        "[ˈwɔ(ː).ʈə(ɾ)]",
+        "[ˈʋɔ(ː)-]",
+        "[ˈʋäː.ʈ(ə)ɾ(ɯ)]",
+        "[ˈwäː-]",
+        "[ˈwɔː.tə]",
+        "/ˈwɔ.tə/",
+        "/ˈwɐː.t̪ɛɾ/"
+      ],
+      "word": "water"
+    },
+    {
+      "accepted": true,
+      "audioTitles": [
+        "En-uk-a cat.ogg",
+        "En-us-cat.ogg",
+        "LL-Q1860 (eng)-Naomi Persephone Amethyst (NaomiAmethyst)-cat.wav",
+        "En-us-inlandnorth-cat.ogg"
+      ],
+      "commons": {
+        "author": "Dvortygirl",
+        "license": {
+          "name": "Creative Commons Attribution ShareAlike 3.0",
+          "spdx": "CC-BY-SA-3.0",
+          "url": "https://creativecommons.org/licenses/by-sa/3.0/"
+        },
+        "media": [
+          {
+            "bytes": 9550,
+            "durationSeconds": 0.5224489795918368,
+            "mime": "application/ogg",
+            "url": "https://upload.wikimedia.org/wikipedia/commons/4/46/En-us-cat.ogg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+          },
+          {
+            "bytes": 10004,
+            "durationSeconds": 0.5224489795918368,
+            "mime": "audio/mpeg",
+            "url": "https://upload.wikimedia.org/wikipedia/commons/transcoded/4/46/En-us-cat.ogg/En-us-cat.ogg.mp3"
+          }
+        ],
+        "metadataSha256": "95ecbff0c2308f2387511b0e588ce8455eab905e2fcf9d72b03fc59c2a8fdee7",
+        "pageUrl": "https://commons.wikimedia.org/wiki/File:En-us-cat.ogg",
+        "rawResponse": "openspec/changes/add-dictionary-pronunciation-audio/evidence/raw/get-891ce2895a008713c774a8713bbcdcca8527f0c96905c2991e13a187646c6e48.json",
+        "revisionId": 1229122106
+      },
+      "currentPhonetic": "kæt",
+      "gap": null,
+      "pageUrl": "https://en.wiktionary.org/wiki/cat",
+      "rawResponse": "openspec/changes/add-dictionary-pronunciation-audio/evidence/raw/get-2ba4f34e116de52af26d4501c2ee2d85cb4ecf00fc04deb76d0816c29eab2786.json",
+      "rawResponseSha256": "e5b39bdb94cc48c6ad606b018410ce96c7e63239ffab00daed8f543fb954d838",
+      "reviewNote": "单音节词省略主重音不改变音素；选择单词录音 En-us-cat.ogg，不选择短语 a cat 或地区变体。",
+      "revisionId": 95423400,
+      "revisionTimestamp": "2026-11-04T22:35:22Z",
+      "sourcePhonetics": [
+        "/ˈkæt/",
+        "[ˈkʰæt]",
+        "[ˈkʰeə̯t]",
+        "[ˈkʰɛə̯t]",
+        "/ˈkɛt/",
+        "[ˈkʰɛt]"
+      ],
+      "word": "cat"
+    },
+    {
+      "accepted": true,
+      "audioTitles": [
+        "En-uk-dog.ogg",
+        "LL-Q1860 (eng)-Back ache-dog.wav",
+        "En-us-ne-dog.ogg",
+        "en-us-dog.ogg"
+      ],
+      "commons": {
+        "author": "Association Shtooka, Judith Franck",
+        "license": {
+          "name": "Creative Commons Attribution 3.0 United States",
+          "spdx": "CC-BY-3.0",
+          "url": "https://creativecommons.org/licenses/by/3.0/us/deed.en"
+        },
+        "media": [
+          {
+            "bytes": 14371,
+            "durationSeconds": 0.82,
+            "mime": "application/ogg",
+            "url": "https://upload.wikimedia.org/wikipedia/commons/1/15/En-uk-dog.ogg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+          },
+          {
+            "bytes": 19808,
+            "durationSeconds": 0.82,
+            "mime": "audio/mpeg",
+            "url": "https://upload.wikimedia.org/wikipedia/commons/transcoded/1/15/En-uk-dog.ogg/En-uk-dog.ogg.mp3"
+          }
+        ],
+        "metadataSha256": "ccc30245f5be2398abaf2a104dff8a71c3bc61a9d1e24fbc5ea888a79824ecd4",
+        "pageUrl": "https://commons.wikimedia.org/wiki/File:En-uk-dog.ogg",
+        "rawResponse": "openspec/changes/add-dictionary-pronunciation-audio/evidence/raw/get-d223022c0736cc71a0dc346c15da81595fc1c69fef7954a2a8182296d386a5ae.json",
+        "revisionId": 877133033
+      },
+      "currentPhonetic": "dɒg",
+      "gap": null,
+      "pageUrl": "https://en.wiktionary.org/wiki/dog",
+      "rawResponse": "openspec/changes/add-dictionary-pronunciation-audio/evidence/raw/get-44695637c68fd225a20c0cfaf2df5c3f335ea678c7ca21e1f5d6e885c0f3cc0f.json",
+      "rawResponseSha256": "da6221fd7b6c952270706916cbb4dc88c764cbef03a59bf158051f55a4d18fb7",
+      "reviewNote": "g 与 ɡ 是同一 IPA 音素的字形差异；当前 UK /dɒɡ/ 仅对应指定 UK 文件。",
+      "revisionId": 95422771,
+      "revisionTimestamp": "2026-11-04T20:51:45Z",
+      "sourcePhonetics": [
+        "/dɒɡ/",
+        "/dɔɡ/",
+        "/dɑɡ/",
+        "[dɔ̟ɡ]"
+      ],
+      "word": "dog"
+    },
+    {
+      "accepted": false,
+      "audioTitles": [
+        "en-uk-to learn.ogg",
+        "en-us-learn.ogg"
+      ],
+      "currentPhonetic": "lә:n",
+      "gap": "reading-review-missing",
+      "pageUrl": "https://en.wiktionary.org/wiki/learn",
+      "rawResponse": "openspec/changes/add-dictionary-pronunciation-audio/evidence/raw/get-d58c09ba96a3ef367d2a2f22edb7d530f64391309c1ab8cac5cd43e1d76b033e.json",
+      "rawResponseSha256": "cd01c5bf4b818650c69990d803e2641ff73a4070c8493c9f6716e9c0606e067e",
+      "revisionId": 93582931,
+      "revisionTimestamp": "2026-10-14T20:40:06Z",
+      "sourcePhonetics": [
+        "/lɜːn/",
+        "/lɝn/",
+        "/lɑː(ɹ)n/",
+        "/lɛːrn/",
+        "/lɛrn/"
+      ],
+      "word": "learn"
+    },
+    {
+      "accepted": false,
+      "audioTitles": [
+        "En-us-word.ogg"
+      ],
+      "currentPhonetic": "wә:d",
+      "gap": "reading-review-missing",
+      "pageUrl": "https://en.wiktionary.org/wiki/word",
+      "rawResponse": "openspec/changes/add-dictionary-pronunciation-audio/evidence/raw/get-6f8b207bdd95c2770f106aedd1fde406a2b22f57ba195946f8f20e7df28e68ee.json",
+      "rawResponseSha256": "e8e2012dda7e1ccf6fd83fe18cd16fd8ae9e5034e6f169ec29ac9ee885dba63d",
+      "revisionId": 94590112,
+      "revisionTimestamp": "2026-10-30T05:11:18Z",
+      "sourcePhonetics": [
+        "/wɜːd/",
+        "/wɛːd/",
+        "/weːd/",
+        "/wɜɹd/",
+        "/wøːd/",
+        "/wʌɾd/"
+      ],
+      "word": "word"
+    },
+    {
+      "accepted": false,
+      "audioTitles": [
+        "En-uk-dictionary.ogg",
+        "En-us-dictionary.ogg"
+      ],
+      "currentPhonetic": "'dikʃәnәri",
+      "gap": "license-or-media: 缺少明确作者归因",
+      "pageUrl": "https://en.wiktionary.org/wiki/dictionary",
+      "rawResponse": "openspec/changes/add-dictionary-pronunciation-audio/evidence/raw/get-130bf46160b77f79b66ae3ae51b93bec5d879cafd638be89d213badef9cffebd.json",
+      "rawResponseSha256": "9d623522b04f69c41598e5a802b15ac23dd6e8a91eed764b50605f4eda97f532",
+      "revisionId": 93780484,
+      "revisionTimestamp": "2026-10-23T18:03:05Z",
+      "sourcePhonetics": [
+        "/ˈdɪkʃən.ɹi/",
+        "/ˈdɪkʃ(ə)nəɹi/",
+        "/ˈdɪkʃəˌnɛɹi/",
+        "/ˈɖɪkʃ(ə)nəri/"
+      ],
+      "word": "dictionary"
+    },
+    {
+      "accepted": false,
+      "audioTitles": [
+        "En-us-pronunciation.ogg"
+      ],
+      "currentPhonetic": "prәu.nʌnsi'eiʃәn",
+      "gap": "reading-review-missing",
+      "pageUrl": "https://en.wiktionary.org/wiki/pronunciation",
+      "rawResponse": "openspec/changes/add-dictionary-pronunciation-audio/evidence/raw/get-22a84ff6d3167f15ecf2ac95f7dcea2b2defe7d93dd8e7e052b6e52e3b62e244.json",
+      "rawResponseSha256": "eacedc1c451c033f5c24b5ed2c262981e9e07427bffbd8d37b6753b44f78d40e",
+      "revisionId": 93716644,
+      "revisionTimestamp": "2026-10-19T10:52:02Z",
+      "sourcePhonetics": [
+        "/pɹəˌnʌn.siˈeɪ.ʃən/",
+        "[pʰɹəˌnʌn.siˈeɪ.ʃn̩]",
+        "/pɹəˌnaʊn.siˈeɪ.ʃən/",
+        "/pɹəˌnʌn.ʃiˈeɪ.ʃən/",
+        "/pɹəˌnʌn.ʃiˈeɪ.ʃʌn/"
+      ],
+      "word": "pronunciation"
+    },
+    {
+      "accepted": false,
+      "audioTitles": [],
+      "currentPhonetic": "ri:d",
+      "gap": "scope-unknown-or-audio-missing",
+      "pageUrl": "https://en.wiktionary.org/wiki/read",
+      "rawResponse": "openspec/changes/add-dictionary-pronunciation-audio/evidence/raw/get-572c2956c78e593d1233fa3e96bc646dddf6bbb61e2e1a7a904c67e8bf9ec1dc.json",
+      "rawResponseSha256": "d5cad434acac2448795f5708f44b9ea9178387673a443f6bafd5e81fe159893d",
+      "revisionId": 94584767,
+      "revisionTimestamp": "2026-10-29T11:18:46Z",
+      "sourcePhonetics": [],
+      "word": "read"
+    },
+    {
+      "accepted": false,
+      "audioTitles": [],
+      "currentPhonetic": "li:d. led",
+      "gap": "scope-unknown-or-audio-missing",
+      "pageUrl": "https://en.wiktionary.org/wiki/lead",
+      "rawResponse": "openspec/changes/add-dictionary-pronunciation-audio/evidence/raw/get-0a62fbc64f74e2753684e08e3eea1a7ad53cc714b963b3f8416d441b194ea552.json",
+      "rawResponseSha256": "998a325b55efe139a2babd78c57c7feb9c572a5d9e9d5701de4f5ae2718a5dc9",
+      "revisionId": 95369725,
+      "revisionTimestamp": "2026-11-02T20:42:48Z",
+      "sourcePhonetics": [],
+      "word": "lead"
+    },
+    {
+      "accepted": false,
+      "audioTitles": [],
+      "currentPhonetic": "liv.laiv",
+      "gap": "scope-unknown-or-audio-missing",
+      "pageUrl": "https://en.wiktionary.org/wiki/live",
+      "rawResponse": "openspec/changes/add-dictionary-pronunciation-audio/evidence/raw/get-f7210e1e1ed85bed526afdc9d8cbe760f822c259ac2bb50cac36b84beb00bc64.json",
+      "rawResponseSha256": "a63c15aaaa8c42e90e82646e3b3fc6c5d312def1b203967705cd11e5ab898c21",
+      "revisionId": 94579200,
+      "revisionTimestamp": "2026-10-28T21:18:31Z",
+      "sourcePhonetics": [],
+      "word": "live"
+    },
+    {
+      "accepted": false,
+      "audioTitles": [],
+      "currentPhonetic": "ri'kɒ:d",
+      "gap": "scope-unknown-or-audio-missing",
+      "pageUrl": "https://en.wiktionary.org/wiki/record",
+      "rawResponse": "openspec/changes/add-dictionary-pronunciation-audio/evidence/raw/get-c4378ae0a5fce074cfced45f9ae809864db16df45cb4ebe3b3ad41f6a9368dec.json",
+      "rawResponseSha256": "f7973b1b256fd412b371007a37faa976c98957f65a0403d74d32cf1a41746d51",
+      "revisionId": 94569328,
+      "revisionTimestamp": "2026-10-28T20:10:29Z",
+      "sourcePhonetics": [],
+      "word": "record"
+    },
+    {
+      "accepted": false,
+      "audioTitles": [],
+      "currentPhonetic": "wind",
+      "gap": "scope-unknown-or-audio-missing",
+      "pageUrl": "https://en.wiktionary.org/wiki/wind",
+      "rawResponse": "openspec/changes/add-dictionary-pronunciation-audio/evidence/raw/get-5b1a3640158d467ee9354a4bc93e582c9510ca938bbf502188c5271aaa072e61.json",
+      "rawResponseSha256": "fddc54e0c7f07315c714a2ec02a12ce79927f6d435f6e202163a6bed3cfc6bdc",
+      "revisionId": 94578025,
+      "revisionTimestamp": "2026-10-28T20:42:03Z",
+      "sourcePhonetics": [],
+      "word": "wind"
+    },
+    {
+      "accepted": false,
+      "audioTitles": [],
+      "currentPhonetic": "klәuz",
+      "gap": "scope-unknown-or-audio-missing",
+      "pageUrl": "https://en.wiktionary.org/wiki/close",
+      "rawResponse": "openspec/changes/add-dictionary-pronunciation-audio/evidence/raw/get-17d92a84ce0e4c7c88e2d36c4381a779017ac5bccd71c5e3163a7b42fc827fa5.json",
+      "rawResponseSha256": "0332dde31a78f42ea182460787e259a35b1ac1449b146b5846de31bc7efff5bc",
+      "revisionId": 95309009,
+      "revisionTimestamp": "2026-11-02T09:05:32Z",
+      "sourcePhonetics": [],
+      "word": "close"
+    },
+    {
+      "accepted": false,
+      "audioTitles": [],
+      "currentPhonetic": "'minit. mai'nju:t",
+      "gap": "scope-unknown-or-audio-missing",
+      "pageUrl": "https://en.wiktionary.org/wiki/minute",
+      "rawResponse": "openspec/changes/add-dictionary-pronunciation-audio/evidence/raw/get-434d482294bda90e10a893775ef558b99f44db627585820a9b548783508f8b5e.json",
+      "rawResponseSha256": "4367037aa5f7427cacea3b870a9f34b1c69f8a5784ec0c2c1fcb2d72093c7f01",
+      "revisionId": 94562779,
+      "revisionTimestamp": "2026-10-28T19:51:46Z",
+      "sourcePhonetics": [],
+      "word": "minute"
+    },
+    {
+      "accepted": false,
+      "audioTitles": [
+        "en-us-present-adjective.ogg",
+        "LL-Q1860 (eng)-Vealhurl-present.wav",
+        "LL-Q1860 (eng)-Vealhurl-present2.wav",
+        "en-us-present-verb1.ogg",
+        "en-us-present-verb2.ogg",
+        "LL-Q1860 (eng)-Vealhurl-present3.wav"
+      ],
+      "currentPhonetic": "'preznt",
+      "gap": "reading-review-missing",
+      "pageUrl": "https://en.wiktionary.org/wiki/present",
+      "rawResponse": "openspec/changes/add-dictionary-pronunciation-audio/evidence/raw/get-a87baf2a4dcc7d7be8dbf109aa05986d69f8b075028719388947772d1e841cd7.json",
+      "rawResponseSha256": "7dea4c72dd108b307c7916087ad8fd8705fe33fbba4473cdcf7a3c78b1f0b389",
+      "revisionId": 94832708,
+      "revisionTimestamp": "2026-11-01T05:30:47Z",
+      "sourcePhonetics": [
+        "/ˈpɹɛz.ənt/",
+        "/ˈpɹez.ənt/",
+        "/pɹɪˈzɛnt/",
+        "/pɹiˈzɛnt/",
+        "/pɹəˈzɛnt/",
+        "/pɹɪˈzent/",
+        "/pɹəˈzent/",
+        "/pɹiːˈsɛnt/",
+        "/pɹiˈsɛnt/"
+      ],
+      "word": "present"
+    }
+  ],
+  "requestCount": 0,
+  "schema": "pronunciation-audio-coverage/1",
+  "syntheticFixturesCounted": 0
+}

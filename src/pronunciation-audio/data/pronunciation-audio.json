@@ -1,0 +1,258 @@
+{
+  "assets": [
+    {
+      "assetId": "commons-b7b60280c9a307cb762a72412f8f4d55047680ba",
+      "author": "Association Shtooka, Judith Franck",
+      "changes": "原始录音未修改；MP3 等候选仅为 Wikimedia 官方转码",
+      "digest": "b7b60280c9a307cb762a72412f8f4d55047680ba",
+      "license": {
+        "name": "Creative Commons Attribution 3.0 United States",
+        "spdx": "CC-BY-3.0",
+        "url": "https://creativecommons.org/licenses/by/3.0/us/deed.en"
+      },
+      "media": [
+        {
+          "bytes": 14145,
+          "durationSeconds": 1.1,
+          "mime": "application/ogg",
+          "url": "https://upload.wikimedia.org/wikipedia/commons/4/48/En-uk-hello.ogg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+        },
+        {
+          "bytes": 18500,
+          "durationSeconds": 1.1,
+          "mime": "audio/mpeg",
+          "url": "https://upload.wikimedia.org/wikipedia/commons/transcoded/4/48/En-uk-hello.ogg/En-uk-hello.ogg.mp3"
+        }
+      ],
+      "metadataSha256": "d2eb32cbc35f755165acd58a4b8256e1a3bef71428701e5ecc1c30787c2e6058",
+      "pageUrl": "https://commons.wikimedia.org/wiki/File:En-uk-hello.ogg",
+      "revisionId": 862483068
+    },
+    {
+      "assetId": "commons-c147ea0c178c3f6c285a6875782a4ba478080903",
+      "author": "Association Shtooka, Judith Franck",
+      "changes": "原始录音未修改；MP3 等候选仅为 Wikimedia 官方转码",
+      "digest": "c147ea0c178c3f6c285a6875782a4ba478080903",
+      "license": {
+        "name": "Creative Commons Attribution 3.0 United States",
+        "spdx": "CC-BY-3.0",
+        "url": "https://creativecommons.org/licenses/by/3.0/us/deed.en"
+      },
+      "media": [
+        {
+          "bytes": 16265,
+          "durationSeconds": 1.2,
+          "mime": "application/ogg",
+          "url": "https://upload.wikimedia.org/wikipedia/commons/c/c8/En-uk-apple.ogg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+        },
+        {
+          "bytes": 24405,
+          "durationSeconds": 1.2,
+          "mime": "audio/mpeg",
+          "url": "https://upload.wikimedia.org/wikipedia/commons/transcoded/c/c8/En-uk-apple.ogg/En-uk-apple.ogg.mp3"
+        }
+      ],
+      "metadataSha256": "8a31c72f7cc53299a49cfc48d2f7841ce769acd9e49a1ba024a49fb544e9e77a",
+      "pageUrl": "https://commons.wikimedia.org/wiki/File:En-uk-apple.ogg",
+      "revisionId": 1107694341
+    },
+    {
+      "assetId": "commons-765e8a3d1e0dee40feb87e33d583253eacdf750c",
+      "author": "Association Shtooka, Judith Franck",
+      "changes": "原始录音未修改；MP3 等候选仅为 Wikimedia 官方转码",
+      "digest": "765e8a3d1e0dee40feb87e33d583253eacdf750c",
+      "license": {
+        "name": "Creative Commons Attribution 3.0 United States",
+        "spdx": "CC-BY-3.0",
+        "url": "https://creativecommons.org/licenses/by/3.0/us/deed.en"
+      },
+      "media": [
+        {
+          "bytes": 15015,
+          "durationSeconds": 1.2,
+          "mime": "application/ogg",
+          "url": "https://upload.wikimedia.org/wikipedia/commons/7/70/En-uk-book.ogg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+        },
+        {
+          "bytes": 20327,
+          "durationSeconds": 1.2,
+          "mime": "audio/mpeg",
+          "url": "https://upload.wikimedia.org/wikipedia/commons/transcoded/7/70/En-uk-book.ogg/En-uk-book.ogg.mp3"
+        }
+      ],
+      "metadataSha256": "fea3fae8f323444dcabb6bb23c309d2b0ed94afcb9324c1038ddee07065c0917",
+      "pageUrl": "https://commons.wikimedia.org/wiki/File:En-uk-book.ogg",
+      "revisionId": 1229077031
+    },
+    {
+      "assetId": "commons-dd8366cc15e33dbf376db99ded74ec45bfd75bae",
+      "author": "Dvortygirl",
+      "changes": "原始录音未修改；MP3 等候选仅为 Wikimedia 官方转码",
+      "digest": "dd8366cc15e33dbf376db99ded74ec45bfd75bae",
+      "license": {
+        "name": "Creative Commons Attribution ShareAlike 3.0",
+        "spdx": "CC-BY-SA-3.0",
+        "url": "https://creativecommons.org/licenses/by-sa/3.0/"
+      },
+      "media": [
+        {
+          "bytes": 9550,
+          "durationSeconds": 0.5224489795918368,
+          "mime": "application/ogg",
+          "url": "https://upload.wikimedia.org/wikipedia/commons/4/46/En-us-cat.ogg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+        },
+        {
+          "bytes": 10004,
+          "durationSeconds": 0.5224489795918368,
+          "mime": "audio/mpeg",
+          "url": "https://upload.wikimedia.org/wikipedia/commons/transcoded/4/46/En-us-cat.ogg/En-us-cat.ogg.mp3"
+        }
+      ],
+      "metadataSha256": "95ecbff0c2308f2387511b0e588ce8455eab905e2fcf9d72b03fc59c2a8fdee7",
+      "pageUrl": "https://commons.wikimedia.org/wiki/File:En-us-cat.ogg",
+      "revisionId": 1229122106
+    },
+    {
+      "assetId": "commons-4077c380480325efefa417b2f84c18b58f92c180",
+      "author": "Association Shtooka, Judith Franck",
+      "changes": "原始录音未修改；MP3 等候选仅为 Wikimedia 官方转码",
+      "digest": "4077c380480325efefa417b2f84c18b58f92c180",
+      "license": {
+        "name": "Creative Commons Attribution 3.0 United States",
+        "spdx": "CC-BY-3.0",
+        "url": "https://creativecommons.org/licenses/by/3.0/us/deed.en"
+      },
+      "media": [
+        {
+          "bytes": 14371,
+          "durationSeconds": 0.82,
+          "mime": "application/ogg",
+          "url": "https://upload.wikimedia.org/wikipedia/commons/1/15/En-uk-dog.ogg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+        },
+        {
+          "bytes": 19808,
+          "durationSeconds": 0.82,
+          "mime": "audio/mpeg",
+          "url": "https://upload.wikimedia.org/wikipedia/commons/transcoded/1/15/En-uk-dog.ogg/En-uk-dog.ogg.mp3"
+        }
+      ],
+      "metadataSha256": "ccc30245f5be2398abaf2a104dff8a71c3bc61a9d1e24fbc5ea888a79824ecd4",
+      "pageUrl": "https://commons.wikimedia.org/wiki/File:En-uk-dog.ogg",
+      "revisionId": 877133033
+    }
+  ],
+  "entries": [
+    {
+      "accent": "uk",
+      "assetId": "commons-b7b60280c9a307cb762a72412f8f4d55047680ba",
+      "evidence": {
+        "association": "wiktionary-pronunciation-section",
+        "responseSha256": "2a7c6e5e2a18d6cf9c05291023e4a30c1b134f1c55685ef7f0f8dd6d530b384c",
+        "reviewNote": "当前 ECDICT 的 ә/'/u 记法与 UK /həˈləʊ/ 的音素和重音一致；仅对应指定的 UK 文件。",
+        "sourcePhonetic": "/həˈləʊ/",
+        "verifiedAt": "2026-11-06T14:56:27Z",
+        "verifiedBy": "资深软件工程师（HAM-186 Apply）",
+        "wiktionaryPageUrl": "https://en.wiktionary.org/wiki/hello",
+        "wiktionaryRevisionId": 95307852
+      },
+      "language": "en",
+      "phonetic": "hә'lәu",
+      "phoneticFingerprint": "21fe22aca28baa47",
+      "scope": {
+        "kind": "legacy-unique",
+        "verified": true
+      },
+      "word": "hello"
+    },
+    {
+      "accent": "uk",
+      "assetId": "commons-c147ea0c178c3f6c285a6875782a4ba478080903",
+      "evidence": {
+        "association": "wiktionary-pronunciation-section",
+        "responseSha256": "a04b5ad39c0bab0132da65281e2091da983531688a06c725b618933bbe2eee13",
+        "reviewNote": "当前单音节词省略音节化 l 的显式写法；音素与 UK /ˈæpəl/ 一致，仅对应指定 UK 文件。",
+        "sourcePhonetic": "/ˈæpəl/",
+        "verifiedAt": "2026-11-06T14:56:27Z",
+        "verifiedBy": "资深软件工程师（HAM-186 Apply）",
+        "wiktionaryPageUrl": "https://en.wiktionary.org/wiki/apple",
+        "wiktionaryRevisionId": 94495227
+      },
+      "language": "en",
+      "phonetic": "'æpl",
+      "phoneticFingerprint": "5092fb5c55486974",
+      "scope": {
+        "kind": "legacy-unique",
+        "verified": true
+      },
+      "word": "apple"
+    },
+    {
+      "accent": "uk",
+      "assetId": "commons-765e8a3d1e0dee40feb87e33d583253eacdf750c",
+      "evidence": {
+        "association": "wiktionary-pronunciation-section",
+        "responseSha256": "7da558c05e79a3e3cfb04627bece92fb050a539c888342478d42bfa6796418d7",
+        "reviewNote": "ECDICT 旧记法以 u 表示 /ʊ/；当前读法与 UK /bʊk/ 一致，不使用其他口音文件。",
+        "sourcePhonetic": "/bʊk/",
+        "verifiedAt": "2026-11-06T14:56:27Z",
+        "verifiedBy": "资深软件工程师（HAM-186 Apply）",
+        "wiktionaryPageUrl": "https://en.wiktionary.org/wiki/book",
+        "wiktionaryRevisionId": 94548435
+      },
+      "language": "en",
+      "phonetic": "buk",
+      "phoneticFingerprint": "00613519135a99e1",
+      "scope": {
+        "kind": "legacy-unique",
+        "verified": true
+      },
+      "word": "book"
+    },
+    {
+      "accent": "us",
+      "assetId": "commons-dd8366cc15e33dbf376db99ded74ec45bfd75bae",
+      "evidence": {
+        "association": "wiktionary-pronunciation-section",
+        "responseSha256": "e5b39bdb94cc48c6ad606b018410ce96c7e63239ffab00daed8f543fb954d838",
+        "reviewNote": "单音节词省略主重音不改变音素；选择单词录音 En-us-cat.ogg，不选择短语 a cat 或地区变体。",
+        "sourcePhonetic": "/ˈkæt/",
+        "verifiedAt": "2026-11-06T14:56:27Z",
+        "verifiedBy": "资深软件工程师（HAM-186 Apply）",
+        "wiktionaryPageUrl": "https://en.wiktionary.org/wiki/cat",
+        "wiktionaryRevisionId": 95423400
+      },
+      "language": "en",
+      "phonetic": "kæt",
+      "phoneticFingerprint": "3c0c3d1934e111d0",
+      "scope": {
+        "kind": "legacy-unique",
+        "verified": true
+      },
+      "word": "cat"
+    },
+    {
+      "accent": "uk",
+      "assetId": "commons-4077c380480325efefa417b2f84c18b58f92c180",
+      "evidence": {
+        "association": "wiktionary-pronunciation-section",
+        "responseSha256": "da6221fd7b6c952270706916cbb4dc88c764cbef03a59bf158051f55a4d18fb7",
+        "reviewNote": "g 与 ɡ 是同一 IPA 音素的字形差异；当前 UK /dɒɡ/ 仅对应指定 UK 文件。",
+        "sourcePhonetic": "/dɒɡ/",
+        "verifiedAt": "2026-11-06T14:56:27Z",
+        "verifiedBy": "资深软件工程师（HAM-186 Apply）",
+        "wiktionaryPageUrl": "https://en.wiktionary.org/wiki/dog",
+        "wiktionaryRevisionId": 95422771
+      },
+      "language": "en",
+      "phonetic": "dɒg",
+      "phoneticFingerprint": "c3f43b18eebc9a1c",
+      "scope": {
+        "kind": "legacy-unique",
+        "verified": true
+      },
+      "word": "dog"
+    }
+  ],
+  "generatedAt": "2026-11-04T22:35:22Z",
+  "manifestVersion": "pronunciation-audio/1"
+}

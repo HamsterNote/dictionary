@@ -24,5 +24,11 @@
     "verbatimModuleSyntax": true,
     "types": ["vite/client"]
   },
-  "include": ["src", "demo", "scripts/fixtures/pronunciation-overlay.tsx"]
+  "include": [
+    "src",
+    "demo",
+    "scripts/fixtures/pronunciation-overlay.tsx",
+    "scripts/fixtures/pronunciation-audio.tsx",
+    "scripts/fixtures/pronunciation-audio-real.tsx"
+  ]
 }

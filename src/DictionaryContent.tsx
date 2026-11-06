@@ -1,5 +1,5 @@
 import type { CSSProperties, HTMLAttributes, ReactNode } from 'react';
-import { useCallback, useId, useRef, useState } from 'react';
+import { useCallback, useEffect, useId, useRef, useState } from 'react';
 import { DictionaryContentCorrection } from './DictionaryContentCorrection';
 import { resolveDictionaryContentSelection } from './dictionaryContentSelection';
 import { DictionaryCorrectionDetailsButton } from './DictionaryCorrectionDetailsButton';
@@ -18,8 +18,11 @@ import type {
 } from './dictionaryCorrections';
 import { resolveDictionaryCorrection } from './dictionaryCorrections';
 import type { DictionaryEntrySummary } from './dictionaryEntrySummary';
+import { PronunciationAudioButton } from './PronunciationAudioButton';
 import { PronunciationButton } from './PronunciationButton';
 import { formatDictionaryPhonetic } from './formatDictionaryPhonetic';
+import type { PronunciationContext } from './pronunciation-audio/contracts';
+import type { PronunciationPlaybackController } from './pronunciation-audio/controller';
 import { useDictionaryCorrectedContent } from './useDictionaryCorrectedContent';
 import { useDictionaryCorrections } from './useDictionaryCorrections';
 import { legacyProtection, type LegacyScopeResolution } from './pronunciation-overlay/legacy';
@@ -47,6 +50,7 @@ export interface DictionaryContentProps extends Omit<HTMLAttributes<HTMLElement>
   readonly pronunciationCandidates?: ReactNode;
   readonly pronunciationScopeResolutions?: readonly LegacyScopeResolution[];
   readonly pronounce?: (word: string) => Promise<void>;
+  readonly pronunciation?: PronunciationPlaybackController;
   readonly resolveEntry?: (word: string) => DictionaryEntrySummary | undefined;
   readonly resolvedCorrections?: ResolvedDictionaryCorrectionsControl;
   readonly search?: DictionarySearch;
@@ -73,6 +77,7 @@ export function DictionaryContent({
   onOpenPreview,
   phonetic: providedPhonetic,
   pronounce,
+  pronunciation,
   pronunciationOverlay,
   pronunciationCandidates,
   pronunciationScopeResolutions = [],
@@ -128,6 +133,23 @@ export function DictionaryContent({
     providedPhonetic: useProvidedContent ? providedPhonetic : undefined,
     providedSources: useProvidedContent ? providedSources : undefined,
   });
+  useEffect(() => {
+    pronunciation?.stop();
+  }, [pronunciation, activeKeyword, resolvedContent.word, resolvedContent.phonetic]);
+  const pronunciationContext: PronunciationContext | undefined =
+    pronunciation === undefined || resolvedContent.phonetic === undefined
+      ? undefined
+      : {
+          word: resolvedContent.word,
+          language: 'en',
+          phonetic: resolvedContent.phonetic,
+        };
+  const pronunciationControl =
+    pronunciation !== undefined && pronunciationContext !== undefined ? (
+      <PronunciationAudioButton context={pronunciationContext} pronunciation={pronunciation} />
+    ) : pronunciation === undefined && pronounce ? (
+      <PronunciationButton pronounce={pronounce} word={activeKeyword} />
+    ) : null;
   const searchEntry = useCallback(
     (word: string) => {
       const normalizedWord = word.trim().normalize('NFKC').toLocaleLowerCase('en-US');
@@ -208,9 +230,7 @@ export function DictionaryContent({
           overlayBlocked.length === 0 ? (
             <>
               {pronunciationOverlay}
-              {pronounce ? (
-                <PronunciationButton pronounce={pronounce} word={activeKeyword} />
-              ) : null}
+              {pronunciationControl}
             </>
           ) : resolvedContent.phonetic ? (
             <div className="dictionary-popover__pronunciation-row">
@@ -224,9 +244,7 @@ export function DictionaryContent({
                 themeStyle={contentStyle}
                 word={resolvedContent.word}
               />
-              {pronounce ? (
-                <PronunciationButton pronounce={pronounce} word={activeKeyword} />
-              ) : null}
+              {pronunciationControl}
             </div>
           ) : null}
           {pronunciationOverlay !== undefined && overlayBlocked.length > 0 ? (

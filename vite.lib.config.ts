@@ -8,6 +8,11 @@ export default defineConfig({
     emptyOutDir: false,
     lib: {
       entry: {
+        'pronunciation-audio': resolve(import.meta.dirname, 'src/pronunciation-audio/index.ts'),
+        'pronunciation-audio/browser': resolve(
+          import.meta.dirname,
+          'src/pronunciation-audio/browser.ts',
+        ),
         'pronunciation-overlay': resolve(import.meta.dirname, 'src/pronunciation-overlay/index.ts'),
         index: resolve(import.meta.dirname, 'src/library.ts'),
         kokoro: resolve(import.meta.dirname, 'src/kokoro.ts'),

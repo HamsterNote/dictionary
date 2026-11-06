@@ -35,6 +35,26 @@
 yarn add @hamster-note/dictionary react react-dom
 ```
 
+### 音标旁播放真实单词录音
+
+`@hamster-note/dictionary/pronunciation-audio` 是不依赖 React、DOM、Worker 或 Kokoro 的纯数据入口，导出 manifest、合同校验和 `resolvePronunciationAudio`。浏览器播放只由独立子入口 `@hamster-note/dictionary/pronunciation-audio/browser` 提供：
+
+```tsx
+import { useEffect, useState } from 'react';
+import { DictionaryContent } from '@hamster-note/dictionary';
+import { createPronunciationBrowserController } from '@hamster-note/dictionary/pronunciation-audio/browser';
+
+export function LookupAudio({ word }: { word: string }) {
+  const [pronunciation] = useState(createPronunciationBrowserController);
+  useEffect(() => () => pronunciation.dispose(), [pronunciation]);
+  return <DictionaryContent keyword={word} pronunciation={pronunciation} />;
+}
+```
+
+每个内容实例使用一个 controller；切换词条时共享组件会停止旧播放，销毁内容时调用 `dispose`。旧 `pronounce(word)` 仍可使用；同时传入时仅使用 `pronunciation`。不要在 native 壳中拼接音频 URL 或补 IPA。
+
+当前 sidecar 只包含经逐文件许可和读法核对的 `hello`、`apple`、`book`、`cat`、`dog`，其他词、无法区分的同形词及被改成不匹配读法的条目显示“暂无读音”。点击后才请求 Wikimedia 音频；Blob 仅在当前内容会话内缓存（20 项、总计 10 MiB、单项 2 MiB），冷启动离线不保证声音。无缓存离线提示“联网后可播放”，其他失败可手动重试，不自动改用 TTS。来源、作者、许可和变更说明可在“音频来源”中离线阅读，另见 `LICENSES/WIKTIONARY-PRONUNCIATION-AUDIO.md`。
+
 ## 使用
 
 ```tsx
