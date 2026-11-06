@@ -24,7 +24,7 @@ try {
     constructor(url, behavior = {}) {
       this.url = url;
       this.duration = 1;
-      this.readyState = 1;
+      this.readyState = behavior.metadata === 'error' ? 0 : 1;
       this.currentTime = 0;
       this.events = new Map();
       this.behavior = behavior;
@@ -58,13 +58,16 @@ try {
       this.pauseCount += 1;
     }
 
-    load() {}
+    load() {
+      if (this.behavior.metadata === 'error') this.emit('error');
+    }
   }
 
   function responseFor(url, body = 'audio') {
+    const mime = url.includes('.mp3') ? 'audio/mpeg' : 'application/ogg';
     const response = new Response(body, {
       status: 200,
-      headers: { 'Content-Type': 'audio/mpeg', 'Content-Length': String(body.length) },
+      headers: { 'Content-Type': mime, 'Content-Length': String(body.length) },
     });
     Object.defineProperty(response, 'url', { value: url });
     return response;
@@ -148,12 +151,12 @@ try {
         return responseFor(url);
       },
     });
-    let playing = controller.play(contexts.apple);
+    let playing = controller.play(contexts.cat);
     await flush();
     audioElements[0].emit('ended');
     await playing;
     online = false;
-    playing = controller.play(contexts.apple);
+    playing = controller.play(contexts.cat);
     await flush();
     assert.equal(fetches, 1);
     assert.equal(controller.getState().status, 'playing');
@@ -161,7 +164,7 @@ try {
     await playing;
 
     const offline = fixture({ isOnline: () => false });
-    await offline.controller.play(contexts.book);
+    await offline.controller.play(contexts.dog);
     assert.equal(offline.controller.getState().error, 'offline');
     assert.equal(offline.audioElements.length, 0);
   }
@@ -208,6 +211,60 @@ try {
   }
 
   {
+    let online = true;
+    const requests = [];
+    const fallback = fixture({
+      canPlayType: () => 'probably',
+      isOnline: () => online,
+      audioBehavior: (index) => (index === 0 ? { metadata: 'error' } : {}),
+      fetch: async (url) => {
+        requests.push(url);
+        return responseFor(url);
+      },
+    });
+    const playing = fallback.controller.play(contexts.hello);
+    await flush();
+    assert.equal(fallback.controller.getState().status, 'playing');
+    assert.equal(requests.length, 2);
+    assert.ok(requests[0].includes('.ogg'));
+    assert.ok(requests[1].includes('.mp3'));
+    fallback.audioElements[1].emit('ended');
+    await playing;
+
+    online = false;
+    const cachedReplay = fallback.controller.play(contexts.hello);
+    await flush();
+    assert.equal(fallback.controller.getState().status, 'playing');
+    assert.equal(requests.length, 2);
+    assert.equal(fallback.audioElements.length, 3);
+    fallback.audioElements[2].emit('ended');
+    await cachedReplay;
+  }
+
+  {
+    let fail = true;
+    let requests = 0;
+    const retry = fixture({
+      canPlayType: () => 'probably',
+      audioBehavior: () => (fail ? { metadata: 'error' } : {}),
+      fetch: async (url) => {
+        requests += 1;
+        return responseFor(url);
+      },
+    });
+    await retry.controller.play(contexts.hello);
+    assert.equal(retry.controller.getState().error, 'decode');
+    assert.equal(requests, 2);
+    fail = false;
+    const replay = retry.controller.play(contexts.hello);
+    await flush();
+    assert.equal(retry.controller.getState().status, 'playing');
+    assert.equal(requests, 3);
+    retry.audioElements[2].emit('ended');
+    await replay;
+  }
+
+  {
     const timers = fakeTimers();
     const pending = fixture({ ...timers, fetch: () => new Promise(() => {}) });
     const playing = pending.controller.play(contexts.hello);
@@ -250,9 +307,9 @@ try {
     });
     const slow = late.controller.play(contexts.hello);
     await flush();
-    const fast = late.controller.play(contexts.apple);
+    const fast = late.controller.play(contexts.cat);
     await flush();
-    assert.equal(late.controller.getState().contextKey.includes('apple'), true);
+    assert.equal(late.controller.getState().contextKey.includes('cat'), true);
     assert.equal(late.audioElements.length, 1);
     resolveSlow(responseFor('https://upload.wikimedia.org/En-uk-hello.mp3'));
     await slow;

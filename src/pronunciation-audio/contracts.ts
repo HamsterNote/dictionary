@@ -44,6 +44,13 @@ export interface PronunciationAudioEvidence {
   readonly sourcePhonetic: string;
   readonly responseSha256: string;
   readonly association: 'wiktionary-pronunciation-section';
+  readonly branch: {
+    readonly relation: 'ancestor' | 'accent';
+    readonly ipaLine: number;
+    readonly audioLine: number;
+    readonly ipaAccents: readonly string[];
+    readonly audioAccents: readonly string[];
+  };
   readonly verifiedAt: string;
   readonly verifiedBy: string;
   readonly reviewNote: string;

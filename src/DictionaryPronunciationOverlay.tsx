@@ -1,9 +1,13 @@
-import { useId, useRef, useState } from 'react';
+import { useContext, useEffect, useId, useMemo, useRef, useState } from 'react';
 import type {
   ApplicabilityScope,
   GrammarRole,
   PronunciationDisplayDto,
 } from './pronunciation-overlay/contracts';
+import {
+  PronunciationOverlayPlaybackContext,
+  resolveOverlayPronunciationContext,
+} from './pronunciationOverlayPlayback';
 import type { ScopedCorrectionsControl } from './pronunciation-overlay/corrections';
 import {
   canEditScopedCorrections,
@@ -94,6 +98,14 @@ export function DictionaryPronunciationOverlay({
   const [busy, setBusy] = useState(false);
   const input = useRef<HTMLTextAreaElement>(null);
   const pending = useRef(false);
+  const reportPlaybackContext = useContext(PronunciationOverlayPlaybackContext);
+  const playbackContext = useMemo(() => resolveOverlayPronunciationContext(entries), [entries]);
+  useEffect(() => {
+    reportPlaybackContext?.(playbackContext);
+    return () => {
+      reportPlaybackContext?.(undefined);
+    };
+  }, [reportPlaybackContext, playbackContext]);
   const eligible = (entry: PronunciationDisplayEntry): boolean => {
     if ((entry.blockedReasons?.length ?? 0) > 0) return false;
     try {

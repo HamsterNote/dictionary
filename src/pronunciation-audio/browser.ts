@@ -165,8 +165,8 @@ export function createPronunciationBrowserController(
     if (disposed || requestGeneration !== generation) throw new PlaybackCancelled();
   }
 
-  function cacheKey(asset: PronunciationAudioAsset): string {
-    return `${manifest.manifestVersion}\n${asset.assetId}\n${asset.digest}`;
+  function cacheKey(asset: PronunciationAudioAsset, media: PronunciationAudioMedia): string {
+    return `${manifest.manifestVersion}\n${asset.assetId}\n${asset.digest}\n${media.url}`;
   }
 
   function supportedMedia(asset: PronunciationAudioAsset): PronunciationAudioMedia[] {
@@ -175,7 +175,6 @@ export function createPronunciationBrowserController(
 
   async function fetchBlob(
     media: PronunciationAudioMedia,
-    key: string,
     requestGeneration: number,
   ): Promise<Blob> {
     if (fetchImpl === undefined) throw new PlaybackFailure('network', 'fetch 不可用');
@@ -204,9 +203,7 @@ export function createPronunciationBrowserController(
     if (rawBlob.type && !mimeMatches(rawBlob.type, media.mime)) {
       throw new PlaybackFailure('resource', 'Blob MIME 不一致');
     }
-    const blob = rawBlob.type ? rawBlob : new Blob([rawBlob], { type: media.mime });
-    cache.set(key, blob);
-    return blob;
+    return rawBlob.type ? rawBlob : new Blob([rawBlob], { type: media.mime });
   }
 
   async function prepareCandidate(
@@ -272,27 +269,38 @@ export function createPronunciationBrowserController(
       publish({ status: 'error', contextKey, error: 'unsupported-format' });
       return;
     }
-    const key = cacheKey(resolution.asset);
-    const cached = supported.map(() => cache.get(key)).find((blob) => blob !== undefined);
+    const candidates = supported
+      .map((media) => ({
+        media,
+        key: cacheKey(resolution.asset, media),
+        cached: cache.get(cacheKey(resolution.asset, media)),
+      }))
+      .sort(
+        (left, right) => Number(right.cached !== undefined) - Number(left.cached !== undefined),
+      );
+    const hasCached = candidates.some((candidate) => candidate.cached !== undefined);
     const deadline = now() + PREPARE_TIMEOUT_MS;
     try {
-      if (cached === undefined && !isOnline()) throw new PlaybackFailure('offline', '离线且无缓存');
+      if (!hasCached && !isOnline()) throw new PlaybackFailure('offline', '离线且无缓存');
       let element: AudioEventTarget | undefined;
       let lastError: unknown;
-      for (const media of supported) {
+      for (const candidate of candidates) {
+        const { media, key } = candidate;
         assertCurrent(requestGeneration);
         try {
           const blob =
-            cache.get(key) ??
+            candidate.cached ??
             (await withTimeout(
-              fetchBlob(media, key, requestGeneration),
+              fetchBlob(media, requestGeneration),
               deadline - now(),
               requestGeneration,
             ));
           element = await prepareCandidate(blob, requestGeneration, deadline);
+          cache.set(key, blob);
           break;
         } catch (error) {
           if (error instanceof PlaybackCancelled) throw error;
+          cache.delete(key);
           lastError = error;
           releasePlayback();
         }

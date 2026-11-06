@@ -18,22 +18,6 @@ official transcodes of the same recording, not separately guessed URLs.
 - License: Creative Commons Attribution 3.0 United States (CC BY 3.0 US)
 - License: https://creativecommons.org/licenses/by/3.0/us/deed.en
 
-## apple
-
-- Recording: https://commons.wikimedia.org/wiki/File:En-uk-apple.ogg
-- File revision: 1107694341; Commons SHA-1: c147ea0c178c3f6c285a6875782a4ba478080903
-- Author: Association Shtooka, Judith Franck
-- License: Creative Commons Attribution 3.0 United States (CC BY 3.0 US)
-- License: https://creativecommons.org/licenses/by/3.0/us/deed.en
-
-## book
-
-- Recording: https://commons.wikimedia.org/wiki/File:En-uk-book.ogg
-- File revision: 1229077031; Commons SHA-1: 765e8a3d1e0dee40feb87e33d583253eacdf750c
-- Author: Association Shtooka, Judith Franck
-- License: Creative Commons Attribution 3.0 United States (CC BY 3.0 US)
-- License: https://creativecommons.org/licenses/by/3.0/us/deed.en
-
 ## cat
 
 - Recording: https://commons.wikimedia.org/wiki/File:En-us-cat.ogg
@@ -53,6 +37,9 @@ official transcodes of the same recording, not separately guessed URLs.
 - License: https://creativecommons.org/licenses/by/3.0/us/deed.en
 
 Files with missing or uncertain authors, unknown or noncommercial licenses,
-unverified readings, oversized media, or unsupported formats are excluded. The
+unverified readings, oversized media, or unsupported formats are excluded. Earlier
+`apple` and `book` candidates were also excluded because their selected UK files
+belong to the SSB `/ˈapəl/` and `/bɵk/` branches, not the current ECDICT readings.
+The
 full 20-word decision record and raw API responses are in the OpenSpec change's
 `evidence/` directory; synthetic test fixtures are never counted as coverage.

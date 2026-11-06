@@ -45,7 +45,7 @@ def main() -> None:
                     errors = []
                     page.on("response", lambda response: media_responses.append((response.url, response.status)) if response.url.startswith("https://upload.wikimedia.org/") else None)
                     page.on("pageerror", lambda error: errors.append(str(error)))
-                    for index, word in enumerate(("hello", "apple", "book")):
+                    for index, word in enumerate(("hello", "cat", "dog")):
                         page.goto(f"{base}?word={word}")
                         page.get_by_role("button", name=f"朗读 {word}", exact=True).click()
                         page.get_by_text("正在播放", exact=True).wait_for(timeout=15000)
@@ -66,7 +66,7 @@ def main() -> None:
         finally:
             server.terminate()
             server.wait(timeout=10)
-    print("test_pronunciation_audio_real: OK (hello/apple/book MP3 fetch + decode + play/ended; cached offline replay)")
+    print("test_pronunciation_audio_real: OK (hello/cat/dog MP3 fetch + decode + play/ended; cached offline replay)")
     print("人工听感、iOS/Android 真机不在此自动化结果内")
 
 

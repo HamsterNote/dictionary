@@ -21,8 +21,15 @@ import type { DictionaryEntrySummary } from './dictionaryEntrySummary';
 import { PronunciationAudioButton } from './PronunciationAudioButton';
 import { PronunciationButton } from './PronunciationButton';
 import { formatDictionaryPhonetic } from './formatDictionaryPhonetic';
-import type { PronunciationContext } from './pronunciation-audio/contracts';
-import type { PronunciationPlaybackController } from './pronunciation-audio/controller';
+import {
+  type PronunciationContext,
+  normalizePronunciationWord,
+} from './pronunciation-audio/contracts';
+import {
+  type PronunciationPlaybackController,
+  pronunciationContextKey,
+} from './pronunciation-audio/controller';
+import { PronunciationOverlayPlaybackContext } from './pronunciationOverlayPlayback';
 import { useDictionaryCorrectedContent } from './useDictionaryCorrectedContent';
 import { useDictionaryCorrections } from './useDictionaryCorrections';
 import { legacyProtection, type LegacyScopeResolution } from './pronunciation-overlay/legacy';
@@ -133,21 +140,41 @@ export function DictionaryContent({
     providedPhonetic: useProvidedContent ? providedPhonetic : undefined,
     providedSources: useProvidedContent ? providedSources : undefined,
   });
+  const [reportedOverlayContext, setReportedOverlayContext] = useState<PronunciationContext>();
+  const overlayActive =
+    pronunciationOverlay !== undefined && useProvidedContent && overlayBlocked.length === 0;
+  const currentOverlayContext =
+    reportedOverlayContext !== undefined &&
+    normalizePronunciationWord(reportedOverlayContext.word) ===
+      normalizePronunciationWord(resolvedContent.word)
+      ? reportedOverlayContext
+      : undefined;
+  const pronunciationContext: PronunciationContext | undefined =
+    pronunciation === undefined
+      ? undefined
+      : overlayActive
+        ? currentOverlayContext
+        : resolvedContent.phonetic === undefined
+          ? undefined
+          : {
+              word: resolvedContent.word,
+              language: 'en',
+              phonetic: resolvedContent.phonetic,
+            };
+  const playbackContextKey = pronunciationContext
+    ? pronunciationContextKey(pronunciationContext)
+    : 'unavailable';
   useEffect(() => {
     pronunciation?.stop();
-  }, [pronunciation, activeKeyword, resolvedContent.word, resolvedContent.phonetic]);
-  const pronunciationContext: PronunciationContext | undefined =
-    pronunciation === undefined || resolvedContent.phonetic === undefined
-      ? undefined
-      : {
-          word: resolvedContent.word,
-          language: 'en',
-          phonetic: resolvedContent.phonetic,
-        };
+  }, [pronunciation, activeKeyword, playbackContextKey]);
   const pronunciationControl =
-    pronunciation !== undefined && pronunciationContext !== undefined ? (
-      <PronunciationAudioButton context={pronunciationContext} pronunciation={pronunciation} />
-    ) : pronunciation === undefined && pronounce ? (
+    pronunciation !== undefined ? (
+      <PronunciationAudioButton
+        context={pronunciationContext}
+        word={resolvedContent.word}
+        pronunciation={pronunciation}
+      />
+    ) : pronounce ? (
       <PronunciationButton pronounce={pronounce} word={activeKeyword} />
     ) : null;
   const searchEntry = useCallback(
@@ -229,7 +256,9 @@ export function DictionaryContent({
           useProvidedContent &&
           overlayBlocked.length === 0 ? (
             <>
-              {pronunciationOverlay}
+              <PronunciationOverlayPlaybackContext.Provider value={setReportedOverlayContext}>
+                {pronunciationOverlay}
+              </PronunciationOverlayPlaybackContext.Provider>
               {pronunciationControl}
             </>
           ) : resolvedContent.phonetic ? (

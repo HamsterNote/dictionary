@@ -53,7 +53,7 @@ export function LookupAudio({ word }: { word: string }) {
 
 每个内容实例使用一个 controller；切换词条时共享组件会停止旧播放，销毁内容时调用 `dispose`。旧 `pronounce(word)` 仍可使用；同时传入时仅使用 `pronunciation`。不要在 native 壳中拼接音频 URL 或补 IPA。
 
-当前 sidecar 只包含经逐文件许可和读法核对的 `hello`、`apple`、`book`、`cat`、`dog`，其他词、无法区分的同形词及被改成不匹配读法的条目显示“暂无读音”。点击后才请求 Wikimedia 音频；Blob 仅在当前内容会话内缓存（20 项、总计 10 MiB、单项 2 MiB），冷启动离线不保证声音。无缓存离线提示“联网后可播放”，其他失败可手动重试，不自动改用 TTS。来源、作者、许可和变更说明可在“音频来源”中离线阅读，另见 `LICENSES/WIKTIONARY-PRONUNCIATION-AUDIO.md`。
+当前 sidecar 只包含经逐文件许可和 IPA—口音—录音分支核对的 `hello`、`cat`、`dog`，其他词、无法区分的同形词及被改成不匹配读法的条目显示“暂无读音”。点击后才请求 Wikimedia 音频；Blob 仅在当前内容会话内缓存（20 项、总计 10 MiB、单项 2 MiB），冷启动离线不保证声音。无缓存离线提示“联网后可播放”，其他失败可手动重试，不自动改用 TTS。来源、作者、许可和变更说明可在“音频来源”中离线阅读，另见 `LICENSES/WIKTIONARY-PRONUNCIATION-AUDIO.md`。
 
 ## 使用
 

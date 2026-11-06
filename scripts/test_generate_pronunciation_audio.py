@@ -38,6 +38,31 @@ class CollectorTests(unittest.TestCase):
         ambiguous = content.replace("{{audio|en|En-uk-cat.ogg}}", "{{audio|en|a.ogg}} {{audio|en|b.ogg}}")
         self.assertEqual(audio.parse_associations(ambiguous)[1], ["a.ogg", "b.ogg"])
 
+    def test_same_section_branches_cannot_cross_pair_ipa_and_audio(self):
+        content = """==English==
+===Pronunciation===
+* {{IPA|en|/ˈæpəl/|a=RP,GA}}
+** {{audio|en|En-us-apple.ogg|a=GA}}
+* {{IPA|en|/ˈapəl/|a=SSB}}
+** {{audio|en|En-uk-apple.ogg|a=SSB}}
+===Noun===
+"""
+        branches = audio.parse_branch_associations(content)
+        uk = next(item for item in branches if item["audio"] == "En-uk-apple.ogg")
+        self.assertEqual(uk["phonetics"], ["/ˈapəl/"])
+        self.assertEqual(uk["relation"], "ancestor")
+        self.assertEqual(uk["ipaAccents"], ["SSB"])
+        record = {"branches": branches, "currentPhonetic": "'æpl"}
+        wrong_review = {
+            "audio": "En-uk-apple.ogg", "sourcePhonetic": "/ˈæpəl/", "currentPhonetic": "'æpl",
+        }
+        with self.assertRaisesRegex(audio.CollectionError, "停止而非交叉配对"):
+            audio.reviewed_branch(record, wrong_review)
+        valid_review = {
+            "audio": "En-us-apple.ogg", "sourcePhonetic": "/ˈæpəl/", "currentPhonetic": "'æpl",
+        }
+        self.assertEqual(audio.reviewed_branch(record, valid_review)["relation"], "ancestor")
+
     def test_cache_serial_rate_limit_and_request_budget(self):
         calls = []
         sleeps = []

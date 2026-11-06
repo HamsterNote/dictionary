@@ -29,62 +29,6 @@
       "revisionId": 862483068
     },
     {
-      "assetId": "commons-c147ea0c178c3f6c285a6875782a4ba478080903",
-      "author": "Association Shtooka, Judith Franck",
-      "changes": "原始录音未修改；MP3 等候选仅为 Wikimedia 官方转码",
-      "digest": "c147ea0c178c3f6c285a6875782a4ba478080903",
-      "license": {
-        "name": "Creative Commons Attribution 3.0 United States",
-        "spdx": "CC-BY-3.0",
-        "url": "https://creativecommons.org/licenses/by/3.0/us/deed.en"
-      },
-      "media": [
-        {
-          "bytes": 16265,
-          "durationSeconds": 1.2,
-          "mime": "application/ogg",
-          "url": "https://upload.wikimedia.org/wikipedia/commons/c/c8/En-uk-apple.ogg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
-        },
-        {
-          "bytes": 24405,
-          "durationSeconds": 1.2,
-          "mime": "audio/mpeg",
-          "url": "https://upload.wikimedia.org/wikipedia/commons/transcoded/c/c8/En-uk-apple.ogg/En-uk-apple.ogg.mp3"
-        }
-      ],
-      "metadataSha256": "8a31c72f7cc53299a49cfc48d2f7841ce769acd9e49a1ba024a49fb544e9e77a",
-      "pageUrl": "https://commons.wikimedia.org/wiki/File:En-uk-apple.ogg",
-      "revisionId": 1107694341
-    },
-    {
-      "assetId": "commons-765e8a3d1e0dee40feb87e33d583253eacdf750c",
-      "author": "Association Shtooka, Judith Franck",
-      "changes": "原始录音未修改；MP3 等候选仅为 Wikimedia 官方转码",
-      "digest": "765e8a3d1e0dee40feb87e33d583253eacdf750c",
-      "license": {
-        "name": "Creative Commons Attribution 3.0 United States",
-        "spdx": "CC-BY-3.0",
-        "url": "https://creativecommons.org/licenses/by/3.0/us/deed.en"
-      },
-      "media": [
-        {
-          "bytes": 15015,
-          "durationSeconds": 1.2,
-          "mime": "application/ogg",
-          "url": "https://upload.wikimedia.org/wikipedia/commons/7/70/En-uk-book.ogg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
-        },
-        {
-          "bytes": 20327,
-          "durationSeconds": 1.2,
-          "mime": "audio/mpeg",
-          "url": "https://upload.wikimedia.org/wikipedia/commons/transcoded/7/70/En-uk-book.ogg/En-uk-book.ogg.mp3"
-        }
-      ],
-      "metadataSha256": "fea3fae8f323444dcabb6bb23c309d2b0ed94afcb9324c1038ddee07065c0917",
-      "pageUrl": "https://commons.wikimedia.org/wiki/File:En-uk-book.ogg",
-      "revisionId": 1229077031
-    },
-    {
       "assetId": "commons-dd8366cc15e33dbf376db99ded74ec45bfd75bae",
       "author": "Dvortygirl",
       "changes": "原始录音未修改；MP3 等候选仅为 Wikimedia 官方转码",
@@ -147,6 +91,17 @@
       "assetId": "commons-b7b60280c9a307cb762a72412f8f4d55047680ba",
       "evidence": {
         "association": "wiktionary-pronunciation-section",
+        "branch": {
+          "audioAccents": [
+            "UK"
+          ],
+          "audioLine": 5,
+          "ipaAccents": [
+            "RP"
+          ],
+          "ipaLine": 4,
+          "relation": "ancestor"
+        },
         "responseSha256": "2a7c6e5e2a18d6cf9c05291023e4a30c1b134f1c55685ef7f0f8dd6d530b384c",
         "reviewNote": "当前 ECDICT 的 ә/'/u 记法与 UK /həˈləʊ/ 的音素和重音一致；仅对应指定的 UK 文件。",
         "sourcePhonetic": "/həˈləʊ/",
@@ -165,54 +120,21 @@
       "word": "hello"
     },
     {
-      "accent": "uk",
-      "assetId": "commons-c147ea0c178c3f6c285a6875782a4ba478080903",
-      "evidence": {
-        "association": "wiktionary-pronunciation-section",
-        "responseSha256": "a04b5ad39c0bab0132da65281e2091da983531688a06c725b618933bbe2eee13",
-        "reviewNote": "当前单音节词省略音节化 l 的显式写法；音素与 UK /ˈæpəl/ 一致，仅对应指定 UK 文件。",
-        "sourcePhonetic": "/ˈæpəl/",
-        "verifiedAt": "2026-11-06T14:56:27Z",
-        "verifiedBy": "资深软件工程师（HAM-186 Apply）",
-        "wiktionaryPageUrl": "https://en.wiktionary.org/wiki/apple",
-        "wiktionaryRevisionId": 94495227
-      },
-      "language": "en",
-      "phonetic": "'æpl",
-      "phoneticFingerprint": "5092fb5c55486974",
-      "scope": {
-        "kind": "legacy-unique",
-        "verified": true
-      },
-      "word": "apple"
-    },
-    {
-      "accent": "uk",
-      "assetId": "commons-765e8a3d1e0dee40feb87e33d583253eacdf750c",
-      "evidence": {
-        "association": "wiktionary-pronunciation-section",
-        "responseSha256": "7da558c05e79a3e3cfb04627bece92fb050a539c888342478d42bfa6796418d7",
-        "reviewNote": "ECDICT 旧记法以 u 表示 /ʊ/；当前读法与 UK /bʊk/ 一致，不使用其他口音文件。",
-        "sourcePhonetic": "/bʊk/",
-        "verifiedAt": "2026-11-06T14:56:27Z",
-        "verifiedBy": "资深软件工程师（HAM-186 Apply）",
-        "wiktionaryPageUrl": "https://en.wiktionary.org/wiki/book",
-        "wiktionaryRevisionId": 94548435
-      },
-      "language": "en",
-      "phonetic": "buk",
-      "phoneticFingerprint": "00613519135a99e1",
-      "scope": {
-        "kind": "legacy-unique",
-        "verified": true
-      },
-      "word": "book"
-    },
-    {
       "accent": "us",
       "assetId": "commons-dd8366cc15e33dbf376db99ded74ec45bfd75bae",
       "evidence": {
         "association": "wiktionary-pronunciation-section",
+        "branch": {
+          "audioAccents": [
+            "GA"
+          ],
+          "audioLine": 8,
+          "ipaAccents": [
+            "GA"
+          ],
+          "ipaLine": 4,
+          "relation": "accent"
+        },
         "responseSha256": "e5b39bdb94cc48c6ad606b018410ce96c7e63239ffab00daed8f543fb954d838",
         "reviewNote": "单音节词省略主重音不改变音素；选择单词录音 En-us-cat.ogg，不选择短语 a cat 或地区变体。",
         "sourcePhonetic": "/ˈkæt/",
@@ -235,6 +157,17 @@
       "assetId": "commons-4077c380480325efefa417b2f84c18b58f92c180",
       "evidence": {
         "association": "wiktionary-pronunciation-section",
+        "branch": {
+          "audioAccents": [
+            "UK"
+          ],
+          "audioLine": 2,
+          "ipaAccents": [
+            "RP"
+          ],
+          "ipaLine": 1,
+          "relation": "ancestor"
+        },
         "responseSha256": "da6221fd7b6c952270706916cbb4dc88c764cbef03a59bf158051f55a4d18fb7",
         "reviewNote": "g 与 ɡ 是同一 IPA 音素的字形差异；当前 UK /dɒɡ/ 仅对应指定 UK 文件。",
         "sourcePhonetic": "/dɒɡ/",

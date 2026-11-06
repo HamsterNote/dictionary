@@ -57,25 +57,25 @@ def main() -> None:
                     page.keyboard.press("Enter")
                     assert page.evaluate("window.__audioFixture.calls[0].word") == "hello"
                     assert page.get_by_text("正在播放", exact=True).is_visible()
-                    assert page.get_by_text("hello apple", exact=False).is_visible()
+                    assert page.get_by_text("hello cat", exact=False).is_visible()
                     page.get_by_role("button", name="结束播放", exact=True).click()
                     stops = page.evaluate("window.__audioFixture.stopCount")
-                    page.get_by_role("button", name="apple", exact=True).click()
-                    apple_play = page.get_by_role("button", name="朗读 apple", exact=True)
-                    apple_play.wait_for()
+                    page.get_by_role("button", name="cat", exact=True).click()
+                    cat_play = page.get_by_role("button", name="朗读 cat", exact=True)
+                    cat_play.wait_for()
                     assert page.evaluate("window.__audioFixture.stopCount") > stops
-                    apple_play.click()
-                    assert page.evaluate("window.__audioFixture.calls.at(-1).word") == "apple"
+                    cat_play.click()
+                    assert page.evaluate("window.__audioFixture.calls.at(-1).word") == "cat"
 
-                    page.get_by_role("button", name="纠错词条 apple", exact=True).click()
-                    for _ in range(4):
+                    page.get_by_role("button", name="纠错词条 cat", exact=True).click()
+                    for _ in range(3):
                         page.get_by_role("button", name="删除前一个字符", exact=True).click()
                     page.get_by_role("button", name="插入 æ", exact=True).click()
                     page.get_by_role("button", name="保存纠错", exact=True).click()
                     assert page.get_by_text("暂无读音", exact=True).is_visible()
-                    assert apple_play.is_disabled()
+                    assert cat_play.is_disabled()
                     assert "æ" in page.locator(".dictionary-popover__phonetic").inner_text()
-                    assert page.get_by_text("apple hello", exact=False).is_visible()
+                    assert page.get_by_text("cat hello", exact=False).is_visible()
                     assert page.get_by_text("音频来源", exact=True).count() == 0
 
                     page.goto(url)
@@ -103,6 +103,25 @@ def main() -> None:
                     page.evaluate("window.__audioFixture.mode = 'success'")
                     page.get_by_role("button", name="朗读 hello", exact=True).click()
                     assert page.get_by_text("正在播放", exact=True).is_visible()
+
+                    page.goto(url + "?mode=overlay")
+                    overlay_play = page.get_by_role("button", name="朗读 hello", exact=True)
+                    overlay_play.wait_for()
+                    assert overlay_play.is_enabled()
+                    assert page.evaluate("window.__audioFixture.resolves.at(-1).phonetic") == "/overlay/"
+                    assert page.evaluate("window.__audioFixture.resolves.at(-1).entryId") == "ent_00000000-0000-4000-8000-000000000001"
+                    assert page.evaluate("window.__audioFixture.resolves.at(-1).role") == "base"
+                    assert page.evaluate("window.__audioFixture.resolves.at(-1).accent") == "uk"
+                    overlay_play.click()
+                    assert page.evaluate("window.__audioFixture.calls.at(-1).phonetic") == "/overlay/"
+                    overlay_stops = page.evaluate("window.__audioFixture.stopCount")
+                    calls_before = page.evaluate("window.__audioFixture.calls.length")
+                    page.get_by_role("button", name="切换 overlay 读法", exact=True).click()
+                    assert overlay_play.is_disabled()
+                    assert page.get_by_text("暂无读音", exact=True).is_visible()
+                    assert page.evaluate("window.__audioFixture.stopCount") > overlay_stops
+                    assert page.evaluate("window.__audioFixture.calls.length") == calls_before
+                    assert page.evaluate("window.__audioFixture.resolves.at(-1).phonetic") == "/overlay-changed/"
 
                     page.goto(url + "?mode=legacy")
                     page.get_by_role("button", name="朗读 hello", exact=True).click()

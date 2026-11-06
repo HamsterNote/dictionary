@@ -163,6 +163,7 @@ function validateEntry(
     sourcePhonetic,
     responseSha256,
     association,
+    branch,
     verifiedAt,
     verifiedBy,
     reviewNote,
@@ -182,6 +183,21 @@ function validateEntry(
   }
   if (association !== 'wiktionary-pronunciation-section') {
     issues.push(`${path}.evidence.association 必须关联音标所在发音段落`);
+  }
+  if (!isRecord(branch)) {
+    issues.push(`${path}.evidence.branch 必须保留 IPA—口音—录音分支`);
+  } else {
+    if (!['ancestor', 'accent'].includes(String(branch['relation']))) {
+      issues.push(`${path}.evidence.branch.relation 无效`);
+    }
+    requirePositiveInteger(branch['ipaLine'], `${path}.evidence.branch.ipaLine`, issues);
+    requirePositiveInteger(branch['audioLine'], `${path}.evidence.branch.audioLine`, issues);
+    for (const field of ['ipaAccents', 'audioAccents']) {
+      const accents = branch[field];
+      if (!Array.isArray(accents) || accents.some((accent) => typeof accent !== 'string')) {
+        issues.push(`${path}.evidence.branch.${field} 必须是字符串数组`);
+      }
+    }
   }
   const verifiedAtText = requireString(verifiedAt, `${path}.evidence.verifiedAt`, issues);
   if (verifiedAtText && !Number.isFinite(Date.parse(verifiedAtText))) {

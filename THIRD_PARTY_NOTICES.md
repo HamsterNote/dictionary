@@ -189,9 +189,9 @@ Kaikki 当前说明其数据从 Wiktionary 抽取，并按 Wiktionary 的 CC-BY-
 
 ## Wiktionary 关联的 Wikimedia Commons 单词录音
 
-发音音频与 Wiktionary 文本分别核验许可。当前仅分发 `hello`、`apple`、`book`、`cat`、`dog` 五个词条的映射及归因元数据；音频文件仍由 Wikimedia 在用户点击后按需传输，不随 npm 包内置。
+发音音频与 Wiktionary 文本分别核验许可。当前仅分发 `hello`、`cat`、`dog` 三个词条的映射及归因元数据；音频文件仍由 Wikimedia 在用户点击后按需传输，不随 npm 包内置。
 
-- `hello`、`apple`、`book`、`dog`：作者 Association Shtooka、Judith Franck；CC BY 3.0 United States，许可 https://creativecommons.org/licenses/by/3.0/us/deed.en 。
+- `hello`、`dog`：作者 Association Shtooka、Judith Franck；CC BY 3.0 United States，许可 https://creativecommons.org/licenses/by/3.0/us/deed.en 。
 - `cat`：作者 Dvortygirl；CC BY-SA 3.0，许可 https://creativecommons.org/licenses/by-sa/3.0/ 。录音改编的相同方式共享义务不改变无关代码的许可。
 - 各文件的 Commons 来源页、文件 revision、SHA-1、作者、许可、变更说明及官方转码关系见 `LICENSES/WIKTIONARY-PRONUNCIATION-AUDIO.md`；包内数据也保留相同字段，供离线查看。
 - 本项目未修改原始录音；MP3 候选是 Wikimedia 对同一录音提供的官方转码。未通过许可、作者、读法范围或媒体校验的文件不会进入映射。

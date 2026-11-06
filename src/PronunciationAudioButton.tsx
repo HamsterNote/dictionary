@@ -8,7 +8,8 @@ import {
 } from './pronunciation-audio/controller';
 
 interface PronunciationAudioButtonProps {
-  readonly context: PronunciationContext;
+  readonly context: PronunciationContext | undefined;
+  readonly word: string;
   readonly pronunciation: PronunciationPlaybackController;
 }
 
@@ -38,11 +39,16 @@ function feedback(available: boolean, state: PronunciationPlaybackState): string
 
 export function PronunciationAudioButton({
   context,
+  word,
   pronunciation,
 }: PronunciationAudioButtonProps) {
   const statusId = useId();
-  const contextKey = pronunciationContextKey(context);
-  const resolution = pronunciation.resolve(context);
+  const contextKey =
+    context === undefined ? `unavailable:${word}` : pronunciationContextKey(context);
+  const resolution =
+    context === undefined
+      ? ({ status: 'unavailable', reason: 'scope-unknown' } as const)
+      : pronunciation.resolve(context);
   const [observedState, setObservedState] = useState<PronunciationPlaybackState>(() =>
     pronunciation.getState(),
   );
@@ -50,7 +56,7 @@ export function PronunciationAudioButton({
   const state =
     observedState.contextKey === contextKey ? observedState : { status: 'idle' as const };
   const available = resolution.status === 'available';
-  const busy = state.status === 'loading' || state.status === 'playing';
+  const busy = context !== undefined && (state.status === 'loading' || state.status === 'playing');
   const message = feedback(available, state);
 
   return (
@@ -58,12 +64,12 @@ export function PronunciationAudioButton({
       <Button
         aria-busy={state.status === 'loading'}
         aria-describedby={statusId}
-        aria-label={busy ? `正在准备或播放 ${context.word}` : `朗读 ${context.word}`}
+        aria-label={busy ? `正在准备或播放 ${word}` : `朗读 ${word}`}
         className="dictionary-popover__pronunciation"
         disabled={!available || busy}
         ghost
         onClick={() => {
-          void pronunciation.play(context);
+          if (context !== undefined) void pronunciation.play(context);
         }}
         size="small"
         type="button"

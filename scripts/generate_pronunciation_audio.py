@@ -45,16 +45,6 @@ REVIEWED_READINGS: dict[str, dict[str, str]] = {
         "accent": "uk", "verifiedAt": "2026-11-06T14:56:27Z", "verifiedBy": "资深软件工程师（HAM-186 Apply）",
         "reviewNote": "当前 ECDICT 的 ә/'/u 记法与 UK /həˈləʊ/ 的音素和重音一致；仅对应指定的 UK 文件。",
     },
-    "apple": {
-        "audio": "En-uk-apple.ogg", "sourcePhonetic": "/ˈæpəl/", "currentPhonetic": "'æpl",
-        "accent": "uk", "verifiedAt": "2026-11-06T14:56:27Z", "verifiedBy": "资深软件工程师（HAM-186 Apply）",
-        "reviewNote": "当前单音节词省略音节化 l 的显式写法；音素与 UK /ˈæpəl/ 一致，仅对应指定 UK 文件。",
-    },
-    "book": {
-        "audio": "En-uk-book.ogg", "sourcePhonetic": "/bʊk/", "currentPhonetic": "buk",
-        "accent": "uk", "verifiedAt": "2026-11-06T14:56:27Z", "verifiedBy": "资深软件工程师（HAM-186 Apply）",
-        "reviewNote": "ECDICT 旧记法以 u 表示 /ʊ/；当前读法与 UK /bʊk/ 一致，不使用其他口音文件。",
-    },
     "cat": {
         "audio": "En-us-cat.ogg", "sourcePhonetic": "/ˈkæt/", "currentPhonetic": "kæt",
         "accent": "us", "verifiedAt": "2026-11-06T14:56:27Z", "verifiedBy": "资深软件工程师（HAM-186 Apply）",
@@ -275,18 +265,118 @@ def pronunciation_section(wikitext: str) -> str | None:
     return sections[0] if len(sections) == 1 else None
 
 
+@dataclass(frozen=True)
+class BranchNode:
+    level: int
+    line: int
+    parent: int | None
+    phonetics: tuple[str, ...]
+    accents: tuple[str, ...]
+    audio: tuple[str, ...]
+
+
+def template_parts(content: str, name: str) -> list[list[str]]:
+    return [
+        [part.strip() for part in match.group(1).split("|")]
+        for match in re.finditer(r"\{\{" + name + r"\|([^{}]+)\}\}", content, re.IGNORECASE)
+    ]
+
+
+def template_accents(parts: list[str]) -> tuple[str, ...]:
+    for part in parts:
+        if part.startswith("a="):
+            return tuple(item.strip() for item in part[2:].split(",") if item.strip())
+    return ()
+
+
+def parse_branch_nodes(section: str) -> list[BranchNode]:
+    nodes: list[BranchNode] = []
+    stack: list[int] = []
+    for line_number, line in enumerate(section.splitlines(), start=1):
+        match = re.match(r"^(\*+)\s*(.*)$", line)
+        if match is None:
+            continue
+        level = len(match.group(1))
+        content = match.group(2)
+        while len(stack) >= level:
+            stack.pop()
+        parent = stack[-1] if stack else None
+        phonetics = []
+        accents = []
+        audio_titles = []
+        for parts in template_parts(content, "IPA"):
+            if len(parts) < 2 or parts[0] != "en":
+                continue
+            phonetics.extend(
+                value for value in parts[1:]
+                if value.startswith(("/", "["))
+            )
+            accents.extend(template_accents(parts[1:]))
+        for parts in template_parts(content, "(?:audio|audiofile)"):
+            if len(parts) >= 2 and parts[0] == "en" and parts[1]:
+                audio_titles.append(parts[1].removeprefix("File:"))
+                accents.extend(template_accents(parts[1:]))
+        for parts in template_parts(content, "a"):
+            if len(parts) >= 2 and parts[0] == "en" and parts[1]:
+                accents.append(parts[1])
+        nodes.append(BranchNode(
+            level, line_number, parent, tuple(phonetics),
+            tuple(dict.fromkeys(accents)), tuple(audio_titles),
+        ))
+        stack.append(len(nodes) - 1)
+    return nodes
+
+
+def inherited_accents(nodes: list[BranchNode], index: int) -> tuple[str, ...]:
+    current: int | None = index
+    while current is not None:
+        if nodes[current].accents:
+            return nodes[current].accents
+        current = nodes[current].parent
+    return ()
+
+
+def parse_branch_associations(wikitext: str) -> list[dict[str, Any]]:
+    section = pronunciation_section(wikitext)
+    if section is None:
+        return []
+    nodes = parse_branch_nodes(section)
+    associations = []
+    for audio_index, audio_node in enumerate(nodes):
+        for title in audio_node.audio:
+            ipa_index: int | None = audio_index
+            while ipa_index is not None and not nodes[ipa_index].phonetics:
+                ipa_index = nodes[ipa_index].parent
+            relation = "ancestor"
+            if ipa_index is None:
+                audio_accents = inherited_accents(nodes, audio_index)
+                matches = [
+                    index for index, node in enumerate(nodes)
+                    if node.phonetics and set(audio_accents).intersection(inherited_accents(nodes, index))
+                ]
+                if len(matches) == 1:
+                    ipa_index = matches[0]
+                    relation = "accent"
+            association = {
+                "audio": title,
+                "phonetics": list(nodes[ipa_index].phonetics) if ipa_index is not None else [],
+                "relation": relation if ipa_index is not None else "unresolved",
+                "ipaLine": nodes[ipa_index].line if ipa_index is not None else 0,
+                "audioLine": audio_node.line,
+                "ipaAccents": list(inherited_accents(nodes, ipa_index)) if ipa_index is not None else [],
+                "audioAccents": list(inherited_accents(nodes, audio_index)),
+            }
+            associations.append(association)
+    return associations
+
+
 def parse_associations(wikitext: str) -> tuple[list[str], list[str]]:
     section = pronunciation_section(wikitext)
     if section is None:
         return [], []
-    ipa_values: list[str] = []
-    for match in re.finditer(r"\{\{IPA\|en\|([^{}]+)\}\}", section, re.IGNORECASE):
-        ipa_values.extend(value.strip() for value in match.group(1).split("|") if value.strip().startswith(("/", "[")))
-    audio = []
-    for match in re.finditer(r"\{\{(?:audio|audiofile)\|en\|([^{}]+)\}\}", section, re.IGNORECASE):
-        title = match.group(1).split("|", 1)[0].strip()
-        if title:
-            audio.append(title.removeprefix("File:"))
+    nodes = parse_branch_nodes(section)
+    ipa_values = [ipa for node in nodes for ipa in node.phonetics]
+    audio = [title for node in nodes for title in node.audio]
     return list(dict.fromkeys(ipa_values)), list(dict.fromkeys(audio))
 
 
@@ -310,6 +400,7 @@ def wiktionary_record(client: CachedClient, word: str) -> tuple[dict[str, Any], 
         "revisionTimestamp": revision.get("timestamp"),
         "sourcePhonetics": ipa,
         "audioTitles": audio,
+        "branches": parse_branch_associations(content),
         "rawResponseSha256": response.sha256,
         "rawResponse": response.cache_ref,
     }, response
@@ -386,6 +477,16 @@ def fingerprint(phonetic: str) -> str:
     return f"{value:016x}"
 
 
+def reviewed_branch(record: dict[str, Any], review: dict[str, str]) -> dict[str, Any]:
+    branch = next((
+        item for item in record["branches"]
+        if item["audio"] == review["audio"] and review["sourcePhonetic"] in item["phonetics"]
+    ), None)
+    if branch is None or review["currentPhonetic"] != record["currentPhonetic"]:
+        raise CollectionError("已核验 IPA—口音—录音分支与真实数据不符；停止而非交叉配对")
+    return branch
+
+
 def collect(client: CachedClient) -> tuple[dict[str, Any], dict[str, Any]]:
     current = current_phonetics()
     entries = []
@@ -407,12 +508,7 @@ def collect(client: CachedClient) -> tuple[dict[str, Any], dict[str, Any]]:
         else:
             title = review["audio"]
             source_phonetic = review["sourcePhonetic"]
-            if any((
-                title not in record["audioTitles"],
-                source_phonetic not in record["sourcePhonetics"],
-                review["currentPhonetic"] != record["currentPhonetic"],
-            )):
-                raise CollectionError(f"已核验读法与真实数据不符：{word}；停止而非自动改映射")
+            branch = reviewed_branch(record, review)
             try:
                 asset, metadata = commons_asset(client, title)
                 record["commons"] = {
@@ -435,6 +531,11 @@ def collect(client: CachedClient) -> tuple[dict[str, Any], dict[str, Any]]:
                         "sourcePhonetic": source_phonetic,
                         "responseSha256": source.sha256,
                         "association": "wiktionary-pronunciation-section",
+                        "branch": {
+                            "relation": branch["relation"],
+                            "ipaLine": branch["ipaLine"], "audioLine": branch["audioLine"],
+                            "ipaAccents": branch["ipaAccents"], "audioAccents": branch["audioAccents"],
+                        },
                         "verifiedAt": review["verifiedAt"], "verifiedBy": review["verifiedBy"],
                         "reviewNote": review["reviewNote"],
                     },

@@ -90,7 +90,7 @@ const script = `
   import { pronunciationAudioManifest, resolvePronunciationAudio } from '@hamster-note/dictionary/pronunciation-audio';
   import { createPronunciationBrowserController } from '@hamster-note/dictionary/pronunciation-audio/browser';
   import { DictionaryContent } from '@hamster-note/dictionary';
-  assert.equal(pronunciationAudioManifest.entries.length, 5);
+  assert.equal(pronunciationAudioManifest.entries.length, 3);
   const entry = pronunciationAudioManifest.entries[0];
   assert.equal(resolvePronunciationAudio(pronunciationAudioManifest, {
     word: entry.word, language: 'en', phonetic: entry.phonetic,
@@ -98,7 +98,7 @@ const script = `
   assert.equal(typeof createPronunciationBrowserController, 'function');
   assert.equal(typeof DictionaryContent, 'function');
   assert.equal(typeof globalThis.Worker, 'undefined');
-  console.log(JSON.stringify({ entries: 5, subpathImports: 'ok', rootImport: 'ok' }));
+  console.log(JSON.stringify({ entries: 3, subpathImports: 'ok', rootImport: 'ok' }));
 `;
 const imported = spawnSync('node', ['--input-type=module', '--eval', script], {
   cwd: smoke,

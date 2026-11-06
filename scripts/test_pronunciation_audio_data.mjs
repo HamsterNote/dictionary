@@ -43,6 +43,13 @@ try {
     sourcePhonetic: '/ɹiːd/',
     responseSha256: 'a'.repeat(64),
     association: 'wiktionary-pronunciation-section',
+    branch: {
+      relation: 'ancestor',
+      ipaLine: 1,
+      audioLine: 2,
+      ipaAccents: ['RP'],
+      audioAccents: ['UK'],
+    },
     verifiedAt: '2026-11-06T00:00:00Z',
     verifiedBy: 'synthetic test',
     reviewNote: '合成映射仅用于匹配测试',
@@ -149,6 +156,51 @@ try {
   resolvePronunciationAudio(roundTrip, context({ phonetic: 'changed' }));
   assert.equal(JSON.stringify(roundTrip), before);
   assert.equal('meaning' in context(), false);
+
+  const { resolveOverlayPronunciationContext } = await server.ssrLoadModule(
+    '/src/pronunciationOverlayPlayback.ts',
+  );
+  const overlayEntry = {
+    entryId: 'ent_00000000-0000-4000-8000-000000000001',
+    word: 'hello',
+    role: 'base',
+    conditions: { language: { kind: 'known', values: ['en'] } },
+    readings: [
+      {
+        entryId: 'ent_00000000-0000-4000-8000-000000000001',
+        word: 'hello',
+        role: 'base',
+        originalIpa: '/həˈləʊ/',
+        tier: 'default',
+        accent: { class: 'uk-unspecified', unspecified: false },
+      },
+    ],
+  };
+  assert.deepEqual(resolveOverlayPronunciationContext([overlayEntry]), {
+    word: 'hello',
+    language: 'en',
+    phonetic: '/həˈləʊ/',
+    entryId: 'ent_00000000-0000-4000-8000-000000000001',
+    role: 'base',
+    accent: 'uk',
+  });
+  assert.equal(resolveOverlayPronunciationContext([]), undefined);
+  assert.equal(
+    resolveOverlayPronunciationContext([
+      overlayEntry,
+      { ...overlayEntry, entryId: 'ent_00000000-0000-4000-8000-000000000002' },
+    ]),
+    undefined,
+  );
+  assert.equal(
+    resolveOverlayPronunciationContext([
+      {
+        ...overlayEntry,
+        readings: [{ ...overlayEntry.readings[0], tier: 'supplemental' }],
+      },
+    ]),
+    undefined,
+  );
 
   console.log('test_pronunciation_audio_data: OK');
 } finally {

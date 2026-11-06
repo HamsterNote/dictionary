@@ -1,13 +1,19 @@
 import { createRoot } from 'react-dom/client';
 import { useState } from 'react';
 import { DictionaryContent } from '../../src/DictionaryContent';
+import {
+  DictionaryPronunciationOverlay,
+  type PronunciationDisplayEntry,
+} from '../../src/DictionaryPronunciationOverlay';
 import type {
   DictionaryCorrectionMap,
   DictionaryCorrectionPatch,
 } from '../../src/dictionaryCorrections';
 import type { DictionaryDataDetail } from '../../src/dictionaryData';
 import {
+  type PronunciationAudioManifest,
   pronunciationAudioManifest,
+  pronunciationPhoneticFingerprint,
   resolvePronunciationAudio,
 } from '../../src/pronunciation-audio/index';
 import {
@@ -17,6 +23,7 @@ import {
   pronunciationContextKey,
 } from '../../src/pronunciation-audio/controller';
 import type { PronunciationContext } from '../../src/pronunciation-audio/contracts';
+import { knownScope, scopeWith } from '../../src/pronunciation-overlay/contracts';
 import '../../src/dictionary.css';
 
 const details: Record<string, DictionaryDataDetail> = {
@@ -27,18 +34,18 @@ const details: Record<string, DictionaryDataDetail> = {
       {
         id: 'fixture',
         label: 'Fixture',
-        meanings: [{ id: 'hello-1', definition: 'hello apple' }],
+        meanings: [{ id: 'hello-1', definition: 'hello cat' }],
       },
     ],
   },
-  apple: {
-    word: 'apple',
-    phonetic: "'æpl",
+  cat: {
+    word: 'cat',
+    phonetic: 'kæt',
     sources: [
       {
         id: 'fixture',
         label: 'Fixture',
-        meanings: [{ id: 'apple-1', definition: 'apple hello' }],
+        meanings: [{ id: 'cat-1', definition: 'cat hello' }],
       },
     ],
   },
@@ -46,11 +53,13 @@ const details: Record<string, DictionaryDataDetail> = {
 
 const testState: {
   calls: PronunciationContext[];
+  resolves: PronunciationContext[];
   stopCount: number;
   mode: 'success' | 'loading' | PronunciationPlaybackError;
   finish: () => void;
 } = {
   calls: [],
+  resolves: [],
   stopCount: 0,
   mode: 'success',
   finish: () => {
@@ -64,7 +73,65 @@ declare global {
 }
 window.__audioFixture = testState;
 
-function fakeController(): PronunciationPlaybackController {
+const overlayEntryId = 'ent_00000000-0000-4000-8000-000000000001';
+const helloAudio = pronunciationAudioManifest.entries.find((entry) => entry.word === 'hello');
+if (helloAudio === undefined) throw new Error('hello audio fixture missing');
+const overlayManifest: PronunciationAudioManifest = {
+  ...pronunciationAudioManifest,
+  entries: [
+    {
+      ...helloAudio,
+      phonetic: '/overlay/',
+      phoneticFingerprint: pronunciationPhoneticFingerprint('/overlay/'),
+      scope: {
+        kind: 'entry',
+        entryId: overlayEntryId,
+        role: 'base',
+        readingRef: 'overlay-reading',
+      },
+    },
+  ],
+};
+
+function overlayEntries(phonetic: string): readonly PronunciationDisplayEntry[] {
+  return [
+    {
+      entryId: overlayEntryId,
+      word: 'hello',
+      role: 'base',
+      conditions: scopeWith({
+        language: knownScope(['en']),
+        entry: knownScope([overlayEntryId]),
+        role: knownScope(['base']),
+      }),
+      readings: [
+        {
+          schema: 'pronunciation-display/1',
+          entryId: overlayEntryId,
+          word: 'hello',
+          role: 'base',
+          originalIpa: phonetic,
+          notation: 'phonemic',
+          accent: { class: 'uk-unspecified', label: 'UK', unspecified: false },
+          usage: [],
+          tier: 'default',
+          reviewStatus: 'active',
+          origin: 'qualified-source',
+          attribution: {
+            pageUrl: 'https://fixture.invalid/overlay',
+            historyUrl: 'https://fixture.invalid/history',
+            licenseUrl: 'https://creativecommons.org/licenses/by-sa/4.0/',
+            licenseSpdx: 'CC-BY-SA-4.0',
+            changeNotice: 'Synthetic overlay fixture',
+          },
+          synthetic: true,
+        },
+      ],
+    },
+  ];
+}
+
+function fakeController(manifest: PronunciationAudioManifest): PronunciationPlaybackController {
   let state: PronunciationPlaybackState = { status: 'idle' };
   const listeners = new Set<(state: PronunciationPlaybackState) => void>();
   const publish = (next: PronunciationPlaybackState) => {
@@ -77,7 +144,10 @@ function fakeController(): PronunciationPlaybackController {
     publish({ status: 'idle' });
   };
   return {
-    resolve: (context) => resolvePronunciationAudio(pronunciationAudioManifest, context),
+    resolve: (context) => {
+      testState.resolves.push(context);
+      return resolvePronunciationAudio(manifest, context);
+    },
     play: (context) => {
       testState.calls.push(context);
       publish({ status: 'loading', contextKey: pronunciationContextKey(context) });
@@ -110,10 +180,13 @@ function fakeController(): PronunciationPlaybackController {
 }
 
 export function Fixture() {
-  const [user, setUser] = useState<DictionaryCorrectionMap>({});
-  const [controller] = useState(fakeController);
-  const [legacyCalls] = useState<string[]>([]);
   const mode = new URLSearchParams(location.search).get('mode');
+  const [user, setUser] = useState<DictionaryCorrectionMap>({});
+  const [overlayPhonetic, setOverlayPhonetic] = useState('/overlay/');
+  const [controller] = useState(() =>
+    fakeController(mode === 'overlay' ? overlayManifest : pronunciationAudioManifest),
+  );
+  const [legacyCalls] = useState<string[]>([]);
   const onChange = (word: string, patch: DictionaryCorrectionPatch | null) => {
     setUser((current) => ({ ...current, ...(patch === null ? {} : { [word]: patch }) }));
   };
@@ -135,6 +208,15 @@ export function Fixture() {
       >
         模拟释义纠错
       </button>
+      {mode === 'overlay' ? (
+        <button
+          onClick={() => {
+            setOverlayPhonetic('/overlay-changed/');
+          }}
+        >
+          切换 overlay 读法
+        </button>
+      ) : null}
       <button onClick={testState.finish}>结束播放</button>
       <DictionaryContent
         keyword="hello"
@@ -142,6 +224,13 @@ export function Fixture() {
         getDetail={(word) => details[word]}
         {...(detail.phonetic === undefined ? {} : { phonetic: detail.phonetic })}
         sources={detail.sources}
+        {...(mode === 'overlay'
+          ? {
+              pronunciationOverlay: (
+                <DictionaryPronunciationOverlay entries={overlayEntries(overlayPhonetic)} />
+              ),
+            }
+          : {})}
         {...(mode === 'legacy' ? {} : { pronunciation: controller })}
         {...(mode === 'legacy' || mode === 'dual'
           ? {
