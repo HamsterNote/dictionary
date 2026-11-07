@@ -19,9 +19,10 @@ export function FeatureOptions({
           type="checkbox"
         />
         <span>
-          <span className="feature-options__name">Kokoro 英文朗读</span>
+          <span className="feature-options__name">改用 Kokoro AI 合成朗读</span>
           <span className="feature-options__description">
-            勾选后显示朗读按钮；<span className="feature-options__keep">首次点击才下载</span>
+            默认播放 Commons 真人录音；勾选后改用 Kokoro，
+            <span className="feature-options__keep">首次点击才下载</span>
             <span className="feature-options__keep">约 92 MB 语音模型</span>。
           </span>
         </span>
