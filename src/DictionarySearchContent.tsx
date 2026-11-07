@@ -12,6 +12,7 @@ import type {
 import type { DictionaryCorrectionsControl } from './dictionaryCorrections';
 import { applyDictionaryCorrectionToSummary } from './dictionaryCorrectionApply';
 import type { DictionaryEntrySummary } from './dictionaryEntrySummary';
+import type { PronunciationPlaybackController } from './pronunciation-audio/controller';
 import { useDictionaryCorrections } from './useDictionaryCorrections';
 
 export interface DictionarySearchContentProps {
@@ -24,6 +25,7 @@ export interface DictionarySearchContentProps {
   readonly onSearch?: (query: string) => void;
   readonly phonetic?: string;
   readonly pronounce?: (word: string) => Promise<void>;
+  readonly pronunciation?: PronunciationPlaybackController;
   readonly query?: string;
   readonly resolveEntry?: (word: string) => DictionaryEntrySummary | undefined;
   readonly search?: DictionarySearchFunction;
@@ -45,6 +47,7 @@ export function DictionarySearchContent({
   onSearch,
   phonetic,
   pronounce,
+  pronunciation,
   query,
   resolveEntry,
   search,
@@ -106,6 +109,7 @@ export function DictionarySearchContent({
         }}
         {...(phonetic === undefined ? {} : { phonetic })}
         {...(pronounce ? { pronounce } : {})}
+        {...(pronunciation ? { pronunciation } : {})}
         {...(resolveEntry ? { resolveEntry } : {})}
         resolvedCorrections={resolvedCorrections}
         {...(search ? { search } : {})}

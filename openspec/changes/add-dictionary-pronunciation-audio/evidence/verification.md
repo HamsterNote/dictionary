@@ -44,3 +44,9 @@ native 集成发现真实 `getDetail` 会返回带成对 `/` 的 IPA，而 beta.
 新增回归对正式清单中的 `hello`、`cat`、`dog` 逐条执行真实 `getDetail` → resolver：断言 sidecar IPA 与真实输出完全相等，且三条均返回 available。三条真实 MP3 的 Chromium 播放、离线缓存、共享 UI、采集器、browser、构建和 tarball smoke 均通过。
 
 beta.4 tarball SHA-256 为 `1becf119017b235e257a35f052c5406d79acef7c5e1cd91563e4c0829f27a7fd`。按最新人工指令，本次只提交 provider PR并停在发布前，不执行 npm 发布或触发 OTP。
+
+## Demo 验收
+
+`demo/src/Demo.tsx` 默认把真实 browser controller 经共享组件接入主查词窗口；旧 Kokoro 开关明确改为“改用 Kokoro AI 合成朗读”，勾选时才切换并下载模型，切换前停止真人播放。controller 的清理兼容 React StrictMode 的 effect 重放，避免开发态提前 dispose。
+
+`python3 scripts/test_pronunciation_audio_demo.py` 直接连接 `ham186-dev` 的 9489 服务并通过：`hello/cat/dog` 均真实播放，`apple/book` 显示“暂无读音”，Kokoro 区别文案可见。截图保存在测试输出 `demo-hello.png` 与 `demo-apple.png`，并在交付评论中提供。该验收不涉及 native 或真机/人工听感。
