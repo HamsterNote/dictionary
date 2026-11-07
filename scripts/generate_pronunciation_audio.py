@@ -41,24 +41,24 @@ USER_AGENT = "HamsterDictionary/0.1 (HAM-186; per-file pronunciation license aud
 # 该表不提供许可结论；许可始终来自本次保存的 Commons 文件元数据。
 REVIEWED_READINGS: dict[str, dict[str, str]] = {
     "hello": {
-        "audio": "En-uk-hello.ogg", "sourcePhonetic": "/həˈləʊ/", "currentPhonetic": "hә'lәu",
+        "audio": "En-uk-hello.ogg", "sourcePhonetic": "/həˈləʊ/", "currentPhonetic": "/hә'lәu/",
         "accent": "uk", "verifiedAt": "2026-11-06T14:56:27Z", "verifiedBy": "资深软件工程师（HAM-186 Apply）",
-        "reviewNote": "当前 ECDICT 的 ә/'/u 记法与 UK /həˈləʊ/ 的音素和重音一致；仅对应指定的 UK 文件。",
+        "reviewNote": "当前 ECDICT 的 ә/'/u 记法与 UK /həˈləʊ/ 的音素和重音一致；真实查询输出带成对 /，仅对应指定的 UK 文件。",
     },
     "cat": {
-        "audio": "En-us-cat.ogg", "sourcePhonetic": "/ˈkæt/", "currentPhonetic": "kæt",
+        "audio": "En-us-cat.ogg", "sourcePhonetic": "/ˈkæt/", "currentPhonetic": "/kæt/",
         "accent": "us", "verifiedAt": "2026-11-06T14:56:27Z", "verifiedBy": "资深软件工程师（HAM-186 Apply）",
-        "reviewNote": "单音节词省略主重音不改变音素；选择单词录音 En-us-cat.ogg，不选择短语 a cat 或地区变体。",
+        "reviewNote": "单音节词省略主重音不改变音素；真实查询输出带成对 /，选择单词录音 En-us-cat.ogg，不选择短语 a cat 或地区变体。",
     },
     "dog": {
-        "audio": "En-uk-dog.ogg", "sourcePhonetic": "/dɒɡ/", "currentPhonetic": "dɒg",
+        "audio": "En-uk-dog.ogg", "sourcePhonetic": "/dɒɡ/", "currentPhonetic": "/dɒg/",
         "accent": "uk", "verifiedAt": "2026-11-06T14:56:27Z", "verifiedBy": "资深软件工程师（HAM-186 Apply）",
-        "reviewNote": "g 与 ɡ 是同一 IPA 音素的字形差异；当前 UK /dɒɡ/ 仅对应指定 UK 文件。",
+        "reviewNote": "g 与 ɡ 是同一 IPA 音素的字形差异；真实查询输出带成对 /，当前 UK /dɒɡ/ 仅对应指定 UK 文件。",
     },
     "dictionary": {
-        "audio": "En-uk-dictionary.ogg", "sourcePhonetic": "/ˈdɪkʃ(ə)nəɹi/", "currentPhonetic": "'dikʃәnәri",
+        "audio": "En-uk-dictionary.ogg", "sourcePhonetic": "/ˈdɪkʃ(ə)nəɹi/", "currentPhonetic": "/'dikʃәnәri/",
         "accent": "uk", "verifiedAt": "2026-11-06T14:56:27Z", "verifiedBy": "资深软件工程师（HAM-186 Apply）",
-        "reviewNote": "当前读法实现来源中可选的第一个 ə；其余音素和重音一致，仅对应指定 UK 文件。",
+        "reviewNote": "当前读法实现来源中可选的第一个 ə；真实查询输出带成对 /，其余音素和重音一致，仅对应指定 UK 文件。",
     },
 }
 
@@ -253,7 +253,8 @@ def current_phonetics() -> dict[str, str]:
         for line in path.read_text().splitlines():
             columns = line.split("\t")
             if len(columns) > 2 and columns[0] in WORDS and columns[0] not in result and columns[1]:
-                result[columns[0]] = columns[1]
+                # lookupEnglishChinese 的真实英文输出在裸 IPA 两侧添加 /；sidecar 对齐该接口。
+                result[columns[0]] = f"/{columns[1]}/"
     return result
 
 

@@ -30,3 +30,17 @@ Yarn 1 的内置 `yarn check` 仅报告 `Folder in sync`，不会执行 package.
 ## 验证边界
 
 无头 Chromium 的播放事件证明实际网络响应、解码和播放生命周期，不等同于人工听感或 iOS/Android 真机验收。真机与消费端验收由 native 同名 change 记录，不在此虚报通过。
+
+## 发布授权
+
+2026-11-07，修勾在 HAM-186 根线程人工选择 A，并在后续指令中明确授权合并 PR #6、发布 `@hamster-note/dictionary@0.1.1-beta.3`。这是对 tasks 原本“不以本任务自动发布包”限制的人工豁免，不是 agent 自行发布。发布前已确认合并后的 main 为 `02e86ab`，本机 npm 身份为 `wszxdhr`，公共注册表尚无该版本。
+
+实际执行 `npm publish --registry=https://registry.npmjs.org --tag beta` 时，prepack 构建成功，但 npm 以 `EOTP` 要求一次性密码；随后经人工协调完成认证与发布。最终已核实公共 registry 的 `beta` 标签指向 `0.1.1-beta.3`，tarball 可获取。
+
+## beta.4 真实查询契约修复
+
+native 集成发现真实 `getDetail` 会返回带成对 `/` 的 IPA，而 beta.3 sidecar 使用 TSV 裸值，导致 `reading-mismatch`。beta.4 改为让 entry 的 `phonetic` 与指纹直接对齐真实查询输出，不修改查询接口，也不在 native 去斜杠。
+
+新增回归对正式清单中的 `hello`、`cat`、`dog` 逐条执行真实 `getDetail` → resolver：断言 sidecar IPA 与真实输出完全相等，且三条均返回 available。三条真实 MP3 的 Chromium 播放、离线缓存、共享 UI、采集器、browser、构建和 tarball smoke 均通过。
+
+beta.4 tarball SHA-256 为 `1becf119017b235e257a35f052c5406d79acef7c5e1cd91563e4c0829f27a7fd`。按最新人工指令，本次只提交 provider PR并停在发布前，不执行 npm 发布或触发 OTP。

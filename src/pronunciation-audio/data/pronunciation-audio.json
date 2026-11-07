@@ -103,7 +103,7 @@
           "relation": "ancestor"
         },
         "responseSha256": "2a7c6e5e2a18d6cf9c05291023e4a30c1b134f1c55685ef7f0f8dd6d530b384c",
-        "reviewNote": "当前 ECDICT 的 ә/'/u 记法与 UK /həˈləʊ/ 的音素和重音一致；仅对应指定的 UK 文件。",
+        "reviewNote": "当前 ECDICT 的 ә/'/u 记法与 UK /həˈləʊ/ 的音素和重音一致；真实查询输出带成对 /，仅对应指定的 UK 文件。",
         "sourcePhonetic": "/həˈləʊ/",
         "verifiedAt": "2026-11-06T14:56:27Z",
         "verifiedBy": "资深软件工程师（HAM-186 Apply）",
@@ -111,8 +111,8 @@
         "wiktionaryRevisionId": 95307852
       },
       "language": "en",
-      "phonetic": "hә'lәu",
-      "phoneticFingerprint": "21fe22aca28baa47",
+      "phonetic": "/hә'lәu/",
+      "phoneticFingerprint": "0e24891d1b8a5711",
       "scope": {
         "kind": "legacy-unique",
         "verified": true
@@ -136,7 +136,7 @@
           "relation": "accent"
         },
         "responseSha256": "e5b39bdb94cc48c6ad606b018410ce96c7e63239ffab00daed8f543fb954d838",
-        "reviewNote": "单音节词省略主重音不改变音素；选择单词录音 En-us-cat.ogg，不选择短语 a cat 或地区变体。",
+        "reviewNote": "单音节词省略主重音不改变音素；真实查询输出带成对 /，选择单词录音 En-us-cat.ogg，不选择短语 a cat 或地区变体。",
         "sourcePhonetic": "/ˈkæt/",
         "verifiedAt": "2026-11-06T14:56:27Z",
         "verifiedBy": "资深软件工程师（HAM-186 Apply）",
@@ -144,8 +144,8 @@
         "wiktionaryRevisionId": 95423400
       },
       "language": "en",
-      "phonetic": "kæt",
-      "phoneticFingerprint": "3c0c3d1934e111d0",
+      "phonetic": "/kæt/",
+      "phoneticFingerprint": "27f815f5869f9e86",
       "scope": {
         "kind": "legacy-unique",
         "verified": true
@@ -169,7 +169,7 @@
           "relation": "ancestor"
         },
         "responseSha256": "da6221fd7b6c952270706916cbb4dc88c764cbef03a59bf158051f55a4d18fb7",
-        "reviewNote": "g 与 ɡ 是同一 IPA 音素的字形差异；当前 UK /dɒɡ/ 仅对应指定 UK 文件。",
+        "reviewNote": "g 与 ɡ 是同一 IPA 音素的字形差异；真实查询输出带成对 /，当前 UK /dɒɡ/ 仅对应指定 UK 文件。",
         "sourcePhonetic": "/dɒɡ/",
         "verifiedAt": "2026-11-06T14:56:27Z",
         "verifiedBy": "资深软件工程师（HAM-186 Apply）",
@@ -177,8 +177,8 @@
         "wiktionaryRevisionId": 95422771
       },
       "language": "en",
-      "phonetic": "dɒg",
-      "phoneticFingerprint": "c3f43b18eebc9a1c",
+      "phonetic": "/dɒg/",
+      "phoneticFingerprint": "076218278fd4a992",
       "scope": {
         "kind": "legacy-unique",
         "verified": true

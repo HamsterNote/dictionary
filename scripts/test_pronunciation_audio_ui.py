@@ -68,7 +68,7 @@ def main() -> None:
                     assert page.evaluate("window.__audioFixture.calls.at(-1).word") == "cat"
 
                     page.get_by_role("button", name="纠错词条 cat", exact=True).click()
-                    for _ in range(3):
+                    for _ in range(5):
                         page.get_by_role("button", name="删除前一个字符", exact=True).click()
                     page.get_by_role("button", name="插入 æ", exact=True).click()
                     page.get_by_role("button", name="保存纠错", exact=True).click()
