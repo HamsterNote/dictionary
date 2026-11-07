@@ -1,0 +1,3051 @@
+{
+  "formatVersion": 1,
+  "packageVersion": "0.1.1-beta.4",
+  "packs": [
+    {
+      "entryCount": 3500,
+      "header": "# chinese-dictionary e804ada333b68afddfdccbe8dcc938a72da157a7 | entries 3500",
+      "id": "chinese-dictionary",
+      "index": {
+        "bytes": 17260,
+        "id": "indexes/chinese-dictionary.tsv.gz",
+        "recordCount": 3500,
+        "sha256": "84a425273cea1437e6004b0eb17cbc816e421d930f0b1599902d70b55ef5571e",
+        "uncompressedBytes": 37390,
+        "uncompressedSha256": "c19b81274a8ee2654ee5ce6e4b64406482cdd6b5d87b678be4554e3772567a93"
+      },
+      "kind": "chinese",
+      "label": "chinese-dictionary",
+      "legacyId": "chinese-dictionary",
+      "recordCount": 3500,
+      "rowOrder": "source",
+      "shards": [
+        {
+          "bytes": 110122,
+          "firstRow": 0,
+          "id": "shards/chinese-dictionary/000000.tsv.gz",
+          "lastRow": 775,
+          "sha256": "f1b68d9f602db13d4534766950981b71f2e3b45bab1db570bd9e2f197fe151c8",
+          "uncompressedBytes": 261197,
+          "uncompressedSha256": "de915dba54ac1af2fc11f842cff1cb57a03c39a0fb08f785b4fb121436431c0c"
+        },
+        {
+          "bytes": 109682,
+          "firstRow": 776,
+          "id": "shards/chinese-dictionary/000001.tsv.gz",
+          "lastRow": 1744,
+          "sha256": "7f238759ea23e4703c5e227213941d081160c2f2b61bb7eeb3e2bc6ae695a9c3",
+          "uncompressedBytes": 262091,
+          "uncompressedSha256": "ba7acdb9c1e568ea65fbbc7b65a30835806101bc896f4e489991a4e05106ccb2"
+        },
+        {
+          "bytes": 107471,
+          "firstRow": 1745,
+          "id": "shards/chinese-dictionary/000002.tsv.gz",
+          "lastRow": 2821,
+          "sha256": "da41ee82bc4963e2d4e978576f85735ff2200f001de5f7083bfef21a5bf1db7f",
+          "uncompressedBytes": 262019,
+          "uncompressedSha256": "970d63816eb522ccc7180063653ce128f10aca9f0774a1f3d5c3316974952920"
+        },
+        {
+          "bytes": 59031,
+          "firstRow": 2822,
+          "id": "shards/chinese-dictionary/000003.tsv.gz",
+          "lastRow": 3499,
+          "sha256": "ebdafeb1f160d42fc5e4d25e45efc19de4b391b7ebd427a35d9d413ea922426d",
+          "uncompressedBytes": 143834,
+          "uncompressedSha256": "2197deb3ef7bed46eb28cf63b42105b0e507c2eb49feebebaa56b8e5f90e02d6"
+        }
+      ],
+      "source": {
+        "commit": "e804ada333b68afddfdccbe8dcc938a72da157a7",
+        "license": "MIT（仓库级；上游授权链见 THIRD_PARTY_NOTICES.md）",
+        "repository": "https://github.com/mapull/chinese-dictionary"
+      },
+      "uncompressedBytes": 929218,
+      "uncompressedSha256": "315eeedd17a92b74cfa39c2a6e876ace13a8c4c365b7fac7b159d24c180ec9c8"
+    },
+    {
+      "entryCount": 304196,
+      "header": "# chinese-dictionary e804ada333b68afddfdccbe8dcc938a72da157a7 | entries 304196",
+      "id": "chinese-dictionary-words",
+      "index": {
+        "bytes": 1925954,
+        "id": "indexes/chinese-dictionary-words.tsv.gz",
+        "recordCount": 304196,
+        "sha256": "4252f941b32e7665d608921766ff98ed69cedbb93f2bcbbd452e96504f00698c",
+        "uncompressedBytes": 5535203,
+        "uncompressedSha256": "448bb4f96a5787631357bea27b4a9222efe926a9d31b9aea38321af0025f4e7b"
+      },
+      "kind": "chinese",
+      "label": "chinese-dictionary",
+      "legacyId": "chinese-dictionary-words",
+      "recordCount": 304196,
+      "rowOrder": "source",
+      "shards": [
+        {
+          "bytes": 105558,
+          "firstRow": 0,
+          "id": "shards/chinese-dictionary-words/000000.tsv.gz",
+          "lastRow": 2376,
+          "sha256": "db9fbf843f4357805aaf391abd9825b6a55e7fcde74610bf0d58dcd81b060586",
+          "uncompressedBytes": 261964,
+          "uncompressedSha256": "a280d3f9df0817d1a1bdbf1d42b695cefbbbf8a269638891aa828b88190b7284"
+        },
+        {
+          "bytes": 115664,
+          "firstRow": 2377,
+          "id": "shards/chinese-dictionary-words/000001.tsv.gz",
+          "lastRow": 4147,
+          "sha256": "686f54275bf2181747d24cc28ca4640fffb653039c3a34d86347d167be4f89f9",
+          "uncompressedBytes": 262135,
+          "uncompressedSha256": "aa285331e21884d592faa5b6101bf6040296154b541675d2143acee1039800e4"
+        },
+        {
+          "bytes": 111274,
+          "firstRow": 4148,
+          "id": "shards/chinese-dictionary-words/000002.tsv.gz",
+          "lastRow": 6549,
+          "sha256": "9905620fc6fc1e0b071db662f8bdf6c7f94e661e6cd921850ffe2b72e6c54d3c",
+          "uncompressedBytes": 262142,
+          "uncompressedSha256": "64c35509fb4553f4d23cdfedaacf130360f62d8972d8f01180197ee5776f3ae3"
+        },
+        {
+          "bytes": 111541,
+          "firstRow": 6550,
+          "id": "shards/chinese-dictionary-words/000003.tsv.gz",
+          "lastRow": 9012,
+          "sha256": "e854b6d964c6ca0571cada72c5f16e86207ad50a98f97d2528b51e02adba4926",
+          "uncompressedBytes": 262099,
+          "uncompressedSha256": "511c78803eb08957eaa134f380688281c5a37540401180f4f4b7b894cdd3559b"
+        },
+        {
+          "bytes": 111287,
+          "firstRow": 9013,
+          "id": "shards/chinese-dictionary-words/000004.tsv.gz",
+          "lastRow": 11014,
+          "sha256": "7811fc9f64522ccbc29b819ec845fe1bd5736968e9c77c321910f60d57cc9068",
+          "uncompressedBytes": 262125,
+          "uncompressedSha256": "ed7d8104782e6dc75bfbc44882b50941d048e63a9dc2e3302b1b2d2be0254fdb"
+        },
+        {
+          "bytes": 113103,
+          "firstRow": 11015,
+          "id": "shards/chinese-dictionary-words/000005.tsv.gz",
+          "lastRow": 13643,
+          "sha256": "99cfb4381af7766f0f09380d8005ce989a909ef5215918b69d41079aa5a37146",
+          "uncompressedBytes": 262124,
+          "uncompressedSha256": "6234e38e8268205b43886beb025dc3ff999fb6bc384e09c0bce11997b587d8fe"
+        },
+        {
+          "bytes": 112929,
+          "firstRow": 13644,
+          "id": "shards/chinese-dictionary-words/000006.tsv.gz",
+          "lastRow": 16165,
+          "sha256": "7461dccffcb5a60050281053ce2d65d55a3d837df9018108fd517d8e9c0c5688",
+          "uncompressedBytes": 261964,
+          "uncompressedSha256": "3c52b77d6973fd8fab360a31015530b2772b6cda15096298b5cb52d49cd71dc3"
+        },
+        {
+          "bytes": 113739,
+          "firstRow": 16166,
+          "id": "shards/chinese-dictionary-words/000007.tsv.gz",
+          "lastRow": 18570,
+          "sha256": "3e68e2bad813b0adf71133d85eb5f8ddf9f921e9135e407485c7fc5071d5f22a",
+          "uncompressedBytes": 262115,
+          "uncompressedSha256": "a7c4f7c0aa1d7c33b042b01e05984d57ec53031c411a0a1ca64a651f1b69b793"
+        },
+        {
+          "bytes": 110434,
+          "firstRow": 18571,
+          "id": "shards/chinese-dictionary-words/000008.tsv.gz",
+          "lastRow": 21242,
+          "sha256": "6b06d8b5b96f8cca03ce28b002d7baa8ef27b4a53e26f1d04f3b53c9335e41bb",
+          "uncompressedBytes": 261924,
+          "uncompressedSha256": "d1909bf319c52fd923c445197a2bd0fa4fbd96b0b22f187a6620559dd9adf7ce"
+        },
+        {
+          "bytes": 111551,
+          "firstRow": 21243,
+          "id": "shards/chinese-dictionary-words/000009.tsv.gz",
+          "lastRow": 24245,
+          "sha256": "fc3dec55ea9687581cd14e9be5949e6571b88655dd37a0bbbe16382088c356fb",
+          "uncompressedBytes": 262080,
+          "uncompressedSha256": "5e88732cd49637db0c79a9f8822c7940a8654eda95128a283895657899c0fc9f"
+        },
+        {
+          "bytes": 112136,
+          "firstRow": 24246,
+          "id": "shards/chinese-dictionary-words/000010.tsv.gz",
+          "lastRow": 27372,
+          "sha256": "7ab7e8b6318e1dda6ebb148b683f2dd240ca9e75a9761eb3f12a5de8fad136b7",
+          "uncompressedBytes": 262073,
+          "uncompressedSha256": "695eaf10971a87ec09dccd5cb472175c18db83401676114414da68ca6d638773"
+        },
+        {
+          "bytes": 112416,
+          "firstRow": 27373,
+          "id": "shards/chinese-dictionary-words/000011.tsv.gz",
+          "lastRow": 30598,
+          "sha256": "5a3b342574510942b545c8a8d6a4c9594993dccab9e592f8c502472f6a77c47f",
+          "uncompressedBytes": 262113,
+          "uncompressedSha256": "7cd44bfd3f996499371830dd72fc245a24d0eb6f824d8cea1d34731d2ba39a23"
+        },
+        {
+          "bytes": 114177,
+          "firstRow": 30599,
+          "id": "shards/chinese-dictionary-words/000012.tsv.gz",
+          "lastRow": 32902,
+          "sha256": "6d264f4604aab4073a699f7ea4a7ba699b19d3a0cdf2eaf306af52d1c18db522",
+          "uncompressedBytes": 261712,
+          "uncompressedSha256": "c190b8cd2e4adcb9cf9c53efeea060cd87d01e7fff28c87e7d8f9ddfb920e5fa"
+        },
+        {
+          "bytes": 111536,
+          "firstRow": 32903,
+          "id": "shards/chinese-dictionary-words/000013.tsv.gz",
+          "lastRow": 35311,
+          "sha256": "e94443657d323ffde1f380a6b4c0e628a27ce6d4b4cface42fdf56da2e738de6",
+          "uncompressedBytes": 262138,
+          "uncompressedSha256": "4476adfcee1d0fa7451702b2401011f73ea16f5d9af75a09c56ed806d557b259"
+        },
+        {
+          "bytes": 108657,
+          "firstRow": 35312,
+          "id": "shards/chinese-dictionary-words/000014.tsv.gz",
+          "lastRow": 38664,
+          "sha256": "98f821d9a89600e54656e4a1ff5bdb230724daf32e0f33ff0b8a127e40b8d321",
+          "uncompressedBytes": 262142,
+          "uncompressedSha256": "be8f3dfd5aa3df384a9dda2f5a617132b505b3d71b1ddf285e0301c1d7397707"
+        },
+        {
+          "bytes": 114385,
+          "firstRow": 38665,
+          "id": "shards/chinese-dictionary-words/000015.tsv.gz",
+          "lastRow": 41404,
+          "sha256": "a03f2d5acc345c41dbf570c52d07555e014a8ddceac2739cc317eadb8686e90a",
+          "uncompressedBytes": 262091,
+          "uncompressedSha256": "c9b4dfa53ae8d7cd264b873d4133bb174dc7aba42bc6bdcbafb281fb347e47a1"
+        },
+        {
+          "bytes": 111909,
+          "firstRow": 41405,
+          "id": "shards/chinese-dictionary-words/000016.tsv.gz",
+          "lastRow": 44294,
+          "sha256": "05be66f5989aadd17c6c38f3de63eee834729815f6434ab164b0bd4ee11f451f",
+          "uncompressedBytes": 262109,
+          "uncompressedSha256": "a9ee475bf5380e5f8db5f7a4193944aace970331f15046a8e505b6d14bdc88ac"
+        },
+        {
+          "bytes": 113481,
+          "firstRow": 44295,
+          "id": "shards/chinese-dictionary-words/000017.tsv.gz",
+          "lastRow": 46809,
+          "sha256": "04165ad2820226ec40af881c6b3b29ab21e5f3e6eaaba4e45a98348576e14cee",
+          "uncompressedBytes": 262125,
+          "uncompressedSha256": "61168ebb204d0efa9414a25b19209a78143c05b427d2edb461a9b35eb91a7d99"
+        },
+        {
+          "bytes": 117151,
+          "firstRow": 46810,
+          "id": "shards/chinese-dictionary-words/000018.tsv.gz",
+          "lastRow": 49271,
+          "sha256": "6143aa7a5b320d4af6430b724846344c0d1e71e5b57537ddc4aa52a1434b04aa",
+          "uncompressedBytes": 262135,
+          "uncompressedSha256": "537074288271b1888dafaae548b6d2f86601df4eca8f9899597c69bf42568eb6"
+        },
+        {
+          "bytes": 115149,
+          "firstRow": 49272,
+          "id": "shards/chinese-dictionary-words/000019.tsv.gz",
+          "lastRow": 51840,
+          "sha256": "a1f3e15d55adec5ca39b7adb90e2d00df99a280e5b676294b8e83d4f6f4a1920",
+          "uncompressedBytes": 262120,
+          "uncompressedSha256": "13b8339e6b1a9f6a7566713f1806cb83499cb39e503adcb1245e4fe8a4231a00"
+        },
+        {
+          "bytes": 112522,
+          "firstRow": 51841,
+          "id": "shards/chinese-dictionary-words/000020.tsv.gz",
+          "lastRow": 54506,
+          "sha256": "eee371b4a6115bbf5d5d0c11de9216a2f19e4d53237fbb7600fdd223f185e192",
+          "uncompressedBytes": 262030,
+          "uncompressedSha256": "0a51a7bcba84fc5527702a56ee8b10ac9cababa7d115210a195fcb424c32afda"
+        },
+        {
+          "bytes": 111995,
+          "firstRow": 54507,
+          "id": "shards/chinese-dictionary-words/000021.tsv.gz",
+          "lastRow": 57260,
+          "sha256": "2b305551cc10ab2f5ba4eadcd270bd679bfd24c74c92d9259bd1fdc564514322",
+          "uncompressedBytes": 262126,
+          "uncompressedSha256": "23d16c7d0887c9ee0802d9a5f2f0b160c31787b9cd19032f23eb1a0a1e792171"
+        },
+        {
+          "bytes": 113790,
+          "firstRow": 57261,
+          "id": "shards/chinese-dictionary-words/000022.tsv.gz",
+          "lastRow": 60285,
+          "sha256": "063262f39a33e804a46a0425e4fc8bc1913013355bf4f495aff60bdecb9fbd67",
+          "uncompressedBytes": 262140,
+          "uncompressedSha256": "59a45871ccbe29aa3fb86a72887e610071574314f595bcb78d2d65b94858de24"
+        },
+        {
+          "bytes": 113500,
+          "firstRow": 60286,
+          "id": "shards/chinese-dictionary-words/000023.tsv.gz",
+          "lastRow": 63075,
+          "sha256": "d15ac63013bad85bddee5eacbd3cab391f048e414f7a8cd154ef0bb26ed57768",
+          "uncompressedBytes": 262020,
+          "uncompressedSha256": "81e206a641c3e26245021236375722602ada1f911ec7810bb650a91e2270bb6f"
+        },
+        {
+          "bytes": 115272,
+          "firstRow": 63076,
+          "id": "shards/chinese-dictionary-words/000024.tsv.gz",
+          "lastRow": 65338,
+          "sha256": "4112f44b5209f650a29f90b18791a18d13b5d838c18fdf0cb8966846ef573059",
+          "uncompressedBytes": 262012,
+          "uncompressedSha256": "d02a63c837803c05f557e32412e0a51c0d7512561961892b9939bd642584c957"
+        },
+        {
+          "bytes": 116585,
+          "firstRow": 65339,
+          "id": "shards/chinese-dictionary-words/000025.tsv.gz",
+          "lastRow": 68115,
+          "sha256": "353314b5a42ea03a7487d19519fa14088067157331cddb189871aba100f46678",
+          "uncompressedBytes": 262109,
+          "uncompressedSha256": "741c3a9690b38388337b0e688c61483c266c969ad731b49a5819f6115fb02374"
+        },
+        {
+          "bytes": 116168,
+          "firstRow": 68116,
+          "id": "shards/chinese-dictionary-words/000026.tsv.gz",
+          "lastRow": 70425,
+          "sha256": "7cff6152f78425fd0a4d78b0c2759d21a1824472084ee19e46bd9664e42b31a2",
+          "uncompressedBytes": 261763,
+          "uncompressedSha256": "fa37d948039352227c8400294fdbbee0223eeb1bcffffdc307dac3523f15f1c8"
+        },
+        {
+          "bytes": 113867,
+          "firstRow": 70426,
+          "id": "shards/chinese-dictionary-words/000027.tsv.gz",
+          "lastRow": 72777,
+          "sha256": "a1ce46823929a88c9f031164d546d6540851072dd05255b117e4553b3c03e84a",
+          "uncompressedBytes": 262130,
+          "uncompressedSha256": "7a9b1205ad16308a18b24a08f252817b3552a7aade3e441ee03d159fb52cf40a"
+        },
+        {
+          "bytes": 109409,
+          "firstRow": 72778,
+          "id": "shards/chinese-dictionary-words/000028.tsv.gz",
+          "lastRow": 75947,
+          "sha256": "7f677d218030f99a6b44d0fc39c9cb94a4937ca63f4de9aa21189db5661a5eb6",
+          "uncompressedBytes": 262098,
+          "uncompressedSha256": "f535a08cfdda7ce4f96ae36ba819a29e1a30506b8ad639eded955ab32f2b2be9"
+        },
+        {
+          "bytes": 111174,
+          "firstRow": 75948,
+          "id": "shards/chinese-dictionary-words/000029.tsv.gz",
+          "lastRow": 78897,
+          "sha256": "f3b05346eb98a1a7d92cb5b9bcfc85223733084594ad2ce248619623e908bf59",
+          "uncompressedBytes": 261969,
+          "uncompressedSha256": "24a2b4fd74b16ac92006c6fa3a2920bff4921bfdd23d1552fd7d1935d1f570cf"
+        },
+        {
+          "bytes": 111572,
+          "firstRow": 78898,
+          "id": "shards/chinese-dictionary-words/000030.tsv.gz",
+          "lastRow": 81854,
+          "sha256": "7eb0505ba35f68b83f84d3fe13565eab209ac4145d1a86c7d678680853a8d06d",
+          "uncompressedBytes": 262142,
+          "uncompressedSha256": "72dcfd751a267a8e9c09294918e1fec5d6dbc9c6e07f5003db22024829e737cc"
+        },
+        {
+          "bytes": 113248,
+          "firstRow": 81855,
+          "id": "shards/chinese-dictionary-words/000031.tsv.gz",
+          "lastRow": 84791,
+          "sha256": "af36cf012a1d71aae1b467829ca8aff94fa56e07e8247ebbfa6cdada66f62f56",
+          "uncompressedBytes": 262028,
+          "uncompressedSha256": "14160b4381afae0e7bc541bd6da88bfc401ee79fc4f935b24909141d82cdf0ab"
+        },
+        {
+          "bytes": 114446,
+          "firstRow": 84792,
+          "id": "shards/chinese-dictionary-words/000032.tsv.gz",
+          "lastRow": 87669,
+          "sha256": "c5ea0f4ec2b1b1cb6395da174c346eaf4d2eb274bb5bc50009abd1d6445fcc7a",
+          "uncompressedBytes": 261962,
+          "uncompressedSha256": "1636526ca649b309643b0c531a99175b2b1fb217227d5a3e5432d9ab6fe5503a"
+        },
+        {
+          "bytes": 110809,
+          "firstRow": 87670,
+          "id": "shards/chinese-dictionary-words/000033.tsv.gz",
+          "lastRow": 90574,
+          "sha256": "955578fa68c1e714f80d9f234b32cc43100c356165f2fa128b7ed03e07b6aedd",
+          "uncompressedBytes": 262139,
+          "uncompressedSha256": "08234bfddff48764b79f0d6eadb489a4e148019246e6cc65a74021c817017c52"
+        },
+        {
+          "bytes": 113925,
+          "firstRow": 90575,
+          "id": "shards/chinese-dictionary-words/000034.tsv.gz",
+          "lastRow": 93257,
+          "sha256": "7de92a990c54dd6ea5ec17350cef4f6a144ce50c26509da24b302c5729c07dd0",
+          "uncompressedBytes": 262080,
+          "uncompressedSha256": "df2cf2b28af56e9507ae316d39c65b40b531c3898807132f9482d65180eb46f3"
+        },
+        {
+          "bytes": 111631,
+          "firstRow": 93258,
+          "id": "shards/chinese-dictionary-words/000035.tsv.gz",
+          "lastRow": 96315,
+          "sha256": "c5f85cd1a4bca8a9ab1b8c96c5789134cbdaa103c757244c84d56b48f88bc89b",
+          "uncompressedBytes": 262067,
+          "uncompressedSha256": "3552fcf3c38bb3ff062b4e8892eae7b6db7cf8eeb8cf8caefed010c888b2bea6"
+        },
+        {
+          "bytes": 112408,
+          "firstRow": 96316,
+          "id": "shards/chinese-dictionary-words/000036.tsv.gz",
+          "lastRow": 98967,
+          "sha256": "ca4bbbd87dd71ceaf6c9293e854eff1c29d5602bca188db67b202a72d856bf47",
+          "uncompressedBytes": 262034,
+          "uncompressedSha256": "7c57315a0e3ee0930c0fb8ec214eadc937d17da8e48f6875038a3d096b47f045"
+        },
+        {
+          "bytes": 108861,
+          "firstRow": 98968,
+          "id": "shards/chinese-dictionary-words/000037.tsv.gz",
+          "lastRow": 101833,
+          "sha256": "9c1c5694f3f33a6432debfc1f492fcf2a825133b93141898750bcd0576334bff",
+          "uncompressedBytes": 262087,
+          "uncompressedSha256": "8e4f030cdb20eac4323824ba5617d95f3bd340b93e0e0bedcfabec852b38fcad"
+        },
+        {
+          "bytes": 107237,
+          "firstRow": 101834,
+          "id": "shards/chinese-dictionary-words/000038.tsv.gz",
+          "lastRow": 105031,
+          "sha256": "eba24af93ef06a3c7569e261b73e9a2f2de72ff8fe97bac965c1f73a99264000",
+          "uncompressedBytes": 262088,
+          "uncompressedSha256": "788df0505241fb0e645bd7b6f12ebf57df61cc19df1f4d8900b3d0f35121a879"
+        },
+        {
+          "bytes": 105619,
+          "firstRow": 105032,
+          "id": "shards/chinese-dictionary-words/000039.tsv.gz",
+          "lastRow": 108558,
+          "sha256": "377653b6320245c873e7b568ed3b8229ef1426abafff7b1001a672d30db948eb",
+          "uncompressedBytes": 262126,
+          "uncompressedSha256": "29dd34a0c579bd378743eebe576efb22e9e4a3bd97e0cdc43c024fb4c8fd21fc"
+        },
+        {
+          "bytes": 111815,
+          "firstRow": 108559,
+          "id": "shards/chinese-dictionary-words/000040.tsv.gz",
+          "lastRow": 111697,
+          "sha256": "b2a88a0586e72a58a77c6c66bc3681f31d9d7875a93aad7b0b87622f029d7558",
+          "uncompressedBytes": 262086,
+          "uncompressedSha256": "cee77ef08eeb4c4fb6b81afb2895a417afede5bd05f364f79dd570ba5f6fff68"
+        },
+        {
+          "bytes": 115441,
+          "firstRow": 111698,
+          "id": "shards/chinese-dictionary-words/000041.tsv.gz",
+          "lastRow": 114630,
+          "sha256": "ea209ffe951069a0c278ec0cf606971bf0f0c0b9049522e93eba6f5a15c0a8c0",
+          "uncompressedBytes": 262031,
+          "uncompressedSha256": "f7979839899929aa932e90ddd37ff0a78890703232d4856ac3f35bba342ad8ae"
+        },
+        {
+          "bytes": 112788,
+          "firstRow": 114631,
+          "id": "shards/chinese-dictionary-words/000042.tsv.gz",
+          "lastRow": 117749,
+          "sha256": "974a50bc35cbf8562ac294c1848a570fb1883032a5c7174981c34b52ba0ec301",
+          "uncompressedBytes": 262120,
+          "uncompressedSha256": "ab68f3bc1ca3b2cc15169ee7e54d46e23387975146c4536bc66ae21b05398ee3"
+        },
+        {
+          "bytes": 114069,
+          "firstRow": 117750,
+          "id": "shards/chinese-dictionary-words/000043.tsv.gz",
+          "lastRow": 120886,
+          "sha256": "7d95fdd387d90210f9a4f2d1d8ab181d627b52618fd375d0f62d6e1e562bad9f",
+          "uncompressedBytes": 262026,
+          "uncompressedSha256": "f070d1cc7fe090a63230961c4402f280cab5f80299362ec93c66a03ba99a126e"
+        },
+        {
+          "bytes": 112031,
+          "firstRow": 120887,
+          "id": "shards/chinese-dictionary-words/000044.tsv.gz",
+          "lastRow": 124151,
+          "sha256": "815ca7840d1f26928484303127b741f4829e9c6be08ab7e6576ae0e1b4198412",
+          "uncompressedBytes": 262114,
+          "uncompressedSha256": "ff9e31035fa60f1366eea1102ac53edebf765605b9720f6b1f758c8827bcf78e"
+        },
+        {
+          "bytes": 110758,
+          "firstRow": 124152,
+          "id": "shards/chinese-dictionary-words/000045.tsv.gz",
+          "lastRow": 126958,
+          "sha256": "ab45db8be585b03fa564e0a93628e756247cca6b34f8bdb0f02e95fc5b8b9b06",
+          "uncompressedBytes": 262048,
+          "uncompressedSha256": "7b676e7443bd6f465519cde508ee751fb5bf4c0073feacbd9dfaf912fcf88f15"
+        },
+        {
+          "bytes": 110824,
+          "firstRow": 126959,
+          "id": "shards/chinese-dictionary-words/000046.tsv.gz",
+          "lastRow": 129719,
+          "sha256": "761e0dbeeaa8a26bece5eb6c413bb7caae36814f88f5407e74fe8b06ff06f463",
+          "uncompressedBytes": 262091,
+          "uncompressedSha256": "a30a94721fa6c8ece36d61e26f3b5b85889ab4c8f105a9b67be058aca9aca77e"
+        },
+        {
+          "bytes": 107986,
+          "firstRow": 129720,
+          "id": "shards/chinese-dictionary-words/000047.tsv.gz",
+          "lastRow": 132471,
+          "sha256": "a204b7223957dddb8a368995481ec1a7325b9ac68ab4d54d68b279377afa0da8",
+          "uncompressedBytes": 262097,
+          "uncompressedSha256": "8e1922b15af28946339347d870dd733e6aa8c301c7136664c5e99d7612a3851d"
+        },
+        {
+          "bytes": 112122,
+          "firstRow": 132472,
+          "id": "shards/chinese-dictionary-words/000048.tsv.gz",
+          "lastRow": 135670,
+          "sha256": "bf6dc10fdc7b9611d30972b87211ee3a9b1a3d159dc2c323846d88230cfe9dfa",
+          "uncompressedBytes": 262076,
+          "uncompressedSha256": "b4fadf397fc87048dfc76e325f7389a99fddbf6cda97f3748ed34047b7ad0a8d"
+        },
+        {
+          "bytes": 111201,
+          "firstRow": 135671,
+          "id": "shards/chinese-dictionary-words/000049.tsv.gz",
+          "lastRow": 138239,
+          "sha256": "3d1e8a14578f2ab19d98db35040ecd0fff332fcf2310632c3dce2ca8b9be551a",
+          "uncompressedBytes": 262092,
+          "uncompressedSha256": "2e3281634f5c1f6716c212981b299228ff999e00424099ec018a179ebf14b2e4"
+        },
+        {
+          "bytes": 114926,
+          "firstRow": 138240,
+          "id": "shards/chinese-dictionary-words/000050.tsv.gz",
+          "lastRow": 140845,
+          "sha256": "05d79ff56d029f8c929f1256aa8acd36c00ea81b1e6fec2fae9a273d09e0a928",
+          "uncompressedBytes": 261956,
+          "uncompressedSha256": "2e751e0da720c356de266f5725bd8b392bf8e90a0dd442bb1b9e13f58bc22f5c"
+        },
+        {
+          "bytes": 112445,
+          "firstRow": 140846,
+          "id": "shards/chinese-dictionary-words/000051.tsv.gz",
+          "lastRow": 143956,
+          "sha256": "9321da4e62214bdb01e388fd6f4f5e7c94ae370822a2f1143a9cc85821388cd1",
+          "uncompressedBytes": 262122,
+          "uncompressedSha256": "a723fc9731dcac77128ffc0384862c54858fa6662dc9e6f54b5d89f2abee1d0a"
+        },
+        {
+          "bytes": 114865,
+          "firstRow": 143957,
+          "id": "shards/chinese-dictionary-words/000052.tsv.gz",
+          "lastRow": 146814,
+          "sha256": "b25e8e67a0989d947124b4f5c60a5506ffd89ecaa88db35a3f0875ceb59d7831",
+          "uncompressedBytes": 262118,
+          "uncompressedSha256": "00e4b8bfb8792a887f469d5c7ec69a7e2bbb392fa88be2612abb1a32a79ac07f"
+        },
+        {
+          "bytes": 113640,
+          "firstRow": 146815,
+          "id": "shards/chinese-dictionary-words/000053.tsv.gz",
+          "lastRow": 149971,
+          "sha256": "3055bd6ab303663233832609d8fcacc5b742ccd2b15016895c0cfc55cd53847f",
+          "uncompressedBytes": 261807,
+          "uncompressedSha256": "2d8c0768b449e36edd2899cdd57eb65e77a166099e72318ba36fd9891093c655"
+        },
+        {
+          "bytes": 111571,
+          "firstRow": 149972,
+          "id": "shards/chinese-dictionary-words/000054.tsv.gz",
+          "lastRow": 152719,
+          "sha256": "c5bca4566e70b0b247956c21b92aee98494c41599eafff2669401d67cbe97983",
+          "uncompressedBytes": 262073,
+          "uncompressedSha256": "2b1613b5f1aa577cb33a134bb31ed6b46d9543e1977466a92791c401f3dfe54e"
+        },
+        {
+          "bytes": 112900,
+          "firstRow": 152720,
+          "id": "shards/chinese-dictionary-words/000055.tsv.gz",
+          "lastRow": 155149,
+          "sha256": "57a41d8c609d33f07ed593b983227ecee72aa70d7693f15b54b357608165ffdd",
+          "uncompressedBytes": 262056,
+          "uncompressedSha256": "1985e3502659c6c9109bed789533759fc63823b9268ff53fb6b03c8ef7f11424"
+        },
+        {
+          "bytes": 114165,
+          "firstRow": 155150,
+          "id": "shards/chinese-dictionary-words/000056.tsv.gz",
+          "lastRow": 158060,
+          "sha256": "1d81f250f173562e5b24be79ce21f554c04b4ed0d1a3c0e679a05941949263c5",
+          "uncompressedBytes": 262144,
+          "uncompressedSha256": "3cd96a60154b65ac800437f33d6854c9d9f8262aad1aa1c81c7e0bc54022253b"
+        },
+        {
+          "bytes": 113288,
+          "firstRow": 158061,
+          "id": "shards/chinese-dictionary-words/000057.tsv.gz",
+          "lastRow": 160914,
+          "sha256": "46ab55429eb14d36f939aad94236887786299ce97d67cf9e7a9dad3a069d302f",
+          "uncompressedBytes": 262104,
+          "uncompressedSha256": "194b65a96d9f36e1f86fbd6c8c8d6fdb9f588414070b80f9c66c76d06e1e327f"
+        },
+        {
+          "bytes": 109693,
+          "firstRow": 160915,
+          "id": "shards/chinese-dictionary-words/000058.tsv.gz",
+          "lastRow": 164151,
+          "sha256": "a2f4d18b7fa33e4e24cd442c16503a3e8e30c936cdffbd93a15b6e021115f517",
+          "uncompressedBytes": 262132,
+          "uncompressedSha256": "d3c8245438132cc04701e53b20553d1ad7f4c75abc277eb5aa463e8b08d96e9c"
+        },
+        {
+          "bytes": 113083,
+          "firstRow": 164152,
+          "id": "shards/chinese-dictionary-words/000059.tsv.gz",
+          "lastRow": 167370,
+          "sha256": "2ee5b22cd60b65529d7258aa6906156f61c11cfc4771afe362715e5b57021da1",
+          "uncompressedBytes": 262136,
+          "uncompressedSha256": "1872bd4b14287bcdcab5a407b621c23f6d13b84e49509ff8d06d75f6cf881fa0"
+        },
+        {
+          "bytes": 110299,
+          "firstRow": 167371,
+          "id": "shards/chinese-dictionary-words/000060.tsv.gz",
+          "lastRow": 170474,
+          "sha256": "00edd9cbee23e120cf61f9853c69ef60c7d5e5cb6b87f10cb5661ab8d0ad0a84",
+          "uncompressedBytes": 262033,
+          "uncompressedSha256": "a1c5acd5d6379d0b1f44d25452fb1e90c5024af5eda0f8ddf58adaa8085e6941"
+        },
+        {
+          "bytes": 114217,
+          "firstRow": 170475,
+          "id": "shards/chinese-dictionary-words/000061.tsv.gz",
+          "lastRow": 173410,
+          "sha256": "00780709d558df4244642e84af3da0688179e2ee3ad274e5b73bdec9c808b5d1",
+          "uncompressedBytes": 262119,
+          "uncompressedSha256": "453c9db494e93dadacb1ff4a305cbcb5c572ce8cda3a4b29dcd9ddd380f274a7"
+        },
+        {
+          "bytes": 111716,
+          "firstRow": 173411,
+          "id": "shards/chinese-dictionary-words/000062.tsv.gz",
+          "lastRow": 176343,
+          "sha256": "295c6e2d07ac96d176e86f0affb06d80cb621c4c6aef899a3b9237af2f1ca9cb",
+          "uncompressedBytes": 262100,
+          "uncompressedSha256": "c639c8c4c8000e857a4579f87e842d0ff7f2325bf7f1fe3b8b6833f2b69ba12a"
+        },
+        {
+          "bytes": 113298,
+          "firstRow": 176344,
+          "id": "shards/chinese-dictionary-words/000063.tsv.gz",
+          "lastRow": 178920,
+          "sha256": "381173d6f3f34ad76beb903f6d6b2ba8a553cfdc2f02cdc5aab5ce36aeb01da5",
+          "uncompressedBytes": 262141,
+          "uncompressedSha256": "d2656dbae657d56cc7d4f8baafcd33de9e444318a08bf6c5c6534566156d098d"
+        },
+        {
+          "bytes": 107845,
+          "firstRow": 178921,
+          "id": "shards/chinese-dictionary-words/000064.tsv.gz",
+          "lastRow": 181816,
+          "sha256": "59a74b062f9c910e1e7d79a1019b163f404a8b943ddbc718cc01f68f163e5097",
+          "uncompressedBytes": 262053,
+          "uncompressedSha256": "90a1389d65b2d07ed40a14ddc394afd271addd6af2b4f4ba97dad6da179d7543"
+        },
+        {
+          "bytes": 108012,
+          "firstRow": 181817,
+          "id": "shards/chinese-dictionary-words/000065.tsv.gz",
+          "lastRow": 184925,
+          "sha256": "8e0aaa70d694308d8a80aa4b6b40d98b4942be2875d2140803459e816ccfe9e4",
+          "uncompressedBytes": 262137,
+          "uncompressedSha256": "3dcccbcfe9e90811dba80ed5b905a8e1b22e9e010bc33a42ccae3dc373329f7d"
+        },
+        {
+          "bytes": 109948,
+          "firstRow": 184926,
+          "id": "shards/chinese-dictionary-words/000066.tsv.gz",
+          "lastRow": 187819,
+          "sha256": "d65cf6e5fbb1a0897d7e774910c01d79e9c37537125cebf421aad70f5a5174c7",
+          "uncompressedBytes": 262120,
+          "uncompressedSha256": "5578b3d9bc45c96167472d47b99f9b3778407833c5cc47cf65fb0b5eae6d1f75"
+        },
+        {
+          "bytes": 105647,
+          "firstRow": 187820,
+          "id": "shards/chinese-dictionary-words/000067.tsv.gz",
+          "lastRow": 191164,
+          "sha256": "062d63dc4bfd4082a32081a676d01462133509256888cb510cb9e24da11cc18d",
+          "uncompressedBytes": 261986,
+          "uncompressedSha256": "0d5bb52a48031e1f56412299f7b1e6ae09b2788c574adb2bfd14eb530ce6af04"
+        },
+        {
+          "bytes": 110051,
+          "firstRow": 191165,
+          "id": "shards/chinese-dictionary-words/000068.tsv.gz",
+          "lastRow": 194083,
+          "sha256": "84e3d01713b52db98e208d7c69692b98cee9cd020baf063f7a5973e282df5fd4",
+          "uncompressedBytes": 262027,
+          "uncompressedSha256": "f7f4ee009c28a7a89507a5d94d1eb48affb6f5cd1dba83624bca8dbcc98c94ac"
+        },
+        {
+          "bytes": 109803,
+          "firstRow": 194084,
+          "id": "shards/chinese-dictionary-words/000069.tsv.gz",
+          "lastRow": 196993,
+          "sha256": "1032d7930f7affaddb34471f0a5817fab521071356802f0a9606e63aeaec09bf",
+          "uncompressedBytes": 262099,
+          "uncompressedSha256": "1058f90d8c4965eb27a702db4fca0fa9f406070561d828715274a4e99ba35e60"
+        },
+        {
+          "bytes": 109608,
+          "firstRow": 196994,
+          "id": "shards/chinese-dictionary-words/000070.tsv.gz",
+          "lastRow": 200372,
+          "sha256": "d0e66baac09376c5a95233585d32bad947383788d5e9483483018ce237a73efb",
+          "uncompressedBytes": 262137,
+          "uncompressedSha256": "0cbbe9455116125f59c6a9fa01916dab94cc0b895ed7f39f62dbb258de8fce87"
+        },
+        {
+          "bytes": 110242,
+          "firstRow": 200373,
+          "id": "shards/chinese-dictionary-words/000071.tsv.gz",
+          "lastRow": 203712,
+          "sha256": "31fd3082f0d0fef16b0b808aa7c3884feff0dd715c3b440d7dff73f9d3909603",
+          "uncompressedBytes": 262099,
+          "uncompressedSha256": "271e457b03b63efd3a0499b5ee491e8bd9e544eae0e23621d0f8969e71c10d77"
+        },
+        {
+          "bytes": 113133,
+          "firstRow": 203713,
+          "id": "shards/chinese-dictionary-words/000072.tsv.gz",
+          "lastRow": 206787,
+          "sha256": "499c92929591f6ac1e1d7e05767b8400c80e4265c04d9d34ced7c8babe6e5776",
+          "uncompressedBytes": 262082,
+          "uncompressedSha256": "a97709d657aa549dd89f035dcb32cdc4dfc89d505634fed7b33fca71eacde840"
+        },
+        {
+          "bytes": 115356,
+          "firstRow": 206788,
+          "id": "shards/chinese-dictionary-words/000073.tsv.gz",
+          "lastRow": 209582,
+          "sha256": "e7e348147fdab35f36b27a3a331733bfedccec0409d8b8aef67980f4c92aba85",
+          "uncompressedBytes": 262069,
+          "uncompressedSha256": "5d582b11d93c7728369a74793a6aaf01e4ebf799dd5575b2102afb69f883e53f"
+        },
+        {
+          "bytes": 115737,
+          "firstRow": 209583,
+          "id": "shards/chinese-dictionary-words/000074.tsv.gz",
+          "lastRow": 212138,
+          "sha256": "cd6d7740b8a6904f91a26af4b947f59b7a66bd8f7572953162873dbec1415c2b",
+          "uncompressedBytes": 262097,
+          "uncompressedSha256": "bc8cf21739ef6fc29114b95b34744fba3ea49b9dcc430265b40298232aec643a"
+        },
+        {
+          "bytes": 113489,
+          "firstRow": 212139,
+          "id": "shards/chinese-dictionary-words/000075.tsv.gz",
+          "lastRow": 215105,
+          "sha256": "0f384070807f3fd96687f9d2933afb9d9ecb0905dbc9dfdc5bc9089a2f4b5c57",
+          "uncompressedBytes": 261958,
+          "uncompressedSha256": "e28a4714530e135f3271aafad9ae94175fdee1e3930bf5d17e8e100e15c75705"
+        },
+        {
+          "bytes": 112271,
+          "firstRow": 215106,
+          "id": "shards/chinese-dictionary-words/000076.tsv.gz",
+          "lastRow": 218033,
+          "sha256": "a4799beca1bcddc6b4778aab15b63f30f9ee3b7d5ebd38e5da1e9610bdbf02d7",
+          "uncompressedBytes": 262128,
+          "uncompressedSha256": "bbde63b5e5b42ad04feae1309e5262a0d626f2624500bd2d45af917f25ebf858"
+        },
+        {
+          "bytes": 112664,
+          "firstRow": 218034,
+          "id": "shards/chinese-dictionary-words/000077.tsv.gz",
+          "lastRow": 220883,
+          "sha256": "b2e44159e3a3ebaad7913fb137fca125b7a213560247b434d96821f553ee4fa3",
+          "uncompressedBytes": 262060,
+          "uncompressedSha256": "66ed791f70d95b6aacc37f88edfcdd4eeeb934a3edf5fb7320f560d2f47bd679"
+        },
+        {
+          "bytes": 112129,
+          "firstRow": 220884,
+          "id": "shards/chinese-dictionary-words/000078.tsv.gz",
+          "lastRow": 223666,
+          "sha256": "f20ebdd364be10cb467a1f763a106a686d6b4ae4dc13a68e644a168dd689b26e",
+          "uncompressedBytes": 262088,
+          "uncompressedSha256": "cb81fd0f731030ff3f9628918768ff8e1e647383a0a3b5eb4f2225a28a744be3"
+        },
+        {
+          "bytes": 114316,
+          "firstRow": 223667,
+          "id": "shards/chinese-dictionary-words/000079.tsv.gz",
+          "lastRow": 226542,
+          "sha256": "01d3e1ab4f39824617ef4a0e65a560baddb7e4e14a084992a01824852f580f96",
+          "uncompressedBytes": 262136,
+          "uncompressedSha256": "203c035274e417955301ba03aaa2aa3856fab474e0c7e58008faee26e9a5a257"
+        },
+        {
+          "bytes": 113342,
+          "firstRow": 226543,
+          "id": "shards/chinese-dictionary-words/000080.tsv.gz",
+          "lastRow": 229336,
+          "sha256": "560d6ba9e411a8146eff155f0a58094c729cca19ad69fa8e3de72d7183e723ff",
+          "uncompressedBytes": 261934,
+          "uncompressedSha256": "5c12922bdfe474206be4674eeb9682281312ae22876ebe487cd94920e5916632"
+        },
+        {
+          "bytes": 109617,
+          "firstRow": 229337,
+          "id": "shards/chinese-dictionary-words/000081.tsv.gz",
+          "lastRow": 232303,
+          "sha256": "0cdb093eba38f336bab37f6080100d1eaaa3f57df6d35e60dc0dfe622c83ad7f",
+          "uncompressedBytes": 262135,
+          "uncompressedSha256": "9a193c74aeb977530c4ee318419421bb0e96314612d0c77e87e89eadd0b8c9a7"
+        },
+        {
+          "bytes": 113121,
+          "firstRow": 232304,
+          "id": "shards/chinese-dictionary-words/000082.tsv.gz",
+          "lastRow": 235115,
+          "sha256": "e697533054b0637caa42aa0cb4dac24d15fbebf286ae72d1b70dafa69027d7e3",
+          "uncompressedBytes": 262136,
+          "uncompressedSha256": "02a1509c5eb056751e6d7e12e82c90d944d30591355c50cc61d762f6bce232b6"
+        },
+        {
+          "bytes": 109750,
+          "firstRow": 235116,
+          "id": "shards/chinese-dictionary-words/000083.tsv.gz",
+          "lastRow": 238111,
+          "sha256": "3a55c178d979afb932539d049103593610ce8beb4f2ffa3c5a9a4d65c8aed4e8",
+          "uncompressedBytes": 262134,
+          "uncompressedSha256": "9e3cab0a18ffeb8f3a7b8befccc9b057e18116b12d37cd2fd2191d5192716430"
+        },
+        {
+          "bytes": 107932,
+          "firstRow": 238112,
+          "id": "shards/chinese-dictionary-words/000084.tsv.gz",
+          "lastRow": 241811,
+          "sha256": "b7a200d5eb362637d828300764d4fd49b90f9ccfb99ccdedaf5274f7aebf5505",
+          "uncompressedBytes": 262100,
+          "uncompressedSha256": "1b320d353a2c89b03c7673c105a6e17a487756ca74a2b37c440bc0ae458760fd"
+        },
+        {
+          "bytes": 108060,
+          "firstRow": 241812,
+          "id": "shards/chinese-dictionary-words/000085.tsv.gz",
+          "lastRow": 245332,
+          "sha256": "f6e4b6137d8815f58a643a5359fa9306b611b8aa833bff1153caa93ee09d3cb5",
+          "uncompressedBytes": 262032,
+          "uncompressedSha256": "1edb8bb47b1301639dddeb4444bc68987f7f2b54e17ce90db8366678fd803d80"
+        },
+        {
+          "bytes": 106960,
+          "firstRow": 245333,
+          "id": "shards/chinese-dictionary-words/000086.tsv.gz",
+          "lastRow": 248643,
+          "sha256": "63a33314c2a46652f90323a6771fd03408e63e52375da6f2f573c0e057a9e8ee",
+          "uncompressedBytes": 261866,
+          "uncompressedSha256": "cf4f036530f9cbc8e9063e272f0c1bc97835a2a810ea75eaf7ce2a0d1ff1916f"
+        },
+        {
+          "bytes": 112087,
+          "firstRow": 248644,
+          "id": "shards/chinese-dictionary-words/000087.tsv.gz",
+          "lastRow": 251533,
+          "sha256": "f12ec132c5aa7dfc358c76e4433be0862f5c9977476cd4d5005e12750d159196",
+          "uncompressedBytes": 262093,
+          "uncompressedSha256": "17198020c92870903f8a9be56639ace1ace99f23753fb5260ce8db63908dd214"
+        },
+        {
+          "bytes": 108713,
+          "firstRow": 251534,
+          "id": "shards/chinese-dictionary-words/000088.tsv.gz",
+          "lastRow": 254826,
+          "sha256": "99b6deb4bc3c285a0605ad9c1dc9533291290e8602279cc0c14dbb2698bceaa2",
+          "uncompressedBytes": 262084,
+          "uncompressedSha256": "55b174c450ab1a736f1125bde6946516a3386a4ddcc27917aa89aa20005bf03a"
+        },
+        {
+          "bytes": 108062,
+          "firstRow": 254827,
+          "id": "shards/chinese-dictionary-words/000089.tsv.gz",
+          "lastRow": 258141,
+          "sha256": "8645e4137326835409ed0228320d1fb9d8d57abb9a66871a384503a5aff238cc",
+          "uncompressedBytes": 262006,
+          "uncompressedSha256": "f3c5dacb6596855a116c34a5f7f090d30d349642dadefd9bdcc5afe0223bafd0"
+        },
+        {
+          "bytes": 104620,
+          "firstRow": 258142,
+          "id": "shards/chinese-dictionary-words/000090.tsv.gz",
+          "lastRow": 261569,
+          "sha256": "09906f5005a85385e51d3fad40282b25a798dbce6a4ca70b0769d82c85d80c82",
+          "uncompressedBytes": 262127,
+          "uncompressedSha256": "da93afa561509d7b406d587ea189b9d82fcf1e107e6d6a7fdef084e141f1bbbb"
+        },
+        {
+          "bytes": 107441,
+          "firstRow": 261570,
+          "id": "shards/chinese-dictionary-words/000091.tsv.gz",
+          "lastRow": 265076,
+          "sha256": "ea46dd59bbe5e71f57d173dd0e9d03ce26b8b75eb6f1c64540347298cb9b84de",
+          "uncompressedBytes": 262142,
+          "uncompressedSha256": "b2fe61c5b537e192a202a11bf6c473e0e5c1b06afbcdda16bbfbdf59dbab5876"
+        },
+        {
+          "bytes": 108346,
+          "firstRow": 265077,
+          "id": "shards/chinese-dictionary-words/000092.tsv.gz",
+          "lastRow": 268276,
+          "sha256": "cde7f60ddd3a4d294fd4ec5b606467ee9aa4707ccf0ff08e5d2069c0749e4e66",
+          "uncompressedBytes": 261917,
+          "uncompressedSha256": "aa90aa300432a42dbdc8bfffdd4266da608f8ba35608435917149c27340bf2c5"
+        },
+        {
+          "bytes": 111568,
+          "firstRow": 268277,
+          "id": "shards/chinese-dictionary-words/000093.tsv.gz",
+          "lastRow": 271393,
+          "sha256": "0ed0629643469ad61ca644faaafffeb9d9136ea187ec299560d41e5147592480",
+          "uncompressedBytes": 262107,
+          "uncompressedSha256": "3093719253bc667efaa9e1b169579dacec134cbe546b6725d047962a9f0f5ba5"
+        },
+        {
+          "bytes": 115111,
+          "firstRow": 271394,
+          "id": "shards/chinese-dictionary-words/000094.tsv.gz",
+          "lastRow": 273947,
+          "sha256": "dc538a1661642a16b4c40c0680060e63a053e9c13cc99a89462d7e069cb07128",
+          "uncompressedBytes": 262094,
+          "uncompressedSha256": "c4b3e2d16823ef694c08220b06f540420f1d3bdcfde4c462a32849ad3979964d"
+        },
+        {
+          "bytes": 112318,
+          "firstRow": 273948,
+          "id": "shards/chinese-dictionary-words/000095.tsv.gz",
+          "lastRow": 276847,
+          "sha256": "a7015462925ac03392490d726516d173593563b463dc0ddf706b3d8308aad488",
+          "uncompressedBytes": 262131,
+          "uncompressedSha256": "64dd5cba0f90e384450498eccb3d5c88262cb3c35b4790ff6fd35a4850655a41"
+        },
+        {
+          "bytes": 112844,
+          "firstRow": 276848,
+          "id": "shards/chinese-dictionary-words/000096.tsv.gz",
+          "lastRow": 279639,
+          "sha256": "c62e1430d935e6dacff1af5595e1c5709c69461ebc644369acb54fe6cd49aa23",
+          "uncompressedBytes": 261891,
+          "uncompressedSha256": "d046756b2f64608e31b269b0b0add6bb76a66d4c9e177e612e37f1be4975999d"
+        },
+        {
+          "bytes": 112155,
+          "firstRow": 279640,
+          "id": "shards/chinese-dictionary-words/000097.tsv.gz",
+          "lastRow": 282664,
+          "sha256": "642386527d95a64aff0593e6c6c3d05ac2fece8bd0d171e32dd4d60622e895e2",
+          "uncompressedBytes": 262132,
+          "uncompressedSha256": "4e03aec571156027dff3cb59727242b60578b85f25b2bd41069379c3626f193c"
+        },
+        {
+          "bytes": 112430,
+          "firstRow": 282665,
+          "id": "shards/chinese-dictionary-words/000098.tsv.gz",
+          "lastRow": 285563,
+          "sha256": "6e43dc6daeacfea13c265638b59aa269939e6b8530234f345d6386d47f1cfb42",
+          "uncompressedBytes": 262076,
+          "uncompressedSha256": "f07432d59f9f6b5b15e946226493725a528246e38a3ca4825216d2dd84cbfb42"
+        },
+        {
+          "bytes": 109371,
+          "firstRow": 285564,
+          "id": "shards/chinese-dictionary-words/000099.tsv.gz",
+          "lastRow": 288422,
+          "sha256": "263c303adb3a8f0a7e9f72a5d33cd143b841911d2bfcbf4160767097c61c69c8",
+          "uncompressedBytes": 262133,
+          "uncompressedSha256": "32745cca582ac92f52d838d0b2dc35f876ea3cae265939ac7e76d37d1501be0a"
+        },
+        {
+          "bytes": 108907,
+          "firstRow": 288423,
+          "id": "shards/chinese-dictionary-words/000100.tsv.gz",
+          "lastRow": 291374,
+          "sha256": "a5338f90ddd463b25926aa62bcd2c074b08225dbbb36b02d68ca00c6f4b683df",
+          "uncompressedBytes": 262135,
+          "uncompressedSha256": "52e2449dda4c3ceb0153ae47f0022f0db8fe686ee0eb66497183245de1b20d72"
+        },
+        {
+          "bytes": 110669,
+          "firstRow": 291375,
+          "id": "shards/chinese-dictionary-words/000101.tsv.gz",
+          "lastRow": 294349,
+          "sha256": "7f8a8b64edaacda1f1df61118af5ec5080d0449c28f76718ab92487aaa5dbdef",
+          "uncompressedBytes": 261864,
+          "uncompressedSha256": "a2c5ea148465be8e040a6122cde95952c467a863a852262767a0c1b87ed3c1d1"
+        },
+        {
+          "bytes": 105871,
+          "firstRow": 294350,
+          "id": "shards/chinese-dictionary-words/000102.tsv.gz",
+          "lastRow": 297694,
+          "sha256": "5a15c16c205781ecd3564bedb809e93caad0a494f5e60ad359aee5ad5cd1f01f",
+          "uncompressedBytes": 262123,
+          "uncompressedSha256": "5714433b392a276a7c99bcc84f0d81bee65c85aa71f547a99f7283272db41262"
+        },
+        {
+          "bytes": 110425,
+          "firstRow": 297695,
+          "id": "shards/chinese-dictionary-words/000103.tsv.gz",
+          "lastRow": 300651,
+          "sha256": "9d5f2a564ec2364ab969b3a1b6d1a215e5fbadb8a79a487a92832c08944b362a",
+          "uncompressedBytes": 262108,
+          "uncompressedSha256": "56b9440b7755da335912762a48c777f9af837023da39a84a06a9f5e4b54d131a"
+        },
+        {
+          "bytes": 111767,
+          "firstRow": 300652,
+          "id": "shards/chinese-dictionary-words/000104.tsv.gz",
+          "lastRow": 303580,
+          "sha256": "00d547cf70798d46319fdb4aa5663cf448de253eb62d20de1b425fcc58ae8349",
+          "uncompressedBytes": 262122,
+          "uncompressedSha256": "64679b58e4b5b919cb110e414a53d1d363c0386ee68209e17e030a532454e6e5"
+        },
+        {
+          "bytes": 27621,
+          "firstRow": 303581,
+          "id": "shards/chinese-dictionary-words/000105.tsv.gz",
+          "lastRow": 304195,
+          "sha256": "4fc2ccf99be391fc6e773feea4ca96eb5a59d3c30935d93965f91d5bf4979f9e",
+          "uncompressedBytes": 64501,
+          "uncompressedSha256": "4e3d095a54fca9ce569971892a5ea23585278d126a2d0aad5cccc3a28da61282"
+        }
+      ],
+      "source": {
+        "commit": "e804ada333b68afddfdccbe8dcc938a72da157a7",
+        "license": "MIT（仓库级；上游授权链见 THIRD_PARTY_NOTICES.md）",
+        "repository": "https://github.com/mapull/chinese-dictionary"
+      },
+      "uncompressedBytes": 27581880,
+      "uncompressedSha256": "cecc8a3169a7bc5b329dc3c2f408ff7c8da4aa979ea62708d06bcc3d9b292914"
+    },
+    {
+      "entryCount": 45705,
+      "header": "# chinese-xinhua fe6d6c2e8baa82187f4c96bbe042e43f96c05666 | entries 45705",
+      "id": "chinese-xinhua",
+      "index": {
+        "bytes": 365338,
+        "id": "indexes/chinese-xinhua.tsv.gz",
+        "recordCount": 45705,
+        "sha256": "9cf54cc7e0cd0dca9d6817042ce468002a3affb714034dbe6fbc62044e9d6241",
+        "uncompressedBytes": 864692,
+        "uncompressedSha256": "c4e7443b60765e0a59af5d6ce54ba9643172d6bdd041ed6f82a074feeae2f06e"
+      },
+      "kind": "chinese",
+      "label": "chinese-xinhua 上游整理",
+      "legacyId": "chinese-xinhua",
+      "recordCount": 45705,
+      "rowOrder": "source",
+      "shards": [
+        {
+          "bytes": 123416,
+          "firstRow": 0,
+          "id": "shards/chinese-xinhua/000000.tsv.gz",
+          "lastRow": 625,
+          "sha256": "722b751e21cbcfd292049e7c5ff1a1333d69c7b9f2d091b842bfec35230088f1",
+          "uncompressedBytes": 261915,
+          "uncompressedSha256": "d34f58e53e6bf2b6d59eca36dffffe53429aab318c6050ef61efa4ab3802c71f"
+        },
+        {
+          "bytes": 122617,
+          "firstRow": 626,
+          "id": "shards/chinese-xinhua/000001.tsv.gz",
+          "lastRow": 1244,
+          "sha256": "4371d8a3122f0b6095e9115f401bde8677b88d7834b12f2336da1c01c0a0d49d",
+          "uncompressedBytes": 261868,
+          "uncompressedSha256": "8eb08bfd32b3f7a375a3cc57fead81a584c61a2ea051fd765b3ab7b53586206e"
+        },
+        {
+          "bytes": 123308,
+          "firstRow": 1245,
+          "id": "shards/chinese-xinhua/000002.tsv.gz",
+          "lastRow": 1881,
+          "sha256": "a7e34ae17be2f36cd5f3b9fd605c5b025c7b964f706b91156af089c5cbc10589",
+          "uncompressedBytes": 262091,
+          "uncompressedSha256": "ed716b87ef0fa8b108a53ab6b81d5286be05b1bcc04e37d72ce08a3e83bcadb1"
+        },
+        {
+          "bytes": 123810,
+          "firstRow": 1882,
+          "id": "shards/chinese-xinhua/000003.tsv.gz",
+          "lastRow": 2572,
+          "sha256": "57ca1d3c22095f148fbf8414ad0bb00a86ea46884d6ae89d8fc2152189e51a83",
+          "uncompressedBytes": 260552,
+          "uncompressedSha256": "fc6f52f97b633567ea3f21e90544f1b252f16a9cf60054d838e53c95cc94a96c"
+        },
+        {
+          "bytes": 120917,
+          "firstRow": 2573,
+          "id": "shards/chinese-xinhua/000004.tsv.gz",
+          "lastRow": 3290,
+          "sha256": "e27e9d04a441f50c6c22c4696fcdd4e9cc56ca71adcd468c7357946faec1b2e7",
+          "uncompressedBytes": 260531,
+          "uncompressedSha256": "89bcb61e391dca21bf67961658deacbcab7988ad0ce513b1a85739b48d79ba91"
+        },
+        {
+          "bytes": 121379,
+          "firstRow": 3291,
+          "id": "shards/chinese-xinhua/000005.tsv.gz",
+          "lastRow": 4015,
+          "sha256": "55a29f8aedc48c1d48f9f201c13f6e4f0e8eae2fb0bf67e6d7208321d61e9638",
+          "uncompressedBytes": 261502,
+          "uncompressedSha256": "7f5ff10d1669da7ecb3c6fa5d9a7a7bae61cb23d36d54fa7b3e7050560188cd7"
+        },
+        {
+          "bytes": 119869,
+          "firstRow": 4016,
+          "id": "shards/chinese-xinhua/000006.tsv.gz",
+          "lastRow": 4850,
+          "sha256": "67b485dcfed416cc26bcbe93d25eaba0fb986d089310f12100e7ffe21f132760",
+          "uncompressedBytes": 262114,
+          "uncompressedSha256": "3e68f385a4f80559b5ac5b1fab5f502a2d6a56e58bb09b322916d016dadfc2a8"
+        },
+        {
+          "bytes": 120404,
+          "firstRow": 4851,
+          "id": "shards/chinese-xinhua/000007.tsv.gz",
+          "lastRow": 5583,
+          "sha256": "c08c7f38be7f90a614cf86cb083718a4e81d52779e560841b910be5c516331db",
+          "uncompressedBytes": 262047,
+          "uncompressedSha256": "7d48c0dfc05db9f59f21de8fef03b543847b68ce76394d0d883dc6de83cd60d8"
+        },
+        {
+          "bytes": 120458,
+          "firstRow": 5584,
+          "id": "shards/chinese-xinhua/000008.tsv.gz",
+          "lastRow": 6424,
+          "sha256": "283534022421921d7c21f9f5666649d85141a350f71c2f2f7136a3efd9376910",
+          "uncompressedBytes": 261422,
+          "uncompressedSha256": "4ba2c837955439ad4388e6b93f82b509823f5746fdaaf2918569dc44a219a481"
+        },
+        {
+          "bytes": 119015,
+          "firstRow": 6425,
+          "id": "shards/chinese-xinhua/000009.tsv.gz",
+          "lastRow": 7308,
+          "sha256": "3bf7f05475308fafe1f46f5351b16c2584f61ce0a5aeddd0ce8cbca2985b61db",
+          "uncompressedBytes": 261764,
+          "uncompressedSha256": "3e4beeb6e520f1074f0524d86ac30ab1093d3e37108597a1f79a766f10bc8f5a"
+        },
+        {
+          "bytes": 121021,
+          "firstRow": 7309,
+          "id": "shards/chinese-xinhua/000010.tsv.gz",
+          "lastRow": 8149,
+          "sha256": "1b567cd71a1712e7be4fc1907fb2c0bab88da99efbcc03d5aa26ec6bf53b3008",
+          "uncompressedBytes": 261181,
+          "uncompressedSha256": "161d2b0323003096c243f726aec565c8cbddd784a7bbd34712f77459513e6c10"
+        },
+        {
+          "bytes": 120523,
+          "firstRow": 8150,
+          "id": "shards/chinese-xinhua/000011.tsv.gz",
+          "lastRow": 8970,
+          "sha256": "a4adb93d078e647f9919316f4281cb1b6bc490673c0aff858b813fce3b6e8dfb",
+          "uncompressedBytes": 262055,
+          "uncompressedSha256": "ed5050ccd3877843523360f6fd7283e2a360cfde4a6ba073cf9cca605b08d1be"
+        },
+        {
+          "bytes": 121299,
+          "firstRow": 8971,
+          "id": "shards/chinese-xinhua/000012.tsv.gz",
+          "lastRow": 9742,
+          "sha256": "9976b3cc39a398893e9dd788a12e1eb8aa0c9ab6f5c63612ddebf508433c582a",
+          "uncompressedBytes": 261881,
+          "uncompressedSha256": "830c82f00a1b2191376d80dfedf24a3b70829f8cb45b9d4b1b8d2b256ea4c3ce"
+        },
+        {
+          "bytes": 121165,
+          "firstRow": 9743,
+          "id": "shards/chinese-xinhua/000013.tsv.gz",
+          "lastRow": 10384,
+          "sha256": "565a3a89e676f507d9434463085fb7179b968021cd0303cd20de8ed0254b4c72",
+          "uncompressedBytes": 262140,
+          "uncompressedSha256": "69afb101e2aaab12aaab2c6e3091423b422041d5459e5b68fa96aada27093f91"
+        },
+        {
+          "bytes": 122543,
+          "firstRow": 10385,
+          "id": "shards/chinese-xinhua/000014.tsv.gz",
+          "lastRow": 11195,
+          "sha256": "8913ac82ac10cef59d92973ca8ad909065c352ffcc49246e94b29e142dd542a4",
+          "uncompressedBytes": 261691,
+          "uncompressedSha256": "d2672d0eeeaf962a476e0472660880004a4e5c323e5d3a3ea96bbdccd901c469"
+        },
+        {
+          "bytes": 120948,
+          "firstRow": 11196,
+          "id": "shards/chinese-xinhua/000015.tsv.gz",
+          "lastRow": 11979,
+          "sha256": "07cf26041ae9b656005000d0cdf8c620e5b575ec0b280472f25bbefad8880071",
+          "uncompressedBytes": 262047,
+          "uncompressedSha256": "f2794d65185ee54873cdd6afef4d38831fcaf8f046a145e900421cb75d99e266"
+        },
+        {
+          "bytes": 121709,
+          "firstRow": 11980,
+          "id": "shards/chinese-xinhua/000016.tsv.gz",
+          "lastRow": 12728,
+          "sha256": "7665abe666b5c4225340fe4f310bf95116eb47169a956d764af7374d5563ae32",
+          "uncompressedBytes": 261467,
+          "uncompressedSha256": "fb51857d5ec0cbd5011f5baa08b5c610490c84037cb5306a156075702cf965b1"
+        },
+        {
+          "bytes": 120282,
+          "firstRow": 12729,
+          "id": "shards/chinese-xinhua/000017.tsv.gz",
+          "lastRow": 13514,
+          "sha256": "702f4a129202ddd3e91875ad3311419b3174d9379210080d53213a76a1bbc4a2",
+          "uncompressedBytes": 262002,
+          "uncompressedSha256": "e55c1308d7056ad594d0fcfa1302c161f00539a66f04012be071b69213ea7ccd"
+        },
+        {
+          "bytes": 121538,
+          "firstRow": 13515,
+          "id": "shards/chinese-xinhua/000018.tsv.gz",
+          "lastRow": 14234,
+          "sha256": "3dd50e4a2db26e787da2c9396713bda9ed985ba23b49e0fd6ca2c8a0632d67c3",
+          "uncompressedBytes": 261322,
+          "uncompressedSha256": "eb1a8f1e827c140ec89869d413ba9a2c9b1004660d7ab93b4e52b22090870d0b"
+        },
+        {
+          "bytes": 120570,
+          "firstRow": 14235,
+          "id": "shards/chinese-xinhua/000019.tsv.gz",
+          "lastRow": 14933,
+          "sha256": "fd41210765ec055292233065a6a871bac5bd984dabbcf6e238b6421df87a5fd4",
+          "uncompressedBytes": 261975,
+          "uncompressedSha256": "dfbdede1ae5b2a38f0ef228635b1c15b76ebd757670a88cb53047526eb29017d"
+        },
+        {
+          "bytes": 115530,
+          "firstRow": 14934,
+          "id": "shards/chinese-xinhua/000020.tsv.gz",
+          "lastRow": 15820,
+          "sha256": "ed7c9ef39969d8f011f7b8585c6e17b6931a8bc087f7470a6cdebf97e41b8992",
+          "uncompressedBytes": 262081,
+          "uncompressedSha256": "f66d0d9509fbe4323d487d95d8aaff5df0860c560ab53b0bb7b8669b0104b324"
+        },
+        {
+          "bytes": 114688,
+          "firstRow": 15821,
+          "id": "shards/chinese-xinhua/000021.tsv.gz",
+          "lastRow": 16740,
+          "sha256": "afba3220002fa7126dea4f324273690801388c0e8779ca660442429a237e893d",
+          "uncompressedBytes": 261949,
+          "uncompressedSha256": "f20cc97f886a443eca5af044e9e5f23ee4b947b6a2bcbbb477261f1d472459a7"
+        },
+        {
+          "bytes": 114672,
+          "firstRow": 16741,
+          "id": "shards/chinese-xinhua/000022.tsv.gz",
+          "lastRow": 17672,
+          "sha256": "3790c4b598f0458536270ab8086b2aac29a88c99a72583cd3fc012485e8c182f",
+          "uncompressedBytes": 261945,
+          "uncompressedSha256": "77ba51c5fe19015a741c6e12191debb0874fb76072befd37b08d3453c5e74893"
+        },
+        {
+          "bytes": 115597,
+          "firstRow": 17673,
+          "id": "shards/chinese-xinhua/000023.tsv.gz",
+          "lastRow": 18651,
+          "sha256": "e7f7d99999ef90ce193bca83f74ef683221a5b6a313240964c69991dfa75725e",
+          "uncompressedBytes": 261976,
+          "uncompressedSha256": "b764ba0b46d9056bb026033abbb93f38b605e6cc21fc2c1c923e11f105a3361b"
+        },
+        {
+          "bytes": 116001,
+          "firstRow": 18652,
+          "id": "shards/chinese-xinhua/000024.tsv.gz",
+          "lastRow": 19619,
+          "sha256": "fd1b7a0e79dc6623d9fe35495b4a1b26dc45ea12a8813be511f3646492ed5bf9",
+          "uncompressedBytes": 262092,
+          "uncompressedSha256": "860ca3b38b6ab26500bbd20c0de439e6bcbf2b08e67ed783231b1f6ca6ca3b23"
+        },
+        {
+          "bytes": 114640,
+          "firstRow": 19620,
+          "id": "shards/chinese-xinhua/000025.tsv.gz",
+          "lastRow": 20627,
+          "sha256": "4fbece61b85d7a2b552bdfef3b5ca790a411d28347a11d61ea56f4b01373b751",
+          "uncompressedBytes": 262061,
+          "uncompressedSha256": "68739607ff5219555b298e98e42ccae8a98e05f0fb7c883970ec75740aa5fd5b"
+        },
+        {
+          "bytes": 114589,
+          "firstRow": 20628,
+          "id": "shards/chinese-xinhua/000026.tsv.gz",
+          "lastRow": 21604,
+          "sha256": "05163574f2016c4b6305303bc72dcb4e51398320ffecf9344b6e794937751952",
+          "uncompressedBytes": 261885,
+          "uncompressedSha256": "280cecee419c1a3fc001ff5914e033c8ad8e6f78c1c98e029264519c0ac3b313"
+        },
+        {
+          "bytes": 114616,
+          "firstRow": 21605,
+          "id": "shards/chinese-xinhua/000027.tsv.gz",
+          "lastRow": 22583,
+          "sha256": "e31c5bdccc6355ec7cac409b4b29998cb93c4b6e3a73c05c550ef7a1bf760c5f",
+          "uncompressedBytes": 261807,
+          "uncompressedSha256": "818b1bd60e88305dc5256920fde5f8b6ea73c3d5d3f25d30f215982951ca2467"
+        },
+        {
+          "bytes": 115016,
+          "firstRow": 22584,
+          "id": "shards/chinese-xinhua/000028.tsv.gz",
+          "lastRow": 23545,
+          "sha256": "935c2851bcb2bf5f727cb6d2588762f242cead615461fe6dd525587acbca28ba",
+          "uncompressedBytes": 261966,
+          "uncompressedSha256": "c3145eef03b53c8ac6b31feadb3045c26799ed61465d6a7f4d3f37856401314c"
+        },
+        {
+          "bytes": 116385,
+          "firstRow": 23546,
+          "id": "shards/chinese-xinhua/000029.tsv.gz",
+          "lastRow": 24501,
+          "sha256": "356bc710f48ea6cbad38b3268e1e323b4d4ebde85e42854f6f629eef9f099bc1",
+          "uncompressedBytes": 262078,
+          "uncompressedSha256": "35ac0ddcc5ae7d21dba819fd89f7a667fe3f63bee542f02f7a603428e7bc118c"
+        },
+        {
+          "bytes": 113155,
+          "firstRow": 24502,
+          "id": "shards/chinese-xinhua/000030.tsv.gz",
+          "lastRow": 25573,
+          "sha256": "e33207dd2d3180e58e9e92e9d8abe8b8db4739c621edb81d553e20afcde4cb38",
+          "uncompressedBytes": 261760,
+          "uncompressedSha256": "9e5ff373e09a966be1bc1b9998aadcae2f6684a1909412c83dfb705ba626433d"
+        },
+        {
+          "bytes": 112188,
+          "firstRow": 25574,
+          "id": "shards/chinese-xinhua/000031.tsv.gz",
+          "lastRow": 26677,
+          "sha256": "23ca01bdcd10fb979630ba578c4b1db750a041c95bfd0d6de5093ec53b2dc922",
+          "uncompressedBytes": 262113,
+          "uncompressedSha256": "b5aa689d8a31e795f5d270e3ca6f31c6f7de471c29f3d473dd39213ab16d4b2a"
+        },
+        {
+          "bytes": 115457,
+          "firstRow": 26678,
+          "id": "shards/chinese-xinhua/000032.tsv.gz",
+          "lastRow": 27750,
+          "sha256": "537fca8d4b14c8eb31a4b9b8a778e39f290e4c8c365907b2e2baef41303ccb52",
+          "uncompressedBytes": 262125,
+          "uncompressedSha256": "986dda44a241ca238fc4d865cd23f03cee199678186e9623889d0c7b4156f83a"
+        },
+        {
+          "bytes": 115905,
+          "firstRow": 27751,
+          "id": "shards/chinese-xinhua/000033.tsv.gz",
+          "lastRow": 28857,
+          "sha256": "2b8d44df6daa58e9af2216c089483f1638e5d60d6ee0e0371503f2681c34a2f3",
+          "uncompressedBytes": 261968,
+          "uncompressedSha256": "7ce88a508396d0ad5aa1919a13e5e4eef2681ecd856fa60d75f2e58a64ea9b85"
+        },
+        {
+          "bytes": 115093,
+          "firstRow": 28858,
+          "id": "shards/chinese-xinhua/000034.tsv.gz",
+          "lastRow": 30019,
+          "sha256": "9309832ffa1b2a7ff7286e71f23cc232587a6f9f21da9e71454f03c199a3519d",
+          "uncompressedBytes": 262091,
+          "uncompressedSha256": "468ea1d15df136a3fff7d37e1b325d70e77055048e35b486dfd1c67b46a5d713"
+        },
+        {
+          "bytes": 113860,
+          "firstRow": 30020,
+          "id": "shards/chinese-xinhua/000035.tsv.gz",
+          "lastRow": 31204,
+          "sha256": "a4e0b3e2df3e3441ed7a3c6239c844cb31fa60e9b5031d12849e338e2ecf6b5a",
+          "uncompressedBytes": 261939,
+          "uncompressedSha256": "ff31188acf2fd8e15c019915465e70fafce26d165e5732c06c4046573917acf2"
+        },
+        {
+          "bytes": 111571,
+          "firstRow": 31205,
+          "id": "shards/chinese-xinhua/000036.tsv.gz",
+          "lastRow": 32458,
+          "sha256": "0bd9dfb4f54a7a9734b51d4471ce7527b5222013f2327d0e7a1ffc0fa7b79b2a",
+          "uncompressedBytes": 262114,
+          "uncompressedSha256": "12cffb15d1a4b29884a0d41df14b6196caf18184bee35a7089cff1251d8fdb36"
+        },
+        {
+          "bytes": 113463,
+          "firstRow": 32459,
+          "id": "shards/chinese-xinhua/000037.tsv.gz",
+          "lastRow": 33568,
+          "sha256": "45badb198f587c612c90971bc34cb59859977d2aef191f6655a92879dee77e04",
+          "uncompressedBytes": 262034,
+          "uncompressedSha256": "bdb1db85d58e7f25a41e923de6a96f64dac50d10a282ac59d59fda593391bc8f"
+        },
+        {
+          "bytes": 112826,
+          "firstRow": 33569,
+          "id": "shards/chinese-xinhua/000038.tsv.gz",
+          "lastRow": 34727,
+          "sha256": "ec17964a2ae32d6e6419511c553cbc4381c599d9faefed07a70d6d8c4ed163ed",
+          "uncompressedBytes": 262118,
+          "uncompressedSha256": "afce2dd98370ec2268132ccc76d0971805b6f1533d1ca0563bcf628adde2e94f"
+        },
+        {
+          "bytes": 111056,
+          "firstRow": 34728,
+          "id": "shards/chinese-xinhua/000039.tsv.gz",
+          "lastRow": 35954,
+          "sha256": "3b4ea85f06914b1df3a0cc62536ed00bf3723529333ebff000eca9522adc48ed",
+          "uncompressedBytes": 261814,
+          "uncompressedSha256": "794bc5867030cdb49042f3db290c5cc263fba3dd1fdd7f8a6902792ec913984d"
+        },
+        {
+          "bytes": 112702,
+          "firstRow": 35955,
+          "id": "shards/chinese-xinhua/000040.tsv.gz",
+          "lastRow": 37111,
+          "sha256": "d8e32c8f20c1d1b3ee05cf476edeb166f6d53cbf527771c802d9b03cb2bae72f",
+          "uncompressedBytes": 262017,
+          "uncompressedSha256": "3578bb3b55b951bdccd0fd7e11e88f2ffb337a5a5f723f4d1061ba9824847a8e"
+        },
+        {
+          "bytes": 113583,
+          "firstRow": 37112,
+          "id": "shards/chinese-xinhua/000041.tsv.gz",
+          "lastRow": 38344,
+          "sha256": "b640c1597ba6b009c85658463a311329d19ba720b7d498a0809c33481e01798e",
+          "uncompressedBytes": 261873,
+          "uncompressedSha256": "838d5b5efa80d621a8b208f2d86852f2db232de91b406861b24f898d72e47177"
+        },
+        {
+          "bytes": 114959,
+          "firstRow": 38345,
+          "id": "shards/chinese-xinhua/000042.tsv.gz",
+          "lastRow": 39491,
+          "sha256": "14485a3a5de9d4ee698b27b627baf48814574c9c12edd054aa815e6784057112",
+          "uncompressedBytes": 262051,
+          "uncompressedSha256": "d7b3e6f15dd423a5949ddd1b7e684d9ae5c1c8af714f8237a5ade9e087bd7281"
+        },
+        {
+          "bytes": 112831,
+          "firstRow": 39492,
+          "id": "shards/chinese-xinhua/000043.tsv.gz",
+          "lastRow": 40598,
+          "sha256": "e2d83928b7067d361c9b428c7d1c7d9b7d8c6f3eef27401cc069a00ca95c6359",
+          "uncompressedBytes": 261867,
+          "uncompressedSha256": "c1c1b97222673d61a8a4434b8e7ce8e0a8d59c5f997ce6925ca9f1e9c5993f70"
+        },
+        {
+          "bytes": 113366,
+          "firstRow": 40599,
+          "id": "shards/chinese-xinhua/000044.tsv.gz",
+          "lastRow": 41551,
+          "sha256": "d3eff8df4b721b22c98f48fbebcb82aa5114f48f742a01690efe549ba70f5146",
+          "uncompressedBytes": 262055,
+          "uncompressedSha256": "f007dbdaf79d236d91112fd9ac025a10191844ac362990004e96445da8528fcd"
+        },
+        {
+          "bytes": 113325,
+          "firstRow": 41552,
+          "id": "shards/chinese-xinhua/000045.tsv.gz",
+          "lastRow": 42577,
+          "sha256": "bb85c1b1a62b1c9f9ff5146a4839ee8a213148f94e34f8b854e0be097874f8c7",
+          "uncompressedBytes": 261914,
+          "uncompressedSha256": "288743fe885fadd7efb4a529476702a106fc331f984f4fcd6869c89522bb286a"
+        },
+        {
+          "bytes": 116060,
+          "firstRow": 42578,
+          "id": "shards/chinese-xinhua/000046.tsv.gz",
+          "lastRow": 43609,
+          "sha256": "cbb2457dbe6f24c2c6c042ed98a59afdd347a43c382363c03e84a5248f79a76f",
+          "uncompressedBytes": 261946,
+          "uncompressedSha256": "09fc0367f83da57b7f88958c14180ae54ebe77e3f4eb732b01eb91fff28455c6"
+        },
+        {
+          "bytes": 116484,
+          "firstRow": 43610,
+          "id": "shards/chinese-xinhua/000047.tsv.gz",
+          "lastRow": 44572,
+          "sha256": "9dfc661e2a69a2ee4b440c396a26a66ee5836b64718b4754dfde736675d42ce7",
+          "uncompressedBytes": 262010,
+          "uncompressedSha256": "2c77ed3a708d53693a788137985ec1e7cd72400f565e5a97ea3a6959279f7cc0"
+        },
+        {
+          "bytes": 116068,
+          "firstRow": 44573,
+          "id": "shards/chinese-xinhua/000048.tsv.gz",
+          "lastRow": 45521,
+          "sha256": "31298fca79f9a3bda6754cae0708720ac3d4ef9407b44f21adc380d3bf9227d6",
+          "uncompressedBytes": 262128,
+          "uncompressedSha256": "29002b90e00b52cc5db85efe90c6c8314bdcc2bbbba7e90529f70d8bd9b86e54"
+        },
+        {
+          "bytes": 23676,
+          "firstRow": 45522,
+          "id": "shards/chinese-xinhua/000049.tsv.gz",
+          "lastRow": 45704,
+          "sha256": "0c89e9d7d948ffa631b866d5886a5c0e563984ac8f43057842e1ab0f0d0c17f6",
+          "uncompressedBytes": 53754,
+          "uncompressedSha256": "7f60ab0fcd13b18a52cfe84ab77b7b3b3291b9e5cbbefa5e8e991b295d6d7985"
+        }
+      ],
+      "source": {
+        "commit": "fe6d6c2e8baa82187f4c96bbe042e43f96c05666",
+        "license": "MIT（仓库级；上游授权链见 THIRD_PARTY_NOTICES.md）",
+        "repository": "https://github.com/pwxcoo/chinese-xinhua"
+      },
+      "uncompressedBytes": 12885172,
+      "uncompressedSha256": "58dc62593fb16c894e00dce4dd25feea6e563259c738ba9f41a37453fda0afa1"
+    },
+    {
+      "entryCount": 264346,
+      "header": "# chinese-xinhua fe6d6c2e8baa82187f4c96bbe042e43f96c05666 | entries 264346",
+      "id": "chinese-xinhua-words",
+      "index": {
+        "bytes": 1656090,
+        "id": "indexes/chinese-xinhua-words.tsv.gz",
+        "recordCount": 264346,
+        "sha256": "6a92a84ec557992fdd214836d7851654dfce2f4efcd2009a4828c6cde265cede",
+        "uncompressedBytes": 4625541,
+        "uncompressedSha256": "09cb53b284d7c5984eb96561976bc740cc932f158e18932efead59ece316a07c"
+      },
+      "kind": "chinese",
+      "label": "chinese-xinhua 词语",
+      "legacyId": "chinese-xinhua-words",
+      "recordCount": 264346,
+      "rowOrder": "source",
+      "shards": [
+        {
+          "bytes": 116389,
+          "firstRow": 0,
+          "id": "shards/chinese-xinhua-words/000000.tsv.gz",
+          "lastRow": 3391,
+          "sha256": "e2e731452d3387e21c1d496a4caac1bf021ea4c62c077748e1d51d678549efc6",
+          "uncompressedBytes": 262076,
+          "uncompressedSha256": "69d2edb697acc4957b88d575b2c6e598c80b781517db3853028e914bb6b4b644"
+        },
+        {
+          "bytes": 114469,
+          "firstRow": 3392,
+          "id": "shards/chinese-xinhua-words/000001.tsv.gz",
+          "lastRow": 6642,
+          "sha256": "8974fb9035f56dc85a1fe50d22b7e968fb14956d6d613da2032db76088fa3186",
+          "uncompressedBytes": 262076,
+          "uncompressedSha256": "2725ab623281f09b899b1e0e9bd4c59460dbe49800e2fbb748b3e9edcb41d513"
+        },
+        {
+          "bytes": 115485,
+          "firstRow": 6643,
+          "id": "shards/chinese-xinhua-words/000002.tsv.gz",
+          "lastRow": 10063,
+          "sha256": "1b8e004dd570701d135cd5feacda931df2c5d27ac14554fb84f7f6ac20e41ad4",
+          "uncompressedBytes": 262061,
+          "uncompressedSha256": "1e529cc485d7c00297bd73f51b515e3bfede50e5faffd258b5eb8b22f74d46ba"
+        },
+        {
+          "bytes": 114946,
+          "firstRow": 10064,
+          "id": "shards/chinese-xinhua-words/000003.tsv.gz",
+          "lastRow": 13113,
+          "sha256": "8190cbfba35b7b31f129fce796bd9ce8af3d9a9f7ea58dac6bf7e2ca9302ea6d",
+          "uncompressedBytes": 262126,
+          "uncompressedSha256": "29eb9e756a6d0d788fa27398220f6895ec29eefdbe3144b9525d952f4a75337a"
+        },
+        {
+          "bytes": 116581,
+          "firstRow": 13114,
+          "id": "shards/chinese-xinhua-words/000004.tsv.gz",
+          "lastRow": 16341,
+          "sha256": "6eadb6e6d3f274edbbd45af8f32da5664518bcac7969d477d33663b8c57c8ea0",
+          "uncompressedBytes": 262037,
+          "uncompressedSha256": "e2dab27f83c3389a61b4c9201d035c6cd2d1c44415cadfeb39500b2c715e3d16"
+        },
+        {
+          "bytes": 115256,
+          "firstRow": 16342,
+          "id": "shards/chinese-xinhua-words/000005.tsv.gz",
+          "lastRow": 19691,
+          "sha256": "3f57c0a059b917ecc6c4d15147008d23cbe79d1c4b3bacc5ffe87570d6cb658c",
+          "uncompressedBytes": 261889,
+          "uncompressedSha256": "5dd189768d4ea59770ed26794b91d567d19ed25e44d71e1d9a01f88b3f74a4c7"
+        },
+        {
+          "bytes": 114836,
+          "firstRow": 19692,
+          "id": "shards/chinese-xinhua-words/000006.tsv.gz",
+          "lastRow": 22907,
+          "sha256": "9c6bbbda5cac05065ce7277e4800c9a5527d7b0e9428264431f803f0def96046",
+          "uncompressedBytes": 262135,
+          "uncompressedSha256": "275724669a757230ca40770a056b9a2c750ca01f2529abd9ffa3a0e345f1af23"
+        },
+        {
+          "bytes": 115504,
+          "firstRow": 22908,
+          "id": "shards/chinese-xinhua-words/000007.tsv.gz",
+          "lastRow": 26550,
+          "sha256": "ff537190ea96858601bf3dbac3f911a008d51905489097d304277f0d7d5398bf",
+          "uncompressedBytes": 262142,
+          "uncompressedSha256": "8e7116f455db13ead3e360240bf212443836ce79aa7550aa6a6210ad1f8ebc3e"
+        },
+        {
+          "bytes": 115591,
+          "firstRow": 26551,
+          "id": "shards/chinese-xinhua-words/000008.tsv.gz",
+          "lastRow": 30189,
+          "sha256": "7cc45601ac1d5847301fce9f310af73217f5f723f1793859ea4941e70307809b",
+          "uncompressedBytes": 262143,
+          "uncompressedSha256": "b653e8114f36fd75e855b0d4a396847259d76e3191d725dec7a2a31e794bda87"
+        },
+        {
+          "bytes": 116674,
+          "firstRow": 30190,
+          "id": "shards/chinese-xinhua-words/000009.tsv.gz",
+          "lastRow": 33459,
+          "sha256": "b5cbf2f0eb39186e3143da26d8b6ca017bcf67093fbd1d1d87ef399e6a2584bf",
+          "uncompressedBytes": 262134,
+          "uncompressedSha256": "5e580316487c0508db802216d6c32f9d41eca238e83f0ed62942304970d5d1a6"
+        },
+        {
+          "bytes": 113250,
+          "firstRow": 33460,
+          "id": "shards/chinese-xinhua-words/000010.tsv.gz",
+          "lastRow": 36881,
+          "sha256": "631cfddabbb67dc40be201cc4f65fa72f579821602f380fd98f7e9e87f5fb6da",
+          "uncompressedBytes": 262087,
+          "uncompressedSha256": "fb230e0d4fce0400fa0a07e14ea07f6f73eb5c0fe604d64006c4ab50c59a2bde"
+        },
+        {
+          "bytes": 112439,
+          "firstRow": 36882,
+          "id": "shards/chinese-xinhua-words/000011.tsv.gz",
+          "lastRow": 40864,
+          "sha256": "7c8144a48902426a7de08a04b8bf3aa4de04f1b80661086c45c9b1b56138629e",
+          "uncompressedBytes": 261875,
+          "uncompressedSha256": "8438e8138a13a6491eb9dc24e1a5d7f2584f95b42051921470e6e172e8a849d7"
+        },
+        {
+          "bytes": 114613,
+          "firstRow": 40865,
+          "id": "shards/chinese-xinhua-words/000012.tsv.gz",
+          "lastRow": 44362,
+          "sha256": "cc5fb060b55d8a1e6ec79fc74596d7311bf77680ea3fb24f5824f7591c73230a",
+          "uncompressedBytes": 262120,
+          "uncompressedSha256": "384c38ec897ac15c54a10508a2886a11e638a816d7e36b478dc395e844f6863e"
+        },
+        {
+          "bytes": 115976,
+          "firstRow": 44363,
+          "id": "shards/chinese-xinhua-words/000013.tsv.gz",
+          "lastRow": 47967,
+          "sha256": "85936dbe27bfd9f7000a164b2f539d047e3f759a90ab981ff3d17775935e4a02",
+          "uncompressedBytes": 262121,
+          "uncompressedSha256": "479ab62df6786f0080a1de7aee7686118d528055cab6b90c50e7a6311b028709"
+        },
+        {
+          "bytes": 113596,
+          "firstRow": 47968,
+          "id": "shards/chinese-xinhua-words/000014.tsv.gz",
+          "lastRow": 51473,
+          "sha256": "4f3bc0c45d608c92d5efade1ca9b197648191b7335fa07e5d2c5601a4ffe8af3",
+          "uncompressedBytes": 261894,
+          "uncompressedSha256": "45d269bfdfc7ec7ad8319bf2c869dc4b0b3a483739b967433e45bfa92d786647"
+        },
+        {
+          "bytes": 111664,
+          "firstRow": 51474,
+          "id": "shards/chinese-xinhua-words/000015.tsv.gz",
+          "lastRow": 55099,
+          "sha256": "6d6950ad29096a2dab993cc679a8c19c4c63b74e1324ae8f044d39f4cda777cb",
+          "uncompressedBytes": 262132,
+          "uncompressedSha256": "537a552590b6ded0282799ad945c3d8cf8c30a19b11e65900a28aaef7072653f"
+        },
+        {
+          "bytes": 111666,
+          "firstRow": 55100,
+          "id": "shards/chinese-xinhua-words/000016.tsv.gz",
+          "lastRow": 59037,
+          "sha256": "af38522dcabd1766ff8644029974f532620da1315318fc039b4b84fd54ddbf3a",
+          "uncompressedBytes": 262112,
+          "uncompressedSha256": "b857fcf8e94e72bbefc028899e4aa09e7d839de1c08d08579ec6f969f007e248"
+        },
+        {
+          "bytes": 113572,
+          "firstRow": 59038,
+          "id": "shards/chinese-xinhua-words/000017.tsv.gz",
+          "lastRow": 62756,
+          "sha256": "3d79c9f633719e7a51de2274a1e2ab7d794387d401e2d2849dc5480e195f658e",
+          "uncompressedBytes": 262117,
+          "uncompressedSha256": "5c70ed4aa01cdb12218ef3a7bfe1933c3501ff048f76f6901c6733b90d5edd2a"
+        },
+        {
+          "bytes": 114402,
+          "firstRow": 62757,
+          "id": "shards/chinese-xinhua-words/000018.tsv.gz",
+          "lastRow": 66255,
+          "sha256": "d2a98c2e2271c77371fc571727deeb08ae7db378d8b874f6c2af199768d480cc",
+          "uncompressedBytes": 262114,
+          "uncompressedSha256": "28f861bf6d3b6119b705894a1468e8c97ed810a9121a12ff2dbf261270c148eb"
+        },
+        {
+          "bytes": 114021,
+          "firstRow": 66256,
+          "id": "shards/chinese-xinhua-words/000019.tsv.gz",
+          "lastRow": 69718,
+          "sha256": "9379495e6e2e5bcc7d17dca5054cadf7626e337748f264dbd2a05b20243f5bc1",
+          "uncompressedBytes": 262016,
+          "uncompressedSha256": "32a37cb05f750c3ac3cefc4d232b865cffa62bd08150ab1dc61aaf35fcf3855b"
+        },
+        {
+          "bytes": 111970,
+          "firstRow": 69719,
+          "id": "shards/chinese-xinhua-words/000020.tsv.gz",
+          "lastRow": 73654,
+          "sha256": "18fd4ab75fbbd2041ff347859b9433582b93d1368eec43234219a3c44e65225e",
+          "uncompressedBytes": 262144,
+          "uncompressedSha256": "a9ddf87a738458c333e2c9955db78b85e3acbc2afc106b413580e30196bf3159"
+        },
+        {
+          "bytes": 112734,
+          "firstRow": 73655,
+          "id": "shards/chinese-xinhua-words/000021.tsv.gz",
+          "lastRow": 77655,
+          "sha256": "619b3eadcd74bf5714c8199b120ae29f254a4d0a1973b16a06f15cc7783c1b7e",
+          "uncompressedBytes": 262110,
+          "uncompressedSha256": "85c00ba077a439cff0e4cd8ae938eb792bf9067570ee5aa13880b485c7a93ced"
+        },
+        {
+          "bytes": 117878,
+          "firstRow": 77656,
+          "id": "shards/chinese-xinhua-words/000022.tsv.gz",
+          "lastRow": 80662,
+          "sha256": "e1d39bc44165ceddaccb6f905cbdeeac7991ac928a254d789a45482ee3997884",
+          "uncompressedBytes": 262113,
+          "uncompressedSha256": "bc887edaf8beb2194169b714253b22d2e4dd19e59d07ab4b68791e553853717b"
+        },
+        {
+          "bytes": 114462,
+          "firstRow": 80663,
+          "id": "shards/chinese-xinhua-words/000023.tsv.gz",
+          "lastRow": 84088,
+          "sha256": "79c83445101c1691d733487393f9c601888971834808ee408e2d54e9e28b2689",
+          "uncompressedBytes": 262136,
+          "uncompressedSha256": "68466e6166179a79929fdec5909ead6545dadc7a79e0f8daf0985a3718a71d8a"
+        },
+        {
+          "bytes": 113534,
+          "firstRow": 84089,
+          "id": "shards/chinese-xinhua-words/000024.tsv.gz",
+          "lastRow": 87848,
+          "sha256": "b4f3a43ccb37cfd53f767ce28b9a6a143f3ee5ee7d161d904c256ecf3158845c",
+          "uncompressedBytes": 262082,
+          "uncompressedSha256": "f32b2d49cf2f085da9ed7fceeb16f432b0d7165431ef6c13a7582cdeacad8274"
+        },
+        {
+          "bytes": 112014,
+          "firstRow": 87849,
+          "id": "shards/chinese-xinhua-words/000025.tsv.gz",
+          "lastRow": 92007,
+          "sha256": "c046e6d7b98558db54cdf47052b0e62307c3a31ccf889797ae5334e1cb296e61",
+          "uncompressedBytes": 262119,
+          "uncompressedSha256": "9847110ad26010514a3a0cf107d0dc3ac705edc48389f4dcfb245cbb16708f18"
+        },
+        {
+          "bytes": 113311,
+          "firstRow": 92008,
+          "id": "shards/chinese-xinhua-words/000026.tsv.gz",
+          "lastRow": 95465,
+          "sha256": "88657f5eabd185f575752a89c4be728f989743e8437559ef8e46ba7502d82a58",
+          "uncompressedBytes": 262094,
+          "uncompressedSha256": "212e2f200d13bb3fdf48ee45c85e364694414a0f711d0733e2ef73bed6e3f061"
+        },
+        {
+          "bytes": 115269,
+          "firstRow": 95466,
+          "id": "shards/chinese-xinhua-words/000027.tsv.gz",
+          "lastRow": 98658,
+          "sha256": "7f1ea9664c1b1e3176a80bed5191d207ad9ea63b409445b7ee676143069984fc",
+          "uncompressedBytes": 262143,
+          "uncompressedSha256": "875ec5d46701d06d724691d3b32d90309af06b4a0b4dc6ba49e55cc2a74131e6"
+        },
+        {
+          "bytes": 111625,
+          "firstRow": 98659,
+          "id": "shards/chinese-xinhua-words/000028.tsv.gz",
+          "lastRow": 102502,
+          "sha256": "5219f673de5eb345acce45c1101a282b66d4e342245d7aee46ad8c53ed0b9186",
+          "uncompressedBytes": 262107,
+          "uncompressedSha256": "d14ae7ecf4421583818e94b382447a9e6e4a73dedef4ae18c72137ca7aca9c4e"
+        },
+        {
+          "bytes": 115915,
+          "firstRow": 102503,
+          "id": "shards/chinese-xinhua-words/000029.tsv.gz",
+          "lastRow": 105550,
+          "sha256": "f808a98e015000d89c0bfcc581b58e6e9ea5bc55b946ba3fc51898d3bc852792",
+          "uncompressedBytes": 262137,
+          "uncompressedSha256": "9cb309c54483bc4ba425d9992e841bc4b452de0b75840e094323cc9f5e0b87cc"
+        },
+        {
+          "bytes": 114301,
+          "firstRow": 105551,
+          "id": "shards/chinese-xinhua-words/000030.tsv.gz",
+          "lastRow": 108759,
+          "sha256": "4556db40261d3d28dec2ec16056fcc1cb296568cbda85eb61d0eb31e3d81e0a3",
+          "uncompressedBytes": 262112,
+          "uncompressedSha256": "8d2048db84486bc5868ceb23480ea59ed800125e7f730eeab35310a946f25dfe"
+        },
+        {
+          "bytes": 115065,
+          "firstRow": 108760,
+          "id": "shards/chinese-xinhua-words/000031.tsv.gz",
+          "lastRow": 112131,
+          "sha256": "bd398cf659fa30f0f1c6d083825b568f3465bc552c7b57c34fcb9e6d45d7554b",
+          "uncompressedBytes": 262079,
+          "uncompressedSha256": "aff64a214e2dbbd41ecf932c8daa3a65e6a133ea897fc7fb6b822f22368d4cb4"
+        },
+        {
+          "bytes": 113768,
+          "firstRow": 112132,
+          "id": "shards/chinese-xinhua-words/000032.tsv.gz",
+          "lastRow": 115584,
+          "sha256": "a7db81fbb96541a8a50699816b8fe2b6c6e726fe9a1701ce35738ab30a5e53e8",
+          "uncompressedBytes": 262127,
+          "uncompressedSha256": "15c6c46faa102cc0d688d8b753a8a449c1ebb6170e0c572f9e985ba609c9c6d0"
+        },
+        {
+          "bytes": 112665,
+          "firstRow": 115585,
+          "id": "shards/chinese-xinhua-words/000033.tsv.gz",
+          "lastRow": 119042,
+          "sha256": "7f44cdc4e8d9dbc99de217c1ab815087ceee3fa5dcfb761613a88f4154ba3a21",
+          "uncompressedBytes": 262082,
+          "uncompressedSha256": "56103a2d293a3ad54354dc08581209f2c6aea2cc0fc95677a408299cae3b4f29"
+        },
+        {
+          "bytes": 114613,
+          "firstRow": 119043,
+          "id": "shards/chinese-xinhua-words/000034.tsv.gz",
+          "lastRow": 122083,
+          "sha256": "ef2fca9797f94bb03a83c333173775ef95f4334d53be489b2e4d2eeb88a36e1c",
+          "uncompressedBytes": 262085,
+          "uncompressedSha256": "6293ca42d1791b6e678c3740db1b650118b657d148cca5e7af16a5cf5206d26a"
+        },
+        {
+          "bytes": 114881,
+          "firstRow": 122084,
+          "id": "shards/chinese-xinhua-words/000035.tsv.gz",
+          "lastRow": 125387,
+          "sha256": "4562bd675fe595f6aa95f3478e6328884af8aede366e15bb842783d02a1f36b8",
+          "uncompressedBytes": 262088,
+          "uncompressedSha256": "6b30dc1bed1722c39e15ff11d9196b99c38d90377b33f29d7d8ebc7e643bd030"
+        },
+        {
+          "bytes": 114896,
+          "firstRow": 125388,
+          "id": "shards/chinese-xinhua-words/000036.tsv.gz",
+          "lastRow": 128841,
+          "sha256": "51142addd87364d65b80beb9fe792293a2000301b3b99e430367834527a4c225",
+          "uncompressedBytes": 261844,
+          "uncompressedSha256": "616c3ac956264b879b1473f2c2bc48bf4a959296371359769f05ef70ed26fc2b"
+        },
+        {
+          "bytes": 111701,
+          "firstRow": 128842,
+          "id": "shards/chinese-xinhua-words/000037.tsv.gz",
+          "lastRow": 132647,
+          "sha256": "085037b4c6908ed1fd72eac5b0bb2d37af28151cb2fc835d92d40f023fa76b90",
+          "uncompressedBytes": 262061,
+          "uncompressedSha256": "d1e86e2e566e9f98ff4f1fd7f17593ba8bbab13a2860d857b73117ffb2dc05fb"
+        },
+        {
+          "bytes": 115031,
+          "firstRow": 132648,
+          "id": "shards/chinese-xinhua-words/000038.tsv.gz",
+          "lastRow": 135742,
+          "sha256": "eb721c0fcec4eea3a4d452b6e1b426890b41ede489e7cc57f517620e0e1ebeaf",
+          "uncompressedBytes": 262069,
+          "uncompressedSha256": "ca506ed4a821369db453de3f68e24002398ce5fdf5f3b688be69abb467249e0d"
+        },
+        {
+          "bytes": 114026,
+          "firstRow": 135743,
+          "id": "shards/chinese-xinhua-words/000039.tsv.gz",
+          "lastRow": 138816,
+          "sha256": "633d71a83127eca74827e0041f455fa1acf01a5f50212210194de7324c862b40",
+          "uncompressedBytes": 262027,
+          "uncompressedSha256": "fa50852406388ee1b82861cdb88e5e499324890db0baea4d65c34802d60e5fae"
+        },
+        {
+          "bytes": 115548,
+          "firstRow": 138817,
+          "id": "shards/chinese-xinhua-words/000040.tsv.gz",
+          "lastRow": 142177,
+          "sha256": "6a93add64f15c07bd4b4a29dce4c014df67de5af41749d2908ac7e009b3cceba",
+          "uncompressedBytes": 262093,
+          "uncompressedSha256": "a4186b238541f682588f0331783c014938b46171b0acc42fdc9cf63d4ae2c4fc"
+        },
+        {
+          "bytes": 113618,
+          "firstRow": 142178,
+          "id": "shards/chinese-xinhua-words/000041.tsv.gz",
+          "lastRow": 145814,
+          "sha256": "9c5a35170fb9b561e1d0ef86e8fa9906b0701cf1d809df25412196b1ff119048",
+          "uncompressedBytes": 262138,
+          "uncompressedSha256": "47272053acea1aef62931122dc4877e73e3af2d9d1093f5dad627dc16cce0bb8"
+        },
+        {
+          "bytes": 113943,
+          "firstRow": 145815,
+          "id": "shards/chinese-xinhua-words/000042.tsv.gz",
+          "lastRow": 149293,
+          "sha256": "25a4872f349949178d82a5b8b901b718cb3beeebe0a3780c820b141c2cef8a66",
+          "uncompressedBytes": 262101,
+          "uncompressedSha256": "83679fc9726eccabe1471c30de7404bdeb14cf5e3bbdba681623874ae64ea7f1"
+        },
+        {
+          "bytes": 115663,
+          "firstRow": 149294,
+          "id": "shards/chinese-xinhua-words/000043.tsv.gz",
+          "lastRow": 152370,
+          "sha256": "9125cc674f0ed7662600b77c978ef29e26790cd36d7d15d38807ef374eaf9eca",
+          "uncompressedBytes": 262105,
+          "uncompressedSha256": "406b616a074aa5462d026cef77c6d0c540e59873f10c533a057bc83e823685fb"
+        },
+        {
+          "bytes": 113997,
+          "firstRow": 152371,
+          "id": "shards/chinese-xinhua-words/000044.tsv.gz",
+          "lastRow": 155627,
+          "sha256": "c8fd99ade6848a7f164f5d7906cfdae320e1f7d873c56935baf27b63a5444da6",
+          "uncompressedBytes": 262067,
+          "uncompressedSha256": "560e425d59c593377d84e2472a6d1793ffa80c867c955e049e032a21607a1254"
+        },
+        {
+          "bytes": 117502,
+          "firstRow": 155628,
+          "id": "shards/chinese-xinhua-words/000045.tsv.gz",
+          "lastRow": 158655,
+          "sha256": "e41d38840b37ec72f0e88fd763fc32b253a8b41f4289a8ab58241575c27024b6",
+          "uncompressedBytes": 262124,
+          "uncompressedSha256": "e81caba5f501faf0a98f27cc6d2d60c2e4144078fa494f3fe0f2a3e52c64ee5d"
+        },
+        {
+          "bytes": 115020,
+          "firstRow": 158656,
+          "id": "shards/chinese-xinhua-words/000046.tsv.gz",
+          "lastRow": 161901,
+          "sha256": "2f42f4e8d2b46a0658d901bccf88d28257e63af81bc7d5d530c4669453c64fa9",
+          "uncompressedBytes": 262140,
+          "uncompressedSha256": "ca0ee6a50667ad7965eaf1cea5dc1d97f0f70563beba38c5d57551656ceb2409"
+        },
+        {
+          "bytes": 113000,
+          "firstRow": 161902,
+          "id": "shards/chinese-xinhua-words/000047.tsv.gz",
+          "lastRow": 165424,
+          "sha256": "04f997a56f36dfacc5b7d24129dbfe915aaf5727a6de3cef749cb5e3bf56d68c",
+          "uncompressedBytes": 262121,
+          "uncompressedSha256": "a0a121610ab85531119c0c043a89bb3aedeeb6b45976e2fbab3958f25401f3fc"
+        },
+        {
+          "bytes": 114502,
+          "firstRow": 165425,
+          "id": "shards/chinese-xinhua-words/000048.tsv.gz",
+          "lastRow": 168708,
+          "sha256": "8d54d6071e917a0e4f5da24963475a4e92df4f55cb3ba4d0e4d7f2eef540a07b",
+          "uncompressedBytes": 261957,
+          "uncompressedSha256": "ec8d09843351a2448788730f4b0103067c64be4b5aa8b1615ddd575e997c79c0"
+        },
+        {
+          "bytes": 114396,
+          "firstRow": 168709,
+          "id": "shards/chinese-xinhua-words/000049.tsv.gz",
+          "lastRow": 171984,
+          "sha256": "6342cdd9547deb0432a253f87d4a8981368deba506cda425789fc45e3b528c74",
+          "uncompressedBytes": 262129,
+          "uncompressedSha256": "e7f97c2b54e8b366709c3222e34224eab0f64f69ab8d9850ca6effcb4f221903"
+        },
+        {
+          "bytes": 114338,
+          "firstRow": 171985,
+          "id": "shards/chinese-xinhua-words/000050.tsv.gz",
+          "lastRow": 175259,
+          "sha256": "aefe4805f6a61631393b4b7bef388c0518e113988e9cfb421bfddb8eb1e39d03",
+          "uncompressedBytes": 261877,
+          "uncompressedSha256": "9c5ec41ae263015e24076efa2cf6da9d1f3436e02f0c9f66a4a369884fa12992"
+        },
+        {
+          "bytes": 113187,
+          "firstRow": 175260,
+          "id": "shards/chinese-xinhua-words/000051.tsv.gz",
+          "lastRow": 178844,
+          "sha256": "711ab6661186cf762fea3e64f587fa77f74e96281f2d729709bd7a24a9f83601",
+          "uncompressedBytes": 261666,
+          "uncompressedSha256": "3c44691c0fa75809952f2b8526c4d1972dd3414d2a7c3a73cc0041d9b1234cf2"
+        },
+        {
+          "bytes": 111295,
+          "firstRow": 178845,
+          "id": "shards/chinese-xinhua-words/000052.tsv.gz",
+          "lastRow": 182456,
+          "sha256": "2ebed0f8fe6e7068327c6479c3d6217d377d5df109e39080b973a585f637f4cf",
+          "uncompressedBytes": 262113,
+          "uncompressedSha256": "3f085351b73f5bcd8b277c232967e65604555ce5351f4d445e93375df43c0981"
+        },
+        {
+          "bytes": 113320,
+          "firstRow": 182457,
+          "id": "shards/chinese-xinhua-words/000053.tsv.gz",
+          "lastRow": 185866,
+          "sha256": "f6959cfaf1813c3969cb4da62caa4b5a8b24fbffa527199091d0e0ab66487473",
+          "uncompressedBytes": 262131,
+          "uncompressedSha256": "b3626017505194d78a82ba6d3c1877fa33262b62f325ab8a1bd72813d1ac2ac8"
+        },
+        {
+          "bytes": 115103,
+          "firstRow": 185867,
+          "id": "shards/chinese-xinhua-words/000054.tsv.gz",
+          "lastRow": 189044,
+          "sha256": "75b4b5e713576519f6460b7bcc79bdf6bf9a186ac3427abfebd6ee95a6b91ba4",
+          "uncompressedBytes": 262074,
+          "uncompressedSha256": "9b9227221a0fafc6bfdacdf8f1fca56e5ed82e95783ee8ae537cd294e11b6d3f"
+        },
+        {
+          "bytes": 115218,
+          "firstRow": 189045,
+          "id": "shards/chinese-xinhua-words/000055.tsv.gz",
+          "lastRow": 192244,
+          "sha256": "58c9e56f98f5a0e2ffa57fda79cf727a4d1fc54650d2351732a48582bb1e30a1",
+          "uncompressedBytes": 262100,
+          "uncompressedSha256": "86df48cadd3d2974a44b6682274e33a78ce8a08b89d6c58fac5887e54db1eef5"
+        },
+        {
+          "bytes": 113319,
+          "firstRow": 192245,
+          "id": "shards/chinese-xinhua-words/000056.tsv.gz",
+          "lastRow": 195807,
+          "sha256": "b55b7253894807593f25962034ca32d374ee21875b6e13f03ddaf3c974a34abc",
+          "uncompressedBytes": 261591,
+          "uncompressedSha256": "2a9a273d78f751d915bb107b5cb3ed146879643dda98a3160f9fec0a758520f3"
+        },
+        {
+          "bytes": 110935,
+          "firstRow": 195808,
+          "id": "shards/chinese-xinhua-words/000057.tsv.gz",
+          "lastRow": 199549,
+          "sha256": "a1a854c3646d88d97094e96452e44b599b4fc71557b4ad67d2feab7794cd2ad1",
+          "uncompressedBytes": 262132,
+          "uncompressedSha256": "36d9950ec1276a3825e96ffbdb3dcabce624fa606a92f8422f64ef38799ba9ee"
+        },
+        {
+          "bytes": 114625,
+          "firstRow": 199550,
+          "id": "shards/chinese-xinhua-words/000058.tsv.gz",
+          "lastRow": 202894,
+          "sha256": "e380a5201178400912e7725550e135317348150a000f92eeff3c10126d86dd70",
+          "uncompressedBytes": 262122,
+          "uncompressedSha256": "4b95c1b9110b7d1b794496ba1fa5ff62e0019f5d7e5f77f3f0296b6c30a77107"
+        },
+        {
+          "bytes": 115317,
+          "firstRow": 202895,
+          "id": "shards/chinese-xinhua-words/000059.tsv.gz",
+          "lastRow": 206119,
+          "sha256": "508cd01c9405181698aa777fb9105aec750666515e5a64092b2733f12bdce56f",
+          "uncompressedBytes": 262060,
+          "uncompressedSha256": "999be809cfbb4f4ccaf94040dfd203ae2a02177fc929ceb2eed175b885a42f9d"
+        },
+        {
+          "bytes": 114922,
+          "firstRow": 206120,
+          "id": "shards/chinese-xinhua-words/000060.tsv.gz",
+          "lastRow": 209322,
+          "sha256": "321bb6f2e2d7709637b178baa6915c1943939cbd48124efb76b52f42be5f6b39",
+          "uncompressedBytes": 261992,
+          "uncompressedSha256": "f3e9f6bc982cae243555232b3cf99704043d89fed810b70e2e04a033cb34d0d8"
+        },
+        {
+          "bytes": 112882,
+          "firstRow": 209323,
+          "id": "shards/chinese-xinhua-words/000061.tsv.gz",
+          "lastRow": 212938,
+          "sha256": "e3ba0bc625361d0c85f9e060ed934fbf47e54e22e131f62443d552da57307559",
+          "uncompressedBytes": 262108,
+          "uncompressedSha256": "75f337fca2c087c3b3ce6060dc9a68df8815053198469e9dbe432c7e6fd57b44"
+        },
+        {
+          "bytes": 115258,
+          "firstRow": 212939,
+          "id": "shards/chinese-xinhua-words/000062.tsv.gz",
+          "lastRow": 216251,
+          "sha256": "1330547c36cb5c2131648f8adc1e077d6594da20902eda3fc47a2d7cf8856a4f",
+          "uncompressedBytes": 261972,
+          "uncompressedSha256": "a5223e8829425f0099eef1deb91c1c57cdab22270a64e5d5b87416598abd279f"
+        },
+        {
+          "bytes": 117804,
+          "firstRow": 216252,
+          "id": "shards/chinese-xinhua-words/000063.tsv.gz",
+          "lastRow": 219231,
+          "sha256": "78190ffc4bcf5116ca8c74ded8a9a65f6bb89ca9d274ed3454be5ee93dfd8ff7",
+          "uncompressedBytes": 261800,
+          "uncompressedSha256": "e9aff25f07e57eb37ab2f4a6567d79a993be8ca44b8792b6ab96171a9f97fc26"
+        },
+        {
+          "bytes": 113198,
+          "firstRow": 219232,
+          "id": "shards/chinese-xinhua-words/000064.tsv.gz",
+          "lastRow": 222742,
+          "sha256": "b8ad4b3cc08ccfabf44c0522b517357352ee1e0ad893855265fd55398d45530a",
+          "uncompressedBytes": 262003,
+          "uncompressedSha256": "e7728cb11cf3af5e1e1b7108be1261bd1a1e27e0a09354373cf0edab2aa2eda8"
+        },
+        {
+          "bytes": 111288,
+          "firstRow": 222743,
+          "id": "shards/chinese-xinhua-words/000065.tsv.gz",
+          "lastRow": 226178,
+          "sha256": "68c63b1f5d312f4416dbd2210f05e8892bbc773f31a7d173cf6a5f8a234c75bf",
+          "uncompressedBytes": 262099,
+          "uncompressedSha256": "dce45ad54f98ec45ab136922741dd9463f275b976881d664e67eed41aec30d06"
+        },
+        {
+          "bytes": 111308,
+          "firstRow": 226179,
+          "id": "shards/chinese-xinhua-words/000066.tsv.gz",
+          "lastRow": 229717,
+          "sha256": "7ed0bdd855c12a748f524af03093824569a4fe7f70947750967511d35fad2440",
+          "uncompressedBytes": 261963,
+          "uncompressedSha256": "a5d9b369f7208add5d44cbea070a4d7e2fa0854a1932f6208b6cd5373181332b"
+        },
+        {
+          "bytes": 112185,
+          "firstRow": 229718,
+          "id": "shards/chinese-xinhua-words/000067.tsv.gz",
+          "lastRow": 233172,
+          "sha256": "5b9720d205a0da411669f7e6b8d103bbd303c6ad30459fd1d8014718cc756aef",
+          "uncompressedBytes": 262095,
+          "uncompressedSha256": "042ee9d91312132144d894ad999346c2037444c646cb85209ddea8fad614bdc9"
+        },
+        {
+          "bytes": 115002,
+          "firstRow": 233173,
+          "id": "shards/chinese-xinhua-words/000068.tsv.gz",
+          "lastRow": 236479,
+          "sha256": "0a11535d1c75ec1459be730be06a7aaca75f9df9a5d6a1e6ff6bfe4c9e90399b",
+          "uncompressedBytes": 262118,
+          "uncompressedSha256": "844a1ff4209a802382d13d5a9ab87a01e330bd35268c8d2d42d817a1e73c102e"
+        },
+        {
+          "bytes": 112933,
+          "firstRow": 236480,
+          "id": "shards/chinese-xinhua-words/000069.tsv.gz",
+          "lastRow": 239858,
+          "sha256": "c0f9aac6c56aa3c7257396ed5fa15274e4c8ea63ef300144b8e351f9674bde2e",
+          "uncompressedBytes": 262071,
+          "uncompressedSha256": "e39d6e850a797dce8c0550578aebee9f7e1ee82abcc5eedf18e03e0fee46968b"
+        },
+        {
+          "bytes": 112012,
+          "firstRow": 239859,
+          "id": "shards/chinese-xinhua-words/000070.tsv.gz",
+          "lastRow": 243474,
+          "sha256": "daf727c0dec4016dc0504a04fabde46d26fa94da3700571ad9e5d0e48e075805",
+          "uncompressedBytes": 262129,
+          "uncompressedSha256": "2671d62759e62e0a99e6bf2945cefa395562e1236203e1f905a05d609b4228fd"
+        },
+        {
+          "bytes": 114955,
+          "firstRow": 243475,
+          "id": "shards/chinese-xinhua-words/000071.tsv.gz",
+          "lastRow": 246529,
+          "sha256": "1b07e9ba5cf127a2971dcaa626ed14e9a055bb547345223fd8d6109d9c481155",
+          "uncompressedBytes": 262098,
+          "uncompressedSha256": "5aa3ea85c2cb9977ab83610e2f4c6a16b715bbcf4a0e662ae16fa81b71e8bf1c"
+        },
+        {
+          "bytes": 113811,
+          "firstRow": 246530,
+          "id": "shards/chinese-xinhua-words/000072.tsv.gz",
+          "lastRow": 250127,
+          "sha256": "bfe450d4442a9fbd645678f2e893d87876dcbbd6377d610a6225233dc956206c",
+          "uncompressedBytes": 261994,
+          "uncompressedSha256": "073ae9f6b05bac4fbeeb86a88d7789f6fc7fcabc536c33949e818b1c7bcdf85a"
+        },
+        {
+          "bytes": 112781,
+          "firstRow": 250128,
+          "id": "shards/chinese-xinhua-words/000073.tsv.gz",
+          "lastRow": 253084,
+          "sha256": "a7560050153398f008db021f6424bb0eebfe765d7b5170724b02690693b8d334",
+          "uncompressedBytes": 261890,
+          "uncompressedSha256": "2b4917a1cbe9515b35eaa6ebbd9b3c4552d22d1f1d5e0ebfa787b0d71f8b1128"
+        },
+        {
+          "bytes": 113748,
+          "firstRow": 253085,
+          "id": "shards/chinese-xinhua-words/000074.tsv.gz",
+          "lastRow": 256494,
+          "sha256": "5ded3b90bcb722a6516a9454915a24da06f05e64985f0cccbc308560fa74df2f",
+          "uncompressedBytes": 262122,
+          "uncompressedSha256": "7ab7bb23ceec3c8756f7dd84954788a9dd18747708cb0b34a74a0b1fdbba9ef8"
+        },
+        {
+          "bytes": 113378,
+          "firstRow": 256495,
+          "id": "shards/chinese-xinhua-words/000075.tsv.gz",
+          "lastRow": 259850,
+          "sha256": "9964636a9b8f38ff4729be4d8d54384eaa7b9ace8e522221a6082019ef9ed0bd",
+          "uncompressedBytes": 262128,
+          "uncompressedSha256": "5bc79b8842f634d81907b73c0cfb95e9f3327ed54700df6858d4893d97510646"
+        },
+        {
+          "bytes": 116684,
+          "firstRow": 259851,
+          "id": "shards/chinese-xinhua-words/000076.tsv.gz",
+          "lastRow": 262910,
+          "sha256": "2ac7c16c49a6e220982adbc2ead5f2c38990755dcd3fd09e18b63ff739657f5f",
+          "uncompressedBytes": 261619,
+          "uncompressedSha256": "d35b9b68060efda64a112862e5d6e8339ab60213eb2c86befc3c2526d803a84e"
+        },
+        {
+          "bytes": 55026,
+          "firstRow": 262911,
+          "id": "shards/chinese-xinhua-words/000077.tsv.gz",
+          "lastRow": 264345,
+          "sha256": "0401b05fb33f3dde794829166909fd6404433114f352b877441b29b703d7b87c",
+          "uncompressedBytes": 130310,
+          "uncompressedSha256": "cdb62a54959a7cd79c181dbc234bb6c04367c0ae2a2262afc0baab3f62a4da7f"
+        }
+      ],
+      "source": {
+        "commit": "fe6d6c2e8baa82187f4c96bbe042e43f96c05666",
+        "license": "MIT（仓库级；上游授权链见 THIRD_PARTY_NOTICES.md）",
+        "repository": "https://github.com/pwxcoo/chinese-xinhua"
+      },
+      "uncompressedBytes": 20308593,
+      "uncompressedSha256": "31dc68f97222b43977710bd556e4216aa982d389753e8d469774481ca24709b1"
+    },
+    {
+      "entryCount": 4380,
+      "header": "# WordNet 3.1 | sha256 3f7d8be8ef6ecc7167d39b10d66954ec734280b5bdcd57f7d9eafe429d11c22a | pack core | entries 4380",
+      "id": "wordnet-synonyms-core",
+      "index": {
+        "bytes": 24383,
+        "id": "indexes/wordnet-synonyms-core.tsv.gz",
+        "recordCount": 4380,
+        "sha256": "0fed84e83f6d0b6bab6e9833158ab374750cd66544f05bf9d5c9e7d56ca3d555",
+        "uncompressedBytes": 62724,
+        "uncompressedSha256": "a4f0b6bd52fa72cdcb38c7224b956d8a880fa4a47e26256c135a02c7fd9868e4"
+      },
+      "kind": "synonyms",
+      "label": "高频核心近义词",
+      "legacyId": "core",
+      "recordCount": 4380,
+      "rowOrder": "source",
+      "shards": [
+        {
+          "bytes": 106853,
+          "firstRow": 0,
+          "id": "shards/wordnet-synonyms-core/000000.tsv.gz",
+          "lastRow": 3214,
+          "sha256": "bbf26c9ede7b8e4a76369675262eac6263ec6cafb7ccf4cfc032f3608303377e",
+          "uncompressedBytes": 262021,
+          "uncompressedSha256": "e9563fdcd022a64bb9a2bb9253d9c0fbde3134dd51d057653961d116f320ee4a"
+        },
+        {
+          "bytes": 43246,
+          "firstRow": 3215,
+          "id": "shards/wordnet-synonyms-core/000001.tsv.gz",
+          "lastRow": 4379,
+          "sha256": "9e336e775272d09fcc00e84f3aa8519a098a6038c393a85d17e0c7afe2c5d33e",
+          "uncompressedBytes": 102428,
+          "uncompressedSha256": "0df9ec15139acb40beb78ae9e139f345935c4b8d2b1dfddd1b9708e91ffe40f2"
+        }
+      ],
+      "source": {
+        "license": "WordNet 3.1",
+        "repository": "https://wordnet.princeton.edu/",
+        "snapshot": "https://wordnetcode.princeton.edu/wn3.1.dict.tar.gz",
+        "snapshotSha256": "3f7d8be8ef6ecc7167d39b10d66954ec734280b5bdcd57f7d9eafe429d11c22a"
+      },
+      "uncompressedBytes": 364564,
+      "uncompressedSha256": "7481e301b18f380f6f32c6629b366372abe9cf28f47e9ce051357495feb234fd"
+    },
+    {
+      "entryCount": 117,
+      "header": "# WordNet 3.1 | sha256 3f7d8be8ef6ecc7167d39b10d66954ec734280b5bdcd57f7d9eafe429d11c22a | pack zk | entries 117",
+      "id": "wordnet-synonyms-zk",
+      "index": {
+        "bytes": 783,
+        "id": "indexes/wordnet-synonyms-zk.tsv.gz",
+        "recordCount": 117,
+        "sha256": "ba4794de5160d104c32f66fcff0ed401b11041754c972f368da44a680962de40",
+        "uncompressedBytes": 1451,
+        "uncompressedSha256": "65f2ac99e74000c654986aca82fb1417f7a10cea27a1dcbf775445e0c0399146"
+      },
+      "kind": "synonyms",
+      "label": "中考近义词",
+      "legacyId": "zk",
+      "recordCount": 117,
+      "rowOrder": "source",
+      "shards": [
+        {
+          "bytes": 3348,
+          "firstRow": 0,
+          "id": "shards/wordnet-synonyms-zk/000000.tsv.gz",
+          "lastRow": 116,
+          "sha256": "184571b49b5c748a12b5196f4d94ad1561e16915c5c43debfa5d7c6797fb5597",
+          "uncompressedBytes": 6478,
+          "uncompressedSha256": "d999ddb23e9c2537aff5d66a43c71211b054d06e318c798cea9b791c46fde6c4"
+        }
+      ],
+      "source": {
+        "license": "WordNet 3.1",
+        "repository": "https://wordnet.princeton.edu/",
+        "snapshot": "https://wordnetcode.princeton.edu/wn3.1.dict.tar.gz",
+        "snapshotSha256": "3f7d8be8ef6ecc7167d39b10d66954ec734280b5bdcd57f7d9eafe429d11c22a"
+      },
+      "uncompressedBytes": 6590,
+      "uncompressedSha256": "7f20096c099541f487ddb5139ccb4e9c1bb253ba39d732e6de27d5d65896d6c6"
+    },
+    {
+      "entryCount": 690,
+      "header": "# WordNet 3.1 | sha256 3f7d8be8ef6ecc7167d39b10d66954ec734280b5bdcd57f7d9eafe429d11c22a | pack gk | entries 690",
+      "id": "wordnet-synonyms-gk",
+      "index": {
+        "bytes": 4461,
+        "id": "indexes/wordnet-synonyms-gk.tsv.gz",
+        "recordCount": 690,
+        "sha256": "79b1d19c446d1adcaa6fcff60c97e75275c28d4aa92d5813d61a65f3ec5bcb8c",
+        "uncompressedBytes": 9468,
+        "uncompressedSha256": "63a6c3c44dc1597bf35c3be44a9371b4d2d729336e52b249ac738fbee3eeb221"
+      },
+      "kind": "synonyms",
+      "label": "高考近义词",
+      "legacyId": "gk",
+      "recordCount": 690,
+      "rowOrder": "source",
+      "shards": [
+        {
+          "bytes": 17863,
+          "firstRow": 0,
+          "id": "shards/wordnet-synonyms-gk/000000.tsv.gz",
+          "lastRow": 689,
+          "sha256": "8d16c41a91878022ff6df2446d5bcf79472cef9cb2fafc35a4e39ca5b5c317d8",
+          "uncompressedBytes": 37998,
+          "uncompressedSha256": "02adbe751cc02bdbc83e549b36b0fad5109078e5b05687a8e179a21a1517ae13"
+        }
+      ],
+      "source": {
+        "license": "WordNet 3.1",
+        "repository": "https://wordnet.princeton.edu/",
+        "snapshot": "https://wordnetcode.princeton.edu/wn3.1.dict.tar.gz",
+        "snapshotSha256": "3f7d8be8ef6ecc7167d39b10d66954ec734280b5bdcd57f7d9eafe429d11c22a"
+      },
+      "uncompressedBytes": 38110,
+      "uncompressedSha256": "c34341f48755772d601979dc3f7b67bf83d68d19b9e9081d2fef3afe3d840877"
+    },
+    {
+      "entryCount": 980,
+      "header": "# WordNet 3.1 | sha256 3f7d8be8ef6ecc7167d39b10d66954ec734280b5bdcd57f7d9eafe429d11c22a | pack cet4 | entries 980",
+      "id": "wordnet-synonyms-cet4",
+      "index": {
+        "bytes": 6167,
+        "id": "indexes/wordnet-synonyms-cet4.tsv.gz",
+        "recordCount": 980,
+        "sha256": "9d9e2a80c7874df3bc0b4c600b20537bef0deed5cfab877bff7b5fe095c64586",
+        "uncompressedBytes": 13399,
+        "uncompressedSha256": "a3824e6936d80cde97e1ae892b8c50dfc45fc15e666f79da91b101978dbd461f"
+      },
+      "kind": "synonyms",
+      "label": "CET-4近义词",
+      "legacyId": "cet4",
+      "recordCount": 980,
+      "rowOrder": "source",
+      "shards": [
+        {
+          "bytes": 28324,
+          "firstRow": 0,
+          "id": "shards/wordnet-synonyms-cet4/000000.tsv.gz",
+          "lastRow": 979,
+          "sha256": "e6dd2b4974ec817e5aaf422aa691078d584fc57244cc23c6c216cd32fb4a762c",
+          "uncompressedBytes": 62243,
+          "uncompressedSha256": "d2cf31ca7e768e98ee4e6ed2f9f94129ececbb253f8918321eac1d0960f5dc5f"
+        }
+      ],
+      "source": {
+        "license": "WordNet 3.1",
+        "repository": "https://wordnet.princeton.edu/",
+        "snapshot": "https://wordnetcode.princeton.edu/wn3.1.dict.tar.gz",
+        "snapshotSha256": "3f7d8be8ef6ecc7167d39b10d66954ec734280b5bdcd57f7d9eafe429d11c22a"
+      },
+      "uncompressedBytes": 62357,
+      "uncompressedSha256": "4cd3509188ad66b891af37759d22185c4bebf1f74e040a3179b3624a717eada8"
+    },
+    {
+      "entryCount": 2206,
+      "header": "# WordNet 3.1 | sha256 3f7d8be8ef6ecc7167d39b10d66954ec734280b5bdcd57f7d9eafe429d11c22a | pack cet6 | entries 2206",
+      "id": "wordnet-synonyms-cet6",
+      "index": {
+        "bytes": 13776,
+        "id": "indexes/wordnet-synonyms-cet6.tsv.gz",
+        "recordCount": 2206,
+        "sha256": "77ce75158689e41d420805116b39739156fae648e7f6eb2a7e5148537a66139c",
+        "uncompressedBytes": 32479,
+        "uncompressedSha256": "00dbf0514573c76daeedc0ef90d12beff29eff841aea88930150f18b1f3f0d8c"
+      },
+      "kind": "synonyms",
+      "label": "CET-6近义词",
+      "legacyId": "cet6",
+      "recordCount": 2206,
+      "rowOrder": "source",
+      "shards": [
+        {
+          "bytes": 58197,
+          "firstRow": 0,
+          "id": "shards/wordnet-synonyms-cet6/000000.tsv.gz",
+          "lastRow": 2205,
+          "sha256": "c966a2cab8f440fe64b553675bd5ab746476149e63ccee532ec90e4332d628a0",
+          "uncompressedBytes": 136083,
+          "uncompressedSha256": "d0a1ef03449c066859adb8755532f39bb0daffcdb2af4cbe4f9a4630c5f53878"
+        }
+      ],
+      "source": {
+        "license": "WordNet 3.1",
+        "repository": "https://wordnet.princeton.edu/",
+        "snapshot": "https://wordnetcode.princeton.edu/wn3.1.dict.tar.gz",
+        "snapshotSha256": "3f7d8be8ef6ecc7167d39b10d66954ec734280b5bdcd57f7d9eafe429d11c22a"
+      },
+      "uncompressedBytes": 136198,
+      "uncompressedSha256": "bd74bcc8f522868f55894141bf0cb759d9ec860bd44a5a886e1d670be209a669"
+    },
+    {
+      "entryCount": 1651,
+      "header": "# WordNet 3.1 | sha256 3f7d8be8ef6ecc7167d39b10d66954ec734280b5bdcd57f7d9eafe429d11c22a | pack ky | entries 1651",
+      "id": "wordnet-synonyms-ky",
+      "index": {
+        "bytes": 10293,
+        "id": "indexes/wordnet-synonyms-ky.tsv.gz",
+        "recordCount": 1651,
+        "sha256": "ee5f8bff67f8226d470b34a99bf645c681f2c1e11e25c1c2d2799d4c589ef058",
+        "uncompressedBytes": 23556,
+        "uncompressedSha256": "d4c94a186b1080b8dc25748e3a4119e4f2fe07d440b1cbcf69e5eb06714caf4d"
+      },
+      "kind": "synonyms",
+      "label": "考研近义词",
+      "legacyId": "ky",
+      "recordCount": 1651,
+      "rowOrder": "source",
+      "shards": [
+        {
+          "bytes": 46547,
+          "firstRow": 0,
+          "id": "shards/wordnet-synonyms-ky/000000.tsv.gz",
+          "lastRow": 1650,
+          "sha256": "ae3bab13e5be4f6ea39e34f9a8fa6e75b588eb67639f634feacccd524826c27e",
+          "uncompressedBytes": 106952,
+          "uncompressedSha256": "5f6d85b8d3dbee517f7633da2eebb9804f2d58d65c207fb2625aaded470b16c2"
+        }
+      ],
+      "source": {
+        "license": "WordNet 3.1",
+        "repository": "https://wordnet.princeton.edu/",
+        "snapshot": "https://wordnetcode.princeton.edu/wn3.1.dict.tar.gz",
+        "snapshotSha256": "3f7d8be8ef6ecc7167d39b10d66954ec734280b5bdcd57f7d9eafe429d11c22a"
+      },
+      "uncompressedBytes": 107065,
+      "uncompressedSha256": "6b3f58e5d150b4c8743231dbefe4c57c2e17ff4e538a1dfb3f95aea1b1ae6061"
+    },
+    {
+      "entryCount": 2087,
+      "header": "# WordNet 3.1 | sha256 3f7d8be8ef6ecc7167d39b10d66954ec734280b5bdcd57f7d9eafe429d11c22a | pack ielts | entries 2087",
+      "id": "wordnet-synonyms-ielts",
+      "index": {
+        "bytes": 13150,
+        "id": "indexes/wordnet-synonyms-ielts.tsv.gz",
+        "recordCount": 2087,
+        "sha256": "3d54126d09316f0fb32d232d6762d0f2c2b8c96aa84a4a7683d819a064dc40e8",
+        "uncompressedBytes": 30475,
+        "uncompressedSha256": "bca2ca800561b345e9f94b486bd1a218e6c43e68cc290bc3f92822037c81e4ed"
+      },
+      "kind": "synonyms",
+      "label": "IELTS近义词",
+      "legacyId": "ielts",
+      "recordCount": 2087,
+      "rowOrder": "source",
+      "shards": [
+        {
+          "bytes": 55684,
+          "firstRow": 0,
+          "id": "shards/wordnet-synonyms-ielts/000000.tsv.gz",
+          "lastRow": 2086,
+          "sha256": "794d744b7ae283eb974bfdb716eb3352a696a9faab46ba533417b75fe00ddb40",
+          "uncompressedBytes": 129581,
+          "uncompressedSha256": "23311f5390922175b57c7c6dc2ea297b213af939514c88545f99666345241d96"
+        }
+      ],
+      "source": {
+        "license": "WordNet 3.1",
+        "repository": "https://wordnet.princeton.edu/",
+        "snapshot": "https://wordnetcode.princeton.edu/wn3.1.dict.tar.gz",
+        "snapshotSha256": "3f7d8be8ef6ecc7167d39b10d66954ec734280b5bdcd57f7d9eafe429d11c22a"
+      },
+      "uncompressedBytes": 129697,
+      "uncompressedSha256": "5d5e216279b2215c047b98bf1ceedcc4d4e56e2ec387de2603a4829c8e7baee8"
+    },
+    {
+      "entryCount": 4028,
+      "header": "# WordNet 3.1 | sha256 3f7d8be8ef6ecc7167d39b10d66954ec734280b5bdcd57f7d9eafe429d11c22a | pack toefl | entries 4028",
+      "id": "wordnet-synonyms-toefl",
+      "index": {
+        "bytes": 24991,
+        "id": "indexes/wordnet-synonyms-toefl.tsv.gz",
+        "recordCount": 4028,
+        "sha256": "14b4257cbe2402cb34eca5a065ec332510e1d739d3f9a3ec9a43e7e2ae3447fb",
+        "uncompressedBytes": 62364,
+        "uncompressedSha256": "ace7bb9148a5239f2a04d3b99d704fb66ef481cb0c0a85139db8b14c09fad43b"
+      },
+      "kind": "synonyms",
+      "label": "TOEFL近义词",
+      "legacyId": "toefl",
+      "recordCount": 4028,
+      "rowOrder": "source",
+      "shards": [
+        {
+          "bytes": 91692,
+          "firstRow": 0,
+          "id": "shards/wordnet-synonyms-toefl/000000.tsv.gz",
+          "lastRow": 4027,
+          "sha256": "6c888986627561d219f7dee8d259f41e1059dee3740728c726aa7f2455da09b0",
+          "uncompressedBytes": 219709,
+          "uncompressedSha256": "720063004321022e918f99da5e925fd45b0ce4364e53676791b8f6557a73465f"
+        }
+      ],
+      "source": {
+        "license": "WordNet 3.1",
+        "repository": "https://wordnet.princeton.edu/",
+        "snapshot": "https://wordnetcode.princeton.edu/wn3.1.dict.tar.gz",
+        "snapshotSha256": "3f7d8be8ef6ecc7167d39b10d66954ec734280b5bdcd57f7d9eafe429d11c22a"
+      },
+      "uncompressedBytes": 219825,
+      "uncompressedSha256": "6134bfff70c2cff7066c154ca918f86e38445268dd3b354f2a987b9c1f5e3a93"
+    },
+    {
+      "entryCount": 5460,
+      "header": "# WordNet 3.1 | sha256 3f7d8be8ef6ecc7167d39b10d66954ec734280b5bdcd57f7d9eafe429d11c22a | pack gre | entries 5460",
+      "id": "wordnet-synonyms-gre",
+      "index": {
+        "bytes": 33611,
+        "id": "indexes/wordnet-synonyms-gre.tsv.gz",
+        "recordCount": 5460,
+        "sha256": "b8edd3c282b3ea2158b302db380e3b304e6d78d3eb15c90dc7ad19ca5b79721a",
+        "uncompressedBytes": 83891,
+        "uncompressedSha256": "2728c7d8956032656fc6c384ad8bb6d044002894791f964a3251275492206f1f"
+      },
+      "kind": "synonyms",
+      "label": "GRE近义词",
+      "legacyId": "gre",
+      "recordCount": 5460,
+      "rowOrder": "source",
+      "shards": [
+        {
+          "bytes": 109025,
+          "firstRow": 0,
+          "id": "shards/wordnet-synonyms-gre/000000.tsv.gz",
+          "lastRow": 4886,
+          "sha256": "e624f16cd2a148c0e9bb13b811353ca858dede3ba04cb6d1cc84d09b6e904b66",
+          "uncompressedBytes": 262103,
+          "uncompressedSha256": "4984e24ba9de287d56344e6d83dbba44bc94540a4ac8a270f2bb63907925353b"
+        },
+        {
+          "bytes": 14065,
+          "firstRow": 4887,
+          "id": "shards/wordnet-synonyms-gre/000001.tsv.gz",
+          "lastRow": 5459,
+          "sha256": "73e82f1bdbd3c592736022dcea27f369c6e0536b550f7324685b01906e500b47",
+          "uncompressedBytes": 30826,
+          "uncompressedSha256": "1726cf8a31ddb269e2565ec6c8f1300f67a7cfd008860b1a292eb1c0cc1a3b90"
+        }
+      ],
+      "source": {
+        "license": "WordNet 3.1",
+        "repository": "https://wordnet.princeton.edu/",
+        "snapshot": "https://wordnetcode.princeton.edu/wn3.1.dict.tar.gz",
+        "snapshotSha256": "3f7d8be8ef6ecc7167d39b10d66954ec734280b5bdcd57f7d9eafe429d11c22a"
+      },
+      "uncompressedBytes": 293043,
+      "uncompressedSha256": "05577cca91051e48f44389e57d6514478d77b275a8179731375120573cad42b0"
+    },
+    {
+      "entryCount": 21770,
+      "header": "# WordNet 3.1 | sha256 3f7d8be8ef6ecc7167d39b10d66954ec734280b5bdcd57f7d9eafe429d11c22a | pack bnc | entries 21770",
+      "id": "wordnet-synonyms-bnc",
+      "index": {
+        "bytes": 127140,
+        "id": "indexes/wordnet-synonyms-bnc.tsv.gz",
+        "recordCount": 21770,
+        "sha256": "c66e446dfe268a2f9f3bc9b2f6e7eb955548b212bb682636df39afe0dbf7c589",
+        "uncompressedBytes": 356136,
+        "uncompressedSha256": "017c42c4645f42cf974a1496938b8bdf00c05632d21a88747cbcc103b2de4e52"
+      },
+      "kind": "synonyms",
+      "label": "BNC近义词",
+      "legacyId": "bnc",
+      "recordCount": 21770,
+      "rowOrder": "source",
+      "shards": [
+        {
+          "bytes": 104595,
+          "firstRow": 0,
+          "id": "shards/wordnet-synonyms-bnc/000000.tsv.gz",
+          "lastRow": 5712,
+          "sha256": "dd34693b2205ee5cfb96b453a3921cb33ba569be3cbfd5f882829c0edf6c6cc2",
+          "uncompressedBytes": 262099,
+          "uncompressedSha256": "dd248372d22db38ba957d2e5f643366523d1250441515ecc14e912edd27740de"
+        },
+        {
+          "bytes": 105362,
+          "firstRow": 5713,
+          "id": "shards/wordnet-synonyms-bnc/000001.tsv.gz",
+          "lastRow": 11581,
+          "sha256": "62aaa5df6734e8380bae256601f036bfcdc4dd6184efe6adbe59cccbc2b884ba",
+          "uncompressedBytes": 262086,
+          "uncompressedSha256": "835f37c76d18ae8945c3372930d6aa3dca064cbb255199659faf4358a5f0ea16"
+        },
+        {
+          "bytes": 105568,
+          "firstRow": 11582,
+          "id": "shards/wordnet-synonyms-bnc/000002.tsv.gz",
+          "lastRow": 17408,
+          "sha256": "9dc564cb706ac61a418e1fe5e66468945ae590612b6ef77a34771cf2d8f92855",
+          "uncompressedBytes": 262054,
+          "uncompressedSha256": "7c78873bf2bfdd52d23f83aa8e2002290c360f2ef775d6903a1822760ae06002"
+        },
+        {
+          "bytes": 80017,
+          "firstRow": 17409,
+          "id": "shards/wordnet-synonyms-bnc/000003.tsv.gz",
+          "lastRow": 21769,
+          "sha256": "0296726c8609fe85ab1c818a86f630dcaa3a13fb3e059ae511efd2ea5f27eb4a",
+          "uncompressedBytes": 196945,
+          "uncompressedSha256": "571a929e89acd84b7ecb188dc78735e4d54220050d3c6fbe2ac7c17a70a6140d"
+        }
+      ],
+      "source": {
+        "license": "WordNet 3.1",
+        "repository": "https://wordnet.princeton.edu/",
+        "snapshot": "https://wordnetcode.princeton.edu/wn3.1.dict.tar.gz",
+        "snapshotSha256": "3f7d8be8ef6ecc7167d39b10d66954ec734280b5bdcd57f7d9eafe429d11c22a"
+      },
+      "uncompressedBytes": 983299,
+      "uncompressedSha256": "72121ef079c48ad97852575c58e85be223abeb9ea7d00fbe17b398734695a007"
+    },
+    {
+      "entryCount": 1688,
+      "header": "# UniMorph eng 66e0e9e8e2dcd196da081a25a48e5c1fe3d8b49b | sha256 743fff8ddb3ff26ae413af1fa859806106ffff69628be4cb7ed4d34f677deed2 | pack core | entries 1688",
+      "id": "unimorph-roots-core",
+      "index": {
+        "bytes": 11059,
+        "id": "indexes/unimorph-roots-core.tsv.gz",
+        "recordCount": 1865,
+        "sha256": "99bd852bdfab19cdd354dbe60a84c36baafdc7a6c79ed187ebbf0fc941523855",
+        "uncompressedBytes": 29280,
+        "uncompressedSha256": "fd8b27e4037c2c3f91a6b7cf82027be9ea1f4c100d533c751301b2e875674d95"
+      },
+      "kind": "roots",
+      "label": "高频核心派生词根",
+      "legacyId": "core",
+      "recordCount": 1865,
+      "rowOrder": "source",
+      "shards": [
+        {
+          "bytes": 14654,
+          "firstRow": 0,
+          "id": "shards/unimorph-roots-core/000000.tsv.gz",
+          "lastRow": 1864,
+          "sha256": "3ff03726cb6d473b2c7a34ac6b28a4f6856c631ce1a7e711efc73ddfff2f61fa",
+          "uncompressedBytes": 48809,
+          "uncompressedSha256": "5fe746531448ce80c567dd3ef61de12841f3337a8681b82100c70e7bd3ffeb71"
+        }
+      ],
+      "source": {
+        "commit": "66e0e9e8e2dcd196da081a25a48e5c1fe3d8b49b",
+        "license": "CC BY-SA 3.0",
+        "repository": "https://github.com/unimorph/eng",
+        "snapshotSha256": "743fff8ddb3ff26ae413af1fa859806106ffff69628be4cb7ed4d34f677deed2"
+      },
+      "uncompressedBytes": 48966,
+      "uncompressedSha256": "3f6a27a3ab62839f50d87fa589e922ba8b1dfa329bde0625b365529b4fb3dc16"
+    },
+    {
+      "entryCount": 47,
+      "header": "# UniMorph eng 66e0e9e8e2dcd196da081a25a48e5c1fe3d8b49b | sha256 743fff8ddb3ff26ae413af1fa859806106ffff69628be4cb7ed4d34f677deed2 | pack zk | entries 47",
+      "id": "unimorph-roots-zk",
+      "index": {
+        "bytes": 362,
+        "id": "indexes/unimorph-roots-zk.tsv.gz",
+        "recordCount": 50,
+        "sha256": "4c9e5251c5aae902c25307bc64644e4630990591cbcacbb502d5966b39f24dd1",
+        "uncompressedBytes": 635,
+        "uncompressedSha256": "623efb4def113f4ff77611b8df5fb9b384e31c72e8399c145378f69ab48791e7"
+      },
+      "kind": "roots",
+      "label": "中考派生词根",
+      "legacyId": "zk",
+      "recordCount": 50,
+      "rowOrder": "source",
+      "shards": [
+        {
+          "bytes": 496,
+          "firstRow": 0,
+          "id": "shards/unimorph-roots-zk/000000.tsv.gz",
+          "lastRow": 49,
+          "sha256": "26b084eaa926dd602080fe3af0424906bc289c90eac4690fc81b6a4c255952e7",
+          "uncompressedBytes": 1135,
+          "uncompressedSha256": "7fb9f4251af69ad6ca01f25013381515f790f941318eeffa214907cc8532d03d"
+        }
+      ],
+      "source": {
+        "commit": "66e0e9e8e2dcd196da081a25a48e5c1fe3d8b49b",
+        "license": "CC BY-SA 3.0",
+        "repository": "https://github.com/unimorph/eng",
+        "snapshotSha256": "743fff8ddb3ff26ae413af1fa859806106ffff69628be4cb7ed4d34f677deed2"
+      },
+      "uncompressedBytes": 1288,
+      "uncompressedSha256": "cc384a052760723e553abc2700aa1b4645cfc77a72469315d74783f890fbd2cf"
+    },
+    {
+      "entryCount": 346,
+      "header": "# UniMorph eng 66e0e9e8e2dcd196da081a25a48e5c1fe3d8b49b | sha256 743fff8ddb3ff26ae413af1fa859806106ffff69628be4cb7ed4d34f677deed2 | pack gk | entries 346",
+      "id": "unimorph-roots-gk",
+      "index": {
+        "bytes": 2500,
+        "id": "indexes/unimorph-roots-gk.tsv.gz",
+        "recordCount": 385,
+        "sha256": "cae2411bc67f10f309946b18b17bb7a6e6f3d947ccc3ac138f877b2dd72d902d",
+        "uncompressedBytes": 5628,
+        "uncompressedSha256": "3b9f4b4435cd53d232060ef543cffd2f78195c6619737f1222d593d46c0ce1ad"
+      },
+      "kind": "roots",
+      "label": "高考派生词根",
+      "legacyId": "gk",
+      "recordCount": 385,
+      "rowOrder": "source",
+      "shards": [
+        {
+          "bytes": 3406,
+          "firstRow": 0,
+          "id": "shards/unimorph-roots-gk/000000.tsv.gz",
+          "lastRow": 384,
+          "sha256": "681f5370cb66e0d59da4c4f4bf1151919760c8e68efb14f44d9c886352c51760",
+          "uncompressedBytes": 9675,
+          "uncompressedSha256": "d6a5a152ec9e4a48535b8b8bf54c0013df02c54820c1e4f720b6e56b059f43f1"
+        }
+      ],
+      "source": {
+        "commit": "66e0e9e8e2dcd196da081a25a48e5c1fe3d8b49b",
+        "license": "CC BY-SA 3.0",
+        "repository": "https://github.com/unimorph/eng",
+        "snapshotSha256": "743fff8ddb3ff26ae413af1fa859806106ffff69628be4cb7ed4d34f677deed2"
+      },
+      "uncompressedBytes": 9829,
+      "uncompressedSha256": "b0974b8830086306079eee5562ef987c5eb7f519b84fe0d0fb64101f7153434a"
+    },
+    {
+      "entryCount": 415,
+      "header": "# UniMorph eng 66e0e9e8e2dcd196da081a25a48e5c1fe3d8b49b | sha256 743fff8ddb3ff26ae413af1fa859806106ffff69628be4cb7ed4d34f677deed2 | pack cet4 | entries 415",
+      "id": "unimorph-roots-cet4",
+      "index": {
+        "bytes": 2974,
+        "id": "indexes/unimorph-roots-cet4.tsv.gz",
+        "recordCount": 458,
+        "sha256": "9357eb7b213fdccb51f4f04e97aadd2041fbe4d783e33ebe5f097a9c75086338",
+        "uncompressedBytes": 6802,
+        "uncompressedSha256": "20ac00bfbb08e0278850e1df0e981c15fa278eb28117ebb4e5b0a0c460d95f33"
+      },
+      "kind": "roots",
+      "label": "CET-4派生词根",
+      "legacyId": "cet4",
+      "recordCount": 458,
+      "rowOrder": "source",
+      "shards": [
+        {
+          "bytes": 4055,
+          "firstRow": 0,
+          "id": "shards/unimorph-roots-cet4/000000.tsv.gz",
+          "lastRow": 457,
+          "sha256": "1ba50eaea8d31806707901d3c58c87b10c28578aebdfa1e9b2fe9b14e872187b",
+          "uncompressedBytes": 11772,
+          "uncompressedSha256": "c1d26e3975390df4d6b3a1dfe2c829e1d4ec31fa2e7f734911ac81b45456246c"
+        }
+      ],
+      "source": {
+        "commit": "66e0e9e8e2dcd196da081a25a48e5c1fe3d8b49b",
+        "license": "CC BY-SA 3.0",
+        "repository": "https://github.com/unimorph/eng",
+        "snapshotSha256": "743fff8ddb3ff26ae413af1fa859806106ffff69628be4cb7ed4d34f677deed2"
+      },
+      "uncompressedBytes": 11928,
+      "uncompressedSha256": "9b68ddbe53c6f5b946d7625a6b414b64af592f637fc35dad44579dbff4abc9b6"
+    },
+    {
+      "entryCount": 991,
+      "header": "# UniMorph eng 66e0e9e8e2dcd196da081a25a48e5c1fe3d8b49b | sha256 743fff8ddb3ff26ae413af1fa859806106ffff69628be4cb7ed4d34f677deed2 | pack cet6 | entries 991",
+      "id": "unimorph-roots-cet6",
+      "index": {
+        "bytes": 7024,
+        "id": "indexes/unimorph-roots-cet6.tsv.gz",
+        "recordCount": 1094,
+        "sha256": "15658843aaf6891bcb51b1370c8b0c7083b283b2602d164d5008aad3b52f3393",
+        "uncompressedBytes": 17043,
+        "uncompressedSha256": "a92b3ee3e8ae1aa192ae7ccd5a0536822494b7163c18305e3bdf30aec836ba98"
+      },
+      "kind": "roots",
+      "label": "CET-6派生词根",
+      "legacyId": "cet6",
+      "recordCount": 1094,
+      "rowOrder": "source",
+      "shards": [
+        {
+          "bytes": 9327,
+          "firstRow": 0,
+          "id": "shards/unimorph-roots-cet6/000000.tsv.gz",
+          "lastRow": 1093,
+          "sha256": "15f25214210d8c27de4ef2367746e4d3e3f709b73b16be3e1af59c86804c8d29",
+          "uncompressedBytes": 29311,
+          "uncompressedSha256": "6373c4b490f0ef023d4f7ec7e9f4fb9c3449e12bdd9570df97cdb951e7b1b77f"
+        }
+      ],
+      "source": {
+        "commit": "66e0e9e8e2dcd196da081a25a48e5c1fe3d8b49b",
+        "license": "CC BY-SA 3.0",
+        "repository": "https://github.com/unimorph/eng",
+        "snapshotSha256": "743fff8ddb3ff26ae413af1fa859806106ffff69628be4cb7ed4d34f677deed2"
+      },
+      "uncompressedBytes": 29467,
+      "uncompressedSha256": "fe15d5623c4cd283fe2871bf09ad7969bd39afefca36304e0f60e377f4c903a5"
+    },
+    {
+      "entryCount": 560,
+      "header": "# UniMorph eng 66e0e9e8e2dcd196da081a25a48e5c1fe3d8b49b | sha256 743fff8ddb3ff26ae413af1fa859806106ffff69628be4cb7ed4d34f677deed2 | pack ky | entries 560",
+      "id": "unimorph-roots-ky",
+      "index": {
+        "bytes": 4070,
+        "id": "indexes/unimorph-roots-ky.tsv.gz",
+        "recordCount": 619,
+        "sha256": "4e2c011976d6ea07bf3080c5673fbdb2d5d1d57c2ebee87a14ba133c1567f274",
+        "uncompressedBytes": 9397,
+        "uncompressedSha256": "eeaf47cc030bd1e9578f4554457b1456f0fc1f5e57b6766dbd880c080345ccdb"
+      },
+      "kind": "roots",
+      "label": "考研派生词根",
+      "legacyId": "ky",
+      "recordCount": 619,
+      "rowOrder": "source",
+      "shards": [
+        {
+          "bytes": 5464,
+          "firstRow": 0,
+          "id": "shards/unimorph-roots-ky/000000.tsv.gz",
+          "lastRow": 618,
+          "sha256": "50de7ed534ea974fa024fb287e1d1dbe4123a74ce44d154a7c3d54470907736a",
+          "uncompressedBytes": 16205,
+          "uncompressedSha256": "7adc7aa78c8501af9d1f12be68d0c63bd82273531051baec0cd602c7f25f0171"
+        }
+      ],
+      "source": {
+        "commit": "66e0e9e8e2dcd196da081a25a48e5c1fe3d8b49b",
+        "license": "CC BY-SA 3.0",
+        "repository": "https://github.com/unimorph/eng",
+        "snapshotSha256": "743fff8ddb3ff26ae413af1fa859806106ffff69628be4cb7ed4d34f677deed2"
+      },
+      "uncompressedBytes": 16359,
+      "uncompressedSha256": "6b1eadfbc107c7103dff19539b6592a596ce317389c40632c1d10a611ddaf7a7"
+    },
+    {
+      "entryCount": 745,
+      "header": "# UniMorph eng 66e0e9e8e2dcd196da081a25a48e5c1fe3d8b49b | sha256 743fff8ddb3ff26ae413af1fa859806106ffff69628be4cb7ed4d34f677deed2 | pack ielts | entries 745",
+      "id": "unimorph-roots-ielts",
+      "index": {
+        "bytes": 5374,
+        "id": "indexes/unimorph-roots-ielts.tsv.gz",
+        "recordCount": 824,
+        "sha256": "56768f5c54e4a68c084d41dabec979adb05f083dcdf05ebb7aea45ef116a028f",
+        "uncompressedBytes": 12568,
+        "uncompressedSha256": "b596c6efce4c5307b58a0d242eebef1063a83e3b018cd63860ad8e1858bfca13"
+      },
+      "kind": "roots",
+      "label": "IELTS派生词根",
+      "legacyId": "ielts",
+      "recordCount": 824,
+      "rowOrder": "source",
+      "shards": [
+        {
+          "bytes": 7139,
+          "firstRow": 0,
+          "id": "shards/unimorph-roots-ielts/000000.tsv.gz",
+          "lastRow": 823,
+          "sha256": "ffff8d8031a2f43b407f412d30c2006aa232d4ce5a8846af1063acff173b1510",
+          "uncompressedBytes": 21623,
+          "uncompressedSha256": "49987e9a237d5cfe8b7a386cdcc496bfecd71f0e09209cebbf3c9f420aa3085e"
+        }
+      ],
+      "source": {
+        "commit": "66e0e9e8e2dcd196da081a25a48e5c1fe3d8b49b",
+        "license": "CC BY-SA 3.0",
+        "repository": "https://github.com/unimorph/eng",
+        "snapshotSha256": "743fff8ddb3ff26ae413af1fa859806106ffff69628be4cb7ed4d34f677deed2"
+      },
+      "uncompressedBytes": 21780,
+      "uncompressedSha256": "d25fcbfaca884dcf7cc17130df40cfccd263e763a0608ea642626b0a71278c98"
+    },
+    {
+      "entryCount": 2067,
+      "header": "# UniMorph eng 66e0e9e8e2dcd196da081a25a48e5c1fe3d8b49b | sha256 743fff8ddb3ff26ae413af1fa859806106ffff69628be4cb7ed4d34f677deed2 | pack toefl | entries 2067",
+      "id": "unimorph-roots-toefl",
+      "index": {
+        "bytes": 14546,
+        "id": "indexes/unimorph-roots-toefl.tsv.gz",
+        "recordCount": 2295,
+        "sha256": "bc01ffde93ab73a558929c65f82e88e56a3adaad318ab5efa0808803e5f230cf",
+        "uncompressedBytes": 38145,
+        "uncompressedSha256": "4d6afdd9aad99ae83b606065679cccb118f693b9f63fe63943323d2aa4a3095f"
+      },
+      "kind": "roots",
+      "label": "TOEFL派生词根",
+      "legacyId": "toefl",
+      "recordCount": 2295,
+      "rowOrder": "source",
+      "shards": [
+        {
+          "bytes": 18816,
+          "firstRow": 0,
+          "id": "shards/unimorph-roots-toefl/000000.tsv.gz",
+          "lastRow": 2294,
+          "sha256": "742479fa47b9c8d0cb230df5394b2e98aa8c8592b069879e26aa6c4c054a453c",
+          "uncompressedBytes": 64256,
+          "uncompressedSha256": "682f7487af32c0f4226e830e95b8875245f3b295f5017158013b5d9c48071035"
+        }
+      ],
+      "source": {
+        "commit": "66e0e9e8e2dcd196da081a25a48e5c1fe3d8b49b",
+        "license": "CC BY-SA 3.0",
+        "repository": "https://github.com/unimorph/eng",
+        "snapshotSha256": "743fff8ddb3ff26ae413af1fa859806106ffff69628be4cb7ed4d34f677deed2"
+      },
+      "uncompressedBytes": 64414,
+      "uncompressedSha256": "2a7f4023f9fd1cf98c92cd6de7e8b5af1d8dc9a796fb0e48cdb10942350ca7dc"
+    },
+    {
+      "entryCount": 2141,
+      "header": "# UniMorph eng 66e0e9e8e2dcd196da081a25a48e5c1fe3d8b49b | sha256 743fff8ddb3ff26ae413af1fa859806106ffff69628be4cb7ed4d34f677deed2 | pack gre | entries 2141",
+      "id": "unimorph-roots-gre",
+      "index": {
+        "bytes": 15353,
+        "id": "indexes/unimorph-roots-gre.tsv.gz",
+        "recordCount": 2357,
+        "sha256": "ce41d65cb6dfb3f336b197cc30d4c59b9cfa1b04452c289da036bc35a3b5c7c4",
+        "uncompressedBytes": 38582,
+        "uncompressedSha256": "10e0037cec4dca401f2e290923ae691170278268396be6c42bc894fac6ca576d"
+      },
+      "kind": "roots",
+      "label": "GRE派生词根",
+      "legacyId": "gre",
+      "recordCount": 2357,
+      "rowOrder": "source",
+      "shards": [
+        {
+          "bytes": 19667,
+          "firstRow": 0,
+          "id": "shards/unimorph-roots-gre/000000.tsv.gz",
+          "lastRow": 2356,
+          "sha256": "2e23f64ae6491ceb2a060084a935e1078962c2aacf3a3671a0f02e53d0258161",
+          "uncompressedBytes": 64645,
+          "uncompressedSha256": "7d8d736d6ca41c57c0392d7e572b44888984108649282e7482ea45fdf4cacd75"
+        }
+      ],
+      "source": {
+        "commit": "66e0e9e8e2dcd196da081a25a48e5c1fe3d8b49b",
+        "license": "CC BY-SA 3.0",
+        "repository": "https://github.com/unimorph/eng",
+        "snapshotSha256": "743fff8ddb3ff26ae413af1fa859806106ffff69628be4cb7ed4d34f677deed2"
+      },
+      "uncompressedBytes": 64801,
+      "uncompressedSha256": "67b036d0c5d92ea889a621806501b034a170fc41eb1c427ee3dd0b6a9925d7f6"
+    },
+    {
+      "entryCount": 15503,
+      "header": "# UniMorph eng 66e0e9e8e2dcd196da081a25a48e5c1fe3d8b49b | sha256 743fff8ddb3ff26ae413af1fa859806106ffff69628be4cb7ed4d34f677deed2 | pack bnc | entries 15503",
+      "id": "unimorph-roots-bnc",
+      "index": {
+        "bytes": 97855,
+        "id": "indexes/unimorph-roots-bnc.tsv.gz",
+        "recordCount": 17082,
+        "sha256": "d866c51c3f4798d423ca02d8d3f5dd2cf8d540a693229893337185afe23f0af0",
+        "uncompressedBytes": 300980,
+        "uncompressedSha256": "b05d18cdb4c757a26ac176e86b288c86514420d731199a1363d04054304fef55"
+      },
+      "kind": "roots",
+      "label": "BNC派生词根",
+      "legacyId": "bnc",
+      "recordCount": 17082,
+      "rowOrder": "source",
+      "shards": [
+        {
+          "bytes": 67970,
+          "firstRow": 0,
+          "id": "shards/unimorph-roots-bnc/000000.tsv.gz",
+          "lastRow": 9220,
+          "sha256": "4f0544dfd90e94bac9c8ec2e94ac7f6c057ee33bab9ace10e604d98597e4b1cb",
+          "uncompressedBytes": 262130,
+          "uncompressedSha256": "3e59327a55fb92fcae0cf4cafc43339fe68e391bdfb54ed45d396844cfed21f9"
+        },
+        {
+          "bytes": 57726,
+          "firstRow": 9221,
+          "id": "shards/unimorph-roots-bnc/000001.tsv.gz",
+          "lastRow": 17081,
+          "sha256": "5bd12100d57b80b3479bf3f930cc803eede94f71b2b631cb3b246c450578d52e",
+          "uncompressedBytes": 221634,
+          "uncompressedSha256": "f9a3e2af2e696b95ee38e000764781eaa69b5d2c05a4cfc915c18b445e2eb472"
+        }
+      ],
+      "source": {
+        "commit": "66e0e9e8e2dcd196da081a25a48e5c1fe3d8b49b",
+        "license": "CC BY-SA 3.0",
+        "repository": "https://github.com/unimorph/eng",
+        "snapshotSha256": "743fff8ddb3ff26ae413af1fa859806106ffff69628be4cb7ed4d34f677deed2"
+      },
+      "uncompressedBytes": 483921,
+      "uncompressedSha256": "44e04d371fa16897a9a5ff890a397306e0764ec6b0d28d3a8d1d9e69f454dccf"
+    }
+  ],
+  "shardTargetBytes": 262144
+}

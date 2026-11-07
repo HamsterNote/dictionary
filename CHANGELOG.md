@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- 新增四个中文词典及 WordNet/UniMorph 十包的确定性 gzip 分片、紧凑索引、版本化 manifest 与 `offline-resources` 正式导出；资源附来源、校验值和适用许可，不包含例句补充。
+- 新增可选 `createDictionaryProvider` 异步查询接口与 `DictionaryQueryController`，统一 search/detail/resolveEntry、请求竞态和错误状态，保留既有同步 API。
+- 释义点词支持共享批量候选解析、摘要加载失败重试及原词头放大；Demo 与原生内容可复用同一交互路径。
+
 ### Changed
 
 - 新增 `--dictionary-radius-popover` 与 `--dictionary-radius-control` 设计变量，统一弹层、搜索、建议及操作按钮的圆角语言，并允许宿主映射自身设计系统。

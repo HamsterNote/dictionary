@@ -1,8 +1,9 @@
+import { Button } from '@hamster-note/components/button';
 import type { ReactNode } from 'react';
-import { useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { DictionaryContent } from './DictionaryContent';
 import { DictionarySearch } from './DictionarySearch';
-import { DictionaryWordPreview } from './DictionaryWordPreview';
+import { DictionaryWordPreview, type DictionaryWordPreviewStatus } from './DictionaryWordPreview';
 import type {
   DictionaryGetDetail,
   DictionaryMeaning,
@@ -12,7 +13,9 @@ import type {
 import type { DictionaryCorrectionsControl } from './dictionaryCorrections';
 import { applyDictionaryCorrectionToSummary } from './dictionaryCorrectionApply';
 import type { DictionaryEntrySummary } from './dictionaryEntrySummary';
+import type { DictionaryProvider } from './dictionaryProvider';
 import { useDictionaryCorrections } from './useDictionaryCorrections';
+import { useDictionaryTextResolution } from './useDictionaryTextResolution';
 
 export interface DictionarySearchContentProps {
   readonly corrections?: DictionaryCorrectionsControl;
@@ -24,6 +27,7 @@ export interface DictionarySearchContentProps {
   readonly onSearch?: (query: string) => void;
   readonly phonetic?: string;
   readonly pronounce?: (word: string) => Promise<void>;
+  readonly provider?: DictionaryProvider;
   readonly query?: string;
   readonly resolveEntry?: (word: string) => DictionaryEntrySummary | undefined;
   readonly search?: DictionarySearchFunction;
@@ -33,6 +37,14 @@ export interface DictionarySearchContentProps {
   readonly sources?: readonly DictionarySource[];
   readonly suggestions?: readonly DictionaryEntrySummary[];
   readonly word: string;
+}
+
+interface PreviewState {
+  readonly anchor: HTMLButtonElement;
+  readonly contextWord: string;
+  readonly entry: DictionaryEntrySummary;
+  readonly originalWord: string;
+  readonly status: DictionaryWordPreviewStatus;
 }
 
 export function DictionarySearchContent({
@@ -45,6 +57,7 @@ export function DictionarySearchContent({
   onSearch,
   phonetic,
   pronounce,
+  provider,
   query,
   resolveEntry,
   search,
@@ -55,16 +68,73 @@ export function DictionarySearchContent({
   suggestions,
   word,
 }: DictionarySearchContentProps) {
-  const [preview, setPreview] = useState<
-    | {
-        readonly anchor: HTMLButtonElement;
-        readonly entry: DictionaryEntrySummary;
-        readonly originalWord: string;
-      }
-    | undefined
-  >(undefined);
+  const [preview, setPreview] = useState<PreviewState | undefined>(undefined);
+  const previewSequenceRef = useRef(0);
+  const previewAbortRef = useRef<AbortController | undefined>(undefined);
   const resolvedCorrections = useDictionaryCorrections(corrections);
   const resolvedSuggestions = suggestions ?? (query === undefined ? [] : (search?.(query) ?? []));
+  const resolutionDetail =
+    sources === undefined && meanings === undefined ? getDetail?.(word) : undefined;
+  const textResolution = useDictionaryTextResolution({
+    meanings,
+    provider,
+    resolveEntry,
+    sources: sources ?? resolutionDetail?.sources,
+  });
+
+  const closePreview = useCallback(() => {
+    previewSequenceRef.current += 1;
+    previewAbortRef.current?.abort();
+    previewAbortRef.current = undefined;
+    setPreview(undefined);
+  }, []);
+
+  useEffect(() => {
+    return () => {
+      previewSequenceRef.current += 1;
+      previewAbortRef.current?.abort();
+    };
+  }, []);
+
+  useEffect(() => {
+    previewSequenceRef.current += 1;
+    previewAbortRef.current?.abort();
+    previewAbortRef.current = undefined;
+  }, [word]);
+
+  const openPreview = useCallback(
+    (entry: DictionaryEntrySummary, anchor: HTMLButtonElement) => {
+      previewAbortRef.current?.abort();
+      const abortController = new AbortController();
+      previewAbortRef.current = abortController;
+      const sequence = ++previewSequenceRef.current;
+      const originalWord = entry.word;
+      setPreview({
+        anchor,
+        contextWord: word,
+        entry,
+        originalWord,
+        status: provider ? 'loading' : 'ready',
+      });
+      if (!provider) return;
+      void provider
+        .resolveEntry(originalWord, abortController.signal)
+        .then((resolvedEntry) => {
+          if (sequence !== previewSequenceRef.current) return;
+          setPreview((current) => {
+            if (current?.originalWord !== originalWord) return current;
+            return resolvedEntry === undefined
+              ? { ...current, status: 'not-found' }
+              : { ...current, entry: resolvedEntry, status: 'ready' };
+          });
+        })
+        .catch(() => {
+          if (abortController.signal.aborted || sequence !== previewSequenceRef.current) return;
+          setPreview((current) => (current ? { ...current, status: 'error' } : current));
+        });
+    },
+    [provider, word],
+  );
 
   return (
     <>
@@ -79,21 +149,41 @@ export function DictionarySearchContent({
           suggestions={resolvedSuggestions}
         />
       )}
-      {preview ? (
+      {preview?.contextWord === word ? (
         <DictionaryWordPreview
           anchor={preview.anchor}
           entry={applyDictionaryCorrectionToSummary(preview.entry, resolvedCorrections).summary}
-          onClose={() => {
-            setPreview(undefined);
-          }}
+          onClose={closePreview}
           onExpand={() => {
-            setPreview(undefined);
-            onSearch?.(preview.originalWord);
+            const originalWord = preview.originalWord;
+            closePreview();
+            onSearch?.(originalWord);
+          }}
+          onRetry={() => {
+            openPreview(preview.entry, preview.anchor);
           }}
           originalWord={preview.originalWord}
+          status={preview.status}
         />
       ) : null}
 
+      {textResolution.status === 'ready' ? null : (
+        <div
+          className="dictionary-inline-resolution"
+          role={textResolution.status === 'error' ? 'alert' : 'status'}
+        >
+          {textResolution.status === 'error' ? (
+            <>
+              <span>释义点词暂时不可用，正文仍可阅读。</span>
+              <Button ghost size="small" onClick={textResolution.retry}>
+                重试点词加载
+              </Button>
+            </>
+          ) : (
+            <span>正在准备释义点词…</span>
+          )}
+        </div>
+      )}
       <DictionaryContent
         {...(corrections === undefined ? {} : { corrections })}
         {...(emptyMessage === undefined ? {} : { emptyMessage })}
@@ -101,12 +191,10 @@ export function DictionarySearchContent({
         {...(headingId ? { headingId } : {})}
         keyword={word}
         {...(meanings ? { meanings } : {})}
-        onOpenPreview={(entry, anchor) => {
-          setPreview({ anchor, entry, originalWord: entry.word });
-        }}
+        onOpenPreview={openPreview}
         {...(phonetic === undefined ? {} : { phonetic })}
         {...(pronounce ? { pronounce } : {})}
-        {...(resolveEntry ? { resolveEntry } : {})}
+        {...(textResolution.resolveEntry ? { resolveEntry: textResolution.resolveEntry } : {})}
         resolvedCorrections={resolvedCorrections}
         {...(search ? { search } : {})}
         showGuide={showGuide}

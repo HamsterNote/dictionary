@@ -51,6 +51,7 @@ export function HamsterDictionary({
   phonetic,
   position,
   pronounce,
+  provider,
   query,
   ref,
   resolveEntry,
@@ -177,6 +178,7 @@ export function HamsterDictionary({
         {...(onSearch ? { onSearch } : {})}
         {...(phonetic === undefined ? {} : { phonetic })}
         {...(pronounce ? { pronounce } : {})}
+        {...(provider === undefined ? {} : { provider })}
         {...(query === undefined ? {} : { query })}
         {...(resolveEntry ? { resolveEntry } : {})}
         {...(search ? { search } : {})}
