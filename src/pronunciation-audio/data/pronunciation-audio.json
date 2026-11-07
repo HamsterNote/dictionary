@@ -1,0 +1,191 @@
+{
+  "assets": [
+    {
+      "assetId": "commons-b7b60280c9a307cb762a72412f8f4d55047680ba",
+      "author": "Association Shtooka, Judith Franck",
+      "changes": "原始录音未修改；MP3 等候选仅为 Wikimedia 官方转码",
+      "digest": "b7b60280c9a307cb762a72412f8f4d55047680ba",
+      "license": {
+        "name": "Creative Commons Attribution 3.0 United States",
+        "spdx": "CC-BY-3.0",
+        "url": "https://creativecommons.org/licenses/by/3.0/us/deed.en"
+      },
+      "media": [
+        {
+          "bytes": 14145,
+          "durationSeconds": 1.1,
+          "mime": "application/ogg",
+          "url": "https://upload.wikimedia.org/wikipedia/commons/4/48/En-uk-hello.ogg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+        },
+        {
+          "bytes": 18500,
+          "durationSeconds": 1.1,
+          "mime": "audio/mpeg",
+          "url": "https://upload.wikimedia.org/wikipedia/commons/transcoded/4/48/En-uk-hello.ogg/En-uk-hello.ogg.mp3"
+        }
+      ],
+      "metadataSha256": "d2eb32cbc35f755165acd58a4b8256e1a3bef71428701e5ecc1c30787c2e6058",
+      "pageUrl": "https://commons.wikimedia.org/wiki/File:En-uk-hello.ogg",
+      "revisionId": 862483068
+    },
+    {
+      "assetId": "commons-dd8366cc15e33dbf376db99ded74ec45bfd75bae",
+      "author": "Dvortygirl",
+      "changes": "原始录音未修改；MP3 等候选仅为 Wikimedia 官方转码",
+      "digest": "dd8366cc15e33dbf376db99ded74ec45bfd75bae",
+      "license": {
+        "name": "Creative Commons Attribution ShareAlike 3.0",
+        "spdx": "CC-BY-SA-3.0",
+        "url": "https://creativecommons.org/licenses/by-sa/3.0/"
+      },
+      "media": [
+        {
+          "bytes": 9550,
+          "durationSeconds": 0.5224489795918368,
+          "mime": "application/ogg",
+          "url": "https://upload.wikimedia.org/wikipedia/commons/4/46/En-us-cat.ogg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+        },
+        {
+          "bytes": 10004,
+          "durationSeconds": 0.5224489795918368,
+          "mime": "audio/mpeg",
+          "url": "https://upload.wikimedia.org/wikipedia/commons/transcoded/4/46/En-us-cat.ogg/En-us-cat.ogg.mp3"
+        }
+      ],
+      "metadataSha256": "95ecbff0c2308f2387511b0e588ce8455eab905e2fcf9d72b03fc59c2a8fdee7",
+      "pageUrl": "https://commons.wikimedia.org/wiki/File:En-us-cat.ogg",
+      "revisionId": 1229122106
+    },
+    {
+      "assetId": "commons-4077c380480325efefa417b2f84c18b58f92c180",
+      "author": "Association Shtooka, Judith Franck",
+      "changes": "原始录音未修改；MP3 等候选仅为 Wikimedia 官方转码",
+      "digest": "4077c380480325efefa417b2f84c18b58f92c180",
+      "license": {
+        "name": "Creative Commons Attribution 3.0 United States",
+        "spdx": "CC-BY-3.0",
+        "url": "https://creativecommons.org/licenses/by/3.0/us/deed.en"
+      },
+      "media": [
+        {
+          "bytes": 14371,
+          "durationSeconds": 0.82,
+          "mime": "application/ogg",
+          "url": "https://upload.wikimedia.org/wikipedia/commons/1/15/En-uk-dog.ogg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+        },
+        {
+          "bytes": 19808,
+          "durationSeconds": 0.82,
+          "mime": "audio/mpeg",
+          "url": "https://upload.wikimedia.org/wikipedia/commons/transcoded/1/15/En-uk-dog.ogg/En-uk-dog.ogg.mp3"
+        }
+      ],
+      "metadataSha256": "ccc30245f5be2398abaf2a104dff8a71c3bc61a9d1e24fbc5ea888a79824ecd4",
+      "pageUrl": "https://commons.wikimedia.org/wiki/File:En-uk-dog.ogg",
+      "revisionId": 877133033
+    }
+  ],
+  "entries": [
+    {
+      "accent": "uk",
+      "assetId": "commons-b7b60280c9a307cb762a72412f8f4d55047680ba",
+      "evidence": {
+        "association": "wiktionary-pronunciation-section",
+        "branch": {
+          "audioAccents": [
+            "UK"
+          ],
+          "audioLine": 5,
+          "ipaAccents": [
+            "RP"
+          ],
+          "ipaLine": 4,
+          "relation": "ancestor"
+        },
+        "responseSha256": "2a7c6e5e2a18d6cf9c05291023e4a30c1b134f1c55685ef7f0f8dd6d530b384c",
+        "reviewNote": "当前 ECDICT 的 ә/'/u 记法与 UK /həˈləʊ/ 的音素和重音一致；仅对应指定的 UK 文件。",
+        "sourcePhonetic": "/həˈləʊ/",
+        "verifiedAt": "2026-11-06T14:56:27Z",
+        "verifiedBy": "资深软件工程师（HAM-186 Apply）",
+        "wiktionaryPageUrl": "https://en.wiktionary.org/wiki/hello",
+        "wiktionaryRevisionId": 95307852
+      },
+      "language": "en",
+      "phonetic": "hә'lәu",
+      "phoneticFingerprint": "21fe22aca28baa47",
+      "scope": {
+        "kind": "legacy-unique",
+        "verified": true
+      },
+      "word": "hello"
+    },
+    {
+      "accent": "us",
+      "assetId": "commons-dd8366cc15e33dbf376db99ded74ec45bfd75bae",
+      "evidence": {
+        "association": "wiktionary-pronunciation-section",
+        "branch": {
+          "audioAccents": [
+            "GA"
+          ],
+          "audioLine": 8,
+          "ipaAccents": [
+            "GA"
+          ],
+          "ipaLine": 4,
+          "relation": "accent"
+        },
+        "responseSha256": "e5b39bdb94cc48c6ad606b018410ce96c7e63239ffab00daed8f543fb954d838",
+        "reviewNote": "单音节词省略主重音不改变音素；选择单词录音 En-us-cat.ogg，不选择短语 a cat 或地区变体。",
+        "sourcePhonetic": "/ˈkæt/",
+        "verifiedAt": "2026-11-06T14:56:27Z",
+        "verifiedBy": "资深软件工程师（HAM-186 Apply）",
+        "wiktionaryPageUrl": "https://en.wiktionary.org/wiki/cat",
+        "wiktionaryRevisionId": 95423400
+      },
+      "language": "en",
+      "phonetic": "kæt",
+      "phoneticFingerprint": "3c0c3d1934e111d0",
+      "scope": {
+        "kind": "legacy-unique",
+        "verified": true
+      },
+      "word": "cat"
+    },
+    {
+      "accent": "uk",
+      "assetId": "commons-4077c380480325efefa417b2f84c18b58f92c180",
+      "evidence": {
+        "association": "wiktionary-pronunciation-section",
+        "branch": {
+          "audioAccents": [
+            "UK"
+          ],
+          "audioLine": 2,
+          "ipaAccents": [
+            "RP"
+          ],
+          "ipaLine": 1,
+          "relation": "ancestor"
+        },
+        "responseSha256": "da6221fd7b6c952270706916cbb4dc88c764cbef03a59bf158051f55a4d18fb7",
+        "reviewNote": "g 与 ɡ 是同一 IPA 音素的字形差异；当前 UK /dɒɡ/ 仅对应指定 UK 文件。",
+        "sourcePhonetic": "/dɒɡ/",
+        "verifiedAt": "2026-11-06T14:56:27Z",
+        "verifiedBy": "资深软件工程师（HAM-186 Apply）",
+        "wiktionaryPageUrl": "https://en.wiktionary.org/wiki/dog",
+        "wiktionaryRevisionId": 95422771
+      },
+      "language": "en",
+      "phonetic": "dɒg",
+      "phoneticFingerprint": "c3f43b18eebc9a1c",
+      "scope": {
+        "kind": "legacy-unique",
+        "verified": true
+      },
+      "word": "dog"
+    }
+  ],
+  "generatedAt": "2026-11-04T22:35:22Z",
+  "manifestVersion": "pronunciation-audio/1"
+}

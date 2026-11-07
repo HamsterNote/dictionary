@@ -1,0 +1,13 @@
+Creative Commons Legal Code
+
+Attribution 3.0 United States
+
+THE WORK IS PROVIDED UNDER THE TERMS OF THIS CREATIVE COMMONS PUBLIC LICENSE.
+THE WORK IS PROTECTED BY COPYRIGHT AND/OR OTHER APPLICABLE LAW. ANY USE OF THE
+WORK OTHER THAN AS AUTHORIZED UNDER THIS LICENSE OR COPYRIGHT LAW IS PROHIBITED.
+
+The complete official legal code is available at:
+https://creativecommons.org/licenses/by/3.0/us/legalcode
+
+This distribution includes that license by reference. The official legal code at
+the URI above governs; this short file is not a substitute for it.

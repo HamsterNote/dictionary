@@ -1,5 +1,5 @@
 import type { CSSProperties, HTMLAttributes, ReactNode } from 'react';
-import { useCallback, useId, useRef, useState } from 'react';
+import { useCallback, useEffect, useId, useRef, useState } from 'react';
 import { DictionaryContentCorrection } from './DictionaryContentCorrection';
 import { resolveDictionaryContentSelection } from './dictionaryContentSelection';
 import { DictionaryCorrectionDetailsButton } from './DictionaryCorrectionDetailsButton';
@@ -18,8 +18,18 @@ import type {
 } from './dictionaryCorrections';
 import { resolveDictionaryCorrection } from './dictionaryCorrections';
 import type { DictionaryEntrySummary } from './dictionaryEntrySummary';
+import { PronunciationAudioButton } from './PronunciationAudioButton';
 import { PronunciationButton } from './PronunciationButton';
 import { formatDictionaryPhonetic } from './formatDictionaryPhonetic';
+import {
+  type PronunciationContext,
+  normalizePronunciationWord,
+} from './pronunciation-audio/contracts';
+import {
+  type PronunciationPlaybackController,
+  pronunciationContextKey,
+} from './pronunciation-audio/controller';
+import { PronunciationOverlayPlaybackContext } from './pronunciationOverlayPlayback';
 import { useDictionaryCorrectedContent } from './useDictionaryCorrectedContent';
 import { useDictionaryCorrections } from './useDictionaryCorrections';
 import { legacyProtection, type LegacyScopeResolution } from './pronunciation-overlay/legacy';
@@ -47,6 +57,7 @@ export interface DictionaryContentProps extends Omit<HTMLAttributes<HTMLElement>
   readonly pronunciationCandidates?: ReactNode;
   readonly pronunciationScopeResolutions?: readonly LegacyScopeResolution[];
   readonly pronounce?: (word: string) => Promise<void>;
+  readonly pronunciation?: PronunciationPlaybackController;
   readonly resolveEntry?: (word: string) => DictionaryEntrySummary | undefined;
   readonly resolvedCorrections?: ResolvedDictionaryCorrectionsControl;
   readonly search?: DictionarySearch;
@@ -73,6 +84,7 @@ export function DictionaryContent({
   onOpenPreview,
   phonetic: providedPhonetic,
   pronounce,
+  pronunciation,
   pronunciationOverlay,
   pronunciationCandidates,
   pronunciationScopeResolutions = [],
@@ -128,6 +140,43 @@ export function DictionaryContent({
     providedPhonetic: useProvidedContent ? providedPhonetic : undefined,
     providedSources: useProvidedContent ? providedSources : undefined,
   });
+  const [reportedOverlayContext, setReportedOverlayContext] = useState<PronunciationContext>();
+  const overlayActive =
+    pronunciationOverlay !== undefined && useProvidedContent && overlayBlocked.length === 0;
+  const currentOverlayContext =
+    reportedOverlayContext !== undefined &&
+    normalizePronunciationWord(reportedOverlayContext.word) ===
+      normalizePronunciationWord(resolvedContent.word)
+      ? reportedOverlayContext
+      : undefined;
+  const pronunciationContext: PronunciationContext | undefined =
+    pronunciation === undefined
+      ? undefined
+      : overlayActive
+        ? currentOverlayContext
+        : resolvedContent.phonetic === undefined
+          ? undefined
+          : {
+              word: resolvedContent.word,
+              language: 'en',
+              phonetic: resolvedContent.phonetic,
+            };
+  const playbackContextKey = pronunciationContext
+    ? pronunciationContextKey(pronunciationContext)
+    : 'unavailable';
+  useEffect(() => {
+    pronunciation?.stop();
+  }, [pronunciation, activeKeyword, playbackContextKey]);
+  const pronunciationControl =
+    pronunciation !== undefined ? (
+      <PronunciationAudioButton
+        context={pronunciationContext}
+        word={resolvedContent.word}
+        pronunciation={pronunciation}
+      />
+    ) : pronounce ? (
+      <PronunciationButton pronounce={pronounce} word={activeKeyword} />
+    ) : null;
   const searchEntry = useCallback(
     (word: string) => {
       const normalizedWord = word.trim().normalize('NFKC').toLocaleLowerCase('en-US');
@@ -207,10 +256,10 @@ export function DictionaryContent({
           useProvidedContent &&
           overlayBlocked.length === 0 ? (
             <>
-              {pronunciationOverlay}
-              {pronounce ? (
-                <PronunciationButton pronounce={pronounce} word={activeKeyword} />
-              ) : null}
+              <PronunciationOverlayPlaybackContext.Provider value={setReportedOverlayContext}>
+                {pronunciationOverlay}
+              </PronunciationOverlayPlaybackContext.Provider>
+              {pronunciationControl}
             </>
           ) : resolvedContent.phonetic ? (
             <div className="dictionary-popover__pronunciation-row">
@@ -224,9 +273,7 @@ export function DictionaryContent({
                 themeStyle={contentStyle}
                 word={resolvedContent.word}
               />
-              {pronounce ? (
-                <PronunciationButton pronounce={pronounce} word={activeKeyword} />
-              ) : null}
+              {pronunciationControl}
             </div>
           ) : null}
           {pronunciationOverlay !== undefined && overlayBlocked.length > 0 ? (
