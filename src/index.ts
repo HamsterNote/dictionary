@@ -19,7 +19,22 @@ export type {
   DictionarySource,
 } from './dictionaryData';
 export { getDetail, search } from './dictionaryData';
+export type { DictionaryProvider, DictionaryProviderOptions } from './dictionaryProvider';
+export { createDictionaryProvider } from './dictionaryProvider';
+export type { DictionaryQueryResult, DictionaryQueryState } from './dictionaryQueryController';
+export { DictionaryQueryController } from './dictionaryQueryController';
 export type { DictionaryEntrySummary } from './dictionaryEntrySummary';
+export type {
+  AsyncDictionaryEntryResolver,
+  DictionaryEntryResolver,
+  DictionaryTextToken,
+  ResolvedDictionaryTextSegment,
+} from './dictionaryTextCandidates';
+export {
+  extractDictionaryTextTokens,
+  resolveChineseText,
+  resolveDictionaryTextEntries,
+} from './dictionaryTextCandidates';
 export {
   ECDICT_SOURCE,
   getChineseSourceHref,

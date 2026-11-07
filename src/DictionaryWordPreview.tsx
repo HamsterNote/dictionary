@@ -7,6 +7,8 @@ import type { DictionaryEntrySummary } from './dictionaryEntrySummary';
 import { protectCjkLineBreaks } from './protectCjkLineBreaks';
 import { formatDictionaryPhonetic } from './formatDictionaryPhonetic';
 
+export type DictionaryWordPreviewStatus = 'error' | 'loading' | 'not-found' | 'ready';
+
 interface DictionaryWordPreviewProps {
   readonly anchor: HTMLElement;
   readonly entry: DictionaryEntrySummary;
@@ -15,9 +17,11 @@ interface DictionaryWordPreviewProps {
   readonly onExpand: (word: string) => void;
   readonly onPointerEnter?: (event: ReactPointerEvent<HTMLDivElement>) => void;
   readonly onPointerLeave?: (event: ReactPointerEvent<HTMLDivElement>) => void;
+  readonly onRetry?: () => void;
   /** 词条纠错前的原始词头；展开与查找始终使用它。 */
   readonly originalWord?: string;
   readonly showExpandButton?: boolean;
+  readonly status?: DictionaryWordPreviewStatus;
 }
 
 export function DictionaryWordPreview({
@@ -28,8 +32,10 @@ export function DictionaryWordPreview({
   onExpand,
   onPointerEnter,
   onPointerLeave,
+  onRetry,
   originalWord,
   showExpandButton = true,
+  status = 'ready',
 }: DictionaryWordPreviewProps) {
   const headingId = useId();
   const previewRef = useRef<HTMLDivElement>(null);
@@ -67,6 +73,7 @@ export function DictionaryWordPreview({
     <Popover
       anchor={anchor}
       anchorOffset={6}
+      aria-busy={status === 'loading'}
       aria-labelledby={headingId}
       className="dictionary-word-preview"
       onPointerEnter={onPointerEnter}
@@ -89,6 +96,7 @@ export function DictionaryWordPreview({
           <Button
             aria-label={`在主窗口打开 ${originalWord ?? entry.word}`}
             className="dictionary-word-preview__expand"
+            disabled={status !== 'ready'}
             ghost
             onClick={() => {
               onExpand(originalWord ?? entry.word);
@@ -100,9 +108,28 @@ export function DictionaryWordPreview({
           </Button>
         ) : null}
       </div>
-      <p className="dictionary-word-preview__definition">
-        {protectCjkLineBreaks(entry.definition)}
-      </p>
+      {status === 'loading' ? (
+        <p className="dictionary-word-preview__definition" role="status">
+          正在加载词条摘要…
+        </p>
+      ) : status === 'error' ? (
+        <div className="dictionary-word-preview__definition" role="alert">
+          <p>摘要加载失败，请重试。</p>
+          {onRetry ? (
+            <Button ghost size="small" onClick={onRetry}>
+              重新加载摘要
+            </Button>
+          ) : null}
+        </div>
+      ) : status === 'not-found' ? (
+        <p className="dictionary-word-preview__definition" role="status">
+          未找到该词条的摘要。
+        </p>
+      ) : (
+        <p className="dictionary-word-preview__definition">
+          {protectCjkLineBreaks(entry.definition)}
+        </p>
+      )}
     </Popover>
   );
 }

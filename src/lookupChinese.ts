@@ -25,7 +25,7 @@ function formatChineseHeadword(headword: string): string {
   return headword.replace(/,/gu, '，');
 }
 
-function normalizeChineseQuery(query: string): string {
+export function normalizeChineseQuery(query: string): string {
   return query.trim().normalize('NFKC').replace(/\s+/gu, ' ');
 }
 
@@ -85,11 +85,9 @@ export function suggestChineseEntries(
   });
 }
 
-export function resolveChineseEntry(
-  query: string,
-  dictionaryPacks: readonly ChineseDictionaryPack[],
+export function createChineseEntrySummary(
+  result: ChineseLookupResult,
 ): DictionaryEntrySummary | undefined {
-  const result = lookupChinese(query, dictionaryPacks);
   if (result.status === 'not-found') return undefined;
   const firstMeaning = result.meanings[0];
   if (firstMeaning === undefined) return undefined;
@@ -98,6 +96,13 @@ export function resolveChineseEntry(
     ...(result.phonetic ? { phonetic: result.phonetic } : {}),
     word: result.word,
   };
+}
+
+export function resolveChineseEntry(
+  query: string,
+  dictionaryPacks: readonly ChineseDictionaryPack[],
+): DictionaryEntrySummary | undefined {
+  return createChineseEntrySummary(lookupChinese(query, dictionaryPacks));
 }
 
 export function lookupChinese(

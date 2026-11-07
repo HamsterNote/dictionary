@@ -9,6 +9,7 @@
   ],
   "files": [
     "dist",
+    "resources",
     "THIRD_PARTY_NOTICES.md",
     "LICENSES"
   ],
@@ -24,6 +25,13 @@
       "types": "./dist/pronunciation-audio/browser.d.ts",
       "import": "./dist/pronunciation-audio/browser.js"
     },
+    "./offline-resources": {
+      "types": "./dist/offline-resources/index.d.ts",
+      "import": "./dist/offline-resources.js"
+    },
+    "./offline-resources/manifest.json": "./resources/dictionary/manifest.json",
+    "./offline-resources/assets/*": "./resources/dictionary/*",
+    "./package.json": "./package.json",
     "./pronunciation-overlay": {
       "types": "./dist/pronunciation-overlay/index.d.ts",
       "import": "./dist/pronunciation-overlay.js"
@@ -231,6 +239,7 @@
     "build:demo": "vite build --config vite.demo.config.ts",
     "generate:dictionary": "uv run scripts/generate_ecdict.py",
     "generate:chinese-dictionaries": "uv run scripts/generate_chinese_dictionaries.py",
+    "generate:offline-resources": "python3 scripts/generate_offline_dictionary_resources.py",
     "generate:examples": "uv run scripts/generate_oanc_examples.py",
     "generate:inflections": "uv run scripts/generate_ecdict_inflections.py",
     "generate:synonyms": "uv run scripts/generate_wordnet_synonyms.py",
@@ -239,6 +248,9 @@
     "generate:pronunciation-audio": "python3 scripts/generate_pronunciation_audio.py",
     "audit:pronunciations": "node scripts/audit_ecdict_pronunciations.mjs --write",
     "test:chinese": "python3 scripts/test_generate_chinese_dictionaries.py",
+    "test:offline-resources": "python3 scripts/test_generate_offline_dictionary_resources.py && node scripts/test_offline_dictionary_resources.mjs",
+    "test:dictionary-text": "node scripts/test_dictionary_text_candidates.mjs",
+    "test:preview-browser": "node scripts/test_preview_browser.mjs",
     "test:examples": "python3 scripts/test_generate_oanc_examples.py",
     "test:inflections": "python3 scripts/test_generate_ecdict_inflections.py",
     "test:kokoro": "yarn build:package && node scripts/test_kokoro_concurrency.mjs",
@@ -260,7 +272,7 @@
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "prepack": "yarn build:package",
-    "check": "yarn test:chinese && yarn test:examples && yarn test:inflections && yarn test:synonyms && yarn test:roots && yarn test:phonetics && yarn test:result-sources && yarn test:chinese-suggestions && yarn test:dictionary-candidates && yarn test:dictionary-data && yarn test:dictionary-corrections && yarn test:pronunciation-audit && yarn test:pronunciation-audio && yarn test:kokoro && yarn format:check && yarn lint && yarn typecheck && yarn build"
+    "check": "yarn test:chinese && yarn test:offline-resources && yarn test:dictionary-text && yarn test:examples && yarn test:inflections && yarn test:synonyms && yarn test:roots && yarn test:phonetics && yarn test:result-sources && yarn test:chinese-suggestions && yarn test:dictionary-candidates && yarn test:dictionary-data && yarn test:dictionary-corrections && yarn test:pronunciation-audit && yarn test:pronunciation-audio && yarn test:kokoro && yarn format:check && yarn lint && yarn typecheck && yarn build"
   },
   "peerDependencies": {
     "react": ">=19.0.0 <20.0.0",
@@ -268,6 +280,7 @@
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
+    "@playwright/test": "1.64.1",
     "@system-ui-js/multi-drag": "0.4.0",
     "@types/node": "^24.0.0",
     "@types/react": "^19.0.0",
@@ -294,6 +307,8 @@
   },
   "dependencies": {
     "@hamster-note/components": "0.3.0",
+    "@noble/hashes": "2.4.0",
+    "fflate": "0.8.3",
     "kokoro-js": "1.2.1"
   }
 }

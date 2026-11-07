@@ -95,7 +95,7 @@ export function findEnglishChineseEntryLabels(
   return labels;
 }
 
-function normalizeEnglishChineseQuery(query: string): string {
+export function normalizeEnglishChineseQuery(query: string): string {
   return query.trim().normalize('NFKC').toLocaleLowerCase('en-US').replace(/\s+/gu, ' ');
 }
 
