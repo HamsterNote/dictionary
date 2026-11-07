@@ -1,6 +1,7 @@
 import { type ThemeAccentPreset, ThemeProvider } from '@hamster-note/components/theme';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
+  createDictionaryProvider,
   DictionaryContent,
   type DictionaryEntrySummary,
   ENGLISH_CHINESE_CORE_GZIP_BYTES,
@@ -122,6 +123,27 @@ export function Demo() {
   const getDetail = useCallback(
     (word: string) =>
       getDictionaryDetail(word, {
+        chineseDictionaryPacks: dictionaryPacks.chineseDictionaryPacks,
+        englishExampleSentencePacks: dictionaryPacks.englishExampleSentencePacks,
+        englishInflectionFormsPacks: dictionaryPacks.englishInflectionFormsPacks,
+        englishInflectionIndexPacks: dictionaryPacks.englishInflectionIndexPacks,
+        englishRootPacks: dictionaryPacks.englishRootPacks,
+        englishSynonymPacks: dictionaryPacks.englishSynonymPacks,
+        englishVocabularyPacks: dictionaryPacks.englishVocabularyPacks,
+      }),
+    [
+      dictionaryPacks.chineseDictionaryPacks,
+      dictionaryPacks.englishExampleSentencePacks,
+      dictionaryPacks.englishInflectionFormsPacks,
+      dictionaryPacks.englishInflectionIndexPacks,
+      dictionaryPacks.englishRootPacks,
+      dictionaryPacks.englishSynonymPacks,
+      dictionaryPacks.englishVocabularyPacks,
+    ],
+  );
+  const provider = useMemo(
+    () =>
+      createDictionaryProvider({
         chineseDictionaryPacks: dictionaryPacks.chineseDictionaryPacks,
         englishExampleSentencePacks: dictionaryPacks.englishExampleSentencePacks,
         englishInflectionFormsPacks: dictionaryPacks.englishInflectionFormsPacks,
@@ -305,6 +327,7 @@ export function Demo() {
               open={isOpen}
               {...(!isChineseQuery && !isPronunciationEnabled ? { pronunciation } : {})}
               {...(!isChineseQuery && isPronunciationEnabled ? { pronounce: pronounceWord } : {})}
+              provider={provider}
               query={query}
               ref={popoverRef}
               search={search}

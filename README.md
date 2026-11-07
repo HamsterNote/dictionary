@@ -283,6 +283,12 @@ const loadXinhuaWords = () =>
 
 ECDICT 没有 TEM-4/TEM-8 标签，因此本包不把 GRE 或 CET-6 冒充为专八词表。数据来源、授权条件及上游权利风险见 [THIRD_PARTY_NOTICES.md](./THIRD_PARTY_NOTICES.md)，商用前请先审核。
 
+### 压缩分片与异步 provider
+
+`@hamster-note/dictionary/offline-resources` 提供四个中文包及 WordNet/UniMorph 十包的版本化 manifest、紧凑索引和 gzip 分片。宿主实现 `OfflineDictionaryResourceReader.read` 读取本地或同源资源；`OfflineDictionaryResourceStore` 负责按需解压和最高 12 MiB 的原始分片 LRU。`createDictionaryProvider({ offlineResources, ... })` 将同一资源上下文接入 search、详情和释义点词 resolver；旧同步 pack API 保持可用。该资源链不导入 `example-sentence-packs/*`。
+
+运行 `yarn generate:offline-resources` 可从已提交的固定 TSV 快照确定性重建资源，运行 `yarn test:offline-resources` 验证逐条重组、查询一致性、缓存逐出与失败重试。来源及许可随 `resources/dictionary` 一起打包，原生适配与验收限制见 HAM-189 的 OpenSpec 实施记录。
+
 ### 重新生成词表
 
 生成器只接受项目已审核的 ECDICT CSV 快照，并会在读取前校验 SHA-256：

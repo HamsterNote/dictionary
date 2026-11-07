@@ -11,7 +11,7 @@ import type {
 import { createEnglishResultSources } from './englishResultSources';
 import type { EnglishRootPack } from './englishRootPack';
 import type { EnglishSynonymPack } from './englishSynonymPack';
-import { lookupChinese } from './lookupChinese';
+import { lookupChinese, type ChineseLookupResult } from './lookupChinese';
 import { findEnglishChineseEntryLabels, lookupEnglishChinese } from './lookupEnglishChinese';
 import {
   type DictionaryCandidateSearchOptions,
@@ -80,6 +80,25 @@ export function search(
   return searchDictionaryCandidates(query, options);
 }
 
+export function createChineseDictionaryDetail(
+  result: ChineseLookupResult,
+): DictionaryDataDetail | undefined {
+  if (result.status === 'not-found') return undefined;
+  const href = getChineseSourceHref(result.sourceId);
+  return {
+    ...(result.phonetic ? { phonetic: result.phonetic } : {}),
+    sources: [
+      {
+        ...(href === undefined ? {} : { href }),
+        id: result.sourceId,
+        label: result.sourceLabel,
+        meanings: result.meanings,
+      },
+    ],
+    word: result.word,
+  };
+}
+
 export function getDetail(
   word: string,
   options: DictionaryDetailOptions = {},
@@ -88,21 +107,7 @@ export function getDetail(
     options.language === 'chinese' ||
     (options.language !== 'english' && HAN_CHARACTER_PATTERN.test(word));
   if (useChinese) {
-    const result = lookupChinese(word, options.chineseDictionaryPacks ?? []);
-    if (result.status === 'not-found') return undefined;
-    const href = getChineseSourceHref(result.sourceId);
-    return {
-      ...(result.phonetic ? { phonetic: result.phonetic } : {}),
-      sources: [
-        {
-          ...(href === undefined ? {} : { href }),
-          id: result.sourceId,
-          label: result.sourceLabel,
-          meanings: result.meanings,
-        },
-      ],
-      word: result.word,
-    };
+    return createChineseDictionaryDetail(lookupChinese(word, options.chineseDictionaryPacks ?? []));
   }
 
   const vocabularyPacks = options.englishVocabularyPacks ?? [];
