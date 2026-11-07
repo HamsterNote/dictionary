@@ -12,6 +12,7 @@ import {
   search as searchDictionary,
 } from '../../src';
 import type { KokoroPronouncer } from '../../src/kokoro';
+import { createPronunciationBrowserController } from '../../src/pronunciation-audio/browser';
 import { useDictionaryNavigation } from '../../src/useDictionaryNavigation';
 import { CopyrightNoticeDownload } from './CopyrightNoticeDownload';
 import { CorrectionLists } from './CorrectionLists';
@@ -31,6 +32,8 @@ export function Demo() {
   const corrections = useDemoCorrections();
   const [isOpen, setIsOpen] = useState(true);
   const [isPronunciationEnabled, setIsPronunciationEnabled] = useState(false);
+  const [pronunciation] = useState(createPronunciationBrowserController);
+  const pronunciationDisposeTimerRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
   const [query, setQuery] = useState('');
   const [themeAccent, setThemeAccent] = useState<ThemeAccentPreset>('blue');
   const focusTargetRef = useRef<'popover' | 'trigger' | null>(null);
@@ -164,6 +167,19 @@ export function Demo() {
     focusTargetRef.current = null;
   }, [isOpen]);
 
+  useEffect(() => {
+    if (pronunciationDisposeTimerRef.current !== undefined) {
+      clearTimeout(pronunciationDisposeTimerRef.current);
+      pronunciationDisposeTimerRef.current = undefined;
+    }
+    return () => {
+      pronunciationDisposeTimerRef.current = setTimeout(() => {
+        pronunciation.dispose();
+        pronunciationDisposeTimerRef.current = undefined;
+      }, 0);
+    };
+  }, [pronunciation]);
+
   useEffect(
     () => () => {
       void pronouncerPromiseRef.current?.then((pronouncer) => {
@@ -182,6 +198,7 @@ export function Demo() {
   }, []);
 
   const togglePronunciation = (enabled: boolean) => {
+    if (enabled) pronunciation.stop();
     setIsPronunciationEnabled(enabled);
     if (enabled) return;
     void pronouncerPromiseRef.current?.then((pronouncer) => {
@@ -286,6 +303,7 @@ export function Demo() {
               onQueryChange={navigation.onQueryChange}
               onSearch={navigation.search}
               open={isOpen}
+              {...(!isChineseQuery && !isPronunciationEnabled ? { pronunciation } : {})}
               {...(!isChineseQuery && isPronunciationEnabled ? { pronounce: pronounceWord } : {})}
               query={query}
               ref={popoverRef}
