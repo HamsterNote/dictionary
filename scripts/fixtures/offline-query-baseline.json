@@ -1,0 +1,2349 @@
+{
+  "version": 1,
+  "cases": [
+    {
+      "id": "overlap-single-character",
+      "query": "心",
+      "detail": {
+        "phonetic": "xīn",
+        "sources": [
+          {
+            "href": "https://github.com/mapull/chinese-dictionary/tree/e804ada333b68afddfdccbe8dcc938a72da157a7",
+            "id": "chinese-dictionary",
+            "label": "chinese-dictionary",
+            "meanings": [
+              {
+                "definition": "(象形。据甲骨文和小篆,中间像心;外面像心的包络。本义:心脏)。",
+                "id": "心-1",
+                "partOfSpeech": "常用汉字 · 4画 · 部首心"
+              },
+              {
+                "definition": "同本义。",
+                "id": "心-2"
+              },
+              {
+                "definition": "内心。",
+                "id": "心-3"
+              },
+              {
+                "definition": "古代人以心为思维器官,故后沿用为脑的代称。",
+                "id": "心-4"
+              },
+              {
+                "definition": "思想。",
+                "id": "心-5"
+              },
+              {
+                "definition": "中心,中央。",
+                "id": "心-6"
+              },
+              {
+                "definition": "又。",
+                "id": "心-7"
+              }
+            ]
+          }
+        ],
+        "word": "心"
+      },
+      "resolved": {
+        "definition": "(象形。据甲骨文和小篆,中间像心;外面像心的包络。本义:心脏)。",
+        "phonetic": "xīn",
+        "word": "心"
+      },
+      "suggestions": [
+        {
+          "definition": "(象形。据甲骨文和小篆,中间像心;外面像心的包络。本义:心脏)。",
+          "phonetic": "xīn",
+          "word": "心"
+        },
+        {
+          "definition": "心里，心中。",
+          "phonetic": "xīn shàng",
+          "word": "心上"
+        },
+        {
+          "definition": "心里，心中； 中医学指膈下胃脘的部位。",
+          "phonetic": "xīn xià",
+          "word": "心下"
+        },
+        {
+          "definition": "以心相许。",
+          "phonetic": "xīn yǔ",
+          "word": "心与"
+        },
+        {
+          "definition": "谓心思专一。",
+          "phonetic": "xīn zhuān",
+          "word": "心专"
+        },
+        {
+          "definition": "古时谓老师去世，弟子守丧，身无丧服而心存哀悼； 泛指无服或释服后的深切悼念，有如守丧。",
+          "phonetic": "xīn sàng",
+          "word": "心丧"
+        },
+        {
+          "definition": "中心点； 心里。",
+          "phonetic": "xīn zhōng",
+          "word": "心中"
+        },
+        {
+          "definition": "犹义气。",
+          "phonetic": "xīn yì",
+          "word": "心义"
+        },
+        {
+          "definition": "心里所想的事；看法欲将心事寄瑶琴，知音少，弦断有谁听｜父亲现在的唯一心事是希望我继续深造。",
+          "phonetic": "xīn shì",
+          "word": "心事"
+        },
+        {
+          "definition": "因理亏而感到心虚。",
+          "phonetic": "xīn kuī",
+          "word": "心亏"
+        },
+        {
+          "definition": "知心朋友。",
+          "phonetic": "xīn jiāo",
+          "word": "心交"
+        },
+        {
+          "definition": "心安。",
+          "phonetic": "xīn yì",
+          "word": "心亿"
+        },
+        {
+          "definition": "心中仰慕：～已久。",
+          "phonetic": "xīn yí",
+          "word": "心仪"
+        },
+        {
+          "definition": "犹心服。",
+          "phonetic": "xīn fú",
+          "word": "心伏"
+        },
+        {
+          "definition": "心中喜乐。语出《诗．小雅．菁菁者莪》\"既见君子，我心则休。\"马瑞辰通释\"休，亦喜也。\"",
+          "phonetic": "xīn xiū",
+          "word": "心休"
+        },
+        {
+          "definition": "心中领会。",
+          "phonetic": "xīn huì",
+          "word": "心会"
+        },
+        {
+          "definition": "佛教语。犹言以心传心。禅宗谓不立文字，不依经卷，唯以师徒心心相印，悟解契合，递相授受。见唐希运《传心法要》卷上。宋儒为宣扬道统，借指圣人以心性精义相传，谓《书．大禹谟》\"人心惟危，道心惟微，惟精惟一，允执厥中\"十六字为尧舜禹递相传授之心法，称\"十六字心传\"◇泛谓精义相传。",
+          "phonetic": "xīn chuán",
+          "word": "心传"
+        },
+        {
+          "definition": "害怕； 伤心。",
+          "phonetic": "xīn shāng",
+          "word": "心伤"
+        }
+      ]
+    },
+    {
+      "id": "whitespace-nfkc",
+      "query": "  ＮＯＴＥ  ",
+      "detail": {
+        "phonetic": "/nәut/",
+        "sources": [
+          {
+            "href": "https://github.com/skywind3000/ECDICT",
+            "id": "ecdict",
+            "label": "ECDICT · 命中：高频核心",
+            "meanings": [
+              {
+                "definition": "笔记，记录，注解，票据，符号，显要，注重，便笺，照会",
+                "id": "note-1",
+                "partOfSpeech": "noun · 名词"
+              },
+              {
+                "definition": "记录，注解，注意",
+                "id": "note-2",
+                "partOfSpeech": "transitive verb · 及物动词"
+              }
+            ]
+          },
+          {
+            "href": "https://github.com/skywind3000/ECDICT",
+            "id": "ecdict-inflections",
+            "label": "ECDICT",
+            "heading": "变形",
+            "meanings": [
+              {
+                "definition": "notes",
+                "id": "note-inflection-1",
+                "partOfSpeech": "第三人称"
+              },
+              {
+                "definition": "noted",
+                "id": "note-inflection-2",
+                "partOfSpeech": "过去分词"
+              },
+              {
+                "definition": "noting",
+                "id": "note-inflection-3",
+                "partOfSpeech": "进行时"
+              },
+              {
+                "definition": "noted",
+                "id": "note-inflection-4",
+                "partOfSpeech": "过去式"
+              },
+              {
+                "definition": "notes",
+                "id": "note-inflection-5",
+                "partOfSpeech": "复数"
+              }
+            ]
+          },
+          {
+            "href": "https://wordnetcode.princeton.edu/",
+            "id": "wordnet",
+            "label": "WordNet 3.1",
+            "heading": "近义词",
+            "meanings": [
+              {
+                "definition": "short letter · line · billet · annotation · notation · musical note · tone · bill · government note · bank bill · banker's bill · bank note · banknote · federal reserve note · greenback · promissory note · note of hand · eminence · distinction · preeminence · observe · mention · remark · take down · notice · mark · take note",
+                "id": "note-synonyms",
+                "partOfSpeech": "synonyms · 近义词"
+              }
+            ]
+          }
+        ],
+        "word": "note"
+      },
+      "resolved": {
+        "definition": "笔记，记录，注解，票据，符号，显要，注重，便笺，照会",
+        "phonetic": "/nәut/",
+        "word": "note"
+      },
+      "suggestions": [
+        {
+          "definition": "笔记，记录，注解，票据，符号，显要，注重，便笺，照会",
+          "phonetic": "/nәut/",
+          "word": "note"
+        },
+        {
+          "definition": "笔记本，手册，期票簿",
+          "phonetic": "/'nәutbuk/",
+          "word": "notebook"
+        },
+        {
+          "definition": "著名的，显著的，扬名的",
+          "phonetic": "/'nәutid/",
+          "word": "noted"
+        },
+        {
+          "definition": "值得注目的，显著的",
+          "phonetic": "/'nәutwә:ði/",
+          "word": "noteworthy"
+        },
+        {
+          "definition": "票据；注释，说明（note复数）",
+          "word": "notes"
+        },
+        {
+          "definition": "信纸，便条纸，笔记用纸",
+          "phonetic": "/'nәut.peipә/",
+          "word": "notepaper"
+        },
+        {
+          "definition": "记事本",
+          "word": "notepad"
+        }
+      ]
+    },
+    {
+      "id": "english-inflection",
+      "query": "went",
+      "detail": {
+        "sources": [
+          {
+            "href": "https://github.com/skywind3000/ECDICT",
+            "id": "ecdict",
+            "label": "ECDICT",
+            "meanings": [
+              {
+                "definition": "是 go 的过去式",
+                "id": "went-source-1"
+              }
+            ]
+          }
+        ],
+        "word": "went"
+      },
+      "resolved": {
+        "definition": "是 go 的过去式",
+        "word": "went"
+      },
+      "suggestions": [
+        {
+          "definition": "是 go 的过去式",
+          "word": "went"
+        },
+        {
+          "definition": "温特沃斯（英国一地名）；文特沃斯（男子名）",
+          "word": "wentworth"
+        }
+      ]
+    },
+    {
+      "id": "english-homograph",
+      "query": "found",
+      "detail": {
+        "phonetic": "/faund/",
+        "sources": [
+          {
+            "href": "https://github.com/skywind3000/ECDICT",
+            "id": "ecdict",
+            "label": "ECDICT · 命中：高频核心",
+            "meanings": [
+              {
+                "definition": "建立，创立，铸造",
+                "id": "found-1",
+                "partOfSpeech": "transitive verb · 及物动词"
+              },
+              {
+                "definition": "find的过去式和过去分词",
+                "id": "found-2"
+              }
+            ]
+          },
+          {
+            "href": "https://github.com/skywind3000/ECDICT",
+            "id": "ecdict-inflections",
+            "label": "ECDICT",
+            "heading": "变形",
+            "meanings": [
+              {
+                "definition": "founds",
+                "id": "found-inflection-1",
+                "partOfSpeech": "第三人称"
+              },
+              {
+                "definition": "founded",
+                "id": "found-inflection-2",
+                "partOfSpeech": "过去分词"
+              },
+              {
+                "definition": "founding",
+                "id": "found-inflection-3",
+                "partOfSpeech": "进行时"
+              },
+              {
+                "definition": "founded",
+                "id": "found-inflection-4",
+                "partOfSpeech": "过去式"
+              }
+            ]
+          },
+          {
+            "href": "https://wordnetcode.princeton.edu/",
+            "id": "wordnet",
+            "label": "WordNet 3.1",
+            "heading": "近义词",
+            "meanings": [
+              {
+                "definition": "establish · base · ground · plant · constitute · institute · set up · launch",
+                "id": "found-synonyms",
+                "partOfSpeech": "synonyms · 近义词"
+              }
+            ]
+          }
+        ],
+        "word": "found"
+      },
+      "resolved": {
+        "definition": "建立，创立，铸造",
+        "phonetic": "/faund/",
+        "word": "found"
+      },
+      "suggestions": [
+        {
+          "definition": "基础，根据，建立",
+          "phonetic": "/faun'deiʃәn/",
+          "word": "foundation"
+        },
+        {
+          "definition": "建立，创立，铸造",
+          "phonetic": "/faund/",
+          "word": "found"
+        },
+        {
+          "definition": "创立者，建立者",
+          "phonetic": "/'faundә/",
+          "word": "founder"
+        },
+        {
+          "definition": "[计] 铸造",
+          "phonetic": "/'faundiŋ/",
+          "word": "founding"
+        },
+        {
+          "definition": "铸造，铸造厂，铸造类",
+          "phonetic": "/'faundri/",
+          "word": "foundry"
+        },
+        {
+          "definition": "弃儿，拾来的孩儿",
+          "phonetic": "/'faundliŋ/",
+          "word": "foundling"
+        },
+        {
+          "definition": "基础主义",
+          "word": "foundationalism"
+        },
+        {
+          "definition": "基础的，基本的",
+          "word": "foundational"
+        }
+      ]
+    },
+    {
+      "id": "unknown",
+      "query": "hamster-word-that-does-not-exist",
+      "detail": null,
+      "resolved": null,
+      "suggestions": []
+    },
+    {
+      "id": "blank",
+      "query": "   ",
+      "detail": null,
+      "resolved": null,
+      "suggestions": []
+    },
+    {
+      "id": "unique:chinese-dictionary",
+      "query": "囱",
+      "detail": {
+        "phonetic": "cōng",
+        "sources": [
+          {
+            "href": "https://github.com/mapull/chinese-dictionary/tree/e804ada333b68afddfdccbe8dcc938a72da157a7",
+            "id": "chinese-dictionary",
+            "label": "chinese-dictionary",
+            "meanings": [
+              {
+                "definition": "灶突。今称烟囱。",
+                "id": "囱-1",
+                "partOfSpeech": "常用汉字 · 7画 · 部首囗"
+              }
+            ]
+          }
+        ],
+        "word": "囱"
+      },
+      "resolved": {
+        "definition": "灶突。今称烟囱。",
+        "phonetic": "cōng",
+        "word": "囱"
+      },
+      "suggestions": [
+        {
+          "definition": "灶突。今称烟囱。",
+          "phonetic": "cōng",
+          "word": "囱"
+        }
+      ]
+    },
+    {
+      "id": "unique:chinese-dictionary-words",
+      "query": "AA制",
+      "detail": {
+        "phonetic": "AA zhì",
+        "sources": [
+          {
+            "href": "https://github.com/mapull/chinese-dictionary/tree/e804ada333b68afddfdccbe8dcc938a72da157a7",
+            "id": "chinese-dictionary-words",
+            "label": "chinese-dictionary",
+            "meanings": [
+              {
+                "definition": "指聚餐或其他消费结账时各人平摊出钱或各人算各人账的做法。",
+                "id": "AA制-1",
+                "partOfSpeech": "词语"
+              }
+            ]
+          }
+        ],
+        "word": "AA制"
+      },
+      "resolved": {
+        "definition": "指聚餐或其他消费结账时各人平摊出钱或各人算各人账的做法。",
+        "phonetic": "AA zhì",
+        "word": "AA制"
+      },
+      "suggestions": [
+        {
+          "definition": "指聚餐或其他消费结账时各人平摊出钱或各人算各人账的做法。",
+          "phonetic": "AA zhì",
+          "word": "AA制"
+        }
+      ]
+    },
+    {
+      "id": "unique:chinese-xinhua",
+      "query": "嗄",
+      "detail": {
+        "phonetic": "á",
+        "sources": [
+          {
+            "href": "https://github.com/pwxcoo/chinese-xinhua/tree/fe6d6c2e8baa82187f4c96bbe042e43f96c05666",
+            "id": "chinese-xinhua",
+            "label": "chinese-xinhua 上游整理",
+            "meanings": [
+              {
+                "definition": "嗄〈叹〉 同啊”。表示省悟或惊奇 嗄!难道这里是没有地方官的么?--宋·佚名《新编五代史平话》 嗄á叹词。在句首，〈表〉疑问或反问～，这是什么？～，你想干什么？\"嗄\"另见shà㈠。 嗄shà ⒈声音嘶哑～声。 嗄a 1.助词。表示强调﹑肯定或辩解。 2.助词。方言。表示疑问或反诘。 嗄xià 1.见\"嗄饭\"。 2.见\"嗄程\"。",
+                "id": "嗄-1",
+                "partOfSpeech": "汉字 · 13画 · 部首口"
+              }
+            ]
+          }
+        ],
+        "word": "嗄"
+      },
+      "resolved": {
+        "definition": "嗄〈叹〉 同啊”。表示省悟或惊奇 嗄!难道这里是没有地方官的么?--宋·佚名《新编五代史平话》 嗄á叹词。在句首，〈表〉疑问或反问～，这是什么？～，你想干什么？\"嗄\"另见shà㈠。 嗄shà ⒈声音嘶哑～声。 嗄a 1.助词。表示强调﹑肯定或辩解。 2.助词。方言。表示疑问或反诘。 嗄xià 1.见\"嗄饭\"。 2.见\"嗄程\"。",
+        "phonetic": "á",
+        "word": "嗄"
+      },
+      "suggestions": [
+        {
+          "definition": "嗄〈叹〉 同啊”。表示省悟或惊奇 嗄!难道这里是没有地方官的么?--宋·佚名《新编五代史平话》 嗄á叹词。在句首，〈表〉疑问或反问～，这是什么？～，你想干什么？\"嗄\"另见shà㈠。 嗄shà ⒈声音嘶哑～声。 嗄a 1.助词。表示强调﹑肯定或辩解。 2.助词。方言。表示疑问或反诘。 嗄xià 1.见\"嗄饭\"。 2.见\"嗄程\"。",
+          "phonetic": "á",
+          "word": "嗄"
+        },
+        {
+          "definition": "嗓音嘶哑。",
+          "phonetic": "á yǎ",
+          "word": "嗄哑"
+        },
+        {
+          "definition": "嗓音嘶哑。",
+          "phonetic": "á sī",
+          "word": "嗄嘶"
+        },
+        {
+          "definition": "指送行的礼物。",
+          "phonetic": "á chéng",
+          "word": "嗄程"
+        },
+        {
+          "definition": "下饭的菜肴。",
+          "phonetic": "á fàn",
+          "word": "嗄飰"
+        },
+        {
+          "definition": "下饭的菜肴； 就着菜肴把饭吃下去。",
+          "phonetic": "á fàn",
+          "word": "嗄饭"
+        }
+      ]
+    },
+    {
+      "id": "unique:chinese-xinhua-words",
+      "query": "宸瞔",
+      "detail": {
+        "sources": [
+          {
+            "href": "https://github.com/pwxcoo/chinese-xinhua/tree/fe6d6c2e8baa82187f4c96bbe042e43f96c05666",
+            "id": "chinese-xinhua-words",
+            "label": "chinese-xinhua 词语",
+            "meanings": [
+              {
+                "definition": "1.帝王的眷注﹑恩宠。瞔，同\"眷\"。",
+                "id": "宸瞔-1",
+                "partOfSpeech": "词语"
+              }
+            ]
+          }
+        ],
+        "word": "宸瞔"
+      },
+      "resolved": {
+        "definition": "1.帝王的眷注﹑恩宠。瞔，同\"眷\"。",
+        "word": "宸瞔"
+      },
+      "suggestions": [
+        {
+          "definition": "1.帝王的眷注﹑恩宠。瞔，同\"眷\"。",
+          "word": "宸瞔"
+        }
+      ]
+    },
+    {
+      "id": "idiom",
+      "query": "阿鼻地狱",
+      "detail": {
+        "phonetic": "ā bí dì yù",
+        "sources": [
+          {
+            "href": "https://github.com/mapull/chinese-dictionary/tree/e804ada333b68afddfdccbe8dcc938a72da157a7",
+            "id": "chinese-dictionary-words",
+            "label": "chinese-dictionary",
+            "meanings": [
+              {
+                "definition": "阿鼻：梵语的译音，意译为“无间”，即痛苦无有间断之意。常用来比喻黑暗的社会和严酷的牢狱。又比喻无法摆脱的极其痛苦的境地。",
+                "id": "阿鼻地狱-1",
+                "partOfSpeech": "词语"
+              }
+            ]
+          }
+        ],
+        "word": "阿鼻地狱"
+      },
+      "resolved": {
+        "definition": "阿鼻：梵语的译音，意译为“无间”，即痛苦无有间断之意。常用来比喻黑暗的社会和严酷的牢狱。又比喻无法摆脱的极其痛苦的境地。",
+        "phonetic": "ā bí dì yù",
+        "word": "阿鼻地狱"
+      },
+      "suggestions": [
+        {
+          "definition": "阿鼻：梵语的译音，意译为“无间”，即痛苦无有间断之意。常用来比喻黑暗的社会和严酷的牢狱。又比喻无法摆脱的极其痛苦的境地。",
+          "phonetic": "ā bí dì yù",
+          "word": "阿鼻地狱"
+        }
+      ]
+    },
+    {
+      "id": "synonyms:core",
+      "query": "a",
+      "detail": {
+        "phonetic": "/ei/",
+        "sources": [
+          {
+            "href": "https://github.com/skywind3000/ECDICT",
+            "id": "ecdict",
+            "label": "ECDICT · 命中：高频核心",
+            "meanings": [
+              {
+                "definition": "第一个字母 A; 一个; 第一的",
+                "id": "a-1"
+              },
+              {
+                "definition": "[计] 累加器，加法器，地址，振幅，模拟，区域，面积，汇编，组件，异步",
+                "id": "a-2",
+                "partOfSpeech": "art"
+              }
+            ]
+          },
+          {
+            "href": "https://wordnetcode.princeton.edu/",
+            "id": "wordnet",
+            "label": "WordNet 3.1",
+            "heading": "近义词",
+            "meanings": [
+              {
+                "definition": "type a · group a · ampere · amp · angstrom · angstrom unit · adenine · deoxyadenosine monophosphate · vitamin a · antiophthalmic factor · axerophthol",
+                "id": "a-synonyms",
+                "partOfSpeech": "synonyms · 近义词"
+              }
+            ]
+          }
+        ],
+        "word": "a"
+      },
+      "resolved": {
+        "definition": "第一个字母 A; 一个; 第一的",
+        "phonetic": "/ei/",
+        "word": "a"
+      },
+      "suggestions": [
+        {
+          "definition": "和，与",
+          "phonetic": "/ænd/",
+          "word": "and"
+        },
+        {
+          "definition": "第一个字母 A; 一个; 第一的",
+          "phonetic": "/ei/",
+          "word": "a"
+        },
+        {
+          "definition": "在，向，对",
+          "phonetic": "/æt/",
+          "word": "at"
+        },
+        {
+          "definition": "一",
+          "phonetic": "/æn/",
+          "word": "an"
+        },
+        {
+          "definition": "同样地，例如",
+          "phonetic": "/æz/",
+          "word": "as"
+        },
+        {
+          "definition": "所有的，全部的，一切的",
+          "phonetic": "/ɒ:l/",
+          "word": "all"
+        },
+        {
+          "definition": "在……周围，大约，有关，关于",
+          "phonetic": "/ә'baut/",
+          "word": "about"
+        },
+        {
+          "definition": "也，并且，同样地",
+          "phonetic": "/'ɒ:lsәu/",
+          "word": "also"
+        },
+        {
+          "definition": "任何的",
+          "phonetic": "/'eni/",
+          "word": "any"
+        },
+        {
+          "definition": "在……之后，由于",
+          "phonetic": "/'ɑ:ftә/",
+          "word": "after"
+        },
+        {
+          "definition": "问，要求",
+          "phonetic": "/ɑ:sk/",
+          "word": "ask"
+        },
+        {
+          "definition": "另外的，再一的，不同的",
+          "phonetic": "/ә'nʌðә/",
+          "word": "another"
+        },
+        {
+          "definition": "区域，面积，范围，空地",
+          "phonetic": "/'єәriә/",
+          "word": "area"
+        },
+        {
+          "definition": "反对，对着，倚靠",
+          "phonetic": "/ә'geinst/",
+          "word": "against"
+        },
+        {
+          "definition": "再一次，又，到原处",
+          "phonetic": "/ә'gein/",
+          "word": "again"
+        },
+        {
+          "definition": "美国人",
+          "phonetic": "/ә'merikәn/",
+          "word": "american"
+        },
+        {
+          "definition": "总是，始终",
+          "phonetic": "/'ɒ:lweiz/",
+          "word": "always"
+        },
+        {
+          "definition": "虽然，尽管",
+          "phonetic": "/ɒ:l'ðou/",
+          "word": "although"
+        }
+      ]
+    },
+    {
+      "id": "synonyms:zk",
+      "query": "ache",
+      "detail": {
+        "phonetic": "/eik/",
+        "sources": [
+          {
+            "href": "https://github.com/skywind3000/ECDICT",
+            "id": "ecdict",
+            "label": "ECDICT · 命中：中考 + 高考 + CET-4 + 考研 + BNC",
+            "meanings": [
+              {
+                "definition": "疼痛",
+                "id": "ache-1",
+                "partOfSpeech": "noun · 名词"
+              },
+              {
+                "definition": "痛，哀怜，渴望",
+                "id": "ache-2",
+                "partOfSpeech": "intransitive verb · 不及物动词"
+              }
+            ]
+          },
+          {
+            "href": "https://github.com/skywind3000/ECDICT",
+            "id": "ecdict-inflections",
+            "label": "ECDICT",
+            "heading": "变形",
+            "meanings": [
+              {
+                "definition": "aches",
+                "id": "ache-inflection-1",
+                "partOfSpeech": "第三人称"
+              },
+              {
+                "definition": "ached",
+                "id": "ache-inflection-2",
+                "partOfSpeech": "过去分词"
+              },
+              {
+                "definition": "aching",
+                "id": "ache-inflection-3",
+                "partOfSpeech": "进行时"
+              },
+              {
+                "definition": "ached",
+                "id": "ache-inflection-4",
+                "partOfSpeech": "过去式"
+              }
+            ]
+          },
+          {
+            "href": "https://wordnetcode.princeton.edu/",
+            "id": "wordnet",
+            "label": "WordNet 3.1",
+            "heading": "近义词",
+            "meanings": [
+              {
+                "definition": "aching · yearn · yen · pine · languish · hurt · suffer · smart",
+                "id": "ache-synonyms",
+                "partOfSpeech": "synonyms · 近义词"
+              }
+            ]
+          }
+        ],
+        "word": "ache"
+      },
+      "resolved": {
+        "definition": "疼痛",
+        "phonetic": "/eik/",
+        "word": "ache"
+      },
+      "suggestions": [
+        {
+          "definition": "疼痛",
+          "phonetic": "/eik/",
+          "word": "ache"
+        },
+        {
+          "definition": "艾奇逊（①姓氏 ②Dean Gooderham, 1893-1971, 于1949-1953年任美国国务卿）",
+          "phonetic": "/'ætʃisn/",
+          "word": "acheson"
+        }
+      ]
+    },
+    {
+      "id": "synonyms:gk",
+      "query": "abnormal",
+      "detail": {
+        "phonetic": "/æb'nɒ:mәl/",
+        "sources": [
+          {
+            "href": "https://github.com/skywind3000/ECDICT",
+            "id": "ecdict",
+            "label": "ECDICT · 命中：高考 + CET-4 + CET-6 + 考研 + IELTS + TOEFL + BNC",
+            "meanings": [
+              {
+                "definition": "反常的，不规则的，变态的，畸形的",
+                "id": "abnormal-1",
+                "partOfSpeech": "adjective · 形容词"
+              },
+              {
+                "definition": "畸形的人",
+                "id": "abnormal-2",
+                "partOfSpeech": "noun · 名词"
+              }
+            ]
+          },
+          {
+            "href": "https://github.com/skywind3000/ECDICT",
+            "id": "ecdict-inflections",
+            "label": "ECDICT",
+            "heading": "变形",
+            "meanings": [
+              {
+                "definition": "abnormals",
+                "id": "abnormal-inflection-1",
+                "partOfSpeech": "复数"
+              }
+            ]
+          },
+          {
+            "href": "https://wordnetcode.princeton.edu/",
+            "id": "wordnet",
+            "label": "WordNet 3.1",
+            "heading": "近义词",
+            "meanings": [
+              {
+                "definition": "unnatural",
+                "id": "abnormal-synonyms",
+                "partOfSpeech": "synonyms · 近义词"
+              }
+            ]
+          },
+          {
+            "href": "https://github.com/unimorph/eng",
+            "id": "unimorph",
+            "label": "UniMorph · MorphyNet",
+            "heading": "派生基词",
+            "meanings": [
+              {
+                "definition": "normal ab-",
+                "id": "abnormal-root-1",
+                "partOfSpeech": "ADJ → ADJ"
+              }
+            ]
+          }
+        ],
+        "word": "abnormal"
+      },
+      "resolved": {
+        "definition": "反常的，不规则的，变态的，畸形的",
+        "phonetic": "/æb'nɒ:mәl/",
+        "word": "abnormal"
+      },
+      "suggestions": [
+        {
+          "definition": "反常的，不规则的，变态的，畸形的",
+          "phonetic": "/æb'nɒ:mәl/",
+          "word": "abnormal"
+        },
+        {
+          "definition": "反常，畸形，变态",
+          "phonetic": "/.æbnɒ:'mæliti/",
+          "word": "abnormality"
+        },
+        {
+          "definition": "不正常，异常，（贬）不同寻常，不规则，变态，反常",
+          "word": "abnormally"
+        }
+      ]
+    },
+    {
+      "id": "synonyms:cet4",
+      "query": "acceleration",
+      "detail": {
+        "phonetic": "/әk.selә'reiʃәn/",
+        "sources": [
+          {
+            "href": "https://github.com/skywind3000/ECDICT",
+            "id": "ecdict",
+            "label": "ECDICT · 命中：CET-4 + TOEFL + BNC",
+            "meanings": [
+              {
+                "definition": "加速，促进，加速度",
+                "id": "acceleration-1",
+                "partOfSpeech": "noun · 名词"
+              },
+              {
+                "definition": "[化] 加速度",
+                "id": "acceleration-2"
+              }
+            ]
+          },
+          {
+            "href": "https://github.com/skywind3000/ECDICT",
+            "id": "ecdict-inflections",
+            "label": "ECDICT",
+            "heading": "变形",
+            "meanings": [
+              {
+                "definition": "accelerations",
+                "id": "acceleration-inflection-1",
+                "partOfSpeech": "复数"
+              }
+            ]
+          },
+          {
+            "href": "https://wordnetcode.princeton.edu/",
+            "id": "wordnet",
+            "label": "WordNet 3.1",
+            "heading": "近义词",
+            "meanings": [
+              {
+                "definition": "quickening · speedup",
+                "id": "acceleration-synonyms",
+                "partOfSpeech": "synonyms · 近义词"
+              }
+            ]
+          },
+          {
+            "href": "https://github.com/unimorph/eng",
+            "id": "unimorph",
+            "label": "UniMorph · MorphyNet",
+            "heading": "派生基词",
+            "meanings": [
+              {
+                "definition": "accelerate -ion",
+                "id": "acceleration-root-1",
+                "partOfSpeech": "V → N"
+              }
+            ]
+          }
+        ],
+        "word": "acceleration"
+      },
+      "resolved": {
+        "definition": "加速，促进，加速度",
+        "phonetic": "/әk.selә'reiʃәn/",
+        "word": "acceleration"
+      },
+      "suggestions": [
+        {
+          "definition": "加速，促进，加速度",
+          "phonetic": "/әk.selә'reiʃәn/",
+          "word": "acceleration"
+        }
+      ]
+    },
+    {
+      "id": "synonyms:cet6",
+      "query": "abide",
+      "detail": {
+        "phonetic": "/ә'baid/",
+        "sources": [
+          {
+            "href": "https://github.com/skywind3000/ECDICT",
+            "id": "ecdict",
+            "label": "ECDICT · 命中：CET-6 + 考研 + TOEFL + GRE + BNC",
+            "meanings": [
+              {
+                "definition": "停留，遵守，居留，继续下去",
+                "id": "abide-1",
+                "partOfSpeech": "intransitive verb · 不及物动词"
+              },
+              {
+                "definition": "忍受，经受，屈从于",
+                "id": "abide-2",
+                "partOfSpeech": "transitive verb · 及物动词"
+              }
+            ]
+          },
+          {
+            "href": "https://github.com/skywind3000/ECDICT",
+            "id": "ecdict-inflections",
+            "label": "ECDICT",
+            "heading": "变形",
+            "meanings": [
+              {
+                "definition": "abides",
+                "id": "abide-inflection-1",
+                "partOfSpeech": "第三人称"
+              },
+              {
+                "definition": "abided",
+                "id": "abide-inflection-2",
+                "partOfSpeech": "过去分词"
+              },
+              {
+                "definition": "abode",
+                "id": "abide-inflection-3",
+                "partOfSpeech": "过去分词"
+              },
+              {
+                "definition": "abiding",
+                "id": "abide-inflection-4",
+                "partOfSpeech": "进行时"
+              },
+              {
+                "definition": "abided",
+                "id": "abide-inflection-5",
+                "partOfSpeech": "过去式"
+              },
+              {
+                "definition": "abode",
+                "id": "abide-inflection-6",
+                "partOfSpeech": "过去式"
+              }
+            ]
+          },
+          {
+            "href": "https://wordnetcode.princeton.edu/",
+            "id": "wordnet",
+            "label": "WordNet 3.1",
+            "heading": "近义词",
+            "meanings": [
+              {
+                "definition": "digest · endure · stick out · stomach · bear · stand · tolerate · support · brook · suffer · put up · bide · stay",
+                "id": "abide-synonyms",
+                "partOfSpeech": "synonyms · 近义词"
+              }
+            ]
+          },
+          {
+            "href": "https://github.com/unimorph/eng",
+            "id": "unimorph",
+            "label": "UniMorph · MorphyNet",
+            "heading": "派生基词",
+            "meanings": [
+              {
+                "definition": "bide a-",
+                "id": "abide-root-1",
+                "partOfSpeech": "V → V"
+              }
+            ]
+          }
+        ],
+        "word": "abide"
+      },
+      "resolved": {
+        "definition": "停留，遵守，居留，继续下去",
+        "phonetic": "/ә'baid/",
+        "word": "abide"
+      },
+      "suggestions": [
+        {
+          "definition": "停留，遵守，居留，继续下去",
+          "phonetic": "/ә'baid/",
+          "word": "abide"
+        }
+      ]
+    },
+    {
+      "id": "synonyms:ky",
+      "query": "abdomen",
+      "detail": {
+        "phonetic": "/'æbdәmen/",
+        "sources": [
+          {
+            "href": "https://github.com/skywind3000/ECDICT",
+            "id": "ecdict",
+            "label": "ECDICT · 命中：考研 + BNC",
+            "meanings": [
+              {
+                "definition": "腹部",
+                "id": "abdomen-1",
+                "partOfSpeech": "noun · 名词"
+              },
+              {
+                "definition": "[医] 腹[部]",
+                "id": "abdomen-2"
+              }
+            ]
+          },
+          {
+            "href": "https://github.com/skywind3000/ECDICT",
+            "id": "ecdict-inflections",
+            "label": "ECDICT",
+            "heading": "变形",
+            "meanings": [
+              {
+                "definition": "abdomens",
+                "id": "abdomen-inflection-1",
+                "partOfSpeech": "复数"
+              }
+            ]
+          },
+          {
+            "href": "https://wordnetcode.princeton.edu/",
+            "id": "wordnet",
+            "label": "WordNet 3.1",
+            "heading": "近义词",
+            "meanings": [
+              {
+                "definition": "venter · stomach · belly · abdominal cavity",
+                "id": "abdomen-synonyms",
+                "partOfSpeech": "synonyms · 近义词"
+              }
+            ]
+          }
+        ],
+        "word": "abdomen"
+      },
+      "resolved": {
+        "definition": "腹部",
+        "phonetic": "/'æbdәmen/",
+        "word": "abdomen"
+      },
+      "suggestions": [
+        {
+          "definition": "腹部",
+          "phonetic": "/'æbdәmen/",
+          "word": "abdomen"
+        }
+      ]
+    },
+    {
+      "id": "synonyms:ielts",
+      "query": "aboriginal",
+      "detail": {
+        "phonetic": "/.æbә'ridʒәnәl/",
+        "sources": [
+          {
+            "href": "https://github.com/skywind3000/ECDICT",
+            "id": "ecdict",
+            "label": "ECDICT · 命中：IELTS + GRE + BNC",
+            "meanings": [
+              {
+                "definition": "原始的，土著的",
+                "id": "aboriginal-1",
+                "partOfSpeech": "adjective · 形容词"
+              },
+              {
+                "definition": "土著居民，土生生物",
+                "id": "aboriginal-2",
+                "partOfSpeech": "noun · 名词"
+              }
+            ]
+          },
+          {
+            "href": "https://github.com/skywind3000/ECDICT",
+            "id": "ecdict-inflections",
+            "label": "ECDICT",
+            "heading": "变形",
+            "meanings": [
+              {
+                "definition": "aboriginals",
+                "id": "aboriginal-inflection-1",
+                "partOfSpeech": "复数"
+              }
+            ]
+          },
+          {
+            "href": "https://wordnetcode.princeton.edu/",
+            "id": "wordnet",
+            "label": "WordNet 3.1",
+            "heading": "近义词",
+            "meanings": [
+              {
+                "definition": "native · indigen · indigene · aborigine · primal · primeval · primaeval · primordial",
+                "id": "aboriginal-synonyms",
+                "partOfSpeech": "synonyms · 近义词"
+              }
+            ]
+          },
+          {
+            "href": "https://github.com/unimorph/eng",
+            "id": "unimorph",
+            "label": "UniMorph · MorphyNet",
+            "heading": "派生基词",
+            "meanings": [
+              {
+                "definition": "aborigine -al",
+                "id": "aboriginal-root-1",
+                "partOfSpeech": "N → ADJ"
+              }
+            ]
+          }
+        ],
+        "word": "aboriginal"
+      },
+      "resolved": {
+        "definition": "原始的，土著的",
+        "phonetic": "/.æbә'ridʒәnәl/",
+        "word": "aboriginal"
+      },
+      "suggestions": [
+        {
+          "definition": "原始的，土著的",
+          "phonetic": "/.æbә'ridʒәnәl/",
+          "word": "aboriginal"
+        },
+        {
+          "definition": "土著居民（aboriginal复数）",
+          "word": "aboriginals"
+        }
+      ]
+    },
+    {
+      "id": "synonyms:toefl",
+      "query": "abandoned",
+      "detail": {
+        "phonetic": "/ә'bændәnd/",
+        "sources": [
+          {
+            "href": "https://github.com/skywind3000/ECDICT",
+            "id": "ecdict",
+            "label": "ECDICT · 命中：TOEFL + BNC",
+            "meanings": [
+              {
+                "definition": "被抛弃的，无约束的，恣意放荡的",
+                "id": "abandoned-1",
+                "partOfSpeech": "adjective · 形容词"
+              }
+            ]
+          },
+          {
+            "href": "https://wordnetcode.princeton.edu/",
+            "id": "wordnet",
+            "label": "WordNet 3.1",
+            "heading": "近义词",
+            "meanings": [
+              {
+                "definition": "derelict · deserted",
+                "id": "abandoned-synonyms",
+                "partOfSpeech": "synonyms · 近义词"
+              }
+            ]
+          },
+          {
+            "href": "https://github.com/unimorph/eng",
+            "id": "unimorph",
+            "label": "UniMorph · MorphyNet",
+            "heading": "派生基词",
+            "meanings": [
+              {
+                "definition": "abandon -ed",
+                "id": "abandoned-root-1",
+                "partOfSpeech": "N → ADJ"
+              }
+            ]
+          }
+        ],
+        "word": "abandoned"
+      },
+      "resolved": {
+        "definition": "被抛弃的，无约束的，恣意放荡的",
+        "phonetic": "/ә'bændәnd/",
+        "word": "abandoned"
+      },
+      "suggestions": [
+        {
+          "definition": "被抛弃的，无约束的，恣意放荡的",
+          "phonetic": "/ә'bændәnd/",
+          "word": "abandoned"
+        }
+      ]
+    },
+    {
+      "id": "synonyms:gre",
+      "query": "abase",
+      "detail": {
+        "phonetic": "/ә'beis/",
+        "sources": [
+          {
+            "href": "https://github.com/skywind3000/ECDICT",
+            "id": "ecdict",
+            "label": "ECDICT · 命中：GRE + BNC",
+            "meanings": [
+              {
+                "definition": "降低……的地位，降低……的品格，贬抑，使谦卑",
+                "id": "abase-1",
+                "partOfSpeech": "transitive verb · 及物动词"
+              }
+            ]
+          },
+          {
+            "href": "https://github.com/skywind3000/ECDICT",
+            "id": "ecdict-inflections",
+            "label": "ECDICT",
+            "heading": "变形",
+            "meanings": [
+              {
+                "definition": "abases",
+                "id": "abase-inflection-1",
+                "partOfSpeech": "第三人称"
+              },
+              {
+                "definition": "abased",
+                "id": "abase-inflection-2",
+                "partOfSpeech": "过去分词"
+              },
+              {
+                "definition": "abasing",
+                "id": "abase-inflection-3",
+                "partOfSpeech": "进行时"
+              },
+              {
+                "definition": "abased",
+                "id": "abase-inflection-4",
+                "partOfSpeech": "过去式"
+              }
+            ]
+          },
+          {
+            "href": "https://wordnetcode.princeton.edu/",
+            "id": "wordnet",
+            "label": "WordNet 3.1",
+            "heading": "近义词",
+            "meanings": [
+              {
+                "definition": "humiliate · mortify · chagrin · humble",
+                "id": "abase-synonyms",
+                "partOfSpeech": "synonyms · 近义词"
+              }
+            ]
+          }
+        ],
+        "word": "abase"
+      },
+      "resolved": {
+        "definition": "降低……的地位，降低……的品格，贬抑，使谦卑",
+        "phonetic": "/ә'beis/",
+        "word": "abase"
+      },
+      "suggestions": [
+        {
+          "definition": "降低……的地位，降低……的品格，贬抑，使谦卑",
+          "phonetic": "/ә'beis/",
+          "word": "abase"
+        },
+        {
+          "definition": "贬抑，屈辱，谦卑",
+          "phonetic": "/ә'beismәnt/",
+          "word": "abasement"
+        }
+      ]
+    },
+    {
+      "id": "synonyms:bnc",
+      "query": "aa",
+      "detail": {
+        "phonetic": "/ɔ:/",
+        "sources": [
+          {
+            "href": "https://github.com/skywind3000/ECDICT",
+            "id": "ecdict",
+            "label": "ECDICT · 命中：BNC",
+            "meanings": [
+              {
+                "definition": "[计] 绝对地址，农业自动化，自动应答",
+                "id": "aa-1"
+              },
+              {
+                "definition": "[医] 各，各个",
+                "id": "aa-2"
+              }
+            ]
+          },
+          {
+            "href": "https://wordnetcode.princeton.edu/",
+            "id": "wordnet",
+            "label": "WordNet 3.1",
+            "heading": "近义词",
+            "meanings": [
+              {
+                "definition": "associate in arts · alcoholics anonymous",
+                "id": "aa-synonyms",
+                "partOfSpeech": "synonyms · 近义词"
+              }
+            ]
+          }
+        ],
+        "word": "aa"
+      },
+      "resolved": {
+        "definition": "[计] 绝对地址，农业自动化，自动应答",
+        "phonetic": "/ɔ:/",
+        "word": "aa"
+      },
+      "suggestions": [
+        {
+          "definition": "[计] 绝对地址，农业自动化，自动应答",
+          "phonetic": "/ɔ:/",
+          "word": "aa"
+        },
+        {
+          "definition": "亚伦（男子名）；[圣经]亚伦（摩西之兄，犹太教的第一祭司长）",
+          "phonetic": "/'eәrәn/",
+          "word": "aaron"
+        },
+        {
+          "definition": "[军] Armored Artillery Howitzer, 装甲榴弹炮",
+          "phonetic": "/ɑ:/",
+          "word": "aah"
+        },
+        {
+          "definition": "啊",
+          "phonetic": "/ɑ:/",
+          "word": "aargh"
+        },
+        {
+          "definition": "[医] 急性焦虑发作",
+          "word": "aaa"
+        },
+        {
+          "definition": "亚琛[德意志联邦共和国西部城市]",
+          "phonetic": "/'ɑ:kәn/",
+          "word": "aachen"
+        },
+        {
+          "definition": "American Association for the Advancement of the Humanities 美国人权促进会",
+          "word": "aaah"
+        }
+      ]
+    },
+    {
+      "id": "roots:core",
+      "query": "ability",
+      "detail": {
+        "phonetic": "/ә'biliti/",
+        "sources": [
+          {
+            "href": "https://github.com/skywind3000/ECDICT",
+            "id": "ecdict",
+            "label": "ECDICT · 命中：高频核心",
+            "meanings": [
+              {
+                "definition": "能力，才干",
+                "id": "ability-1",
+                "partOfSpeech": "noun · 名词"
+              },
+              {
+                "definition": "[经] 能力，才能",
+                "id": "ability-2"
+              }
+            ]
+          },
+          {
+            "href": "https://github.com/skywind3000/ECDICT",
+            "id": "ecdict-inflections",
+            "label": "ECDICT",
+            "heading": "变形",
+            "meanings": [
+              {
+                "definition": "abilities",
+                "id": "ability-inflection-1",
+                "partOfSpeech": "复数"
+              }
+            ]
+          },
+          {
+            "href": "https://wordnetcode.princeton.edu/",
+            "id": "wordnet",
+            "label": "WordNet 3.1",
+            "heading": "近义词",
+            "meanings": [
+              {
+                "definition": "power",
+                "id": "ability-synonyms",
+                "partOfSpeech": "synonyms · 近义词"
+              }
+            ]
+          },
+          {
+            "href": "https://github.com/unimorph/eng",
+            "id": "unimorph",
+            "label": "UniMorph · MorphyNet",
+            "heading": "派生基词",
+            "meanings": [
+              {
+                "definition": "able -ity",
+                "id": "ability-root-1",
+                "partOfSpeech": "N → N"
+              }
+            ]
+          }
+        ],
+        "word": "ability"
+      },
+      "resolved": {
+        "definition": "能力，才干",
+        "phonetic": "/ә'biliti/",
+        "word": "ability"
+      },
+      "suggestions": [
+        {
+          "definition": "能力，才干",
+          "phonetic": "/ә'biliti/",
+          "word": "ability"
+        }
+      ]
+    },
+    {
+      "id": "roots:zk",
+      "query": "aloud",
+      "detail": {
+        "phonetic": "/ә'laud/",
+        "sources": [
+          {
+            "href": "https://github.com/skywind3000/ECDICT",
+            "id": "ecdict",
+            "label": "ECDICT · 命中：中考 + 高考 + CET-4 + 考研 + BNC",
+            "meanings": [
+              {
+                "definition": "出声地，大声地",
+                "id": "aloud-1",
+                "partOfSpeech": "adverb · 副词"
+              }
+            ]
+          },
+          {
+            "href": "https://wordnetcode.princeton.edu/",
+            "id": "wordnet",
+            "label": "WordNet 3.1",
+            "heading": "近义词",
+            "meanings": [
+              {
+                "definition": "out loud · loudly · loud",
+                "id": "aloud-synonyms",
+                "partOfSpeech": "synonyms · 近义词"
+              }
+            ]
+          },
+          {
+            "href": "https://github.com/unimorph/eng",
+            "id": "unimorph",
+            "label": "UniMorph · MorphyNet",
+            "heading": "派生基词",
+            "meanings": [
+              {
+                "definition": "loud a-",
+                "id": "aloud-root-1",
+                "partOfSpeech": "ADJ → ADV"
+              }
+            ]
+          }
+        ],
+        "word": "aloud"
+      },
+      "resolved": {
+        "definition": "出声地，大声地",
+        "phonetic": "/ә'laud/",
+        "word": "aloud"
+      },
+      "suggestions": [
+        {
+          "definition": "出声地，大声地",
+          "phonetic": "/ә'laud/",
+          "word": "aloud"
+        }
+      ]
+    },
+    {
+      "id": "roots:gk",
+      "query": "abnormal",
+      "detail": {
+        "phonetic": "/æb'nɒ:mәl/",
+        "sources": [
+          {
+            "href": "https://github.com/skywind3000/ECDICT",
+            "id": "ecdict",
+            "label": "ECDICT · 命中：高考 + CET-4 + CET-6 + 考研 + IELTS + TOEFL + BNC",
+            "meanings": [
+              {
+                "definition": "反常的，不规则的，变态的，畸形的",
+                "id": "abnormal-1",
+                "partOfSpeech": "adjective · 形容词"
+              },
+              {
+                "definition": "畸形的人",
+                "id": "abnormal-2",
+                "partOfSpeech": "noun · 名词"
+              }
+            ]
+          },
+          {
+            "href": "https://github.com/skywind3000/ECDICT",
+            "id": "ecdict-inflections",
+            "label": "ECDICT",
+            "heading": "变形",
+            "meanings": [
+              {
+                "definition": "abnormals",
+                "id": "abnormal-inflection-1",
+                "partOfSpeech": "复数"
+              }
+            ]
+          },
+          {
+            "href": "https://wordnetcode.princeton.edu/",
+            "id": "wordnet",
+            "label": "WordNet 3.1",
+            "heading": "近义词",
+            "meanings": [
+              {
+                "definition": "unnatural",
+                "id": "abnormal-synonyms",
+                "partOfSpeech": "synonyms · 近义词"
+              }
+            ]
+          },
+          {
+            "href": "https://github.com/unimorph/eng",
+            "id": "unimorph",
+            "label": "UniMorph · MorphyNet",
+            "heading": "派生基词",
+            "meanings": [
+              {
+                "definition": "normal ab-",
+                "id": "abnormal-root-1",
+                "partOfSpeech": "ADJ → ADJ"
+              }
+            ]
+          }
+        ],
+        "word": "abnormal"
+      },
+      "resolved": {
+        "definition": "反常的，不规则的，变态的，畸形的",
+        "phonetic": "/æb'nɒ:mәl/",
+        "word": "abnormal"
+      },
+      "suggestions": [
+        {
+          "definition": "反常的，不规则的，变态的，畸形的",
+          "phonetic": "/æb'nɒ:mәl/",
+          "word": "abnormal"
+        },
+        {
+          "definition": "反常，畸形，变态",
+          "phonetic": "/.æbnɒ:'mæliti/",
+          "word": "abnormality"
+        },
+        {
+          "definition": "不正常，异常，（贬）不同寻常，不规则，变态，反常",
+          "word": "abnormally"
+        }
+      ]
+    },
+    {
+      "id": "roots:cet4",
+      "query": "acceleration",
+      "detail": {
+        "phonetic": "/әk.selә'reiʃәn/",
+        "sources": [
+          {
+            "href": "https://github.com/skywind3000/ECDICT",
+            "id": "ecdict",
+            "label": "ECDICT · 命中：CET-4 + TOEFL + BNC",
+            "meanings": [
+              {
+                "definition": "加速，促进，加速度",
+                "id": "acceleration-1",
+                "partOfSpeech": "noun · 名词"
+              },
+              {
+                "definition": "[化] 加速度",
+                "id": "acceleration-2"
+              }
+            ]
+          },
+          {
+            "href": "https://github.com/skywind3000/ECDICT",
+            "id": "ecdict-inflections",
+            "label": "ECDICT",
+            "heading": "变形",
+            "meanings": [
+              {
+                "definition": "accelerations",
+                "id": "acceleration-inflection-1",
+                "partOfSpeech": "复数"
+              }
+            ]
+          },
+          {
+            "href": "https://wordnetcode.princeton.edu/",
+            "id": "wordnet",
+            "label": "WordNet 3.1",
+            "heading": "近义词",
+            "meanings": [
+              {
+                "definition": "quickening · speedup",
+                "id": "acceleration-synonyms",
+                "partOfSpeech": "synonyms · 近义词"
+              }
+            ]
+          },
+          {
+            "href": "https://github.com/unimorph/eng",
+            "id": "unimorph",
+            "label": "UniMorph · MorphyNet",
+            "heading": "派生基词",
+            "meanings": [
+              {
+                "definition": "accelerate -ion",
+                "id": "acceleration-root-1",
+                "partOfSpeech": "V → N"
+              }
+            ]
+          }
+        ],
+        "word": "acceleration"
+      },
+      "resolved": {
+        "definition": "加速，促进，加速度",
+        "phonetic": "/әk.selә'reiʃәn/",
+        "word": "acceleration"
+      },
+      "suggestions": [
+        {
+          "definition": "加速，促进，加速度",
+          "phonetic": "/әk.selә'reiʃәn/",
+          "word": "acceleration"
+        }
+      ]
+    },
+    {
+      "id": "roots:cet6",
+      "query": "abbreviation",
+      "detail": {
+        "phonetic": "/ә.bri:vi'eiʃәn/",
+        "sources": [
+          {
+            "href": "https://github.com/skywind3000/ECDICT",
+            "id": "ecdict",
+            "label": "ECDICT · 命中：CET-6 + IELTS + TOEFL + BNC",
+            "meanings": [
+              {
+                "definition": "缩写词，缩写，缩短，节略",
+                "id": "abbreviation-1",
+                "partOfSpeech": "noun · 名词"
+              }
+            ]
+          },
+          {
+            "href": "https://github.com/skywind3000/ECDICT",
+            "id": "ecdict-inflections",
+            "label": "ECDICT",
+            "heading": "变形",
+            "meanings": [
+              {
+                "definition": "abbreviations",
+                "id": "abbreviation-inflection-1",
+                "partOfSpeech": "复数"
+              }
+            ]
+          },
+          {
+            "href": "https://github.com/unimorph/eng",
+            "id": "unimorph",
+            "label": "UniMorph · MorphyNet",
+            "heading": "派生基词",
+            "meanings": [
+              {
+                "definition": "abbreviate -ion",
+                "id": "abbreviation-root-1",
+                "partOfSpeech": "V → N"
+              }
+            ]
+          }
+        ],
+        "word": "abbreviation"
+      },
+      "resolved": {
+        "definition": "缩写词，缩写，缩短，节略",
+        "phonetic": "/ә.bri:vi'eiʃәn/",
+        "word": "abbreviation"
+      },
+      "suggestions": [
+        {
+          "definition": "缩写词，缩写，缩短，节略",
+          "phonetic": "/ә.bri:vi'eiʃәn/",
+          "word": "abbreviation"
+        }
+      ]
+    },
+    {
+      "id": "roots:ky",
+      "query": "activate",
+      "detail": {
+        "phonetic": "/'æktiveit/",
+        "sources": [
+          {
+            "href": "https://github.com/skywind3000/ECDICT",
+            "id": "ecdict",
+            "label": "ECDICT · 命中：考研 + IELTS + TOEFL + BNC",
+            "meanings": [
+              {
+                "definition": "使活动，使激活，正式建成",
+                "id": "activate-1",
+                "partOfSpeech": "transitive verb · 及物动词"
+              },
+              {
+                "definition": "有活力",
+                "id": "activate-2",
+                "partOfSpeech": "intransitive verb · 不及物动词"
+              }
+            ]
+          },
+          {
+            "href": "https://github.com/skywind3000/ECDICT",
+            "id": "ecdict-inflections",
+            "label": "ECDICT",
+            "heading": "变形",
+            "meanings": [
+              {
+                "definition": "activates",
+                "id": "activate-inflection-1",
+                "partOfSpeech": "第三人称"
+              },
+              {
+                "definition": "activated",
+                "id": "activate-inflection-2",
+                "partOfSpeech": "过去分词"
+              },
+              {
+                "definition": "activating",
+                "id": "activate-inflection-3",
+                "partOfSpeech": "进行时"
+              },
+              {
+                "definition": "activated",
+                "id": "activate-inflection-4",
+                "partOfSpeech": "过去式"
+              }
+            ]
+          },
+          {
+            "href": "https://wordnetcode.princeton.edu/",
+            "id": "wordnet",
+            "label": "WordNet 3.1",
+            "heading": "近义词",
+            "meanings": [
+              {
+                "definition": "aerate · trip · actuate · trigger · set off · spark off · spark · trigger off · touch off",
+                "id": "activate-synonyms",
+                "partOfSpeech": "synonyms · 近义词"
+              }
+            ]
+          },
+          {
+            "href": "https://github.com/unimorph/eng",
+            "id": "unimorph",
+            "label": "UniMorph · MorphyNet",
+            "heading": "派生基词",
+            "meanings": [
+              {
+                "definition": "active -ate",
+                "id": "activate-root-1",
+                "partOfSpeech": "ADJ → V"
+              }
+            ]
+          }
+        ],
+        "word": "activate"
+      },
+      "resolved": {
+        "definition": "使活动，使激活，正式建成",
+        "phonetic": "/'æktiveit/",
+        "word": "activate"
+      },
+      "suggestions": [
+        {
+          "definition": "使活动，使激活，正式建成",
+          "phonetic": "/'æktiveit/",
+          "word": "activate"
+        },
+        {
+          "definition": "活性化的；活泼的",
+          "phonetic": "/'æktiveitid/",
+          "word": "activated"
+        }
+      ]
+    },
+    {
+      "id": "roots:ielts",
+      "query": "aboriginal",
+      "detail": {
+        "phonetic": "/.æbә'ridʒәnәl/",
+        "sources": [
+          {
+            "href": "https://github.com/skywind3000/ECDICT",
+            "id": "ecdict",
+            "label": "ECDICT · 命中：IELTS + GRE + BNC",
+            "meanings": [
+              {
+                "definition": "原始的，土著的",
+                "id": "aboriginal-1",
+                "partOfSpeech": "adjective · 形容词"
+              },
+              {
+                "definition": "土著居民，土生生物",
+                "id": "aboriginal-2",
+                "partOfSpeech": "noun · 名词"
+              }
+            ]
+          },
+          {
+            "href": "https://github.com/skywind3000/ECDICT",
+            "id": "ecdict-inflections",
+            "label": "ECDICT",
+            "heading": "变形",
+            "meanings": [
+              {
+                "definition": "aboriginals",
+                "id": "aboriginal-inflection-1",
+                "partOfSpeech": "复数"
+              }
+            ]
+          },
+          {
+            "href": "https://wordnetcode.princeton.edu/",
+            "id": "wordnet",
+            "label": "WordNet 3.1",
+            "heading": "近义词",
+            "meanings": [
+              {
+                "definition": "native · indigen · indigene · aborigine · primal · primeval · primaeval · primordial",
+                "id": "aboriginal-synonyms",
+                "partOfSpeech": "synonyms · 近义词"
+              }
+            ]
+          },
+          {
+            "href": "https://github.com/unimorph/eng",
+            "id": "unimorph",
+            "label": "UniMorph · MorphyNet",
+            "heading": "派生基词",
+            "meanings": [
+              {
+                "definition": "aborigine -al",
+                "id": "aboriginal-root-1",
+                "partOfSpeech": "N → ADJ"
+              }
+            ]
+          }
+        ],
+        "word": "aboriginal"
+      },
+      "resolved": {
+        "definition": "原始的，土著的",
+        "phonetic": "/.æbә'ridʒәnәl/",
+        "word": "aboriginal"
+      },
+      "suggestions": [
+        {
+          "definition": "原始的，土著的",
+          "phonetic": "/.æbә'ridʒәnәl/",
+          "word": "aboriginal"
+        },
+        {
+          "definition": "土著居民（aboriginal复数）",
+          "word": "aboriginals"
+        }
+      ]
+    },
+    {
+      "id": "roots:toefl",
+      "query": "abandoned",
+      "detail": {
+        "phonetic": "/ә'bændәnd/",
+        "sources": [
+          {
+            "href": "https://github.com/skywind3000/ECDICT",
+            "id": "ecdict",
+            "label": "ECDICT · 命中：TOEFL + BNC",
+            "meanings": [
+              {
+                "definition": "被抛弃的，无约束的，恣意放荡的",
+                "id": "abandoned-1",
+                "partOfSpeech": "adjective · 形容词"
+              }
+            ]
+          },
+          {
+            "href": "https://wordnetcode.princeton.edu/",
+            "id": "wordnet",
+            "label": "WordNet 3.1",
+            "heading": "近义词",
+            "meanings": [
+              {
+                "definition": "derelict · deserted",
+                "id": "abandoned-synonyms",
+                "partOfSpeech": "synonyms · 近义词"
+              }
+            ]
+          },
+          {
+            "href": "https://github.com/unimorph/eng",
+            "id": "unimorph",
+            "label": "UniMorph · MorphyNet",
+            "heading": "派生基词",
+            "meanings": [
+              {
+                "definition": "abandon -ed",
+                "id": "abandoned-root-1",
+                "partOfSpeech": "N → ADJ"
+              }
+            ]
+          }
+        ],
+        "word": "abandoned"
+      },
+      "resolved": {
+        "definition": "被抛弃的，无约束的，恣意放荡的",
+        "phonetic": "/ә'bændәnd/",
+        "word": "abandoned"
+      },
+      "suggestions": [
+        {
+          "definition": "被抛弃的，无约束的，恣意放荡的",
+          "phonetic": "/ә'bændәnd/",
+          "word": "abandoned"
+        }
+      ]
+    },
+    {
+      "id": "roots:gre",
+      "query": "aberrant",
+      "detail": {
+        "phonetic": "/æ'berәnt/",
+        "sources": [
+          {
+            "href": "https://github.com/skywind3000/ECDICT",
+            "id": "ecdict",
+            "label": "ECDICT · 命中：GRE + BNC",
+            "meanings": [
+              {
+                "definition": "偏离正路的，偏离常轨的，畸变的",
+                "id": "aberrant-1",
+                "partOfSpeech": "adjective · 形容词"
+              },
+              {
+                "definition": "[化] 异常的",
+                "id": "aberrant-2"
+              }
+            ]
+          },
+          {
+            "href": "https://wordnetcode.princeton.edu/",
+            "id": "wordnet",
+            "label": "WordNet 3.1",
+            "heading": "近义词",
+            "meanings": [
+              {
+                "definition": "deviant · deviate",
+                "id": "aberrant-synonyms",
+                "partOfSpeech": "synonyms · 近义词"
+              }
+            ]
+          },
+          {
+            "href": "https://github.com/unimorph/eng",
+            "id": "unimorph",
+            "label": "UniMorph · MorphyNet",
+            "heading": "派生基词",
+            "meanings": [
+              {
+                "definition": "aberr -ant",
+                "id": "aberrant-root-1",
+                "partOfSpeech": "V → ADJ"
+              }
+            ]
+          }
+        ],
+        "word": "aberrant"
+      },
+      "resolved": {
+        "definition": "偏离正路的，偏离常轨的，畸变的",
+        "phonetic": "/æ'berәnt/",
+        "word": "aberrant"
+      },
+      "suggestions": [
+        {
+          "definition": "偏离正路的，偏离常轨的，畸变的",
+          "phonetic": "/æ'berәnt/",
+          "word": "aberrant"
+        }
+      ]
+    },
+    {
+      "id": "roots:bnc",
+      "query": "aback",
+      "detail": {
+        "phonetic": "/ә'bæk/",
+        "sources": [
+          {
+            "href": "https://github.com/skywind3000/ECDICT",
+            "id": "ecdict",
+            "label": "ECDICT · 命中：BNC",
+            "meanings": [
+              {
+                "definition": "向后，朝后，突然，船顶风地",
+                "id": "aback-1",
+                "partOfSpeech": "adverb · 副词"
+              }
+            ]
+          },
+          {
+            "href": "https://github.com/unimorph/eng",
+            "id": "unimorph",
+            "label": "UniMorph · MorphyNet",
+            "heading": "派生基词",
+            "meanings": [
+              {
+                "definition": "back a-",
+                "id": "aback-root-1",
+                "partOfSpeech": "ADV → ADV"
+              }
+            ]
+          }
+        ],
+        "word": "aback"
+      },
+      "resolved": {
+        "definition": "向后，朝后，突然，船顶风地",
+        "phonetic": "/ә'bæk/",
+        "word": "aback"
+      },
+      "suggestions": [
+        {
+          "definition": "向后，朝后，突然，船顶风地",
+          "phonetic": "/ә'bæk/",
+          "word": "aback"
+        }
+      ]
+    }
+  ],
+  "interactiveTexts": [
+    {
+      "id": "chinese-longest-match",
+      "text": "内心安定，心想事成。",
+      "resolvedSegments": ["内心", "安定", "心想", "事", "成"]
+    },
+    {
+      "id": "english-inflection-qualifier",
+      "text": "running(noun), went, unknownzz.",
+      "resolvedSegments": ["running(noun)", "went"]
+    },
+    {
+      "id": "english-punctuation",
+      "text": "Don't re-enter found; keep unknownzz.",
+      "resolvedSegments": ["found", "keep"]
+    }
+  ],
+  "snapshots": {
+    "chinese-dictionary.tsv": {
+      "header": "# chinese-dictionary e804ada333b68afddfdccbe8dcc938a72da157a7 | entries 3500",
+      "sha256": "315eeedd17a92b74cfa39c2a6e876ace13a8c4c365b7fac7b159d24c180ec9c8"
+    },
+    "chinese-dictionary-words.tsv": {
+      "header": "# chinese-dictionary e804ada333b68afddfdccbe8dcc938a72da157a7 | entries 304196",
+      "sha256": "cecc8a3169a7bc5b329dc3c2f408ff7c8da4aa979ea62708d06bcc3d9b292914"
+    },
+    "chinese-xinhua.tsv": {
+      "header": "# chinese-xinhua fe6d6c2e8baa82187f4c96bbe042e43f96c05666 | entries 45705",
+      "sha256": "58dc62593fb16c894e00dce4dd25feea6e563259c738ba9f41a37453fda0afa1"
+    },
+    "chinese-xinhua-words.tsv": {
+      "header": "# chinese-xinhua fe6d6c2e8baa82187f4c96bbe042e43f96c05666 | entries 264346",
+      "sha256": "31dc68f97222b43977710bd556e4216aa982d389753e8d469774481ca24709b1"
+    },
+    "ecdict-zk.tsv": {
+      "header": "# ECDICT bc015ed2e24a7abef49fc6dbbb7fe32c1dadaf8b | sha256 1a6947e04785db63613a92e14903cdae7954f7e84860b10e68e5c7cbb3f9c3cf | pack zk | entries 145",
+      "sha256": "17fe3712cd442130f3dab30d1c6251d5d3be3b17d04ef8abb460dda9c422077d"
+    },
+    "ecdict-gk.tsv": {
+      "header": "# ECDICT bc015ed2e24a7abef49fc6dbbb7fe32c1dadaf8b | sha256 1a6947e04785db63613a92e14903cdae7954f7e84860b10e68e5c7cbb3f9c3cf | pack gk | entries 873",
+      "sha256": "2f0ba544e1547406c41a1f86fcd906484894815e7398cc1b0cc1f498dd0bd69c"
+    },
+    "ecdict-cet4.tsv": {
+      "header": "# ECDICT bc015ed2e24a7abef49fc6dbbb7fe32c1dadaf8b | sha256 1a6947e04785db63613a92e14903cdae7954f7e84860b10e68e5c7cbb3f9c3cf | pack cet4 | entries 1131",
+      "sha256": "90e893c63e73a0e6fb985cee4288b132beb438b6fce5691fc388b2f925bd9a9c"
+    },
+    "ecdict-cet6.tsv": {
+      "header": "# ECDICT bc015ed2e24a7abef49fc6dbbb7fe32c1dadaf8b | sha256 1a6947e04785db63613a92e14903cdae7954f7e84860b10e68e5c7cbb3f9c3cf | pack cet6 | entries 2538",
+      "sha256": "f17dc8dd97fcfbe0c7afb720db085dd4a3acc19da19c967b782650bdd4639ed5"
+    },
+    "ecdict-ky.tsv": {
+      "header": "# ECDICT bc015ed2e24a7abef49fc6dbbb7fe32c1dadaf8b | sha256 1a6947e04785db63613a92e14903cdae7954f7e84860b10e68e5c7cbb3f9c3cf | pack ky | entries 1879",
+      "sha256": "bc8f1f1b4b5cce9476d762802e67acda56474248d94589a79da439f315b54402"
+    },
+    "ecdict-ielts.tsv": {
+      "header": "# ECDICT bc015ed2e24a7abef49fc6dbbb7fe32c1dadaf8b | sha256 1a6947e04785db63613a92e14903cdae7954f7e84860b10e68e5c7cbb3f9c3cf | pack ielts | entries 2647",
+      "sha256": "74007b5e6e80cfd2b54ba12e16e63be340aa6c5232c93669c797b91c6595f0f7"
+    },
+    "ecdict-toefl.tsv": {
+      "header": "# ECDICT bc015ed2e24a7abef49fc6dbbb7fe32c1dadaf8b | sha256 1a6947e04785db63613a92e14903cdae7954f7e84860b10e68e5c7cbb3f9c3cf | pack toefl | entries 4799",
+      "sha256": "82fc37f00e2cb2263244d6e076b9f85176ebf5bff91c4eea27c6899b217d6fd6"
+    },
+    "ecdict-gre.tsv": {
+      "header": "# ECDICT bc015ed2e24a7abef49fc6dbbb7fe32c1dadaf8b | sha256 1a6947e04785db63613a92e14903cdae7954f7e84860b10e68e5c7cbb3f9c3cf | pack gre | entries 6534",
+      "sha256": "5792cb7501029accf1327594efb720edab6d8971344609c53d5aaa7f2df23b00"
+    },
+    "ecdict-bnc.tsv": {
+      "header": "# ECDICT bc015ed2e24a7abef49fc6dbbb7fe32c1dadaf8b | sha256 1a6947e04785db63613a92e14903cdae7954f7e84860b10e68e5c7cbb3f9c3cf | pack bnc | entries 40470",
+      "sha256": "c4ea0d0ca307cd54125792120abd5980825bd5f6a32e06f278214d33a00b693e"
+    },
+    "wordnet-synonyms-core.tsv": {
+      "header": "# WordNet 3.1 | sha256 3f7d8be8ef6ecc7167d39b10d66954ec734280b5bdcd57f7d9eafe429d11c22a | pack core | entries 4380",
+      "sha256": "7481e301b18f380f6f32c6629b366372abe9cf28f47e9ce051357495feb234fd"
+    },
+    "unimorph-roots-core.tsv": {
+      "header": "# UniMorph eng 66e0e9e8e2dcd196da081a25a48e5c1fe3d8b49b | sha256 743fff8ddb3ff26ae413af1fa859806106ffff69628be4cb7ed4d34f677deed2 | pack core | entries 1688",
+      "sha256": "3f6a27a3ab62839f50d87fa589e922ba8b1dfa329bde0625b365529b4fb3dc16"
+    },
+    "wordnet-synonyms-zk.tsv": {
+      "header": "# WordNet 3.1 | sha256 3f7d8be8ef6ecc7167d39b10d66954ec734280b5bdcd57f7d9eafe429d11c22a | pack zk | entries 117",
+      "sha256": "7f20096c099541f487ddb5139ccb4e9c1bb253ba39d732e6de27d5d65896d6c6"
+    },
+    "unimorph-roots-zk.tsv": {
+      "header": "# UniMorph eng 66e0e9e8e2dcd196da081a25a48e5c1fe3d8b49b | sha256 743fff8ddb3ff26ae413af1fa859806106ffff69628be4cb7ed4d34f677deed2 | pack zk | entries 47",
+      "sha256": "cc384a052760723e553abc2700aa1b4645cfc77a72469315d74783f890fbd2cf"
+    },
+    "wordnet-synonyms-gk.tsv": {
+      "header": "# WordNet 3.1 | sha256 3f7d8be8ef6ecc7167d39b10d66954ec734280b5bdcd57f7d9eafe429d11c22a | pack gk | entries 690",
+      "sha256": "c34341f48755772d601979dc3f7b67bf83d68d19b9e9081d2fef3afe3d840877"
+    },
+    "unimorph-roots-gk.tsv": {
+      "header": "# UniMorph eng 66e0e9e8e2dcd196da081a25a48e5c1fe3d8b49b | sha256 743fff8ddb3ff26ae413af1fa859806106ffff69628be4cb7ed4d34f677deed2 | pack gk | entries 346",
+      "sha256": "b0974b8830086306079eee5562ef987c5eb7f519b84fe0d0fb64101f7153434a"
+    },
+    "wordnet-synonyms-cet4.tsv": {
+      "header": "# WordNet 3.1 | sha256 3f7d8be8ef6ecc7167d39b10d66954ec734280b5bdcd57f7d9eafe429d11c22a | pack cet4 | entries 980",
+      "sha256": "4cd3509188ad66b891af37759d22185c4bebf1f74e040a3179b3624a717eada8"
+    },
+    "unimorph-roots-cet4.tsv": {
+      "header": "# UniMorph eng 66e0e9e8e2dcd196da081a25a48e5c1fe3d8b49b | sha256 743fff8ddb3ff26ae413af1fa859806106ffff69628be4cb7ed4d34f677deed2 | pack cet4 | entries 415",
+      "sha256": "9b68ddbe53c6f5b946d7625a6b414b64af592f637fc35dad44579dbff4abc9b6"
+    },
+    "wordnet-synonyms-cet6.tsv": {
+      "header": "# WordNet 3.1 | sha256 3f7d8be8ef6ecc7167d39b10d66954ec734280b5bdcd57f7d9eafe429d11c22a | pack cet6 | entries 2206",
+      "sha256": "bd74bcc8f522868f55894141bf0cb759d9ec860bd44a5a886e1d670be209a669"
+    },
+    "unimorph-roots-cet6.tsv": {
+      "header": "# UniMorph eng 66e0e9e8e2dcd196da081a25a48e5c1fe3d8b49b | sha256 743fff8ddb3ff26ae413af1fa859806106ffff69628be4cb7ed4d34f677deed2 | pack cet6 | entries 991",
+      "sha256": "fe15d5623c4cd283fe2871bf09ad7969bd39afefca36304e0f60e377f4c903a5"
+    },
+    "wordnet-synonyms-ky.tsv": {
+      "header": "# WordNet 3.1 | sha256 3f7d8be8ef6ecc7167d39b10d66954ec734280b5bdcd57f7d9eafe429d11c22a | pack ky | entries 1651",
+      "sha256": "6b3f58e5d150b4c8743231dbefe4c57c2e17ff4e538a1dfb3f95aea1b1ae6061"
+    },
+    "unimorph-roots-ky.tsv": {
+      "header": "# UniMorph eng 66e0e9e8e2dcd196da081a25a48e5c1fe3d8b49b | sha256 743fff8ddb3ff26ae413af1fa859806106ffff69628be4cb7ed4d34f677deed2 | pack ky | entries 560",
+      "sha256": "6b1eadfbc107c7103dff19539b6592a596ce317389c40632c1d10a611ddaf7a7"
+    },
+    "wordnet-synonyms-ielts.tsv": {
+      "header": "# WordNet 3.1 | sha256 3f7d8be8ef6ecc7167d39b10d66954ec734280b5bdcd57f7d9eafe429d11c22a | pack ielts | entries 2087",
+      "sha256": "5d5e216279b2215c047b98bf1ceedcc4d4e56e2ec387de2603a4829c8e7baee8"
+    },
+    "unimorph-roots-ielts.tsv": {
+      "header": "# UniMorph eng 66e0e9e8e2dcd196da081a25a48e5c1fe3d8b49b | sha256 743fff8ddb3ff26ae413af1fa859806106ffff69628be4cb7ed4d34f677deed2 | pack ielts | entries 745",
+      "sha256": "d25fcbfaca884dcf7cc17130df40cfccd263e763a0608ea642626b0a71278c98"
+    },
+    "wordnet-synonyms-toefl.tsv": {
+      "header": "# WordNet 3.1 | sha256 3f7d8be8ef6ecc7167d39b10d66954ec734280b5bdcd57f7d9eafe429d11c22a | pack toefl | entries 4028",
+      "sha256": "6134bfff70c2cff7066c154ca918f86e38445268dd3b354f2a987b9c1f5e3a93"
+    },
+    "unimorph-roots-toefl.tsv": {
+      "header": "# UniMorph eng 66e0e9e8e2dcd196da081a25a48e5c1fe3d8b49b | sha256 743fff8ddb3ff26ae413af1fa859806106ffff69628be4cb7ed4d34f677deed2 | pack toefl | entries 2067",
+      "sha256": "2a7f4023f9fd1cf98c92cd6de7e8b5af1d8dc9a796fb0e48cdb10942350ca7dc"
+    },
+    "wordnet-synonyms-gre.tsv": {
+      "header": "# WordNet 3.1 | sha256 3f7d8be8ef6ecc7167d39b10d66954ec734280b5bdcd57f7d9eafe429d11c22a | pack gre | entries 5460",
+      "sha256": "05577cca91051e48f44389e57d6514478d77b275a8179731375120573cad42b0"
+    },
+    "unimorph-roots-gre.tsv": {
+      "header": "# UniMorph eng 66e0e9e8e2dcd196da081a25a48e5c1fe3d8b49b | sha256 743fff8ddb3ff26ae413af1fa859806106ffff69628be4cb7ed4d34f677deed2 | pack gre | entries 2141",
+      "sha256": "67b036d0c5d92ea889a621806501b034a170fc41eb1c427ee3dd0b6a9925d7f6"
+    },
+    "wordnet-synonyms-bnc.tsv": {
+      "header": "# WordNet 3.1 | sha256 3f7d8be8ef6ecc7167d39b10d66954ec734280b5bdcd57f7d9eafe429d11c22a | pack bnc | entries 21770",
+      "sha256": "72121ef079c48ad97852575c58e85be223abeb9ea7d00fbe17b398734695a007"
+    },
+    "unimorph-roots-bnc.tsv": {
+      "header": "# UniMorph eng 66e0e9e8e2dcd196da081a25a48e5c1fe3d8b49b | sha256 743fff8ddb3ff26ae413af1fa859806106ffff69628be4cb7ed4d34f677deed2 | pack bnc | entries 15503",
+      "sha256": "44e04d371fa16897a9a5ff890a397306e0764ec6b0d28d3a8d1d9e69f454dccf"
+    },
+    "ecdict-core.tsv": {
+      "header": "# ECDICT bc015ed2e24a7abef49fc6dbbb7fe32c1dadaf8b | sha256 1a6947e04785db63613a92e14903cdae7954f7e84860b10e68e5c7cbb3f9c3cf | pack core | entries 5000",
+      "sha256": "322dfeed5900a7b2eb7c0d6f4932762bb9bc73f27e54a96fcc536c64b7fd2b29"
+    },
+    "ecdict-inflections.tsv": {
+      "header": "# ECDICT bc015ed2e24a7abef49fc6dbbb7fe32c1dadaf8b | sha256 1a6947e04785db63613a92e14903cdae7954f7e84860b10e68e5c7cbb3f9c3cf | forward lemmas 40308 | forms 71439",
+      "sha256": "72d4ac04e1b1d6b7c91856684d0e2c70bcae8af9a0d411b7f450e51a18e46652"
+    },
+    "ecdict-inflection-index.tsv": {
+      "header": "# ECDICT bc015ed2e24a7abef49fc6dbbb7fe32c1dadaf8b | sha256 1a6947e04785db63613a92e14903cdae7954f7e84860b10e68e5c7cbb3f9c3cf | reverse forms 58153 | relations 71439",
+      "sha256": "dabffc84d3175340254ecdad434d717c629b6bd204c8930c9640b8a8f11afa1c"
+    }
+  },
+  "packOrder": {
+    "chinese": [
+      "chinese-dictionary",
+      "chinese-dictionary-words",
+      "chinese-xinhua",
+      "chinese-xinhua-words"
+    ],
+    "english": ["core", "zk", "gk", "cet4", "cet6", "ky", "ielts", "toefl", "gre", "bnc"]
+  }
+}
