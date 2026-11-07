@@ -41,8 +41,8 @@
 
 #### Scenario: 真实查询接口与指纹一致
 
-- **WHEN** 对正式映射逐条调用真实 `getDetail`，并将其返回的 IPA（含接口已有的成对 `/`）传给 resolver
-- **THEN** 每条映射均返回 available，且 sidecar 中的 IPA 与真实查询值完全一致
+- **WHEN** 生成器通过 Node/Vite 桥调用真实 `getDetail`，并对正式映射逐条执行真实查询，将返回的 IPA（含接口已有的成对 `/`）传给 resolver
+- **THEN** 生成入口直接使用真实查询值，每条映射均返回 available，且 sidecar 中的 IPA 与真实查询值完全一致；接口变化会使重新生成与 `--check` 的结果同步变化
 
 ### Requirement: 每项录音具备可分发许可及可达归因
 

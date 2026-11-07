@@ -26,7 +26,7 @@
 
 ### 映射合同与安全匹配
 
-拟定义 JSON 合同 `pronunciation-audio/1`：manifestVersion、entries、assets、来源与许可记录。asset 包含稳定 assetId、Commons 文件页/文件 revision 与 digest、作者、许可名/链接、原始或转码变更声明、候选 HTTPS 媒体地址/MIME。映射包含 language、原始词头、显式范围（entryId/role/readingRef/accent，如存在）、对应当前 IPA 的指纹及来源关联证据。assetId 不以 IPA 充当词条身份。entry 的 `phonetic` 与指纹以真实 `getDetail` 输出为准；英文 lookup 返回的成对 `/` 也是接口值的一部分，不得仅按 TSV 裸值生成。生成后必须逐条执行真实 lookup → resolver 回归。
+拟定义 JSON 合同 `pronunciation-audio/1`：manifestVersion、entries、assets、来源与许可记录。asset 包含稳定 assetId、Commons 文件页/文件 revision 与 digest、作者、许可名/链接、原始或转码变更声明、候选 HTTPS 媒体地址/MIME。映射包含 language、原始词头、显式范围（entryId/role/readingRef/accent，如存在）、对应当前 IPA 的指纹及来源关联证据。assetId 不以 IPA 充当词条身份。entry 的 `phonetic` 与指纹以真实 `getDetail` 输出为准；英文 lookup 返回的成对 `/` 也是接口值的一部分，不得仅按 TSV 裸值生成。采集入口通过 `scripts/pronunciation_audio_lookup.mjs` 以 Node/Vite 直接调用真实 `getDetail`，Python 不复制查询格式规则；真实接口变化会驱动重新生成及 `--check`。生成后必须逐条执行真实 lookup → resolver 回归。
 
 匹配输入包含有效展示的 word、language、phonetic、可选身份/读法/口音。输出为 `available`（同一读法的有序媒体候选及归因）或 `unavailable`（not-found、scope-unknown、reading-mismatch、unsupported-language 等）。已有稳定身份时按身份与范围验证；旧单值接口只在有显式核验的唯一兼容映射且 IPA 指纹一致时可用。IPA 相同只是必要校验之一，不单独证明适用范围。`read` 多角色、UK/US、来源仅知拼写、用户改 IPA 后不匹配时拒绝任取第一项。用户只改释义不撤销有效映射，改词头需重新核对。音频失败从不写 IPA 或清除旧值。
 

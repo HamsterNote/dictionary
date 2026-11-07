@@ -5,7 +5,7 @@
 ## 通过
 
 - `python3 scripts/generate_pronunciation_audio.py --check --max-requests 0`：3 个真实映射与 20 词报告可从原始响应缓存复现，失败不覆盖 manifest。
-- `yarn test:pronunciation-audio`：纯数据、范围匹配、overlay 选择、browser 异步生命周期、缓存及采集器 8 组测试通过。
+- `yarn test:pronunciation-audio`：纯数据、范围匹配、overlay 选择、browser 异步生命周期、缓存及采集器 9 组测试通过，包含 Node/Vite 真实查询桥。
 - `yarn test:pronunciation-audio-ui`：真实 Chromium 中通过内部切词、IPA/词头/释义纠错、旧回调、双 prop、键盘、状态、错误焦点和离线归因测试。
 - `python3 scripts/test_pronunciation_audio_real.py`：`hello`、`cat`、`dog` 的真实 Commons MP3 均完成 HTTP 200、浏览器解码、`playing`/`ended`；`hello` 同会话断网复播无新请求。
 - `yarn build:package`、`yarn build`：类型、库及 demo 构建通过。
@@ -39,7 +39,7 @@ Yarn 1 的内置 `yarn check` 仅报告 `Folder in sync`，不会执行 package.
 
 ## beta.4 真实查询契约修复
 
-native 集成发现真实 `getDetail` 会返回带成对 `/` 的 IPA，而 beta.3 sidecar 使用 TSV 裸值，导致 `reading-mismatch`。beta.4 改为让 entry 的 `phonetic` 与指纹直接对齐真实查询输出，不修改查询接口，也不在 native 去斜杠。
+native 集成发现真实 `getDetail` 会返回带成对 `/` 的 IPA，而 beta.3 sidecar 使用 TSV 裸值，导致 `reading-mismatch`。beta.4 的生成入口通过 `scripts/pronunciation_audio_lookup.mjs` 以 Node/Vite 直接调用真实 `getDetail`，把返回值交给 Python 采集器；Python 不再读取 TSV 或复制斜杠规则。查询接口变化会驱动重新生成和 `--check`，不修改查询接口，也不在 native 去斜杠。
 
 新增回归对正式清单中的 `hello`、`cat`、`dog` 逐条执行真实 `getDetail` → resolver：断言 sidecar IPA 与真实输出完全相等，且三条均返回 available。三条真实 MP3 的 Chromium 播放、离线缓存、共享 UI、采集器、browser、构建和 tarball smoke 均通过。
 

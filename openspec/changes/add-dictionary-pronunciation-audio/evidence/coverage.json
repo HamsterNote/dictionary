@@ -926,8 +926,8 @@
           "relation": "unresolved"
         }
       ],
-      "currentPhonetic": "/prәu.nʌnsi'eiʃәn/",
-      "gap": "reading-review-missing",
+      "currentPhonetic": null,
+      "gap": "current-phonetic-missing",
       "pageUrl": "https://en.wiktionary.org/wiki/pronunciation",
       "rawResponse": "openspec/changes/add-dictionary-pronunciation-audio/evidence/raw/get-22a84ff6d3167f15ecf2ac95f7dcea2b2defe7d93dd8e7e052b6e52e3b62e244.json",
       "rawResponseSha256": "eacedc1c451c033f5c24b5ed2c262981e9e07427bffbd8d37b6753b44f78d40e",

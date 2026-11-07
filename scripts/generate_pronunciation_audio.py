@@ -10,6 +10,7 @@ import json
 import os
 from pathlib import Path
 import re
+import subprocess
 import tempfile
 import time
 import unicodedata
@@ -29,7 +30,6 @@ WORDS = (
     "hello", "note", "apple", "book", "world", "water", "cat", "dog", "learn", "word",
     "dictionary", "pronunciation", "read", "lead", "live", "record", "wind", "close", "minute", "present",
 )
-PACK_ORDER = ("core", "zk", "gk", "cet4", "cet6", "ky", "ielts", "toefl", "gre", "bnc")
 ALLOWED_API_HOSTS = {"en.wiktionary.org", "commons.wikimedia.org"}
 ALLOWED_MEDIA_HOSTS = {"upload.wikimedia.org"}
 ALLOWED_MIMES = {"audio/mpeg", "audio/ogg", "application/ogg", "audio/webm", "audio/mp4"}
@@ -244,18 +244,33 @@ class CachedClient:
         return MediaHead(final_url, mime, size, (str(path.relative_to(ROOT)) if path.is_relative_to(ROOT) else path.name))
 
 
-def current_phonetics() -> dict[str, str]:
-    result: dict[str, str] = {}
-    for pack in PACK_ORDER:
-        path = ROOT / f"src/data/ecdict-{pack}.tsv"
-        if not path.exists():
-            continue
-        for line in path.read_text().splitlines():
-            columns = line.split("\t")
-            if len(columns) > 2 and columns[0] in WORDS and columns[0] not in result and columns[1]:
-                # lookupEnglishChinese 的真实英文输出在裸 IPA 两侧添加 /；sidecar 对齐该接口。
-                result[columns[0]] = f"/{columns[1]}/"
-    return result
+def lookup_current_phonetics() -> dict[str, str]:
+    try:
+        process = subprocess.run(
+            ["node", "scripts/pronunciation_audio_lookup.mjs"],
+            cwd=ROOT, input=json.dumps(WORDS), text=True, capture_output=True, timeout=60,
+        )
+    except (OSError, subprocess.TimeoutExpired) as error:
+        raise CollectionError("真实 getDetail 桥接失败") from error
+    if process.returncode != 0:
+        raise CollectionError(f"真实 getDetail 桥接失败：{process.stderr.strip()}")
+    try:
+        payload = json.loads(process.stdout)
+        records = payload["records"]
+        if payload["schema"] != "pronunciation-audio-lookup/1" or not isinstance(records, list):
+            raise ValueError("lookup schema 无效")
+        if [record.get("word") for record in records] != list(WORDS):
+            raise ValueError("lookup 词表或顺序不一致")
+        result = {}
+        for record in records:
+            phonetic = record.get("phonetic")
+            if phonetic is not None and (not isinstance(phonetic, str) or not phonetic.strip()):
+                raise ValueError("lookup IPA 类型无效")
+            if isinstance(phonetic, str) and phonetic.strip():
+                result[record["word"]] = phonetic
+        return result
+    except (KeyError, TypeError, ValueError, json.JSONDecodeError) as error:
+        raise CollectionError("真实 getDetail 桥接响应无效") from error
 
 
 def pronunciation_section(wikitext: str) -> str | None:
@@ -489,7 +504,7 @@ def reviewed_branch(record: dict[str, Any], review: dict[str, str]) -> dict[str,
 
 
 def collect(client: CachedClient) -> tuple[dict[str, Any], dict[str, Any]]:
-    current = current_phonetics()
+    current = lookup_current_phonetics()
     entries = []
     assets: dict[str, Any] = {}
     coverage = []
