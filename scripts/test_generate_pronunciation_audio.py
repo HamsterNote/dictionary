@@ -191,6 +191,13 @@ class CollectorTests(unittest.TestCase):
         with self.assertRaisesRegex(audio.AssetRejected, "MIME 不一致"):
             audio.commons_asset(mismatch, "Original.ogg")
 
+    def test_lookup_bridge_consumes_real_get_detail_for_all_formal_words(self):
+        result = audio.lookup_current_phonetics()
+        expected = {"hello": "/hә'lәu/", "cat": "/kæt/", "dog": "/dɒg/"}
+        for word, phonetic in expected.items():
+            with self.subTest(word=word):
+                self.assertEqual(result[word], phonetic)
+
 
 if __name__ == "__main__":
     unittest.main()

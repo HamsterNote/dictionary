@@ -88,12 +88,12 @@
         "rawResponse": "openspec/changes/add-dictionary-pronunciation-audio/evidence/raw/get-d4f8624e7200b7fdcb356b41799712fb550d0ab404cd1ed36733939f7221b09d.json",
         "revisionId": 862483068
       },
-      "currentPhonetic": "hә'lәu",
+      "currentPhonetic": "/hә'lәu/",
       "gap": null,
       "pageUrl": "https://en.wiktionary.org/wiki/hello",
       "rawResponse": "openspec/changes/add-dictionary-pronunciation-audio/evidence/raw/get-0dfd459a62e035bc2ce86678d5b7c760482610b690d274c0e0c8607f7024852d.json",
       "rawResponseSha256": "2a7c6e5e2a18d6cf9c05291023e4a30c1b134f1c55685ef7f0f8dd6d530b384c",
-      "reviewNote": "当前 ECDICT 的 ә/'/u 记法与 UK /həˈləʊ/ 的音素和重音一致；仅对应指定的 UK 文件。",
+      "reviewNote": "当前 ECDICT 的 ә/'/u 记法与 UK /həˈləʊ/ 的音素和重音一致；真实查询输出带成对 /，仅对应指定的 UK 文件。",
       "revisionId": 95307852,
       "revisionTimestamp": "2026-11-02T03:58:18Z",
       "sourcePhonetics": [
@@ -133,7 +133,7 @@
           "relation": "ancestor"
         }
       ],
-      "currentPhonetic": "nәut",
+      "currentPhonetic": "/nәut/",
       "gap": "reading-review-missing",
       "pageUrl": "https://en.wiktionary.org/wiki/note",
       "rawResponse": "openspec/changes/add-dictionary-pronunciation-audio/evidence/raw/get-10b28cbf76b5d1f2148d498eaaf315e54775d847624c2ddb1f5af98c51dcfac5.json",
@@ -238,7 +238,7 @@
           "relation": "ancestor"
         }
       ],
-      "currentPhonetic": "'æpl",
+      "currentPhonetic": "/'æpl/",
       "gap": "reading-review-missing",
       "pageUrl": "https://en.wiktionary.org/wiki/apple",
       "rawResponse": "openspec/changes/add-dictionary-pronunciation-audio/evidence/raw/get-beda0cffb8d958042cff67e4ad8fbfe3e032366edc6478cb38c24963ec49996d.json",
@@ -300,7 +300,7 @@
           "relation": "ancestor"
         }
       ],
-      "currentPhonetic": "buk",
+      "currentPhonetic": "/buk/",
       "gap": "reading-review-missing",
       "pageUrl": "https://en.wiktionary.org/wiki/book",
       "rawResponse": "openspec/changes/add-dictionary-pronunciation-audio/evidence/raw/get-9a6eae507b279e9102b95819942cb6000149806803b1720c335b9519a90db2d4.json",
@@ -357,7 +357,7 @@
           "relation": "ancestor"
         }
       ],
-      "currentPhonetic": "wә:ld",
+      "currentPhonetic": "/wә:ld/",
       "gap": "reading-review-missing",
       "pageUrl": "https://en.wiktionary.org/wiki/world",
       "rawResponse": "openspec/changes/add-dictionary-pronunciation-audio/evidence/raw/get-39c6b5c3eb7a231ec3138e0b080178d0ff90fdb2e206b38b6197438fa18a34d6.json",
@@ -490,7 +490,7 @@
           "relation": "ancestor"
         }
       ],
-      "currentPhonetic": "'wɒ:tә",
+      "currentPhonetic": "/'wɒ:tә/",
       "gap": "reading-review-missing",
       "pageUrl": "https://en.wiktionary.org/wiki/water",
       "rawResponse": "openspec/changes/add-dictionary-pronunciation-audio/evidence/raw/get-15454e3a126cfbdac6200d43153dd26129be2d509eb77f4c13055d6f6c0ab217.json",
@@ -633,12 +633,12 @@
         "rawResponse": "openspec/changes/add-dictionary-pronunciation-audio/evidence/raw/get-891ce2895a008713c774a8713bbcdcca8527f0c96905c2991e13a187646c6e48.json",
         "revisionId": 1229122106
       },
-      "currentPhonetic": "kæt",
+      "currentPhonetic": "/kæt/",
       "gap": null,
       "pageUrl": "https://en.wiktionary.org/wiki/cat",
       "rawResponse": "openspec/changes/add-dictionary-pronunciation-audio/evidence/raw/get-2ba4f34e116de52af26d4501c2ee2d85cb4ecf00fc04deb76d0816c29eab2786.json",
       "rawResponseSha256": "e5b39bdb94cc48c6ad606b018410ce96c7e63239ffab00daed8f543fb954d838",
-      "reviewNote": "单音节词省略主重音不改变音素；选择单词录音 En-us-cat.ogg，不选择短语 a cat 或地区变体。",
+      "reviewNote": "单音节词省略主重音不改变音素；真实查询输出带成对 /，选择单词录音 En-us-cat.ogg，不选择短语 a cat 或地区变体。",
       "revisionId": 95423400,
       "revisionTimestamp": "2026-11-04T22:35:22Z",
       "sourcePhonetics": [
@@ -752,12 +752,12 @@
         "rawResponse": "openspec/changes/add-dictionary-pronunciation-audio/evidence/raw/get-d223022c0736cc71a0dc346c15da81595fc1c69fef7954a2a8182296d386a5ae.json",
         "revisionId": 877133033
       },
-      "currentPhonetic": "dɒg",
+      "currentPhonetic": "/dɒg/",
       "gap": null,
       "pageUrl": "https://en.wiktionary.org/wiki/dog",
       "rawResponse": "openspec/changes/add-dictionary-pronunciation-audio/evidence/raw/get-44695637c68fd225a20c0cfaf2df5c3f335ea678c7ca21e1f5d6e885c0f3cc0f.json",
       "rawResponseSha256": "da6221fd7b6c952270706916cbb4dc88c764cbef03a59bf158051f55a4d18fb7",
-      "reviewNote": "g 与 ɡ 是同一 IPA 音素的字形差异；当前 UK /dɒɡ/ 仅对应指定 UK 文件。",
+      "reviewNote": "g 与 ɡ 是同一 IPA 音素的字形差异；真实查询输出带成对 /，当前 UK /dɒɡ/ 仅对应指定 UK 文件。",
       "revisionId": 95422771,
       "revisionTimestamp": "2026-11-04T20:51:45Z",
       "sourcePhonetics": [
@@ -798,7 +798,7 @@
           "relation": "unresolved"
         }
       ],
-      "currentPhonetic": "lә:n",
+      "currentPhonetic": "/lә:n/",
       "gap": "reading-review-missing",
       "pageUrl": "https://en.wiktionary.org/wiki/learn",
       "rawResponse": "openspec/changes/add-dictionary-pronunciation-audio/evidence/raw/get-d58c09ba96a3ef367d2a2f22edb7d530f64391309c1ab8cac5cd43e1d76b033e.json",
@@ -837,7 +837,7 @@
           "relation": "accent"
         }
       ],
-      "currentPhonetic": "wә:d",
+      "currentPhonetic": "/wә:d/",
       "gap": "reading-review-missing",
       "pageUrl": "https://en.wiktionary.org/wiki/word",
       "rawResponse": "openspec/changes/add-dictionary-pronunciation-audio/evidence/raw/get-6f8b207bdd95c2770f106aedd1fde406a2b22f57ba195946f8f20e7df28e68ee.json",
@@ -893,7 +893,7 @@
           "relation": "ancestor"
         }
       ],
-      "currentPhonetic": "'dikʃәnәri",
+      "currentPhonetic": "/'dikʃәnәri/",
       "gap": "license-or-media: 缺少明确作者归因",
       "pageUrl": "https://en.wiktionary.org/wiki/dictionary",
       "rawResponse": "openspec/changes/add-dictionary-pronunciation-audio/evidence/raw/get-130bf46160b77f79b66ae3ae51b93bec5d879cafd638be89d213badef9cffebd.json",
@@ -926,8 +926,8 @@
           "relation": "unresolved"
         }
       ],
-      "currentPhonetic": "prәu.nʌnsi'eiʃәn",
-      "gap": "reading-review-missing",
+      "currentPhonetic": null,
+      "gap": "current-phonetic-missing",
       "pageUrl": "https://en.wiktionary.org/wiki/pronunciation",
       "rawResponse": "openspec/changes/add-dictionary-pronunciation-audio/evidence/raw/get-22a84ff6d3167f15ecf2ac95f7dcea2b2defe7d93dd8e7e052b6e52e3b62e244.json",
       "rawResponseSha256": "eacedc1c451c033f5c24b5ed2c262981e9e07427bffbd8d37b6753b44f78d40e",
@@ -946,7 +946,7 @@
       "accepted": false,
       "audioTitles": [],
       "branches": [],
-      "currentPhonetic": "ri:d",
+      "currentPhonetic": "/ri:d/",
       "gap": "scope-unknown-or-audio-missing",
       "pageUrl": "https://en.wiktionary.org/wiki/read",
       "rawResponse": "openspec/changes/add-dictionary-pronunciation-audio/evidence/raw/get-572c2956c78e593d1233fa3e96bc646dddf6bbb61e2e1a7a904c67e8bf9ec1dc.json",
@@ -960,7 +960,7 @@
       "accepted": false,
       "audioTitles": [],
       "branches": [],
-      "currentPhonetic": "li:d. led",
+      "currentPhonetic": "/li:d. led/",
       "gap": "scope-unknown-or-audio-missing",
       "pageUrl": "https://en.wiktionary.org/wiki/lead",
       "rawResponse": "openspec/changes/add-dictionary-pronunciation-audio/evidence/raw/get-0a62fbc64f74e2753684e08e3eea1a7ad53cc714b963b3f8416d441b194ea552.json",
@@ -974,7 +974,7 @@
       "accepted": false,
       "audioTitles": [],
       "branches": [],
-      "currentPhonetic": "liv.laiv",
+      "currentPhonetic": "/liv.laiv/",
       "gap": "scope-unknown-or-audio-missing",
       "pageUrl": "https://en.wiktionary.org/wiki/live",
       "rawResponse": "openspec/changes/add-dictionary-pronunciation-audio/evidence/raw/get-f7210e1e1ed85bed526afdc9d8cbe760f822c259ac2bb50cac36b84beb00bc64.json",
@@ -988,7 +988,7 @@
       "accepted": false,
       "audioTitles": [],
       "branches": [],
-      "currentPhonetic": "ri'kɒ:d",
+      "currentPhonetic": "/ri'kɒ:d/",
       "gap": "scope-unknown-or-audio-missing",
       "pageUrl": "https://en.wiktionary.org/wiki/record",
       "rawResponse": "openspec/changes/add-dictionary-pronunciation-audio/evidence/raw/get-c4378ae0a5fce074cfced45f9ae809864db16df45cb4ebe3b3ad41f6a9368dec.json",
@@ -1002,7 +1002,7 @@
       "accepted": false,
       "audioTitles": [],
       "branches": [],
-      "currentPhonetic": "wind",
+      "currentPhonetic": "/wind/",
       "gap": "scope-unknown-or-audio-missing",
       "pageUrl": "https://en.wiktionary.org/wiki/wind",
       "rawResponse": "openspec/changes/add-dictionary-pronunciation-audio/evidence/raw/get-5b1a3640158d467ee9354a4bc93e582c9510ca938bbf502188c5271aaa072e61.json",
@@ -1016,7 +1016,7 @@
       "accepted": false,
       "audioTitles": [],
       "branches": [],
-      "currentPhonetic": "klәuz",
+      "currentPhonetic": "/klәuz/",
       "gap": "scope-unknown-or-audio-missing",
       "pageUrl": "https://en.wiktionary.org/wiki/close",
       "rawResponse": "openspec/changes/add-dictionary-pronunciation-audio/evidence/raw/get-17d92a84ce0e4c7c88e2d36c4381a779017ac5bccd71c5e3163a7b42fc827fa5.json",
@@ -1030,7 +1030,7 @@
       "accepted": false,
       "audioTitles": [],
       "branches": [],
-      "currentPhonetic": "'minit. mai'nju:t",
+      "currentPhonetic": "/'minit. mai'nju:t/",
       "gap": "scope-unknown-or-audio-missing",
       "pageUrl": "https://en.wiktionary.org/wiki/minute",
       "rawResponse": "openspec/changes/add-dictionary-pronunciation-audio/evidence/raw/get-434d482294bda90e10a893775ef558b99f44db627585820a9b548783508f8b5e.json",
@@ -1130,7 +1130,7 @@
           "relation": "unresolved"
         }
       ],
-      "currentPhonetic": "'preznt",
+      "currentPhonetic": "/'preznt/",
       "gap": "reading-review-missing",
       "pageUrl": "https://en.wiktionary.org/wiki/present",
       "rawResponse": "openspec/changes/add-dictionary-pronunciation-audio/evidence/raw/get-a87baf2a4dcc7d7be8dbf109aa05986d69f8b075028719388947772d1e841cd7.json",

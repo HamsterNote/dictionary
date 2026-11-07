@@ -202,6 +202,26 @@ try {
     undefined,
   );
 
+  const { getDetail } = await server.ssrLoadModule('/src/dictionaryData.ts');
+  for (const manifestEntry of pronunciationAudioManifest.entries) {
+    const detail = getDetail(manifestEntry.word);
+    assert.ok(detail?.phonetic, `${manifestEntry.word} 的真实查询缺少 IPA`);
+    assert.equal(
+      manifestEntry.phonetic,
+      detail.phonetic,
+      `${manifestEntry.word} sidecar 未对齐真实 getDetail 输出`,
+    );
+    assert.equal(
+      resolvePronunciationAudio(pronunciationAudioManifest, {
+        word: manifestEntry.word,
+        language: 'en',
+        phonetic: detail.phonetic,
+      }).status,
+      'available',
+      `${manifestEntry.word} 真实 lookup 结果不能播放`,
+    );
+  }
+
   console.log('test_pronunciation_audio_data: OK');
 } finally {
   await server.close();

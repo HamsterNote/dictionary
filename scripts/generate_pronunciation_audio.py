@@ -10,6 +10,7 @@ import json
 import os
 from pathlib import Path
 import re
+import subprocess
 import tempfile
 import time
 import unicodedata
@@ -29,7 +30,6 @@ WORDS = (
     "hello", "note", "apple", "book", "world", "water", "cat", "dog", "learn", "word",
     "dictionary", "pronunciation", "read", "lead", "live", "record", "wind", "close", "minute", "present",
 )
-PACK_ORDER = ("core", "zk", "gk", "cet4", "cet6", "ky", "ielts", "toefl", "gre", "bnc")
 ALLOWED_API_HOSTS = {"en.wiktionary.org", "commons.wikimedia.org"}
 ALLOWED_MEDIA_HOSTS = {"upload.wikimedia.org"}
 ALLOWED_MIMES = {"audio/mpeg", "audio/ogg", "application/ogg", "audio/webm", "audio/mp4"}
@@ -41,24 +41,24 @@ USER_AGENT = "HamsterDictionary/0.1 (HAM-186; per-file pronunciation license aud
 # 该表不提供许可结论；许可始终来自本次保存的 Commons 文件元数据。
 REVIEWED_READINGS: dict[str, dict[str, str]] = {
     "hello": {
-        "audio": "En-uk-hello.ogg", "sourcePhonetic": "/həˈləʊ/", "currentPhonetic": "hә'lәu",
+        "audio": "En-uk-hello.ogg", "sourcePhonetic": "/həˈləʊ/", "currentPhonetic": "/hә'lәu/",
         "accent": "uk", "verifiedAt": "2026-11-06T14:56:27Z", "verifiedBy": "资深软件工程师（HAM-186 Apply）",
-        "reviewNote": "当前 ECDICT 的 ә/'/u 记法与 UK /həˈləʊ/ 的音素和重音一致；仅对应指定的 UK 文件。",
+        "reviewNote": "当前 ECDICT 的 ә/'/u 记法与 UK /həˈləʊ/ 的音素和重音一致；真实查询输出带成对 /，仅对应指定的 UK 文件。",
     },
     "cat": {
-        "audio": "En-us-cat.ogg", "sourcePhonetic": "/ˈkæt/", "currentPhonetic": "kæt",
+        "audio": "En-us-cat.ogg", "sourcePhonetic": "/ˈkæt/", "currentPhonetic": "/kæt/",
         "accent": "us", "verifiedAt": "2026-11-06T14:56:27Z", "verifiedBy": "资深软件工程师（HAM-186 Apply）",
-        "reviewNote": "单音节词省略主重音不改变音素；选择单词录音 En-us-cat.ogg，不选择短语 a cat 或地区变体。",
+        "reviewNote": "单音节词省略主重音不改变音素；真实查询输出带成对 /，选择单词录音 En-us-cat.ogg，不选择短语 a cat 或地区变体。",
     },
     "dog": {
-        "audio": "En-uk-dog.ogg", "sourcePhonetic": "/dɒɡ/", "currentPhonetic": "dɒg",
+        "audio": "En-uk-dog.ogg", "sourcePhonetic": "/dɒɡ/", "currentPhonetic": "/dɒg/",
         "accent": "uk", "verifiedAt": "2026-11-06T14:56:27Z", "verifiedBy": "资深软件工程师（HAM-186 Apply）",
-        "reviewNote": "g 与 ɡ 是同一 IPA 音素的字形差异；当前 UK /dɒɡ/ 仅对应指定 UK 文件。",
+        "reviewNote": "g 与 ɡ 是同一 IPA 音素的字形差异；真实查询输出带成对 /，当前 UK /dɒɡ/ 仅对应指定 UK 文件。",
     },
     "dictionary": {
-        "audio": "En-uk-dictionary.ogg", "sourcePhonetic": "/ˈdɪkʃ(ə)nəɹi/", "currentPhonetic": "'dikʃәnәri",
+        "audio": "En-uk-dictionary.ogg", "sourcePhonetic": "/ˈdɪkʃ(ə)nəɹi/", "currentPhonetic": "/'dikʃәnәri/",
         "accent": "uk", "verifiedAt": "2026-11-06T14:56:27Z", "verifiedBy": "资深软件工程师（HAM-186 Apply）",
-        "reviewNote": "当前读法实现来源中可选的第一个 ə；其余音素和重音一致，仅对应指定 UK 文件。",
+        "reviewNote": "当前读法实现来源中可选的第一个 ə；真实查询输出带成对 /，其余音素和重音一致，仅对应指定 UK 文件。",
     },
 }
 
@@ -244,17 +244,33 @@ class CachedClient:
         return MediaHead(final_url, mime, size, (str(path.relative_to(ROOT)) if path.is_relative_to(ROOT) else path.name))
 
 
-def current_phonetics() -> dict[str, str]:
-    result: dict[str, str] = {}
-    for pack in PACK_ORDER:
-        path = ROOT / f"src/data/ecdict-{pack}.tsv"
-        if not path.exists():
-            continue
-        for line in path.read_text().splitlines():
-            columns = line.split("\t")
-            if len(columns) > 2 and columns[0] in WORDS and columns[0] not in result and columns[1]:
-                result[columns[0]] = columns[1]
-    return result
+def lookup_current_phonetics() -> dict[str, str]:
+    try:
+        process = subprocess.run(
+            ["node", "scripts/pronunciation_audio_lookup.mjs"],
+            cwd=ROOT, input=json.dumps(WORDS), text=True, capture_output=True, timeout=60,
+        )
+    except (OSError, subprocess.TimeoutExpired) as error:
+        raise CollectionError("真实 getDetail 桥接失败") from error
+    if process.returncode != 0:
+        raise CollectionError(f"真实 getDetail 桥接失败：{process.stderr.strip()}")
+    try:
+        payload = json.loads(process.stdout)
+        records = payload["records"]
+        if payload["schema"] != "pronunciation-audio-lookup/1" or not isinstance(records, list):
+            raise ValueError("lookup schema 无效")
+        if [record.get("word") for record in records] != list(WORDS):
+            raise ValueError("lookup 词表或顺序不一致")
+        result = {}
+        for record in records:
+            phonetic = record.get("phonetic")
+            if phonetic is not None and (not isinstance(phonetic, str) or not phonetic.strip()):
+                raise ValueError("lookup IPA 类型无效")
+            if isinstance(phonetic, str) and phonetic.strip():
+                result[record["word"]] = phonetic
+        return result
+    except (KeyError, TypeError, ValueError, json.JSONDecodeError) as error:
+        raise CollectionError("真实 getDetail 桥接响应无效") from error
 
 
 def pronunciation_section(wikitext: str) -> str | None:
@@ -488,7 +504,7 @@ def reviewed_branch(record: dict[str, Any], review: dict[str, str]) -> dict[str,
 
 
 def collect(client: CachedClient) -> tuple[dict[str, Any], dict[str, Any]]:
-    current = current_phonetics()
+    current = lookup_current_phonetics()
     entries = []
     assets: dict[str, Any] = {}
     coverage = []

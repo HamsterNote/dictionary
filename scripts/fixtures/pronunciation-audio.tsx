@@ -29,7 +29,7 @@ import '../../src/dictionary.css';
 const details: Record<string, DictionaryDataDetail> = {
   hello: {
     word: 'hello',
-    phonetic: "hә'lәu",
+    phonetic: "/hә'lәu/",
     sources: [
       {
         id: 'fixture',
@@ -40,7 +40,7 @@ const details: Record<string, DictionaryDataDetail> = {
   },
   cat: {
     word: 'cat',
-    phonetic: 'kæt',
+    phonetic: '/kæt/',
     sources: [
       {
         id: 'fixture',
