@@ -2,6 +2,7 @@ import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
 import { readFile } from 'node:fs/promises';
 import { createServer } from 'vite';
+import { gunzipSync, gzipSync } from 'fflate';
 
 const server = await createServer({ logLevel: 'error', server: { middlewareMode: true } });
 
@@ -203,6 +204,21 @@ try {
   await assert.rejects(retryStore.lookupChinese('心'), /injected read failure/u);
   assert.deepEqual(await retryStore.lookupChinese('心'), lookupChinese('心', chinesePacks));
   retryStore.dispose();
+
+  const corruptionPack = manifest.packs.find((pack) => pack.id === 'wordnet-synonyms-toefl');
+  const corruptionResource = corruptionPack.index;
+  const originalZipped = await reader.read(corruptionResource);
+  const originalRaw = gunzipSync(originalZipped);
+  const corruptedZipped = gzipSync(originalRaw, { level: 9, filename: 'x' });
+  assert.equal(corruptedZipped.byteLength, originalZipped.byteLength);
+  assert.notDeepEqual(corruptedZipped, originalZipped);
+  assert.deepEqual(gunzipSync(corruptedZipped), originalRaw);
+  const corruptedStore = new OfflineDictionaryResourceStore(manifest, {
+    read: async (resource) =>
+      resource.id === corruptionResource.id ? corruptedZipped : reader.read(resource),
+  });
+  await assert.rejects(corruptedStore.getSynonymPacks('a'), /压缩 SHA-256 校验失败/u);
+  corruptedStore.dispose();
 
   await assert.rejects(store.readPackShard('../outside', 0), /不在 manifest 允许范围内/u);
   await assert.rejects(store.readPackShard(largePack.id, -1), /不在 manifest 允许范围内/u);

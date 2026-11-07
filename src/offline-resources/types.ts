@@ -22,6 +22,7 @@ export interface OfflineDictionaryPack {
   readonly kind: 'chinese' | 'roots' | 'synonyms';
   readonly label: string;
   readonly source: Readonly<Record<string, string>>;
+  readonly licenseFiles: readonly string[];
   readonly header: string;
   readonly rowOrder: 'source';
   readonly recordCount: number;

@@ -307,6 +307,7 @@
   },
   "dependencies": {
     "@hamster-note/components": "0.3.0",
+    "@noble/hashes": "2.4.0",
     "fflate": "0.8.3",
     "kokoro-js": "1.2.1"
   }

@@ -7,6 +7,7 @@ import gzip
 import hashlib
 import json
 import shutil
+import tempfile
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Final
@@ -17,6 +18,10 @@ UNIMORPH_COMMIT: Final = "66e0e9e8e2dcd196da081a25a48e5c1fe3d8b49b"
 DEFAULT_SHARD_BYTES: Final = 256 * 1024
 MAX_RESOURCE_BYTES: Final = 40 * 1024 * 1024
 ENGLISH_PACK_IDS: Final = ("core", "zk", "gk", "cet4", "cet6", "ky", "ielts", "toefl", "gre", "bnc")
+MAPULL_LICENSES: Final = ("LICENSES/MAPULL-MIT.txt", "LICENSES/CC-BY-SA-4.0.txt")
+XINHUA_LICENSES: Final = ("LICENSES/CHINESE-XINHUA-MIT.txt",)
+WORDNET_LICENSES: Final = ("LICENSES/WORDNET-3.1.txt",)
+UNIMORPH_LICENSES: Final = ("LICENSES/CC-BY-SA-3.0.txt",)
 
 
 @dataclass(frozen=True, slots=True)
@@ -27,6 +32,7 @@ class PackSpec:
     label: str
     source_file: str
     source: dict[str, str]
+    license_files: tuple[str, ...]
 
 
 CHINESE_SPECS: Final = (
@@ -41,6 +47,7 @@ CHINESE_SPECS: Final = (
             "commit": MAPULL_COMMIT,
             "license": "MIT（仓库级；上游授权链见 THIRD_PARTY_NOTICES.md）",
         },
+        MAPULL_LICENSES,
     ),
     PackSpec(
         "chinese-dictionary-words",
@@ -53,6 +60,7 @@ CHINESE_SPECS: Final = (
             "commit": MAPULL_COMMIT,
             "license": "MIT（仓库级；上游授权链见 THIRD_PARTY_NOTICES.md）",
         },
+        MAPULL_LICENSES,
     ),
     PackSpec(
         "chinese-xinhua",
@@ -65,6 +73,7 @@ CHINESE_SPECS: Final = (
             "commit": XINHUA_COMMIT,
             "license": "MIT（仓库级；上游授权链见 THIRD_PARTY_NOTICES.md）",
         },
+        XINHUA_LICENSES,
     ),
     PackSpec(
         "chinese-xinhua-words",
@@ -77,6 +86,7 @@ CHINESE_SPECS: Final = (
             "commit": XINHUA_COMMIT,
             "license": "MIT（仓库级；上游授权链见 THIRD_PARTY_NOTICES.md）",
         },
+        XINHUA_LICENSES,
     ),
 )
 
@@ -125,6 +135,7 @@ SUPPLEMENT_SPECS: Final = tuple(
             SYNONYM_LABELS[pack_id],
             f"wordnet-synonyms-{pack_id}.tsv",
             WORDNET_SOURCE,
+            WORDNET_LICENSES,
         )
         for pack_id in ENGLISH_PACK_IDS
     ]
@@ -136,6 +147,7 @@ SUPPLEMENT_SPECS: Final = tuple(
             ROOT_LABELS[pack_id],
             f"unimorph-roots-{pack_id}.tsv",
             UNIMORPH_SOURCE,
+            UNIMORPH_LICENSES,
         )
         for pack_id in ENGLISH_PACK_IDS
     ]
@@ -250,6 +262,7 @@ def build_pack(
         "kind": spec.kind,
         "label": spec.label,
         "source": spec.source,
+        "licenseFiles": list(spec.license_files),
         "header": header.rstrip("\r\n"),
         "rowOrder": "source",
         "recordCount": len(rows),
@@ -268,30 +281,51 @@ def generate(
     specs: tuple[PackSpec, ...] = ALL_SPECS,
     shard_target_bytes: int = DEFAULT_SHARD_BYTES,
 ) -> dict[str, object]:
-    output_root.mkdir(parents=True, exist_ok=True)
-    packs = [
-        build_pack(spec, source_root, output_root, shard_target_bytes) for spec in specs
-    ]
-    manifest: dict[str, object] = {
-        "formatVersion": 1,
-        "packageVersion": package_version,
-        "shardTargetBytes": shard_target_bytes,
-        "packs": packs,
-    }
-    manifest_bytes = (json.dumps(manifest, ensure_ascii=False, indent=2, sort_keys=True) + "\n").encode(
-        "utf-8"
-    )
-    (output_root / "manifest.json").write_bytes(manifest_bytes)
-    return manifest
+    output_root.parent.mkdir(parents=True, exist_ok=True)
+    with tempfile.TemporaryDirectory(
+        prefix=f".{output_root.name}-", dir=output_root.parent
+    ) as temporary_directory:
+        temporary_root = Path(temporary_directory) / "dictionary"
+        packs = [
+            build_pack(spec, source_root, temporary_root, shard_target_bytes) for spec in specs
+        ]
+        manifest: dict[str, object] = {
+            "formatVersion": 1,
+            "packageVersion": package_version,
+            "shardTargetBytes": shard_target_bytes,
+            "packs": packs,
+        }
+        manifest_bytes = (
+            json.dumps(manifest, ensure_ascii=False, indent=2, sort_keys=True) + "\n"
+        ).encode("utf-8")
+        (temporary_root / "manifest.json").write_bytes(manifest_bytes)
+        copy_notices(Path(__file__).resolve().parent.parent, temporary_root)
+        total_bytes = sum(
+            path.stat().st_size for path in temporary_root.rglob("*") if path.is_file()
+        )
+        if total_bytes > MAX_RESOURCE_BYTES:
+            raise ValueError(f"离线资源总计 {total_bytes} bytes，超过 {MAX_RESOURCE_BYTES} bytes")
+
+        previous_root = Path(temporary_directory) / "previous"
+        if output_root.exists():
+            output_root.replace(previous_root)
+        try:
+            temporary_root.replace(output_root)
+        except Exception:
+            if previous_root.exists():
+                previous_root.replace(output_root)
+            raise
+        return manifest
 
 
 def copy_notices(repository_root: Path, output_root: Path) -> None:
     shutil.copyfile(repository_root / "THIRD_PARTY_NOTICES.md", output_root / "THIRD_PARTY_NOTICES.md")
-    licenses = ("CC-BY-SA-3.0.txt",)
-    for filename in licenses:
-        destination = output_root / "LICENSES" / filename
+    license_files = sorted({license_file for spec in ALL_SPECS for license_file in spec.license_files})
+    for license_file in license_files:
+        source = repository_root / license_file
+        destination = output_root / license_file
         destination.parent.mkdir(parents=True, exist_ok=True)
-        shutil.copyfile(repository_root / "LICENSES" / filename, destination)
+        shutil.copyfile(source, destination)
 
 
 def main() -> int:
@@ -304,10 +338,7 @@ def main() -> int:
         "version"
     ]
     generate(arguments.source_root, arguments.output_root, package_version)
-    copy_notices(repository_root, arguments.output_root)
     total_bytes = sum(path.stat().st_size for path in arguments.output_root.rglob("*") if path.is_file())
-    if total_bytes > MAX_RESOURCE_BYTES:
-        raise ValueError(f"离线资源总计 {total_bytes} bytes，超过 {MAX_RESOURCE_BYTES} bytes")
     print(f"已生成 {len(ALL_SPECS)} 个包；资源总计 {total_bytes} bytes：{arguments.output_root}")
     return 0
 

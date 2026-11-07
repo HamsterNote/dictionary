@@ -26,6 +26,7 @@ class OfflineDictionaryResourceTest(unittest.TestCase):
             "测试词库",
             "fixture.tsv",
             {"repository": "https://example.invalid/fixture", "license": "MIT"},
+            ("LICENSES/CC-BY-SA-3.0.txt",),
         )
 
     def tearDown(self) -> None:
@@ -88,6 +89,25 @@ class OfflineDictionaryResourceTest(unittest.TestCase):
         self.assertEqual(manifest["packageVersion"], "1.0.0")
         self.assertEqual(manifest["packs"][0]["rowOrder"], "source")
 
+    def test_rebuild_removes_stale_shards(self) -> None:
+        self.write_snapshot(
+            "# fixture\n"
+            "心\txīn\t汉字\t内心\n"
+            f"超长\tchāng cháng\t词语\t{'长' * 200}\n"
+            "心安\txīn ān\t词语\t内心安定\n"
+        )
+        generate(self.source_root, self.output_root, "1.0.0", (self.spec,), 40)
+        stale_shard = self.output_root / "shards" / "fixture" / "000001.tsv.gz"
+        self.assertTrue(stale_shard.exists())
+
+        self.write_snapshot("# fixture\n心\txīn\t汉字\t内心\n")
+        manifest = generate(self.source_root, self.output_root, "1.0.0", (self.spec,), 40)
+        self.assertEqual(len(manifest["packs"][0]["shards"]), 1)
+        self.assertFalse(stale_shard.exists())
+        self.assertFalse(
+            any(path.name.startswith(".output-") for path in self.output_root.parent.iterdir())
+        )
+
     def test_invalid_utf8_and_empty_inputs_fail(self) -> None:
         (self.source_root / "fixture.tsv").write_bytes(b"# fixture\n\xff\n")
         with self.assertRaises(UnicodeDecodeError):
@@ -115,6 +135,14 @@ class OfflineDictionaryResourceTest(unittest.TestCase):
         for spec in ALL_SPECS:
             with self.subTest(pack=spec.id):
                 pack = packs[spec.id]
+                self.assertTrue(spec.license_files)
+                self.assertEqual(pack["licenseFiles"], list(spec.license_files))
+                for license_file in spec.license_files:
+                    self.assertEqual(Path(license_file).parts[0], "LICENSES")
+                    self.assertNotIn("..", Path(license_file).parts)
+                    expected_license = (repository_root / license_file).read_bytes()
+                    self.assertGreater(len(expected_license), 0)
+                    self.assertEqual((output_root / license_file).read_bytes(), expected_license)
                 source = (repository_root / "src" / "data" / spec.source_file).read_bytes()
                 reassembled = pack["header"].encode("utf-8") + b"\n" + b"".join(
                     gzip.decompress((output_root / shard["id"]).read_bytes())
