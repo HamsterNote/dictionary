@@ -16,6 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - 释义点词从整篇并发查询改为共享的空闲串行队列；候选惰性生成、可见段落优先、段落完成即可点词，并在切词、卸载与重试时取消过期任务。
+- 打包前核对 npm 包、离线 manifest 与构建后的运行时资源版本，阻止版本混配的包进入发布。
 - 新增 `--dictionary-radius-popover` 与 `--dictionary-radius-control` 设计变量，统一弹层、搜索、建议及操作按钮的圆角语言，并允许宿主映射自身设计系统。
 
 ## [0.1.1-beta.2] - 2026-08-18
