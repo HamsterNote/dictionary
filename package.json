@@ -1,6 +1,6 @@
 {
   "name": "@hamster-note/dictionary",
-  "version": "0.1.1-beta.6",
+  "version": "0.1.1-beta.7",
   "description": "仓鼠笔记的 React 词典悬浮窗组件",
   "type": "module",
   "license": "MIT",
@@ -248,7 +248,7 @@
     "generate:pronunciation-audio": "python3 scripts/generate_pronunciation_audio.py",
     "audit:pronunciations": "node scripts/audit_ecdict_pronunciations.mjs --write",
     "test:chinese": "python3 scripts/test_generate_chinese_dictionaries.py",
-    "test:offline-resources": "python3 scripts/test_generate_offline_dictionary_resources.py && node scripts/test_offline_dictionary_resources.mjs",
+    "test:offline-resources": "python3 scripts/test_generate_offline_dictionary_resources.py && node scripts/test_offline_dictionary_resources.mjs && node scripts/test_offline_decoder_browser.mjs",
     "test:dictionary-text": "node scripts/test_dictionary_text_candidates.mjs && node scripts/test_dictionary_idle_queue.mjs",
     "test:dictionary-text-browser": "node scripts/test_dictionary_text_browser.mjs",
     "benchmark:dictionary-text": "node scripts/benchmark_dictionary_text.mjs",

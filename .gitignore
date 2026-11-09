@@ -15,4 +15,5 @@ __pycache__/
 playwright-report/
 test-results/
 reports/
+artifacts/
 data_sources/

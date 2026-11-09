@@ -1,6 +1,4 @@
-import { sha256 } from '@noble/hashes/sha2.js';
-import { bytesToHex } from '@noble/hashes/utils.js';
-import { gunzipSync } from 'fflate';
+import { OfflineResourceDecoder } from './resourceDecoder';
 import { createChineseDictionaryPack, type ChineseDictionaryPack } from '../chineseDictionaryPack';
 import type { DictionaryEntrySummary } from '../dictionaryEntrySummary';
 import { createEnglishRootPack, type EnglishRootPack } from '../englishRootPack';
@@ -104,9 +102,11 @@ export class OfflineDictionaryResourceStore {
   readonly #indexes = new Map<string, Promise<string>>();
   readonly #shards = new Map<string, Uint8Array>();
   readonly #pendingShards = new Map<string, Promise<Uint8Array>>();
+  #rowsByShard = new WeakMap<Uint8Array, readonly string[]>();
   readonly #maxShardCacheBytes: number;
   #shardCacheBytes = 0;
   #disposed = false;
+  readonly #decoder = new OfflineResourceDecoder();
 
   constructor(
     manifest: OfflineDictionaryManifest,
@@ -137,10 +137,12 @@ export class OfflineDictionaryResourceStore {
 
   dispose(): void {
     this.#disposed = true;
+    this.#decoder.dispose();
     this.#indexes.clear();
     this.#shards.clear();
     this.#pendingShards.clear();
     this.#shardCacheBytes = 0;
+    this.#rowsByShard = new WeakMap();
   }
 
   async lookupChinese(query: string): Promise<ChineseLookupResult> {
@@ -223,6 +225,7 @@ export class OfflineDictionaryResourceStore {
   clearShardCache(): void {
     this.#shards.clear();
     this.#shardCacheBytes = 0;
+    this.#rowsByShard = new WeakMap();
   }
 
   #packsByKind(kind: OfflineDictionaryPack['kind']): readonly OfflineDictionaryPack[] {
@@ -277,8 +280,12 @@ export class OfflineDictionaryResourceStore {
     for (const [shardNumber, shardReferences] of referencesByShard) {
       const shard = pack.shards[shardNumber];
       if (!shard) throw new Error(`${pack.id} 的索引指向不存在的分片`);
-      const contents = textDecoder.decode(await this.#readShard(pack, shard));
-      const rows = contents.split('\n');
+      const contents = await this.#readShard(pack, shard);
+      let rows = this.#rowsByShard.get(contents);
+      if (!rows) {
+        rows = textDecoder.decode(contents).split('\n');
+        this.#rowsByShard.set(contents, rows);
+      }
       for (const reference of shardReferences) {
         const row = rows[reference.rowNumber - shard.firstRow];
         if (row?.split('\t', 1)[0] !== reference.word) {
@@ -298,12 +305,10 @@ export class OfflineDictionaryResourceStore {
     this.#assertActive();
     const cached = this.#indexes.get(pack.id);
     if (cached) return cached;
-    const pending = this.#readCompressedResource(pack.index)
-      .then((raw) => textDecoder.decode(raw))
-      .catch((error: unknown) => {
-        this.#indexes.delete(pack.id);
-        throw error;
-      });
+    const pending = this.#readIndexText(pack.index).catch((error: unknown) => {
+      this.#indexes.delete(pack.id);
+      throw error;
+    });
     this.#indexes.set(pack.id, pending);
     return pending;
   }
@@ -334,20 +339,18 @@ export class OfflineDictionaryResourceStore {
     this.#assertActive();
     const zipped = await this.#reader.read(resource);
     this.#assertActive();
-    if (zipped.byteLength !== resource.bytes) {
-      throw new Error(`${resource.id} 的压缩长度校验失败`);
-    }
-    if (bytesToHex(sha256(zipped)) !== resource.sha256) {
-      throw new Error(`${resource.id} 的压缩 SHA-256 校验失败`);
-    }
-    const raw = gunzipSync(zipped);
-    if (raw.byteLength !== resource.uncompressedBytes) {
-      throw new Error(`${resource.id} 的解压长度校验失败`);
-    }
-    if (bytesToHex(sha256(raw)) !== resource.uncompressedSha256) {
-      throw new Error(`${resource.id} 的解压 SHA-256 校验失败`);
-    }
+    const raw = await this.#decoder.decode(zipped, resource);
+    this.#assertActive();
     return raw;
+  }
+
+  async #readIndexText(resource: OfflineDictionaryResource): Promise<string> {
+    this.#assertActive();
+    const zipped = await this.#reader.read(resource);
+    this.#assertActive();
+    const text = await this.#decoder.decodeText(zipped, resource);
+    this.#assertActive();
+    return text;
   }
 
   #cacheShard(shard: OfflineDictionaryShard, raw: Uint8Array): void {

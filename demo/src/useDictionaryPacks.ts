@@ -68,6 +68,8 @@ export function useDictionaryPacks() {
     [activeChinesePacks, activeEnglishPacks, enabledSupplements],
   );
 
+  const loadInflections = inflectionPacks.load;
+  const loadLexical = lexicalPacks.load;
   const toggle = useCallback(
     (id: string, enabled: boolean) => {
       if (!isDictionaryPackId(id)) return;
@@ -83,7 +85,7 @@ export function useDictionaryPacks() {
         setEnabledSupplements(nextSupplements);
         if (!enabled) return;
         setLoadingIds((current) => new Set(current).add(id));
-        void inflectionPacks.load(id).then(
+        void loadInflections(id).then(
           () => {
             setLoadingIds((current) => removeLoadingIds(current, [id]));
           },
@@ -117,7 +119,7 @@ export function useDictionaryPacks() {
         enabledSupplementsRef.current = nextSupplements;
         setEnabledSupplements(nextSupplements);
         setLoadingIds((current) => new Set(current).add(id));
-        void lexicalPacks.load(activeSupplementPackIds, nextSupplements).then(
+        void loadLexical(activeSupplementPackIds, nextSupplements).then(
           () => {
             setLoadingIds((current) => removeLoadingIds(current, [id]));
           },
@@ -150,7 +152,7 @@ export function useDictionaryPacks() {
       if (isEnglishVocabularyPackId(id)) {
         void loadEnglishPack(id).then(
           (pack) => {
-            void lexicalPacks.load([id], enabledSupplementsRef.current).then(
+            void loadLexical([id], enabledSupplementsRef.current).then(
               () => {
                 setActiveEnglishPacks((current) => new Map(current).set(id, pack));
                 setLoadingIds((current) => removeLoadingIds(current, [id]));
@@ -183,7 +185,7 @@ export function useDictionaryPacks() {
         },
       );
     },
-    [activeSupplementPackIds, inflectionPacks, lexicalPacks],
+    [activeSupplementPackIds, loadInflections, loadLexical],
   );
 
   return {

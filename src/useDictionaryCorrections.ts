@@ -125,6 +125,7 @@ export function useDictionaryCorrections(
   control?: DictionaryCorrectionsControl,
 ): DictionaryCorrectionsManager {
   const resolved = resolveDictionaryCorrectionsControl(control);
+  const { disabled, managed, onChange } = resolved;
   const localPatches = useSyncExternalStore(
     resolved.managed ? () => () => undefined : subscribeLocalCorrections,
     resolved.managed ? () => resolved.user : getLocalPatchesSnapshot,
@@ -133,12 +134,12 @@ export function useDictionaryCorrections(
 
   const save = useCallback(
     (word: string, patch: DictionaryCorrectionPatch | null) => {
-      if (resolved.disabled) return;
-      if (resolved.managed && resolved.onChange === undefined) {
+      if (disabled) return;
+      if (managed && onChange === undefined) {
         throw new Error('corrections.onChange 缺失：托管模式必须提供持久化回调，补丁未保存。');
       }
       const key = normalizeDictionaryCorrectionKey(word);
-      if (!resolved.managed) {
+      if (!managed) {
         const cache = getLocalCorrectionsCache();
         const next: Record<string, DictionaryCorrectionPatch> = Object.fromEntries([
           ...Object.entries(cache.patches).filter(([patchKey]) => patchKey !== key),
@@ -146,9 +147,9 @@ export function useDictionaryCorrections(
         ]);
         writeLocalCorrections(next);
       }
-      resolved.onChange?.(key, patch);
+      onChange?.(key, patch);
     },
-    [resolved],
+    [disabled, managed, onChange],
   );
 
   const reset = useCallback(

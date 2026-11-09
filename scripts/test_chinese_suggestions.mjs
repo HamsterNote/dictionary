@@ -68,6 +68,32 @@ try {
     ],
     '中文候选默认应显示 18 条，同时将精确匹配置顶并将其余候选按字数升序排列',
   );
+
+  const extraPack = createChineseDictionaryPack(
+    ['# fixture', '心\t\t\tduplicate', '心上\t\t\tnew', '𠮷祥\t\t\tastral', '𠮷\t\t\tastral'].join(
+      '\n',
+    ),
+    { entryCount: 4, gzipBytes: 0, id: 'extra', label: 'extra' },
+  );
+  const packs = [dictionaryPack, extraPack];
+  // Compare with the previous complete scan: exact precedence, stable length
+  // ordering, pack deduplication, absent prefixes, normalization and astral Han.
+  for (const query of ['心', '心上', '𠮷', '没有', ' 心 ']) {
+    for (const limit of [0, 1, 3, 18, 100]) {
+      const normalized = query.trim().normalize('NFKC');
+      const expected = [...new Set(packs.flatMap((pack) => [...pack.entries.keys()]))]
+        .filter((word) => word.startsWith(normalized))
+        .sort((a, b) => (a === normalized ? -1 : b === normalized ? 1 : a.length - b.length))
+        .slice(0, limit);
+      assert.deepEqual(suggestChinese(query, packs, limit), expected);
+    }
+  }
+  // Custom packs can expose live Maps; they must not acquire stale indexes.
+  const entries = new Map([['心', ['', '', ['one']]]]);
+  const custom = { ...extraPack, entries };
+  assert.deepEqual(suggestChinese('心', [custom]), ['心']);
+  entries.set('心安', ['', '', ['two']]);
+  assert.deepEqual(suggestChinese('心', [custom]), ['心', '心安']);
 } finally {
   await server.close();
 }
