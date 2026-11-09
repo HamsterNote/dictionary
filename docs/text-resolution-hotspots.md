@@ -1,5 +1,7 @@
 # 长释义主线程热点（HAM-195 第二轮）
 
+本页为 dev + tracing 的热点诊断，不能当作 production 基线。生产构建、不挂 tracing 的三次对照及 native 读取器重复校验修复见[第三轮报告](text-resolution-production.md)。
+
 上一轮的受控候选队列基准没有覆盖真实词库的完整搜索输入链。本轮从仍在运行的 19502（Demo）与 19501（native WebView 浏览器壳、官方 beta.6）直接录制“行”的冷打开、滚动、点词小窗、输入与热打开；保留 Chrome trace 和 CPU profile，按原子操作定位后再优化。
 
 已确认的问题与实现：
