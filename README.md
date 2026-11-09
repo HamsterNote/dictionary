@@ -51,9 +51,11 @@ export function LookupAudio({ word }: { word: string }) {
 }
 ```
 
-每个内容实例使用一个 controller；切换词条时共享组件会停止旧播放，销毁内容时调用 `dispose`。旧 `pronounce(word)` 仍可使用；同时传入时仅使用 `pronunciation`。不要在 native 壳中拼接音频 URL 或补 IPA。
+每个内容实例使用一个 controller；切换词条时共享组件会停止旧播放，销毁内容时调用 `dispose`。共享层按当前词条决定优先级：可信真人录音匹配时使用 `pronunciation`，不调用 `pronounce`；无匹配录音且注册了 `pronounce` 时显示同一个喇叭并调用回调；两者都无时禁用并显示“暂无读音”。native 只注册函数，不判断音源或补 IPA。
 
-当前 sidecar 只包含经逐文件许可和 IPA—口音—录音分支核对的 `hello`、`cat`、`dog`，其他词、无法区分的同形词及被改成不匹配读法的条目显示“暂无读音”。点击后才请求 Wikimedia 音频；Blob 仅在当前内容会话内缓存（20 项、总计 10 MiB、单项 2 MiB），冷启动离线不保证声音。无缓存离线提示“联网后可播放”，其他失败可手动重试，不自动改用 TTS。来源、作者、许可和变更说明可在“音频来源”中离线阅读，另见 `LICENSES/WIKTIONARY-PRONUNCIATION-AUDIO.md`。
+`pronounce` 类型为 `DictionaryPronounce`：`(word, signal?) => Promise<void>`。单参数旧回调保持兼容；Promise 在朗读结束后完成，支持取消的宿主应监听 AbortSignal，在切词、读法变化或卸载时停止。系统合成只按当前词头朗读，不保证复现特定 IPA、口音或同形词读法。录音已匹配但下载失败时仍显示录音错误并允许重试，不静默切换声音。
+
+当前 sidecar 只包含经逐文件许可和 IPA—口音—录音分支核对的 `hello`、`cat`、`dog`，其他词、无法区分的同形词及被改成不匹配读法的条目没有可信录音，此时可使用宿主注册的朗读函数；未注册才显示“暂无读音”。点击后才请求 Wikimedia 音频；Blob 仅在当前内容会话内缓存（20 项、总计 10 MiB、单项 2 MiB），冷启动离线不保证声音。无缓存离线提示“联网后可播放”，其他失败可手动重试。来源、作者、许可和变更说明可在“音频来源”中离线阅读，另见 `LICENSES/WIKTIONARY-PRONUNCIATION-AUDIO.md`。
 
 ## 使用
 
@@ -161,7 +163,7 @@ export function ManagedCorrections() {
 
 ### 可选 Kokoro 英文朗读
 
-朗读功能默认关闭。只有传入 `pronounce` 回调且当前词条有音标时，音标后才显示朗读按钮。官方 Kokoro 适配器位于独立子入口，不会进入词典根入口：
+可通过 `pronounce` 注册宿主朗读函数；同时提供录音 controller 时遵循上面的录音优先规则。未提供任何朗读能力时，带音标的词条显示禁用按钮及“暂无读音”。官方 Kokoro 适配器位于独立子入口，不会进入词典根入口：
 
 ```tsx
 import { useEffect, useRef } from 'react';

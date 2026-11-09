@@ -1,6 +1,8 @@
 import { Button } from '@hamster-note/components/button';
 import { useEffect, useId, useState } from 'react';
 import type { PronunciationContext } from './pronunciation-audio/contracts';
+import type { DictionaryPronounce } from './dictionaryPronounce';
+import { PronunciationButton } from './PronunciationButton';
 import {
   type PronunciationPlaybackController,
   type PronunciationPlaybackState,
@@ -10,7 +12,8 @@ import {
 interface PronunciationAudioButtonProps {
   readonly context: PronunciationContext | undefined;
   readonly word: string;
-  readonly pronunciation: PronunciationPlaybackController;
+  readonly pronunciation?: PronunciationPlaybackController | undefined;
+  readonly pronounce?: DictionaryPronounce | undefined;
 }
 
 function feedback(available: boolean, state: PronunciationPlaybackState): string {
@@ -41,23 +44,28 @@ export function PronunciationAudioButton({
   context,
   word,
   pronunciation,
+  pronounce,
 }: PronunciationAudioButtonProps) {
   const statusId = useId();
   const contextKey =
     context === undefined ? `unavailable:${word}` : pronunciationContextKey(context);
   const resolution =
-    context === undefined
+    context === undefined || pronunciation === undefined
       ? ({ status: 'unavailable', reason: 'scope-unknown' } as const)
       : pronunciation.resolve(context);
-  const [observedState, setObservedState] = useState<PronunciationPlaybackState>(() =>
-    pronunciation.getState(),
+  const [observedState, setObservedState] = useState<PronunciationPlaybackState>(
+    () => pronunciation?.getState() ?? { status: 'idle' },
   );
-  useEffect(() => pronunciation.subscribe(setObservedState), [pronunciation, contextKey]);
+  useEffect(() => pronunciation?.subscribe(setObservedState), [pronunciation, contextKey]);
   const state =
     observedState.contextKey === contextKey ? observedState : { status: 'idle' as const };
   const available = resolution.status === 'available';
   const busy = context !== undefined && (state.status === 'loading' || state.status === 'playing');
   const message = feedback(available, state);
+
+  if (!available && pronounce !== undefined) {
+    return <PronunciationButton key={contextKey} pronounce={pronounce} word={word} />;
+  }
 
   return (
     <>
@@ -69,7 +77,7 @@ export function PronunciationAudioButton({
         disabled={!available || busy}
         ghost
         onClick={() => {
-          if (context !== undefined) void pronunciation.play(context);
+          if (context !== undefined) void pronunciation?.play(context);
         }}
         size="small"
         type="button"

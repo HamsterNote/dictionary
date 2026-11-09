@@ -231,7 +231,7 @@ export function Fixture() {
               ),
             }
           : {})}
-        {...(mode === 'legacy' ? {} : { pronunciation: controller })}
+        {...(mode === 'legacy' || mode === 'none' ? {} : { pronunciation: controller })}
         {...(mode === 'legacy' || mode === 'dual'
           ? {
               pronounce: (word) => {
