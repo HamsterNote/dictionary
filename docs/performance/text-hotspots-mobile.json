@@ -1,0 +1,1029 @@
+[
+  {
+    "device": "mobile",
+    "host": "web",
+    "phase": "before",
+    "action": "open-cold",
+    "cpuThrottle": 4,
+    "elapsedMs": 6887.785,
+    "longestTaskMs": 3491.143,
+    "observerLongestTaskMs": 3491,
+    "longTasks": [
+      {
+        "startMs": 36.624,
+        "durationMs": 2748.21
+      },
+      {
+        "startMs": 2858.584,
+        "durationMs": 3491.143
+      },
+      {
+        "startMs": 6616.112,
+        "durationMs": 233.711
+      }
+    ],
+    "totalBlockingMs": 6323.064,
+    "topSelfSamples": [
+      ["suggestChinese", 4822.1910000000125],
+      ["(program)", 3304.097000000002],
+      ["countChineseEntries", 699.9419999999998],
+      ["exports.jsxDEV", 354.433],
+      ["(idle)", 143.67199999999994],
+      ["suggestChineseEntries", 72.34300000000002],
+      ["run", 63.22999999999996],
+      ["jsxDEVImpl", 41.857000000000006],
+      ["getBoundingClientRect", 30.743],
+      ["measure", 23.077000000000005],
+      ["(garbage collector)", 19.477999999999998],
+      ["(anonymous)", 18.164],
+      ["runWithFiberInDEV", 17.938],
+      ["getTaskName", 13.34],
+      ["createTask", 13.023000000000001],
+      ["completeWork", 12.628],
+      ["protectCjkLineBreaks", 12.097000000000001],
+      ["getComponentNameFromType", 12.068999999999999],
+      ["workLoopSync", 10.438],
+      ["lookupChinese", 9.395999999999999],
+      ["exports.jsx", 8.988],
+      ["validateProperty", 8.632],
+      ["DictionaryInteractiveTextRenderer", 7.534000000000001],
+      ["select", 7.3740000000000006],
+      ["(anonymous)", 7.28]
+    ],
+    "errors": []
+  },
+  {
+    "device": "mobile",
+    "host": "web",
+    "phase": "before",
+    "action": "scroll",
+    "cpuThrottle": 4,
+    "elapsedMs": 467.354,
+    "longestTaskMs": 37.583,
+    "observerLongestTaskMs": 0,
+    "longTasks": [],
+    "totalBlockingMs": 0,
+    "topSelfSamples": [
+      ["(program)", 1027.9850000000001],
+      ["(idle)", 439.89899999999994],
+      ["(anonymous)", 8.800999999999998],
+      ["InjectedScript", 4.282],
+      ["mark", 3.742],
+      ["(anonymous)", 3.152],
+      ["_cached", 1.957],
+      ["computeElementStyleVisibilityVisible", 1.868],
+      ["(anonymous)", 1.319],
+      ["query", 1.115],
+      ["retarget", 1.11],
+      ["serialize", 1.075],
+      ["previewNode", 1.074],
+      ["innerSerialize", 1.072],
+      ["check", 1.035],
+      ["requestAnimationFrame", 0.948],
+      ["querySelectorAll", 0.872],
+      ["(anonymous)", 0.121],
+      ["getListener", 0],
+      ["dispatchContinuousEvent", 0]
+    ],
+    "errors": []
+  },
+  {
+    "device": "mobile",
+    "host": "web",
+    "phase": "before",
+    "action": "preview",
+    "cpuThrottle": 4,
+    "elapsedMs": 1121.875,
+    "longestTaskMs": 497.733,
+    "observerLongestTaskMs": 497,
+    "longTasks": [
+      {
+        "startMs": 47.144,
+        "durationMs": 497.733
+      },
+      {
+        "startMs": 676.977,
+        "durationMs": 85.272
+      },
+      {
+        "startMs": 914.135,
+        "durationMs": 197.936
+      }
+    ],
+    "totalBlockingMs": 630.941,
+    "topSelfSamples": [
+      ["(program)", 1035.708],
+      ["suggestChinese", 478.61199999999997],
+      ["(idle)", 218.89399999999998],
+      ["(garbage collector)", 171.27199999999993],
+      ["exports.jsxDEV", 70.43699999999998],
+      ["run", 20.985999999999994],
+      ["suggestChineseEntries", 14.186000000000002],
+      ["measure", 11.020999999999997],
+      ["lookupChinese", 10.471],
+      ["getBoundingClientRect", 8.026],
+      ["jsxDEVImpl", 5.3100000000000005],
+      ["focus", 5.29],
+      ["exports.jsx", 3.868],
+      ["i", 3.508],
+      ["protectCjkLineBreaks", 3.505],
+      ["addTrappedEventListener", 3.418],
+      ["(anonymous)", 3.242],
+      ["createTask", 3.096],
+      ["validateProperty$1", 3.092],
+      ["getAriaRole", 2.818],
+      ["closest", 2.684],
+      ["getRootNode", 2.682],
+      ["(anonymous)", 2.19],
+      ["queryRole", 2.1559999999999997],
+      ["pushDebugInfo", 1.919]
+    ],
+    "errors": []
+  },
+  {
+    "device": "mobile",
+    "host": "web",
+    "phase": "before",
+    "action": "input-warm",
+    "cpuThrottle": 4,
+    "elapsedMs": 10728.82,
+    "longestTaskMs": 3530.141,
+    "observerLongestTaskMs": 3530,
+    "longTasks": [
+      {
+        "startMs": 145.161,
+        "durationMs": 2954.762
+      },
+      {
+        "startMs": 3261.028,
+        "durationMs": 61.234
+      },
+      {
+        "startMs": 3322.308,
+        "durationMs": 3530.141
+      },
+      {
+        "startMs": 7014.482,
+        "durationMs": 3312.355
+      },
+      {
+        "startMs": 10526.326,
+        "durationMs": 138.864
+      }
+    ],
+    "totalBlockingMs": 9747.356,
+    "topSelfSamples": [
+      ["suggestChinese", 6376.031999999992],
+      ["countChineseEntries", 2140.645999999999],
+      ["(program)", 1352.4049999999988],
+      ["exports.jsxDEV", 633.5589999999997],
+      ["(idle)", 259.922],
+      ["suggestChineseEntries", 163.3799999999999],
+      ["run", 122.08800000000008],
+      ["measure", 83.26400000000022],
+      ["jsxDEVImpl", 73.73400000000001],
+      ["protectCjkLineBreaks", 68.46700000000001],
+      ["createDictionaryView", 25.093],
+      ["getBoundingClientRect", 24.505000000000003],
+      ["exports.jsx", 22.595],
+      ["(garbage collector)", 22.488],
+      ["getTaskName", 20.463],
+      ["now", 18.632],
+      ["createTask", 18.217],
+      ["formatKilobytes", 14.997000000000002],
+      ["query", 12.892999999999999],
+      ["runWithFiberInDEV", 12.251999999999999],
+      ["validateProperty", 10.731],
+      ["react_stack_bottom_frame", 9.167],
+      ["createWorkInProgress", 8.366],
+      ["beginWork", 8.017],
+      ["updateFunctionComponent", 7.9030000000000005]
+    ],
+    "errors": []
+  },
+  {
+    "device": "mobile",
+    "host": "web",
+    "phase": "before",
+    "action": "open-warm",
+    "cpuThrottle": 4,
+    "elapsedMs": 4705.756,
+    "longestTaskMs": 3810.645,
+    "observerLongestTaskMs": 3810,
+    "longTasks": [
+      {
+        "startMs": 28.703,
+        "durationMs": 3810.645
+      },
+      {
+        "startMs": 3965.452,
+        "durationMs": 350.467
+      }
+    ],
+    "totalBlockingMs": 4061.112,
+    "topSelfSamples": [
+      ["suggestChinese", 2687.5239999999985],
+      ["(program)", 1095.0419999999988],
+      ["countChineseEntries", 759.992],
+      ["(idle)", 337.08600000000007],
+      ["exports.jsxDEV", 311.81600000000003],
+      ["(garbage collector)", 105.529],
+      ["suggestChineseEntries", 53.521999999999984],
+      ["run", 44.436000000000014],
+      ["measure", 33.82599999999998],
+      ["jsxDEVImpl", 32.661],
+      ["protectCjkLineBreaks", 13.477],
+      ["getBoundingClientRect", 10.667000000000002],
+      ["getTaskName", 9.876999999999999],
+      ["removeChild", 9.584999999999999],
+      ["exports.jsx", 8.035],
+      ["now", 7.941],
+      ["lookupChinese", 7.898],
+      ["runWithFiberInDEV", 7.375000000000001],
+      ["mark", 6.4350000000000005],
+      ["getAriaRole", 6.017],
+      ["query", 5.439],
+      ["setTimeout", 4.849],
+      ["reconcileChildrenArray", 4.763],
+      ["(anonymous)", 4.694000000000001],
+      ["commitMutationEffectsOnFiber", 4.305]
+    ],
+    "errors": []
+  },
+  {
+    "device": "mobile",
+    "host": "web",
+    "phase": "after",
+    "action": "open-cold",
+    "cpuThrottle": 4,
+    "elapsedMs": 988.037,
+    "longestTaskMs": 197.541,
+    "observerLongestTaskMs": 197,
+    "longTasks": [
+      {
+        "startMs": 33.929,
+        "durationMs": 141.609
+      },
+      {
+        "startMs": 211.831,
+        "durationMs": 75.481
+      },
+      {
+        "startMs": 302.808,
+        "durationMs": 197.541
+      },
+      {
+        "startMs": 852.73,
+        "durationMs": 86.75
+      }
+    ],
+    "totalBlockingMs": 301.381,
+    "topSelfSamples": [
+      ["(program)", 3064.9440000000022],
+      ["(idle)", 206.27299999999997],
+      ["exports.jsxDEV", 139.443],
+      ["(garbage collector)", 80.004],
+      ["run", 57.377999999999986],
+      ["getBoundingClientRect", 22.659999999999997],
+      ["measure", 22.34],
+      ["ReactElement", 19.657999999999998],
+      ["recursivelyTraverseMutationEffects", 11.549],
+      ["(anonymous)", 9.431],
+      ["resolve", 8.958],
+      ["protectCjkLineBreaks", 7.664],
+      ["(anonymous)", 7.318],
+      ["query", 6.712],
+      ["validateProperties$2", 6.704000000000001],
+      ["resolveChineseEntry", 6.694],
+      ["evaluate", 6.359999999999999],
+      ["t", 6.327],
+      ["(anonymous)", 5.936999999999999],
+      ["updateReducerImpl", 5.936],
+      ["pushHostContext", 5.843],
+      ["coerceRef", 5.683999999999999],
+      ["getAriaRole", 5.622],
+      ["beginWork", 5.295999999999999],
+      ["getComponentNameFromType", 5.1259999999999994]
+    ],
+    "errors": []
+  },
+  {
+    "device": "mobile",
+    "host": "web",
+    "phase": "after",
+    "action": "scroll",
+    "cpuThrottle": 4,
+    "elapsedMs": 414.673,
+    "longestTaskMs": 31.97,
+    "observerLongestTaskMs": 0,
+    "longTasks": [],
+    "totalBlockingMs": 0,
+    "topSelfSamples": [
+      ["(program)", 1020.1329999999999],
+      ["(idle)", 399.58399999999995],
+      ["dispatchEvent", 5.191],
+      ["(anonymous)", 2.4320000000000004],
+      ["query", 1.9100000000000001],
+      ["(anonymous)", 1.653],
+      ["(anonymous)", 1.217],
+      ["InjectedScript", 1.182],
+      ["mark", 1.032],
+      ["getBoundingClientRect", 0.936],
+      ["check", 0.736],
+      ["(anonymous)", 0.694],
+      ["previewNode", 0.101],
+      ["dispatchEventForPluginEventSystem", 0.031]
+    ],
+    "errors": []
+  },
+  {
+    "device": "mobile",
+    "host": "web",
+    "phase": "after",
+    "action": "preview",
+    "cpuThrottle": 4,
+    "elapsedMs": 619.24,
+    "longestTaskMs": 163.481,
+    "observerLongestTaskMs": 163,
+    "longTasks": [
+      {
+        "startMs": 40.019,
+        "durationMs": 163.481
+      }
+    ],
+    "totalBlockingMs": 113.481,
+    "topSelfSamples": [
+      ["(program)", 1003.1310000000001],
+      ["(idle)", 365.5029999999998],
+      ["exports.jsxDEV", 83.65799999999999],
+      ["run", 10.497999999999998],
+      ["measure", 10.182],
+      ["updateProperties", 9.093],
+      ["ReactElement", 6.302],
+      ["focus", 5.982000000000001],
+      ["getExplicitAriaRole", 5.057],
+      ["getBoundingClientRect", 4.927],
+      ["(anonymous)", 4.6610000000000005],
+      ["pronunciationContextKey", 4.54],
+      ["react_stack_bottom_frame", 4.057],
+      ["queryRole", 3.8609999999999998],
+      ["logComponentRender", 3.691],
+      ["(anonymous)", 3.452],
+      ["exports.jsx", 3.287],
+      ["elementsFromPoint", 3.232],
+      ["elementFromPoint", 2.678],
+      ["(anonymous)", 2.666],
+      ["getComponentNameFromType", 2.4570000000000003],
+      ["e", 2.129],
+      ["createTask", 2.055],
+      ["DictionarySearchContent", 1.975],
+      ["setValueForStyle", 1.853]
+    ],
+    "errors": []
+  },
+  {
+    "device": "mobile",
+    "host": "web",
+    "phase": "after",
+    "action": "input-warm",
+    "cpuThrottle": 4,
+    "elapsedMs": 1261.833,
+    "longestTaskMs": 158.679,
+    "observerLongestTaskMs": 158,
+    "longTasks": [
+      {
+        "startMs": 144.68,
+        "durationMs": 85.321
+      },
+      {
+        "startMs": 430.005,
+        "durationMs": 115.515
+      },
+      {
+        "startMs": 696.952,
+        "durationMs": 158.679
+      }
+    ],
+    "totalBlockingMs": 209.515,
+    "topSelfSamples": [
+      ["(program)", 1097.6809999999984],
+      ["(idle)", 700.1400000000002],
+      ["exports.jsxDEV", 186.77999999999994],
+      ["ReactElement", 26.642],
+      ["run", 20.619999999999997],
+      ["measure", 11.982999999999992],
+      ["suggestChinese", 8.862],
+      ["exports.jsx", 8.449000000000002],
+      ["getAriaRole", 7.744],
+      ["reconcileChildFibersImpl", 7.244],
+      ["query", 6.791],
+      ["protectCjkLineBreaks", 5.9479999999999995],
+      ["runWithFiberInDEV", 5.473000000000001],
+      ["select", 4.954999999999999],
+      ["validatePropertiesInDevelopment", 4.494],
+      ["getImplicitAriaRole", 4.4270000000000005],
+      ["addObjectDiffToProperties", 4.369],
+      ["(anonymous)", 4.0729999999999995],
+      ["commitDeletionEffectsOnFiber", 4.016],
+      ["getComponentNameFromType", 3.48],
+      ["validateProperty$1", 3.099],
+      ["dispatchEvent", 3.089],
+      ["updatedAncestorInfoDev", 3.041],
+      ["exports.useMemo", 3.038],
+      ["getTaskName", 2.906]
+    ],
+    "errors": []
+  },
+  {
+    "device": "mobile",
+    "host": "web",
+    "phase": "after",
+    "action": "open-warm",
+    "cpuThrottle": 4,
+    "elapsedMs": 614.055,
+    "longestTaskMs": 131.539,
+    "observerLongestTaskMs": 131,
+    "longTasks": [
+      {
+        "startMs": 30.669,
+        "durationMs": 131.539
+      },
+      {
+        "startMs": 335.386,
+        "durationMs": 68.491
+      }
+    ],
+    "totalBlockingMs": 100.02999999999997,
+    "topSelfSamples": [
+      ["(program)", 1134.1580000000008],
+      ["(idle)", 265.293],
+      ["(garbage collector)", 125.61199999999998],
+      ["exports.jsxDEV", 62.87500000000001],
+      ["measure", 16.359],
+      ["exports.jsx", 11.370999999999999],
+      ["run", 9.766999999999998],
+      ["query", 5.357],
+      ["ReactElement", 4.984],
+      ["(anonymous)", 4.814],
+      ["suggestChinese", 4.538],
+      ["(anonymous)", 4.220000000000001],
+      ["query", 3.511],
+      ["runWithFiberInDEV", 2.6630000000000003],
+      ["parseEvaluationResultValue", 2.2750000000000004],
+      ["(anonymous)", 2.197],
+      ["serialize", 2.133],
+      ["closest", 1.758],
+      ["(anonymous)", 1.7560000000000002],
+      ["getAriaRole", 1.742],
+      ["mark", 1.677],
+      ["validateProperty", 1.649],
+      ["removeChild", 1.595],
+      ["jsxDEVImpl", 1.354],
+      ["getImplicitAriaRole", 1.309]
+    ],
+    "errors": []
+  },
+  {
+    "device": "mobile",
+    "host": "native",
+    "phase": "before",
+    "action": "open-cold",
+    "cpuThrottle": 4,
+    "elapsedMs": 11387.607,
+    "longestTaskMs": 985.344,
+    "observerLongestTaskMs": 985,
+    "longTasks": [
+      {
+        "startMs": 182.433,
+        "durationMs": 985.344
+      },
+      {
+        "startMs": 1172.963,
+        "durationMs": 51.528
+      },
+      {
+        "startMs": 1242.883,
+        "durationMs": 144.899
+      },
+      {
+        "startMs": 1416.561,
+        "durationMs": 733.047
+      },
+      {
+        "startMs": 2158.975,
+        "durationMs": 83.665
+      },
+      {
+        "startMs": 2291.646,
+        "durationMs": 119.851
+      },
+      {
+        "startMs": 2500.321,
+        "durationMs": 50.781
+      },
+      {
+        "startMs": 2552.153,
+        "durationMs": 64.891
+      },
+      {
+        "startMs": 3341.282,
+        "durationMs": 51.959
+      },
+      {
+        "startMs": 3493.138,
+        "durationMs": 53.918
+      },
+      {
+        "startMs": 3948.318,
+        "durationMs": 64.736
+      },
+      {
+        "startMs": 4024.519,
+        "durationMs": 53.588
+      },
+      {
+        "startMs": 4152.34,
+        "durationMs": 62.715
+      },
+      {
+        "startMs": 4258.929,
+        "durationMs": 63.769
+      },
+      {
+        "startMs": 4723.555,
+        "durationMs": 55.774
+      },
+      {
+        "startMs": 4844.801,
+        "durationMs": 57.034
+      },
+      {
+        "startMs": 5717.765,
+        "durationMs": 53.775
+      },
+      {
+        "startMs": 6602.313,
+        "durationMs": 58.442
+      },
+      {
+        "startMs": 7128.234,
+        "durationMs": 56.66
+      },
+      {
+        "startMs": 7220.834,
+        "durationMs": 51.875
+      },
+      {
+        "startMs": 7550.853,
+        "durationMs": 54.449
+      },
+      {
+        "startMs": 7907.92,
+        "durationMs": 51.881
+      },
+      {
+        "startMs": 8157.61,
+        "durationMs": 56.511
+      },
+      {
+        "startMs": 8754.303,
+        "durationMs": 53.247
+      },
+      {
+        "startMs": 8981.25,
+        "durationMs": 58.962
+      },
+      {
+        "startMs": 9071.418,
+        "durationMs": 51.984
+      },
+      {
+        "startMs": 9197.332,
+        "durationMs": 85.966
+      },
+      {
+        "startMs": 9534.794,
+        "durationMs": 53.685
+      },
+      {
+        "startMs": 9608.712,
+        "durationMs": 71.975
+      },
+      {
+        "startMs": 9990.75,
+        "durationMs": 64.872
+      },
+      {
+        "startMs": 10600.844,
+        "durationMs": 57.445
+      },
+      {
+        "startMs": 10959.113,
+        "durationMs": 55.382
+      }
+    ],
+    "totalBlockingMs": 2034.6100000000006,
+    "topSelfSamples": [
+      ["(program)", 2893.9560000000006],
+      ["process", 2891.6189999999974],
+      ["(idle)", 2021.1819999999993],
+      ["Zl", 1218.9280000000012],
+      ["decode", 840.7239999999993],
+      ["process", 828.2699999999999],
+      ["Kl", 490.92599999999976],
+      ["pl", 277.85699999999997],
+      ["xl", 259.69800000000004],
+      ["bl", 174.52200000000002],
+      ["#d", 144.70100000000002],
+      ["fetch", 140.93499999999997],
+      ["zl", 131.19],
+      ["Nu", 68.053],
+      ["Tu", 67.49000000000001],
+      ["Mu", 50.977999999999994],
+      ["(garbage collector)", 30.92200000000001],
+      ["tu", 30.393],
+      ["read", 25.757000000000005],
+      ["update", 21.830999999999996],
+      ["(anonymous)", 21.723],
+      ["update", 16.427],
+      ["(anonymous)", 14.513],
+      ["Js", 13.497],
+      ["#u", 11.504999999999999]
+    ],
+    "errors": []
+  },
+  {
+    "device": "mobile",
+    "host": "native",
+    "phase": "before",
+    "action": "scroll",
+    "cpuThrottle": 4,
+    "elapsedMs": 416.902,
+    "longestTaskMs": 42.567,
+    "observerLongestTaskMs": 0,
+    "longTasks": [],
+    "totalBlockingMs": 0,
+    "topSelfSamples": [
+      ["(program)", 418.65200000000044],
+      ["(idle)", 361.0060000000002],
+      ["InjectedScript", 6.317],
+      ["(anonymous)", 5.632],
+      ["mark", 4.720000000000001],
+      ["_queryEngineAll", 2.361],
+      ["jsonValue", 1.716],
+      ["evaluate", 1.181],
+      ["previewNode", 1.065],
+      ["querySelectorAll", 1.021],
+      ["computeBox", 0.996],
+      ["query", 0.837],
+      ["getBoundingClientRect", 0.693],
+      ["serialize", 0.618]
+    ],
+    "errors": []
+  },
+  {
+    "device": "mobile",
+    "host": "native",
+    "phase": "before",
+    "action": "preview",
+    "cpuThrottle": 4,
+    "elapsedMs": 532.576,
+    "longestTaskMs": 70.424,
+    "observerLongestTaskMs": 70,
+    "longTasks": [
+      {
+        "startMs": 50.291,
+        "durationMs": 70.424
+      }
+    ],
+    "totalBlockingMs": 20.424000000000007,
+    "topSelfSamples": [
+      ["(program)", 499.9759999999995],
+      ["(idle)", 332.1619999999998],
+      ["process", 34.282000000000004],
+      ["getBoundingClientRect", 23.648],
+      ["Zl", 14.925],
+      ["focus", 14.073000000000002],
+      ["process", 11.126999999999999],
+      ["So", 9.54],
+      ["Kl", 7.272],
+      ["pl", 4.835],
+      ["di", 4.126],
+      ["(anonymous)", 3.454],
+      ["h", 3.365],
+      ["decode", 3.2380000000000004],
+      ["xl", 2.9370000000000003],
+      ["query", 2.812],
+      ["#d", 2.781],
+      ["bs", 2.151],
+      ["elementsFromPoint", 2.003],
+      ["_t", 1.389],
+      ["Vc", 1.343],
+      ["qa", 1.315],
+      ["parentElementOrShadowHost", 1.155],
+      ["o", 0.935],
+      ["t", 0.912]
+    ],
+    "errors": []
+  },
+  {
+    "device": "mobile",
+    "host": "native",
+    "phase": "before",
+    "action": "input-warm",
+    "cpuThrottle": 4,
+    "elapsedMs": 948.579,
+    "longestTaskMs": 56.586,
+    "observerLongestTaskMs": 56,
+    "longTasks": [
+      {
+        "startMs": 482.868,
+        "durationMs": 50.867
+      },
+      {
+        "startMs": 566.675,
+        "durationMs": 56.586
+      }
+    ],
+    "totalBlockingMs": 7.452999999999996,
+    "topSelfSamples": [
+      ["(program)", 635.5319999999999],
+      ["(idle)", 445.8190000000001],
+      ["process", 77.9],
+      ["decode", 26.644999999999996],
+      ["process", 25.198999999999998],
+      ["Zl", 20.788999999999998],
+      ["Kl", 18.893],
+      ["h", 9.5],
+      ["select", 9.479],
+      ["pl", 8.304],
+      ["bl", 6.39],
+      ["qc", 6.025],
+      ["(anonymous)", 5.705000000000001],
+      ["fetch", 5.568],
+      ["xl", 5.494999999999999],
+      ["su", 5.3149999999999995],
+      ["p", 4.196],
+      ["suggestChineseEntries", 3.3840000000000003],
+      ["#d", 3.233],
+      ["previewNode", 3.061],
+      ["E", 2.785],
+      ["dispatchEvent", 2.7479999999999998],
+      ["Mu", 2.643],
+      ["oc", 2.496],
+      ["isElementHiddenForAria", 2.335]
+    ],
+    "errors": []
+  },
+  {
+    "device": "mobile",
+    "host": "native",
+    "phase": "before",
+    "action": "open-warm",
+    "cpuThrottle": 4,
+    "elapsedMs": 440.012,
+    "longestTaskMs": 27.077,
+    "observerLongestTaskMs": 0,
+    "longTasks": [],
+    "totalBlockingMs": 0,
+    "topSelfSamples": [
+      ["(program)", 411.8080000000004],
+      ["(idle)", 378.4730000000001],
+      ["decode", 16.233],
+      ["#d", 5.279],
+      ["mark", 3.769],
+      ["_activelyFocused", 3.733],
+      ["getAriaRole", 3.505],
+      ["su", 3.212],
+      ["Fu", 2.576],
+      ["FORM", 2.3689999999999998],
+      ["fi", 2.338],
+      ["(anonymous)", 2.064],
+      ["ou", 1.652],
+      ["md", 1.469],
+      ["G", 1.224],
+      ["elementSafeTagName", 1.103],
+      ["cp", 1.05],
+      ["b", 0.998],
+      ["query", 0.801],
+      ["jc", 0.652],
+      ["hl", 0.645],
+      ["query", 0.515],
+      ["r", 0.086],
+      ["previewNode", 0],
+      ["ln", 0]
+    ],
+    "errors": []
+  },
+  {
+    "device": "mobile",
+    "host": "native",
+    "phase": "after",
+    "action": "open-cold",
+    "cpuThrottle": 4,
+    "elapsedMs": 5170.199,
+    "longestTaskMs": 128.712,
+    "observerLongestTaskMs": 128,
+    "longTasks": [
+      {
+        "startMs": 195.367,
+        "durationMs": 128.712
+      },
+      {
+        "startMs": 730.542,
+        "durationMs": 117.229
+      },
+      {
+        "startMs": 1085.125,
+        "durationMs": 55.88
+      },
+      {
+        "startMs": 1141.047,
+        "durationMs": 85.85
+      }
+    ],
+    "totalBlockingMs": 187.67099999999996,
+    "topSelfSamples": [
+      ["(program)", 2842.9650000000024],
+      ["(idle)", 1797.5480000000005],
+      ["process", 857.7980000000001],
+      ["decode", 237.59899999999996],
+      ["(anonymous)", 182.25299999999993],
+      ["fetch", 127.68100000000001],
+      ["Mu", 118.06000000000003],
+      ["Bu", 65.175],
+      ["#p", 61.52600000000001],
+      ["zu", 59.82000000000001],
+      ["Worker.#e.onmessage", 36.966],
+      ["read", 29.743000000000006],
+      ["Qs", 19.936],
+      ["(anonymous)", 18.686],
+      ["update", 15.921000000000001],
+      ["(anonymous)", 14.622999999999998],
+      ["n", 14.069],
+      ["zs", 10.987],
+      ["#f", 10.283000000000001],
+      ["Mc", 10.271],
+      ["mu", 7.408],
+      ["gl", 6.859999999999999],
+      ["So", 6.455],
+      ["#h", 5.788],
+      ["query", 5.718]
+    ],
+    "errors": []
+  },
+  {
+    "device": "mobile",
+    "host": "native",
+    "phase": "after",
+    "action": "scroll",
+    "cpuThrottle": 4,
+    "elapsedMs": 427.325,
+    "longestTaskMs": 37.339,
+    "observerLongestTaskMs": 0,
+    "longTasks": [],
+    "totalBlockingMs": 0,
+    "topSelfSamples": [
+      ["(program)", 581.3980000000001],
+      ["(idle)", 360.8249999999999],
+      ["(anonymous)", 3.593],
+      ["(anonymous)", 3.2760000000000002],
+      ["mark", 2.674],
+      ["(anonymous)", 2.109],
+      ["previewNode", 1.979],
+      ["(anonymous)", 1.733],
+      ["evaluate", 1.063],
+      ["InjectedScript", 0.996],
+      ["query", 0.887],
+      ["querySelectorAll", 0.803],
+      ["querySelectorAll", 0.678],
+      ["(anonymous)", 0]
+    ],
+    "errors": []
+  },
+  {
+    "device": "mobile",
+    "host": "native",
+    "phase": "after",
+    "action": "preview",
+    "cpuThrottle": 4,
+    "elapsedMs": 533.102,
+    "longestTaskMs": 61.31,
+    "observerLongestTaskMs": 61,
+    "longTasks": [
+      {
+        "startMs": 60.185,
+        "durationMs": 61.31
+      }
+    ],
+    "totalBlockingMs": 11.310000000000002,
+    "topSelfSamples": [
+      ["(program)", 585.2269999999999],
+      ["(idle)", 329.7710000000002],
+      ["getBoundingClientRect", 18.944],
+      ["focus", 10.906999999999998],
+      ["process", 8.734000000000002],
+      ["decode", 7.382],
+      ["postMessage", 5.557],
+      ["Bu", 5.208],
+      ["(anonymous)", 4.325],
+      ["(anonymous)", 4.205],
+      ["o", 4.143],
+      ["evaluate", 4.087000000000001],
+      ["previewNode", 3.991],
+      ["gl", 3.904],
+      ["mark", 2.928],
+      ["od", 2.892],
+      ["Mu", 2.777],
+      ["Lc", 2.701],
+      ["elementsFromPoint", 2.0839999999999996],
+      ["zu", 2.052],
+      ["os", 1.772],
+      ["enclosingShadowRootOrDocument", 1.668],
+      ["So", 1.634],
+      ["closest", 1.474],
+      ["oneLine", 1.258]
+    ],
+    "errors": []
+  },
+  {
+    "device": "mobile",
+    "host": "native",
+    "phase": "after",
+    "action": "input-warm",
+    "cpuThrottle": 4,
+    "elapsedMs": 920.509,
+    "longestTaskMs": 34.466,
+    "observerLongestTaskMs": 0,
+    "longTasks": [],
+    "totalBlockingMs": 0,
+    "topSelfSamples": [
+      ["(program)", 769.0119999999995],
+      ["(idle)", 564.2180000000005],
+      ["process", 19.381000000000004],
+      ["decode", 8.808],
+      ["zu", 7.156],
+      ["(anonymous)", 6.34],
+      ["ac", 6.259],
+      ["elementSafeTagName", 5.611],
+      ["(anonymous)", 4.89],
+      ["Tr", 4.763],
+      ["#p", 4.385],
+      ["select", 4.293],
+      ["fetch", 4.189],
+      ["r", 3.813],
+      ["hu", 3.689],
+      ["ku", 2.8419999999999996],
+      ["parseEvaluationResultValue", 2.673],
+      ["Ms", 2.431],
+      ["D", 2.3099999999999996],
+      ["Rc", 2.244],
+      ["getExplicitAriaRole", 2.185],
+      ["query", 1.966],
+      ["mark", 1.94],
+      ["h", 1.937],
+      ["Mu", 1.9049999999999998]
+    ],
+    "errors": []
+  },
+  {
+    "device": "mobile",
+    "host": "native",
+    "phase": "after",
+    "action": "open-warm",
+    "cpuThrottle": 4,
+    "elapsedMs": 444.493,
+    "longestTaskMs": 17.857,
+    "observerLongestTaskMs": 0,
+    "longTasks": [],
+    "totalBlockingMs": 0,
+    "topSelfSamples": [
+      ["(program)", 515.8240000000002],
+      ["(idle)", 386.9090000000002],
+      ["(anonymous)", 6.489],
+      ["query", 3.785],
+      ["mark", 3.538],
+      ["Fd", 3.524],
+      ["useState", 3.378],
+      ["suggestChineseEntries", 3.331],
+      ["(anonymous)", 2.208],
+      ["pp", 1.84],
+      ["(anonymous)", 1.514],
+      ["b", 1.497],
+      ["cp", 1.479],
+      ["evaluate", 1.188],
+      ["mu", 1.12],
+      ["getAttribute", 1.102],
+      ["B", 1.05],
+      ["select", 1.023],
+      ["(anonymous)", 1.003],
+      ["elementSafeTagName", 0.806],
+      ["kf", 0.758],
+      ["ku", 0.731],
+      ["observe", 0],
+      ["fi", 0],
+      ["Ro", 0]
+    ],
+    "errors": []
+  }
+]

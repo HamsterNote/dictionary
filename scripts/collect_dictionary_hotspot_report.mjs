@@ -26,10 +26,7 @@ for (const device of ['mobile', 'desktop']) {
           observerLongestTaskMs: entry.observerLongestTaskMs,
           longTasks: result.longTasks,
           totalBlockingMs: result.longTasks.reduce((sum, task) => sum + task.durationMs - 50, 0),
-          topSelfSamples: entry.topSelfSamples.map(([name, ms]) => [
-            name.replace(/ @ https?:\/\/.*?\/(?:@fs\/.*?)?\/(src|demo\/src)\//u, ' @ $1/'),
-            ms,
-          ]),
+          topSelfSamples: entry.topSelfSamples.map(([name, ms]) => [name.split(' @ ')[0], ms]),
           errors: entry.errors,
         });
       }
