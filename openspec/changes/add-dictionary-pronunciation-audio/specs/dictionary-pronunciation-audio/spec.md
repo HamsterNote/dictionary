@@ -132,3 +132,12 @@
 
 - **WHEN** 当前词条只有不带地区的 ECDICT 音标，或 overlay 未提供唯一明确口音
 - **THEN** 回调收到 unknown 来源且不带 language，不从 r、元音或“英：”等字符推测美英
+
+### Requirement: 播放释放不得重新请求已撤销资源
+
+播放器 SHALL 在结束或取消后先解除媒体 src，再释放底层媒体和对象 URL；MUST 不在保留旧 src 时调用 load 并立即撤销对应 Blob。自定义播放适配器未提供 DOM 属性操作时 SHALL 保持兼容。
+
+#### Scenario: 真人录音正常结束
+
+- **WHEN** 录音结束并进入 idle，播放器释放 Blob
+- **THEN** 不再请求该失效 URL，浏览器不产生由释放流程引起的 ERR_FILE_NOT_FOUND 或媒体错误

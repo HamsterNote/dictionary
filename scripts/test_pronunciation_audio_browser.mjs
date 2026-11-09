@@ -29,6 +29,8 @@ try {
       this.events = new Map();
       this.behavior = behavior;
       this.pauseCount = 0;
+      this.sourceAttached = true;
+      this.releaseReloads = 0;
     }
 
     addEventListener(type, listener) {
@@ -62,7 +64,13 @@ try {
     }
 
     load() {
+      if (this.pauseCount > 0 && this.sourceAttached) this.releaseReloads++;
       if (this.behavior.metadata === 'error') this.emit('error');
+    }
+
+    removeAttribute(name) {
+      assert.equal(name, 'src');
+      this.sourceAttached = false;
     }
   }
 
@@ -142,6 +150,12 @@ try {
     await playing;
     assert.equal(controller.getState().status, 'idle');
     assert.deepEqual(revoked, ['blob:test-1']);
+    assert.equal(
+      audioElements[0].releaseReloads,
+      0,
+      'cleanup must not reload a Blob immediately before revoking it',
+    );
+    assert.equal(audioElements[0].sourceAttached, false);
   }
 
   {
