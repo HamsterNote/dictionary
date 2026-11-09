@@ -150,18 +150,15 @@ export function DictionaryContent({
       normalizePronunciationWord(resolvedContent.word)
       ? reportedOverlayContext
       : undefined;
-  const pronunciationContext: PronunciationContext | undefined =
-    pronunciation === undefined
+  const pronunciationContext: PronunciationContext | undefined = overlayActive
+    ? currentOverlayContext
+    : resolvedContent.phonetic === undefined
       ? undefined
-      : overlayActive
-        ? currentOverlayContext
-        : resolvedContent.phonetic === undefined
-          ? undefined
-          : {
-              word: resolvedContent.word,
-              language: 'en',
-              phonetic: resolvedContent.phonetic,
-            };
+      : {
+          word: resolvedContent.word,
+          language: 'en',
+          phonetic: resolvedContent.phonetic,
+        };
   const playbackContextKey = pronunciationContext
     ? pronunciationContextKey(pronunciationContext)
     : 'unavailable';

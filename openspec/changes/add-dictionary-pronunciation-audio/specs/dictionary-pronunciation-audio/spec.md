@@ -118,3 +118,17 @@
 
 - **WHEN** 当前词条无可信录音且未注册回调
 - **THEN** 按钮禁用并显示“暂无读音”
+
+### Requirement: 共享层下发明确口音元数据
+
+共享层 SHALL 在 pronounce 的第三个可选参数中传递当前唯一且可用读法的显式口音元数据，us-unspecified 映射 en-US、uk-unspecified 映射 en-GB，languageSource 为 overlay-accent。未知 SHALL 不带 language 且 languageSource 为 unknown，MUST 不根据 IPA 字符或展示前缀猜测。旧一参/二参回调 SHALL 保持兼容，不要求注册录音 controller 才能传递口音。宿主负责未知口音的默认值与系统音色映射，不得把默认值当作词条数据。
+
+#### Scenario: 明确美音与英音
+
+- **WHEN** 无可信录音且注册回调，当前唯一可用 overlay 默认读法带明确美音或英音元数据
+- **THEN** 回调分别收到 en-US 或 en-GB，languageSource 为 overlay-accent，点击仍只触发一次朗读
+
+#### Scenario: 普通音标与未知地区
+
+- **WHEN** 当前词条只有不带地区的 ECDICT 音标，或 overlay 未提供唯一明确口音
+- **THEN** 回调收到 unknown 来源且不带 language，不从 r、元音或“英：”等字符推测美英

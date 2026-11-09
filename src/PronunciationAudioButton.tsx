@@ -3,6 +3,7 @@ import { useEffect, useId, useState } from 'react';
 import type { PronunciationContext } from './pronunciation-audio/contracts';
 import type { DictionaryPronounce } from './dictionaryPronounce';
 import { PronunciationButton } from './PronunciationButton';
+import { resolvePronounceOptions } from './resolvePronounceOptions';
 import {
   type PronunciationPlaybackController,
   type PronunciationPlaybackState,
@@ -64,7 +65,14 @@ export function PronunciationAudioButton({
   const message = feedback(available, state);
 
   if (!available && pronounce !== undefined) {
-    return <PronunciationButton key={contextKey} pronounce={pronounce} word={word} />;
+    return (
+      <PronunciationButton
+        key={contextKey}
+        pronounce={pronounce}
+        word={word}
+        options={resolvePronounceOptions(context)}
+      />
+    );
   }
 
   return (

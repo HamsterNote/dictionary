@@ -7,6 +7,23 @@ try {
   assert.equal(typeof globalThis.Worker, 'undefined');
   assert.equal(typeof globalThis.document, 'undefined');
   const audio = await server.ssrLoadModule('/src/pronunciation-audio/index.ts');
+  const { resolvePronounceOptions } = await server.ssrLoadModule('/src/resolvePronounceOptions.ts');
+  for (const [accent, language] of [
+    ['us', 'en-US'],
+    ['uk', 'en-GB'],
+  ]) {
+    assert.deepEqual(
+      resolvePronounceOptions({ word: 'read', language: 'en', phonetic: '/riːd/', accent }),
+      { language, languageSource: 'overlay-accent' },
+    );
+  }
+  for (const context of [
+    undefined,
+    { word: 'car', language: 'en', phonetic: '/kɑr/' },
+    { word: 'note', language: 'en', phonetic: '/nəʊt/', accent: 'unspecified' },
+  ]) {
+    assert.deepEqual(resolvePronounceOptions(context), { languageSource: 'unknown' });
+  }
   const {
     parsePronunciationAudioManifest,
     pronunciationAudioManifest,

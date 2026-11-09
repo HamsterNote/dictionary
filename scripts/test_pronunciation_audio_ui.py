@@ -1,6 +1,7 @@
 """使用真实 Chromium 验证发音共享组件；仅访问本机 fixture，不请求第三方。"""
 from __future__ import annotations
 
+import json
 import os
 from pathlib import Path
 import socket
@@ -143,6 +144,16 @@ def main() -> None:
                     page.goto(url + "?mode=none")
                     assert page.get_by_role("button", name="朗读 hello", exact=True).is_disabled()
                     assert page.get_by_text("暂无读音", exact=True).is_visible()
+                    # Plain IPA stays unknown; explicit overlay metadata carries accent.
+                    for mode, expected in (
+                        ("accent-us", {"language": "en-US", "languageSource": "overlay-accent"}),
+                        ("accent-uk", {"language": "en-GB", "languageSource": "overlay-accent"}),
+                        ("accent-unknown", {"languageSource": "unknown"}),
+                    ):
+                        page.goto(url + "?mode=" + mode)
+                        page.get_by_role("button", name="朗读 hello", exact=True).click()
+                        page.wait_for_function("document.querySelector('[data-testid=pronounce-options]').textContent.length > 0")
+                        assert json.loads(page.get_by_test_id("pronounce-options").inner_text()) == expected
                     assert not errors, errors
                 finally:
                     browser.close()

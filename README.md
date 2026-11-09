@@ -383,3 +383,9 @@ yarn test:roots
 ## License
 
 本项目代码采用 MIT，详见 [LICENSE](./LICENSE)。捆绑词典数据的来源、上游许可与尚待确认的权利风险另见 [THIRD_PARTY_NOTICES.md](./THIRD_PARTY_NOTICES.md)。
+
+### 宿主朗读口音契约
+
+`pronounce(word, signal?, options?)` 的第三参数向后兼容。`options.language` 可为 en-US/en-GB，`languageSource` 为 overlay-accent/unknown。共享层只使用当前唯一可用 overlay 读法的 `readings[].accent.class`：us-unspecified → en-US，uk-unspecified → en-GB；其余未知，不带 language。原始 ECDICT `phonetic` 无地区字段，普通 IPA 不足以可靠判断口音；UI 的“英：”表示英文，不能据此当作英音，也不根据 r 等符号猜测。真人录音优先，旧回调不受影响。
+
+native 在未知时默认 en-US，依据是延续此前宿主默认口音，并非声称该词条属于美音。设置面板默认自动跟随元数据，手动覆盖仅供开发试听；TTS 仍不保证复现具体 IPA。
