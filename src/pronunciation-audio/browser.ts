@@ -26,6 +26,7 @@ interface AudioEventTarget {
   readonly currentTime: number;
   addEventListener(type: string, listener: () => void): void;
   removeEventListener(type: string, listener: () => void): void;
+  removeAttribute?(name: string): void;
   play(): Promise<void>;
   pause(): void;
   load(): void;
@@ -103,7 +104,13 @@ export function createPronunciationBrowserController(
     for (const cancel of [...cancellers]) cancel();
     if (audio !== undefined) {
       audio.pause();
-      audio.load();
+      // Loading the still-attached Blob starts another request just before its
+      // URL is revoked. Detach first; custom adapters without DOM attributes
+      // can release by pause/drop rather than accidentally reloading media.
+      if (audio.removeAttribute) {
+        audio.removeAttribute('src');
+        audio.load();
+      }
     }
     audio = undefined;
     if (objectUrl !== undefined) revokeObjectURL(objectUrl);
