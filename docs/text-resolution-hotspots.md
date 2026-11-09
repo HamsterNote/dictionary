@@ -54,7 +54,7 @@
 
 [桌面原始区间](performance/text-hotspots-desktop.json) / [移动模拟原始区间](performance/text-hotspots-mobile.json) 同时保留 Long Tasks API 的交叉核对结果。阈值以下区间的几毫秒波动不视作回归或收益。最明显的改善来自移除重复扫描、provider 重建与主线程资源验证，未证明所有动作都不再掉帧：移动模拟下 Web 渲染仍有 132～198 ms 的区间，native 预览仍有 61 ms 区间。应继续以真机和具体复现动作验收，不能把模拟结果描述为零长任务。
 
-本组优化后 native 使用 `9b5e286` 构建的本地 beta.7 tarball，不冒充官方 npm 安装。beta.7 发布 run `42645925912` 已成功，但截至本轮核查，官方不缓存元数据仍只有 beta.6；正式依赖验收需待 beta.7 公开可安装。
+本组优化后 native 使用 `9b5e286` 构建的本地 beta.7 tarball，不冒充官方 npm 安装。测量时 beta.7 尚未公开可安装；随后发布阻塞解除，2026-11-10（Asia/Shanghai）已从官方 npm 和全新独立缓存完成正常安装及不可变安装，两个 workspace 的包、manifest、运行时均为 beta.7，native `yarn check`（53+156 项）和桌面/移动离线 E2E 4/4 通过，WebView HTML 为 9,834,257 bytes。[native #18](https://github.com/HamsterNote/dictionary-native/pull/18) 已补真实正式锁文件。官方包回归不改变上述性能数据的测量来源；iOS/Android 真机仍待验收。
 
 测量口径：
 
