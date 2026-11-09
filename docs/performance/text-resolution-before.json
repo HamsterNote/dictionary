@@ -1,0 +1,58 @@
+[
+  {
+    "device": "desktop",
+    "viewport": {
+      "width": 1440,
+      "height": 900
+    },
+    "cpuThrottle": 1,
+    "totalMs": 662.3000001907349,
+    "firstVisibleReadyMs": 662.3000001907349,
+    "longestTaskMs": 536,
+    "longTaskCount": 2,
+    "totalBlockingMs": 509,
+    "samples": [
+      {
+        "ms": 0,
+        "ready": 0,
+        "visible": 0
+      },
+      {
+        "ms": 662.3000001907349,
+        "ready": 1152,
+        "visible": 286
+      }
+    ],
+    "calls": 1152,
+    "concurrency": 1152,
+    "longestMainThreadTaskMs": 536.091
+  },
+  {
+    "device": "mobile-emulated",
+    "viewport": {
+      "width": 390,
+      "height": 844
+    },
+    "cpuThrottle": 4,
+    "totalMs": 1725.5,
+    "firstVisibleReadyMs": 1725.5,
+    "longestTaskMs": 1167,
+    "longTaskCount": 4,
+    "totalBlockingMs": 1584,
+    "samples": [
+      {
+        "ms": 0,
+        "ready": 0,
+        "visible": 0
+      },
+      {
+        "ms": 1725.5,
+        "ready": 1152,
+        "visible": 104
+      }
+    ],
+    "calls": 1152,
+    "concurrency": 1152,
+    "longestMainThreadTaskMs": 1167.215
+  }
+]

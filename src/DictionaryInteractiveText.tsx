@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react';
+import { memo, useContext, useEffect, useMemo, useRef, useState } from 'react';
 import type { DictionaryEntrySummary } from './dictionaryEntrySummary';
 import {
   extractDictionaryTextTokens,
@@ -6,6 +7,10 @@ import {
   type DictionaryEntryResolver,
 } from './dictionaryTextCandidates';
 import { protectCjkLineBreaks } from './protectCjkLineBreaks';
+import {
+  DictionaryTextResolutionContext,
+  type DictionaryTextResolutionSession,
+} from './dictionaryTextResolutionSession';
 
 interface DictionaryInteractiveTextProps {
   readonly children: ReactNode;
@@ -13,22 +18,62 @@ interface DictionaryInteractiveTextProps {
   readonly resolveEntry: DictionaryEntryResolver;
 }
 
-export function DictionaryInteractiveText({
+function DictionaryInteractiveTextRenderer({
   children,
   onOpen,
   resolveEntry,
-}: DictionaryInteractiveTextProps) {
+  session,
+}: DictionaryInteractiveTextProps & {
+  readonly session: DictionaryTextResolutionSession | undefined;
+}) {
+  const ref = useRef<HTMLSpanElement>(null);
+  const [resolved, setResolved] = useState<{
+    readonly session: DictionaryTextResolutionSession;
+    readonly text: string;
+    readonly entries: ReadonlyMap<string, DictionaryEntrySummary>;
+  }>();
+  const ready = !session || (resolved?.session === session && resolved.text === children);
+  const tokens = useMemo(
+    () => (ready && typeof children === 'string' ? extractDictionaryTextTokens(children) : []),
+    [children, ready],
+  );
+  useEffect(() => {
+    if (!session || typeof children !== 'string' || !ref.current) return;
+    const controller = new AbortController();
+    void session
+      .resolve(children, ref.current, controller.signal)
+      .then((entries) => {
+        if (!controller.signal.aborted) setResolved({ session, text: children, entries });
+      })
+      .catch(() => {
+        /* Session owns the retry/error status; cancelled readers never write. */
+      });
+    return () => {
+      controller.abort();
+    };
+  }, [children, session]);
   if (typeof children !== 'string') return children;
+  // Pending paragraphs only need readable text; defer the token DOM as well.
+  if (!ready) {
+    return <span ref={ref}>{protectCjkLineBreaks(children)}</span>;
+  }
+
+  const lookup: DictionaryEntryResolver = session
+    ? (word) =>
+        resolved?.session === session && resolved.text === children
+          ? resolved.entries.get(word)
+          : undefined
+    : resolveEntry;
 
   const nodes: ReactNode[] = [];
   let cursor = 0;
-  for (const { index, token, semanticWords } of extractDictionaryTextTokens(children)) {
+  for (const { index, token, semanticWords } of tokens) {
     if (index > cursor) nodes.push(protectCjkLineBreaks(children.slice(cursor, index)));
 
     for (const semanticWord of semanticWords) {
       const segments = /^\p{Script=Han}+$/u.test(semanticWord)
-        ? resolveChineseText(semanticWord, resolveEntry)
-        : [{ entry: resolveEntry(semanticWord), text: token }];
+        ? resolveChineseText(semanticWord, lookup)
+        : [{ entry: lookup(semanticWord), text: token }];
       const segmentNodes = segments.map((segment, segmentIndex) => {
         if (segment.entry === undefined) return protectCjkLineBreaks(segment.text);
         const entry = segment.entry;
@@ -58,5 +103,18 @@ export function DictionaryInteractiveText({
     cursor = index + token.length;
   }
   if (cursor < children.length) nodes.push(protectCjkLineBreaks(children.slice(cursor)));
-  return nodes;
+  return session ? <span ref={ref}>{nodes}</span> : nodes;
+}
+
+const ScheduledDictionaryInteractiveText = memo(DictionaryInteractiveTextRenderer);
+
+export function DictionaryInteractiveText(props: DictionaryInteractiveTextProps) {
+  const session = useContext(DictionaryTextResolutionContext);
+  // Synchronous resolver hosts may update the data behind a stable function and
+  // re-render. Only memoize readers whose asynchronous results own their state.
+  return session ? (
+    <ScheduledDictionaryInteractiveText {...props} session={session} />
+  ) : (
+    <DictionaryInteractiveTextRenderer {...props} session={undefined} />
+  );
 }
