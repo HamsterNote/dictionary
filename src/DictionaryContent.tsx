@@ -19,7 +19,7 @@ import type {
 import { resolveDictionaryCorrection } from './dictionaryCorrections';
 import type { DictionaryEntrySummary } from './dictionaryEntrySummary';
 import { PronunciationAudioButton } from './PronunciationAudioButton';
-import { PronunciationButton } from './PronunciationButton';
+import type { DictionaryPronounce } from './dictionaryPronounce';
 import { formatDictionaryPhonetic } from './formatDictionaryPhonetic';
 import {
   type PronunciationContext,
@@ -56,7 +56,8 @@ export interface DictionaryContentProps extends Omit<HTMLAttributes<HTMLElement>
   readonly pronunciationOverlay?: ReactNode;
   readonly pronunciationCandidates?: ReactNode;
   readonly pronunciationScopeResolutions?: readonly LegacyScopeResolution[];
-  readonly pronounce?: (word: string) => Promise<void>;
+  /** 无匹配可信录音时调用；与 pronunciation 同传时录音优先。 */
+  readonly pronounce?: DictionaryPronounce;
   readonly pronunciation?: PronunciationPlaybackController;
   readonly resolveEntry?: (word: string) => DictionaryEntrySummary | undefined;
   readonly resolvedCorrections?: ResolvedDictionaryCorrectionsControl;
@@ -167,16 +168,14 @@ export function DictionaryContent({
   useEffect(() => {
     pronunciation?.stop();
   }, [pronunciation, activeKeyword, playbackContextKey]);
-  const pronunciationControl =
-    pronunciation !== undefined ? (
-      <PronunciationAudioButton
-        context={pronunciationContext}
-        word={resolvedContent.word}
-        pronunciation={pronunciation}
-      />
-    ) : pronounce ? (
-      <PronunciationButton pronounce={pronounce} word={activeKeyword} />
-    ) : null;
+  const pronunciationControl = (
+    <PronunciationAudioButton
+      context={pronunciationContext}
+      word={resolvedContent.word}
+      pronunciation={pronunciation}
+      pronounce={pronounce}
+    />
+  );
   const searchEntry = useCallback(
     (word: string) => {
       const normalizedWord = word.trim().normalize('NFKC').toLocaleLowerCase('en-US');
@@ -261,11 +260,13 @@ export function DictionaryContent({
               </PronunciationOverlayPlaybackContext.Provider>
               {pronunciationControl}
             </>
-          ) : resolvedContent.phonetic ? (
+          ) : resolvedContent.phonetic || pronounce !== undefined ? (
             <div className="dictionary-popover__pronunciation-row">
-              <p className="dictionary-popover__phonetic">
-                {formatDictionaryPhonetic(activeKeyword, resolvedContent.phonetic)}
-              </p>
+              {resolvedContent.phonetic ? (
+                <p className="dictionary-popover__phonetic">
+                  {formatDictionaryPhonetic(activeKeyword, resolvedContent.phonetic)}
+                </p>
+              ) : null}
               <DictionaryCorrectionDetailsButton
                 changes={resolvedContent.changes.filter((change) => change.field === 'phonetic')}
                 key={activeKeyword}

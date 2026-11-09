@@ -2,6 +2,7 @@ export type { ChineseDictionaryPopoverProps } from './ChineseDictionaryPopover';
 export { ChineseDictionaryPopover } from './ChineseDictionaryPopover';
 export type { ChineseDictionaryMetadata, ChineseDictionaryPack } from './chineseDictionaryPack';
 export type { DictionaryContentProps } from './DictionaryContent';
+export type { DictionaryPronounce } from './dictionaryPronounce';
 export { DictionaryContent } from './DictionaryContent';
 export type { DictionaryPopoverProps } from './DictionaryPopover';
 export { DictionaryPopover } from './DictionaryPopover';

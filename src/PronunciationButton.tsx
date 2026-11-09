@@ -1,8 +1,9 @@
 import { Button } from '@hamster-note/components/button';
-import { useId, useState } from 'react';
+import { useEffect, useId, useRef, useState } from 'react';
+import type { DictionaryPronounce } from './dictionaryPronounce';
 
 interface PronunciationButtonProps {
-  readonly pronounce: (word: string) => Promise<void>;
+  readonly pronounce: DictionaryPronounce;
   readonly word: string;
 }
 
@@ -11,6 +12,8 @@ type PronunciationStatus = 'idle' | 'busy' | 'error';
 export function PronunciationButton({ pronounce, word }: PronunciationButtonProps) {
   const [status, setStatus] = useState<PronunciationStatus>('idle');
   const statusId = useId();
+  const request = useRef<AbortController | undefined>(undefined);
+  useEffect(() => () => request.current?.abort(), []);
 
   return (
     <>
@@ -23,12 +26,19 @@ export function PronunciationButton({ pronounce, word }: PronunciationButtonProp
         ghost
         onClick={() => {
           setStatus('busy');
-          void pronounce(word).then(
+          const current = new AbortController();
+          request.current?.abort();
+          request.current = current;
+          const play = async () => {
+            await pronounce(word, current.signal);
+          };
+          void play().then(
             () => {
-              setStatus('idle');
+              if (!current.signal.aborted) setStatus('idle');
             },
-            () => {
-              setStatus('error');
+            (error: unknown) => {
+              if (!current.signal.aborted)
+                setStatus(error instanceof Error && error.name === 'AbortError' ? 'idle' : 'error');
             },
           );
         }}

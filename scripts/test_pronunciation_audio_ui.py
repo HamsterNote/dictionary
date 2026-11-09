@@ -132,6 +132,17 @@ def main() -> None:
                     page.get_by_role("button", name="朗读 hello", exact=True).click()
                     assert page.evaluate("window.__audioFixture.calls.length") == 1
                     assert page.get_by_test_id("legacy-calls").inner_text() == "[]"
+                    # A valid recording wins; an unavailable corrected reading
+                    # uses the registered callback without guessing another file.
+                    page.get_by_role("button", name="模拟词头纠错", exact=True).click()
+                    fallback = page.get_by_role("button", name="朗读 hello- edited", exact=True)
+                    assert fallback.is_enabled()
+                    fallback.click()
+                    assert page.get_by_test_id("legacy-calls").inner_text() == '["hello- edited"]'
+                    assert page.evaluate("window.__audioFixture.calls.length") == 1
+                    page.goto(url + "?mode=none")
+                    assert page.get_by_role("button", name="朗读 hello", exact=True).is_disabled()
+                    assert page.get_by_text("暂无读音", exact=True).is_visible()
                     assert not errors, errors
                 finally:
                     browser.close()

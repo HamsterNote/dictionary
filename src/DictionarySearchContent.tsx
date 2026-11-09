@@ -15,6 +15,7 @@ import { applyDictionaryCorrectionToSummary } from './dictionaryCorrectionApply'
 import type { DictionaryEntrySummary } from './dictionaryEntrySummary';
 import type { DictionaryProvider } from './dictionaryProvider';
 import type { PronunciationPlaybackController } from './pronunciation-audio/controller';
+import type { DictionaryPronounce } from './dictionaryPronounce';
 import { useDictionaryCorrections } from './useDictionaryCorrections';
 import { useDictionaryTextResolution } from './useDictionaryTextResolution';
 
@@ -27,7 +28,8 @@ export interface DictionarySearchContentProps {
   readonly onQueryChange?: (query: string) => void;
   readonly onSearch?: (query: string) => void;
   readonly phonetic?: string;
-  readonly pronounce?: (word: string) => Promise<void>;
+  /** 无匹配可信真人录音时调用宿主朗读；有录音时不调用。 */
+  readonly pronounce?: DictionaryPronounce;
   readonly pronunciation?: PronunciationPlaybackController;
   readonly provider?: DictionaryProvider;
   readonly query?: string;
