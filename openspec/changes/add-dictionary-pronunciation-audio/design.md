@@ -74,3 +74,9 @@
 修勾在 HAM-186 提出通过共享层注册函数，由 native 调用系统朗读；小助手随后明确授权两个平台均启用，可信真人录音优先、注册函数兜底、都无时禁用。此修订取代前文“不新增语音桥/不默认启用 TTS”及“双 prop 整体覆盖”的旧限制；保持音源和 IPA 决策在 dictionary。
 
 复用 pronounce 回调，补可选 AbortSignal 取消参数。native 只通过已有受信消息通道发送带文档会话与请求 ID 的词头/停止指令，由 expo-speech 调系统 TTS；不传音源 URL，不改变存档或导航信任。缺录音才调用回调，已有可信录音的网络失败保留手动重试。合成不保证匹配显示 IPA。设备听感仍须独立验收。
+
+## 2026-11-09 授权修订：宿主口音契约
+
+共享 pronounce 第三参数为可选 DictionaryPronounceOptions（language?: en-US/en-GB，languageSource: overlay-accent/unknown）。来源为当前唯一可用 overlay 默认读法的 readings[].accent.class：us-unspecified → en-US，uk-unspecified → en-GB；必须通过既有 language=en、唯一 default 读法、身份和阻断检查。无需注册录音 controller 也可以传递口音。普通 ECDICT phonetic 没有地区字段，不根据 r、元音、拼写或 UI 的“英：”前缀推测；unknown 不带 language。合成仍不保证复现具体 IPA，旧一参/二参回调兼容，真人录音继续优先。
+
+宿主自行约定未知时的默认口音；本任务的 native 消费方选 en-US，依据是延续此前宿主默认设置而非数据推断。native 只映射共享层给出的 language，不读 IPA 或判断音源；音色选择与临时调参属于 native 仓库，不在本共享层变更中实现。

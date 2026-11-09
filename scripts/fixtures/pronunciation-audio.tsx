@@ -23,6 +23,7 @@ import {
   pronunciationContextKey,
 } from '../../src/pronunciation-audio/controller';
 import type { PronunciationContext } from '../../src/pronunciation-audio/contracts';
+import type { DictionaryPronounceOptions } from '../../src/dictionaryPronounce';
 import { knownScope, scopeWith } from '../../src/pronunciation-overlay/contracts';
 import '../../src/dictionary.css';
 
@@ -93,7 +94,7 @@ const overlayManifest: PronunciationAudioManifest = {
   ],
 };
 
-function overlayEntries(phonetic: string): readonly PronunciationDisplayEntry[] {
+function overlayEntries(phonetic: string, us = false): readonly PronunciationDisplayEntry[] {
   return [
     {
       entryId: overlayEntryId,
@@ -112,7 +113,11 @@ function overlayEntries(phonetic: string): readonly PronunciationDisplayEntry[] 
           role: 'base',
           originalIpa: phonetic,
           notation: 'phonemic',
-          accent: { class: 'uk-unspecified', label: 'UK', unspecified: false },
+          accent: {
+            class: us ? 'us-unspecified' : 'uk-unspecified',
+            label: us ? 'US' : 'UK',
+            unspecified: false,
+          },
           usage: [],
           tier: 'default',
           reviewStatus: 'active',
@@ -181,6 +186,8 @@ function fakeController(manifest: PronunciationAudioManifest): PronunciationPlay
 
 export function Fixture() {
   const mode = new URLSearchParams(location.search).get('mode');
+  const accentMode = mode === 'accent-us' || mode === 'accent-uk' || mode === 'accent-unknown';
+  const [lastOptions, setLastOptions] = useState<DictionaryPronounceOptions>();
   const [user, setUser] = useState<DictionaryCorrectionMap>({});
   const [overlayPhonetic, setOverlayPhonetic] = useState('/overlay/');
   const [controller] = useState(() =>
@@ -224,17 +231,22 @@ export function Fixture() {
         getDetail={(word) => details[word]}
         {...(detail.phonetic === undefined ? {} : { phonetic: detail.phonetic })}
         sources={detail.sources}
-        {...(mode === 'overlay'
+        {...(mode === 'overlay' || (accentMode && mode !== 'accent-unknown')
           ? {
               pronunciationOverlay: (
-                <DictionaryPronunciationOverlay entries={overlayEntries(overlayPhonetic)} />
+                <DictionaryPronunciationOverlay
+                  entries={overlayEntries(overlayPhonetic, mode === 'accent-us')}
+                />
               ),
             }
           : {})}
-        {...(mode === 'legacy' || mode === 'none' ? {} : { pronunciation: controller })}
-        {...(mode === 'legacy' || mode === 'dual'
+        {...(mode === 'legacy' || mode === 'none' || accentMode
+          ? {}
+          : { pronunciation: controller })}
+        {...(mode === 'legacy' || mode === 'dual' || accentMode
           ? {
-              pronounce: (word) => {
+              pronounce: (word, _signal, options) => {
+                setLastOptions(options);
                 legacyCalls.push(word);
                 const output = document.querySelector('[data-testid="legacy-calls"]');
                 if (output !== null) output.textContent = JSON.stringify(legacyCalls);
@@ -244,6 +256,7 @@ export function Fixture() {
           : {})}
       />
       <output data-testid="legacy-calls">{JSON.stringify(legacyCalls)}</output>
+      <output data-testid="pronounce-options">{JSON.stringify(lastOptions)}</output>
     </main>
   );
 }

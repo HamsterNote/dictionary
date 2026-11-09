@@ -1,15 +1,16 @@
 import { Button } from '@hamster-note/components/button';
 import { useEffect, useId, useRef, useState } from 'react';
-import type { DictionaryPronounce } from './dictionaryPronounce';
+import type { DictionaryPronounce, DictionaryPronounceOptions } from './dictionaryPronounce';
 
 interface PronunciationButtonProps {
   readonly pronounce: DictionaryPronounce;
   readonly word: string;
+  readonly options?: DictionaryPronounceOptions | undefined;
 }
 
 type PronunciationStatus = 'idle' | 'busy' | 'error';
 
-export function PronunciationButton({ pronounce, word }: PronunciationButtonProps) {
+export function PronunciationButton({ pronounce, word, options }: PronunciationButtonProps) {
   const [status, setStatus] = useState<PronunciationStatus>('idle');
   const statusId = useId();
   const request = useRef<AbortController | undefined>(undefined);
@@ -30,7 +31,7 @@ export function PronunciationButton({ pronounce, word }: PronunciationButtonProp
           request.current?.abort();
           request.current = current;
           const play = async () => {
-            await pronounce(word, current.signal);
+            await pronounce(word, current.signal, options);
           };
           void play().then(
             () => {
