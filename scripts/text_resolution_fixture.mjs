@@ -9,6 +9,15 @@ export function createTextResolutionServer() {
       {
         name: 'text-resolution-fixture',
         configureServer(server) {
+          server.middlewares.use('/main-scroll', async (_request, response) => {
+            response.setHeader('Content-Type', 'text/html');
+            response.end(
+              await server.transformIndexHtml(
+                '/main-scroll',
+                '<style>body{margin:0}#root{padding:16px}</style><div id="root"></div><script type="module" src="/scripts/fixtures/main-scroll.tsx"></script>',
+              ),
+            );
+          });
           server.middlewares.use('/preview-contract', async (_request, response) => {
             response.setHeader('Content-Type', 'text/html');
             response.end(

@@ -194,8 +194,8 @@ export function DictionarySearchContent({
 
   return (
     <div
+      className="dictionary-search-content"
       ref={scopeRef}
-      style={{ display: 'contents' }}
       onFocusCapture={(event) => {
         const target = event.target;
         if (target instanceof HTMLElement && target.matches('.dictionary-popover__inline-word'))

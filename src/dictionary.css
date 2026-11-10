@@ -73,7 +73,20 @@
   overflow: visible;
 }
 
-.dictionary-popover > .dictionary-content {
+.dictionary-popover > .dictionary-search-content {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  min-width: 0;
+  min-height: 0;
+}
+
+.dictionary-popover > .dictionary-search-content > .dictionary-popover__search-region,
+.dictionary-popover > .dictionary-search-content > .dictionary-inline-resolution-slot {
+  flex: 0 0 auto;
+}
+
+.dictionary-popover > .dictionary-search-content > .dictionary-content {
   display: flex;
   flex: 1 1 auto;
   flex-direction: column;
@@ -81,7 +94,10 @@
   overflow: hidden;
 }
 
-.dictionary-popover > .dictionary-content > .dictionary-popover__results {
+.dictionary-popover
+  > .dictionary-search-content
+  > .dictionary-content
+  > .dictionary-popover__results {
   flex: 1 1 auto;
   min-height: 0;
   max-height: max(120px, calc(100dvh - 230px));

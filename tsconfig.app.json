@@ -27,6 +27,7 @@
   "include": [
     "src",
     "scripts/fixtures/layout.tsx",
+    "scripts/fixtures/main-scroll.tsx",
     "demo",
     "scripts/fixtures/pronunciation-overlay.tsx",
     "scripts/fixtures/text-resolution.tsx",
