@@ -18,6 +18,7 @@ import type { PronunciationPlaybackController } from './pronunciation-audio/cont
 import type { DictionaryPronounce } from './dictionaryPronounce';
 import { useDictionaryCorrections } from './useDictionaryCorrections';
 import { useDictionaryTextResolution } from './useDictionaryTextResolution';
+import { DictionaryTextResolutionContext } from './dictionaryTextResolutionSession';
 
 export interface DictionarySearchContentProps {
   readonly corrections?: DictionaryCorrectionsControl;
@@ -85,6 +86,7 @@ export function DictionarySearchContent({
     provider,
     resolveEntry,
     sources: sources ?? resolutionDetail?.sources,
+    word,
   });
 
   const closePreview = useCallback(() => {
@@ -189,23 +191,25 @@ export function DictionarySearchContent({
           )}
         </div>
       )}
-      <DictionaryContent
-        {...(corrections === undefined ? {} : { corrections })}
-        {...(emptyMessage === undefined ? {} : { emptyMessage })}
-        {...(getDetail ? { getDetail } : {})}
-        {...(headingId ? { headingId } : {})}
-        keyword={word}
-        {...(meanings ? { meanings } : {})}
-        onOpenPreview={openPreview}
-        {...(phonetic === undefined ? {} : { phonetic })}
-        {...(pronounce ? { pronounce } : {})}
-        {...(pronunciation ? { pronunciation } : {})}
-        {...(textResolution.resolveEntry ? { resolveEntry: textResolution.resolveEntry } : {})}
-        resolvedCorrections={resolvedCorrections}
-        {...(search ? { search } : {})}
-        showGuide={showGuide}
-        {...(sources ? { sources } : {})}
-      />
+      <DictionaryTextResolutionContext.Provider value={textResolution.session}>
+        <DictionaryContent
+          {...(corrections === undefined ? {} : { corrections })}
+          {...(emptyMessage === undefined ? {} : { emptyMessage })}
+          {...(getDetail ? { getDetail } : {})}
+          {...(headingId ? { headingId } : {})}
+          keyword={word}
+          {...(meanings ? { meanings } : {})}
+          onOpenPreview={openPreview}
+          {...(phonetic === undefined ? {} : { phonetic })}
+          {...(pronounce ? { pronounce } : {})}
+          {...(pronunciation ? { pronunciation } : {})}
+          {...(textResolution.resolveEntry ? { resolveEntry: textResolution.resolveEntry } : {})}
+          resolvedCorrections={resolvedCorrections}
+          {...(search ? { search } : {})}
+          showGuide={showGuide}
+          {...(sources ? { sources } : {})}
+        />
+      </DictionaryTextResolutionContext.Provider>
     </>
   );
 }

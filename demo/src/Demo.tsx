@@ -2,6 +2,8 @@ import { type ThemeAccentPreset, ThemeProvider } from '@hamster-note/components/
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
   createDictionaryProvider,
+  countChineseEntries,
+  countEnglishChineseEntries,
   DictionaryContent,
   type DictionaryEntrySummary,
   ENGLISH_CHINESE_CORE_GZIP_BYTES,
@@ -65,6 +67,15 @@ export function Demo() {
   });
   const isChineseQuery = HAN_CHARACTER_PATTERN.test(navigation.committedQuery);
   const isChineseSearch = HAN_CHARACTER_PATTERN.test(query);
+  const chineseEntryCount = useMemo(
+    () => countChineseEntries(dictionaryPacks.chineseDictionaryPacks),
+    [dictionaryPacks.chineseDictionaryPacks],
+  );
+  const englishEntryCount = useMemo(
+    () => countEnglishChineseEntries(dictionaryPacks.englishVocabularyPacks),
+    [dictionaryPacks.englishVocabularyPacks],
+  );
+  const totalEntries = isChineseQuery ? chineseEntryCount : englishEntryCount;
   const dictionaryView = useMemo(
     () =>
       createDictionaryView({
@@ -79,6 +90,7 @@ export function Demo() {
         isChineseQuery,
         isChineseSearch,
         query,
+        totalEntries,
       }),
     [
       dictionaryPacks.chineseDictionaryPacks,
@@ -92,6 +104,7 @@ export function Demo() {
       isChineseSearch,
       navigation.committedQuery,
       query,
+      totalEntries,
     ],
   );
   const resolveEntry = useCallback(
@@ -332,6 +345,7 @@ export function Demo() {
               ref={popoverRef}
               search={search}
               searchLabel={dictionaryView.searchLabel}
+              suggestions={dictionaryView.suggestions}
               searchPlaceholder={dictionaryView.searchPlaceholder}
               showGuide={navigation.committedQuery.length === 0}
               tabIndex={-1}

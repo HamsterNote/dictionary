@@ -1,0 +1,919 @@
+{
+  "repeats": 3,
+  "tracing": false,
+  "profiling": false,
+  "results": [
+    {
+      "label": "dev-untraced",
+      "host": "web",
+      "cpu": 1,
+      "repeat": 1,
+      "action": "open-cold",
+      "windowMs": 447,
+      "longTasks": [],
+      "longestObservedLongTaskMs": 0,
+      "totalBlockingMs": 0,
+      "longestFrameGapMs": 33.40000000000009,
+      "errors": []
+    },
+    {
+      "label": "dev-untraced",
+      "host": "web",
+      "cpu": 1,
+      "repeat": 1,
+      "action": "scroll",
+      "windowMs": 616,
+      "longTasks": [],
+      "longestObservedLongTaskMs": 0,
+      "totalBlockingMs": 0,
+      "longestFrameGapMs": 16.800000000000182,
+      "errors": []
+    },
+    {
+      "label": "dev-untraced",
+      "host": "web",
+      "cpu": 1,
+      "repeat": 1,
+      "action": "preview",
+      "windowMs": 632,
+      "longTasks": [],
+      "longestObservedLongTaskMs": 0,
+      "totalBlockingMs": 0,
+      "longestFrameGapMs": 33.400000000000546,
+      "errors": []
+    },
+    {
+      "label": "dev-untraced",
+      "host": "web",
+      "cpu": 1,
+      "repeat": 1,
+      "action": "input-warm",
+      "windowMs": 1065.8000001907349,
+      "longTasks": [],
+      "longestObservedLongTaskMs": 0,
+      "totalBlockingMs": 0,
+      "longestFrameGapMs": 66.80000000000018,
+      "errors": []
+    },
+    {
+      "label": "dev-untraced",
+      "host": "web",
+      "cpu": 1,
+      "repeat": 1,
+      "action": "open-warm",
+      "windowMs": 606.1000003814697,
+      "longTasks": [],
+      "longestObservedLongTaskMs": 0,
+      "totalBlockingMs": 0,
+      "longestFrameGapMs": 33.399999999999636,
+      "errors": []
+    },
+    {
+      "label": "dev-untraced",
+      "host": "web",
+      "cpu": 1,
+      "repeat": 2,
+      "action": "open-cold",
+      "windowMs": 431.80000019073486,
+      "longTasks": [
+        {
+          "startMs": 69.69999980926514,
+          "durationMs": 51
+        }
+      ],
+      "longestObservedLongTaskMs": 51,
+      "totalBlockingMs": 1,
+      "longestFrameGapMs": 33.40000000000009,
+      "errors": []
+    },
+    {
+      "label": "dev-untraced",
+      "host": "web",
+      "cpu": 1,
+      "repeat": 2,
+      "action": "scroll",
+      "windowMs": 635.5,
+      "longTasks": [],
+      "longestObservedLongTaskMs": 0,
+      "totalBlockingMs": 0,
+      "longestFrameGapMs": 16.800000000000182,
+      "errors": []
+    },
+    {
+      "label": "dev-untraced",
+      "host": "web",
+      "cpu": 1,
+      "repeat": 2,
+      "action": "preview",
+      "windowMs": 628.6999998092651,
+      "longTasks": [],
+      "longestObservedLongTaskMs": 0,
+      "totalBlockingMs": 0,
+      "longestFrameGapMs": 50.099999999999454,
+      "errors": []
+    },
+    {
+      "label": "dev-untraced",
+      "host": "web",
+      "cpu": 1,
+      "repeat": 2,
+      "action": "input-warm",
+      "windowMs": 1058.8000001907349,
+      "longTasks": [],
+      "longestObservedLongTaskMs": 0,
+      "totalBlockingMs": 0,
+      "longestFrameGapMs": 33.400000000000546,
+      "errors": []
+    },
+    {
+      "label": "dev-untraced",
+      "host": "web",
+      "cpu": 1,
+      "repeat": 2,
+      "action": "open-warm",
+      "windowMs": 604.3999996185303,
+      "longTasks": [],
+      "longestObservedLongTaskMs": 0,
+      "totalBlockingMs": 0,
+      "longestFrameGapMs": 16.800000000000182,
+      "errors": []
+    },
+    {
+      "label": "dev-untraced",
+      "host": "web",
+      "cpu": 1,
+      "repeat": 3,
+      "action": "open-cold",
+      "windowMs": 441.5,
+      "longTasks": [],
+      "longestObservedLongTaskMs": 0,
+      "totalBlockingMs": 0,
+      "longestFrameGapMs": 33.40000000000009,
+      "errors": []
+    },
+    {
+      "label": "dev-untraced",
+      "host": "web",
+      "cpu": 1,
+      "repeat": 3,
+      "action": "scroll",
+      "windowMs": 612.5,
+      "longTasks": [],
+      "longestObservedLongTaskMs": 0,
+      "totalBlockingMs": 0,
+      "longestFrameGapMs": 16.800000000000182,
+      "errors": []
+    },
+    {
+      "label": "dev-untraced",
+      "host": "web",
+      "cpu": 1,
+      "repeat": 3,
+      "action": "preview",
+      "windowMs": 629.3000001907349,
+      "longTasks": [],
+      "longestObservedLongTaskMs": 0,
+      "totalBlockingMs": 0,
+      "longestFrameGapMs": 33.400000000000546,
+      "errors": []
+    },
+    {
+      "label": "dev-untraced",
+      "host": "web",
+      "cpu": 1,
+      "repeat": 3,
+      "action": "input-warm",
+      "windowMs": 1058.7000007629395,
+      "longTasks": [],
+      "longestObservedLongTaskMs": 0,
+      "totalBlockingMs": 0,
+      "longestFrameGapMs": 50,
+      "errors": []
+    },
+    {
+      "label": "dev-untraced",
+      "host": "web",
+      "cpu": 1,
+      "repeat": 3,
+      "action": "open-warm",
+      "windowMs": 602.0999994277954,
+      "longTasks": [],
+      "longestObservedLongTaskMs": 0,
+      "totalBlockingMs": 0,
+      "longestFrameGapMs": 33.30000000000018,
+      "errors": []
+    },
+    {
+      "label": "dev-untraced",
+      "host": "native",
+      "cpu": 1,
+      "repeat": 1,
+      "action": "open-cold",
+      "windowMs": 2930.1000003814697,
+      "longTasks": [],
+      "longestObservedLongTaskMs": 0,
+      "totalBlockingMs": 0,
+      "longestFrameGapMs": 16.800000000000182,
+      "errors": []
+    },
+    {
+      "label": "dev-untraced",
+      "host": "native",
+      "cpu": 1,
+      "repeat": 1,
+      "action": "scroll",
+      "windowMs": 630.6999998092651,
+      "longTasks": [],
+      "longestObservedLongTaskMs": 0,
+      "totalBlockingMs": 0,
+      "longestFrameGapMs": 16.800000000000182,
+      "errors": []
+    },
+    {
+      "label": "dev-untraced",
+      "host": "native",
+      "cpu": 1,
+      "repeat": 1,
+      "action": "preview",
+      "windowMs": 616.6000003814697,
+      "longTasks": [],
+      "longestObservedLongTaskMs": 0,
+      "totalBlockingMs": 0,
+      "longestFrameGapMs": 16.800000000000182,
+      "errors": []
+    },
+    {
+      "label": "dev-untraced",
+      "host": "native",
+      "cpu": 1,
+      "repeat": 1,
+      "action": "input-warm",
+      "windowMs": 996.4000005722046,
+      "longTasks": [],
+      "longestObservedLongTaskMs": 0,
+      "totalBlockingMs": 0,
+      "longestFrameGapMs": 16.799999999999272,
+      "errors": []
+    },
+    {
+      "label": "dev-untraced",
+      "host": "native",
+      "cpu": 1,
+      "repeat": 1,
+      "action": "open-warm",
+      "windowMs": 576.1000003814697,
+      "longTasks": [],
+      "longestObservedLongTaskMs": 0,
+      "totalBlockingMs": 0,
+      "longestFrameGapMs": 16.80000000000109,
+      "errors": []
+    },
+    {
+      "label": "dev-untraced",
+      "host": "native",
+      "cpu": 1,
+      "repeat": 2,
+      "action": "open-cold",
+      "windowMs": 2906.4000005722046,
+      "longTasks": [],
+      "longestObservedLongTaskMs": 0,
+      "totalBlockingMs": 0,
+      "longestFrameGapMs": 33.30000000000018,
+      "errors": []
+    },
+    {
+      "label": "dev-untraced",
+      "host": "native",
+      "cpu": 1,
+      "repeat": 2,
+      "action": "scroll",
+      "windowMs": 628.8000001907349,
+      "longTasks": [],
+      "longestObservedLongTaskMs": 0,
+      "totalBlockingMs": 0,
+      "longestFrameGapMs": 16.800000000000182,
+      "errors": []
+    },
+    {
+      "label": "dev-untraced",
+      "host": "native",
+      "cpu": 1,
+      "repeat": 2,
+      "action": "preview",
+      "windowMs": 616.3999996185303,
+      "longTasks": [],
+      "longestObservedLongTaskMs": 0,
+      "totalBlockingMs": 0,
+      "longestFrameGapMs": 16.800000000000182,
+      "errors": []
+    },
+    {
+      "label": "dev-untraced",
+      "host": "native",
+      "cpu": 1,
+      "repeat": 2,
+      "action": "input-warm",
+      "windowMs": 995,
+      "longTasks": [],
+      "longestObservedLongTaskMs": 0,
+      "totalBlockingMs": 0,
+      "longestFrameGapMs": 16.800000000000182,
+      "errors": []
+    },
+    {
+      "label": "dev-untraced",
+      "host": "native",
+      "cpu": 1,
+      "repeat": 2,
+      "action": "open-warm",
+      "windowMs": 576.7000007629395,
+      "longTasks": [],
+      "longestObservedLongTaskMs": 0,
+      "totalBlockingMs": 0,
+      "longestFrameGapMs": 16.700000000000728,
+      "errors": []
+    },
+    {
+      "label": "dev-untraced",
+      "host": "native",
+      "cpu": 1,
+      "repeat": 3,
+      "action": "open-cold",
+      "windowMs": 2904.1000003814697,
+      "longTasks": [],
+      "longestObservedLongTaskMs": 0,
+      "totalBlockingMs": 0,
+      "longestFrameGapMs": 33.40000000000009,
+      "errors": []
+    },
+    {
+      "label": "dev-untraced",
+      "host": "native",
+      "cpu": 1,
+      "repeat": 3,
+      "action": "scroll",
+      "windowMs": 627.4000005722046,
+      "longTasks": [],
+      "longestObservedLongTaskMs": 0,
+      "totalBlockingMs": 0,
+      "longestFrameGapMs": 16.800000000000182,
+      "errors": []
+    },
+    {
+      "label": "dev-untraced",
+      "host": "native",
+      "cpu": 1,
+      "repeat": 3,
+      "action": "preview",
+      "windowMs": 615.9000005722046,
+      "longTasks": [],
+      "longestObservedLongTaskMs": 0,
+      "totalBlockingMs": 0,
+      "longestFrameGapMs": 16.799999999999272,
+      "errors": []
+    },
+    {
+      "label": "dev-untraced",
+      "host": "native",
+      "cpu": 1,
+      "repeat": 3,
+      "action": "input-warm",
+      "windowMs": 996.4000005722046,
+      "longTasks": [],
+      "longestObservedLongTaskMs": 0,
+      "totalBlockingMs": 0,
+      "longestFrameGapMs": 16.800000000000182,
+      "errors": []
+    },
+    {
+      "label": "dev-untraced",
+      "host": "native",
+      "cpu": 1,
+      "repeat": 3,
+      "action": "open-warm",
+      "windowMs": 577.6000003814697,
+      "longTasks": [],
+      "longestObservedLongTaskMs": 0,
+      "totalBlockingMs": 0,
+      "longestFrameGapMs": 16.800000000000182,
+      "errors": []
+    },
+    {
+      "label": "dev-untraced",
+      "host": "web",
+      "cpu": 4,
+      "repeat": 1,
+      "action": "open-cold",
+      "windowMs": 907.6000003814697,
+      "longTasks": [
+        {
+          "startMs": 24.699999809265137,
+          "durationMs": 99
+        },
+        {
+          "startMs": 155.19999980926514,
+          "durationMs": 175
+        }
+      ],
+      "longestObservedLongTaskMs": 175,
+      "totalBlockingMs": 174,
+      "longestFrameGapMs": 183.29999999999973,
+      "errors": []
+    },
+    {
+      "label": "dev-untraced",
+      "host": "web",
+      "cpu": 4,
+      "repeat": 1,
+      "action": "scroll",
+      "windowMs": 645.3000001907349,
+      "longTasks": [],
+      "longestObservedLongTaskMs": 0,
+      "totalBlockingMs": 0,
+      "longestFrameGapMs": 33.29999999999973,
+      "errors": []
+    },
+    {
+      "label": "dev-untraced",
+      "host": "web",
+      "cpu": 4,
+      "repeat": 1,
+      "action": "preview",
+      "windowMs": 768.3999996185303,
+      "longTasks": [
+        {
+          "startMs": 47.09999942779541,
+          "durationMs": 104
+        }
+      ],
+      "longestObservedLongTaskMs": 104,
+      "totalBlockingMs": 54,
+      "longestFrameGapMs": 100,
+      "errors": []
+    },
+    {
+      "label": "dev-untraced",
+      "host": "web",
+      "cpu": 4,
+      "repeat": 1,
+      "action": "input-warm",
+      "windowMs": 1471.8999996185303,
+      "longTasks": [
+        {
+          "startMs": 115.89999961853027,
+          "durationMs": 161
+        },
+        {
+          "startMs": 465.0999994277954,
+          "durationMs": 103
+        },
+        {
+          "startMs": 722.0999994277954,
+          "durationMs": 97
+        }
+      ],
+      "longestObservedLongTaskMs": 161,
+      "totalBlockingMs": 211,
+      "longestFrameGapMs": 183.19999999999982,
+      "errors": []
+    },
+    {
+      "label": "dev-untraced",
+      "host": "web",
+      "cpu": 4,
+      "repeat": 1,
+      "action": "open-warm",
+      "windowMs": 768.6999998092651,
+      "longTasks": [
+        {
+          "startMs": 27,
+          "durationMs": 116
+        }
+      ],
+      "longestObservedLongTaskMs": 116,
+      "totalBlockingMs": 66,
+      "longestFrameGapMs": 100,
+      "errors": []
+    },
+    {
+      "label": "dev-untraced",
+      "host": "web",
+      "cpu": 4,
+      "repeat": 2,
+      "action": "open-cold",
+      "windowMs": 895.8000001907349,
+      "longTasks": [
+        {
+          "startMs": 26.199999809265137,
+          "durationMs": 104
+        },
+        {
+          "startMs": 162.39999961853027,
+          "durationMs": 176
+        }
+      ],
+      "longestObservedLongTaskMs": 176,
+      "totalBlockingMs": 180,
+      "longestFrameGapMs": 183.29999999999973,
+      "errors": []
+    },
+    {
+      "label": "dev-untraced",
+      "host": "web",
+      "cpu": 4,
+      "repeat": 2,
+      "action": "scroll",
+      "windowMs": 648.3000001907349,
+      "longTasks": [],
+      "longestObservedLongTaskMs": 0,
+      "totalBlockingMs": 0,
+      "longestFrameGapMs": 16.800000000000182,
+      "errors": []
+    },
+    {
+      "label": "dev-untraced",
+      "host": "web",
+      "cpu": 4,
+      "repeat": 2,
+      "action": "preview",
+      "windowMs": 801.0999994277954,
+      "longTasks": [
+        {
+          "startMs": 51.39999961853027,
+          "durationMs": 122
+        }
+      ],
+      "longestObservedLongTaskMs": 122,
+      "totalBlockingMs": 72,
+      "longestFrameGapMs": 116.59999999999945,
+      "errors": []
+    },
+    {
+      "label": "dev-untraced",
+      "host": "web",
+      "cpu": 4,
+      "repeat": 2,
+      "action": "input-warm",
+      "windowMs": 1419.8999996185303,
+      "longTasks": [
+        {
+          "startMs": 111.5,
+          "durationMs": 89
+        },
+        {
+          "startMs": 399.19999980926514,
+          "durationMs": 107
+        },
+        {
+          "startMs": 659.3000001907349,
+          "durationMs": 102
+        }
+      ],
+      "longestObservedLongTaskMs": 107,
+      "totalBlockingMs": 148,
+      "longestFrameGapMs": 133.39999999999964,
+      "errors": []
+    },
+    {
+      "label": "dev-untraced",
+      "host": "web",
+      "cpu": 4,
+      "repeat": 2,
+      "action": "open-warm",
+      "windowMs": 731.9000005722046,
+      "longTasks": [
+        {
+          "startMs": 15.5,
+          "durationMs": 98
+        }
+      ],
+      "longestObservedLongTaskMs": 98,
+      "totalBlockingMs": 48,
+      "longestFrameGapMs": 83.40000000000055,
+      "errors": []
+    },
+    {
+      "label": "dev-untraced",
+      "host": "web",
+      "cpu": 4,
+      "repeat": 3,
+      "action": "open-cold",
+      "windowMs": 822.4000005722046,
+      "longTasks": [
+        {
+          "startMs": 23.200000762939453,
+          "durationMs": 100
+        },
+        {
+          "startMs": 153.80000019073486,
+          "durationMs": 185
+        },
+        {
+          "startMs": 475.1000003814697,
+          "durationMs": 59
+        }
+      ],
+      "longestObservedLongTaskMs": 185,
+      "totalBlockingMs": 194,
+      "longestFrameGapMs": 183.4000000000001,
+      "errors": []
+    },
+    {
+      "label": "dev-untraced",
+      "host": "web",
+      "cpu": 4,
+      "repeat": 3,
+      "action": "scroll",
+      "windowMs": 647.5,
+      "longTasks": [],
+      "longestObservedLongTaskMs": 0,
+      "totalBlockingMs": 0,
+      "longestFrameGapMs": 33.400000000000546,
+      "errors": []
+    },
+    {
+      "label": "dev-untraced",
+      "host": "web",
+      "cpu": 4,
+      "repeat": 3,
+      "action": "preview",
+      "windowMs": 792.1999998092651,
+      "longTasks": [
+        {
+          "startMs": 59.29999923706055,
+          "durationMs": 105
+        }
+      ],
+      "longestObservedLongTaskMs": 105,
+      "totalBlockingMs": 55,
+      "longestFrameGapMs": 99.89999999999964,
+      "errors": []
+    },
+    {
+      "label": "dev-untraced",
+      "host": "web",
+      "cpu": 4,
+      "repeat": 3,
+      "action": "input-warm",
+      "windowMs": 1355.6000003814697,
+      "longTasks": [
+        {
+          "startMs": 102.60000038146973,
+          "durationMs": 84
+        },
+        {
+          "startMs": 365.19999980926514,
+          "durationMs": 100
+        },
+        {
+          "startMs": 618,
+          "durationMs": 83
+        }
+      ],
+      "longestObservedLongTaskMs": 100,
+      "totalBlockingMs": 117,
+      "longestFrameGapMs": 100,
+      "errors": []
+    },
+    {
+      "label": "dev-untraced",
+      "host": "web",
+      "cpu": 4,
+      "repeat": 3,
+      "action": "open-warm",
+      "windowMs": 755.3999996185303,
+      "longTasks": [
+        {
+          "startMs": 17.199999809265137,
+          "durationMs": 123
+        }
+      ],
+      "longestObservedLongTaskMs": 123,
+      "totalBlockingMs": 73,
+      "longestFrameGapMs": 116.60000000000036,
+      "errors": []
+    },
+    {
+      "label": "dev-untraced",
+      "host": "native",
+      "cpu": 4,
+      "repeat": 1,
+      "action": "open-cold",
+      "windowMs": 5273.300000190735,
+      "longTasks": [
+        {
+          "startMs": 154.19999980926514,
+          "durationMs": 136
+        },
+        {
+          "startMs": 694.8999996185303,
+          "durationMs": 109
+        }
+      ],
+      "longestObservedLongTaskMs": 136,
+      "totalBlockingMs": 145,
+      "longestFrameGapMs": 133.30000000000018,
+      "errors": []
+    },
+    {
+      "label": "dev-untraced",
+      "host": "native",
+      "cpu": 4,
+      "repeat": 1,
+      "action": "scroll",
+      "windowMs": 660.5,
+      "longTasks": [],
+      "longestObservedLongTaskMs": 0,
+      "totalBlockingMs": 0,
+      "longestFrameGapMs": 16.800000000000182,
+      "errors": []
+    },
+    {
+      "label": "dev-untraced",
+      "host": "native",
+      "cpu": 4,
+      "repeat": 1,
+      "action": "preview",
+      "windowMs": 708.3000001907349,
+      "longTasks": [],
+      "longestObservedLongTaskMs": 0,
+      "totalBlockingMs": 0,
+      "longestFrameGapMs": 16.799999999999272,
+      "errors": []
+    },
+    {
+      "label": "dev-untraced",
+      "host": "native",
+      "cpu": 4,
+      "repeat": 1,
+      "action": "input-warm",
+      "windowMs": 1079.9000005722046,
+      "longTasks": [],
+      "longestObservedLongTaskMs": 0,
+      "totalBlockingMs": 0,
+      "longestFrameGapMs": 16.80000000000109,
+      "errors": []
+    },
+    {
+      "label": "dev-untraced",
+      "host": "native",
+      "cpu": 4,
+      "repeat": 1,
+      "action": "open-warm",
+      "windowMs": 617.1999998092651,
+      "longTasks": [],
+      "longestObservedLongTaskMs": 0,
+      "totalBlockingMs": 0,
+      "longestFrameGapMs": 16.799999999999272,
+      "errors": []
+    },
+    {
+      "label": "dev-untraced",
+      "host": "native",
+      "cpu": 4,
+      "repeat": 2,
+      "action": "open-cold",
+      "windowMs": 5305.60000038147,
+      "longTasks": [
+        {
+          "startMs": 136.30000019073486,
+          "durationMs": 125
+        },
+        {
+          "startMs": 658.6999998092651,
+          "durationMs": 105
+        }
+      ],
+      "longestObservedLongTaskMs": 125,
+      "totalBlockingMs": 130,
+      "longestFrameGapMs": 116.59999999999991,
+      "errors": []
+    },
+    {
+      "label": "dev-untraced",
+      "host": "native",
+      "cpu": 4,
+      "repeat": 2,
+      "action": "scroll",
+      "windowMs": 677.3999996185303,
+      "longTasks": [],
+      "longestObservedLongTaskMs": 0,
+      "totalBlockingMs": 0,
+      "longestFrameGapMs": 16.800000000000182,
+      "errors": []
+    },
+    {
+      "label": "dev-untraced",
+      "host": "native",
+      "cpu": 4,
+      "repeat": 2,
+      "action": "preview",
+      "windowMs": 733.5,
+      "longTasks": [],
+      "longestObservedLongTaskMs": 0,
+      "totalBlockingMs": 0,
+      "longestFrameGapMs": 33.30000000000109,
+      "errors": []
+    },
+    {
+      "label": "dev-untraced",
+      "host": "native",
+      "cpu": 4,
+      "repeat": 2,
+      "action": "input-warm",
+      "windowMs": 1076.5,
+      "longTasks": [],
+      "longestObservedLongTaskMs": 0,
+      "totalBlockingMs": 0,
+      "longestFrameGapMs": 16.80000000000109,
+      "errors": []
+    },
+    {
+      "label": "dev-untraced",
+      "host": "native",
+      "cpu": 4,
+      "repeat": 2,
+      "action": "open-warm",
+      "windowMs": 632.4000005722046,
+      "longTasks": [],
+      "longestObservedLongTaskMs": 0,
+      "totalBlockingMs": 0,
+      "longestFrameGapMs": 16.799999999999272,
+      "errors": []
+    },
+    {
+      "label": "dev-untraced",
+      "host": "native",
+      "cpu": 4,
+      "repeat": 3,
+      "action": "open-cold",
+      "windowMs": 5281.700000762939,
+      "longTasks": [
+        {
+          "startMs": 150.60000038146973,
+          "durationMs": 126
+        },
+        {
+          "startMs": 655.5,
+          "durationMs": 105
+        }
+      ],
+      "longestObservedLongTaskMs": 126,
+      "totalBlockingMs": 131,
+      "longestFrameGapMs": 133.29999999999973,
+      "errors": []
+    },
+    {
+      "label": "dev-untraced",
+      "host": "native",
+      "cpu": 4,
+      "repeat": 3,
+      "action": "scroll",
+      "windowMs": 673.6000003814697,
+      "longTasks": [],
+      "longestObservedLongTaskMs": 0,
+      "totalBlockingMs": 0,
+      "longestFrameGapMs": 16.80000000000109,
+      "errors": []
+    },
+    {
+      "label": "dev-untraced",
+      "host": "native",
+      "cpu": 4,
+      "repeat": 3,
+      "action": "preview",
+      "windowMs": 700,
+      "longTasks": [],
+      "longestObservedLongTaskMs": 0,
+      "totalBlockingMs": 0,
+      "longestFrameGapMs": 33.399999999999636,
+      "errors": []
+    },
+    {
+      "label": "dev-untraced",
+      "host": "native",
+      "cpu": 4,
+      "repeat": 3,
+      "action": "input-warm",
+      "windowMs": 1084.3000001907349,
+      "longTasks": [],
+      "longestObservedLongTaskMs": 0,
+      "totalBlockingMs": 0,
+      "longestFrameGapMs": 16.80000000000109,
+      "errors": []
+    },
+    {
+      "label": "dev-untraced",
+      "host": "native",
+      "cpu": 4,
+      "repeat": 3,
+      "action": "open-warm",
+      "windowMs": 622.3999996185303,
+      "longTasks": [],
+      "longestObservedLongTaskMs": 0,
+      "totalBlockingMs": 0,
+      "longestFrameGapMs": 16.80000000000109,
+      "errors": []
+    }
+  ]
+}

@@ -1,7 +1,5 @@
 import {
   type ChineseDictionaryPack,
-  countChineseEntries,
-  countEnglishChineseEntries,
   type DictionaryEntrySummary,
   type DictionaryMeaning,
   type DictionarySource,
@@ -42,6 +40,7 @@ interface CreateDictionaryViewOptions {
   readonly isChineseQuery: boolean;
   readonly isChineseSearch: boolean;
   readonly query: string;
+  readonly totalEntries: number;
 }
 
 export function createDictionaryView({
@@ -56,6 +55,7 @@ export function createDictionaryView({
   isChineseQuery,
   isChineseSearch,
   query,
+  totalEntries,
 }: CreateDictionaryViewOptions): DictionaryView {
   if (isChineseQuery) {
     const result = lookupChinese(committedQuery, chineseDictionaryPacks);
@@ -86,7 +86,7 @@ export function createDictionaryView({
         englishInflectionIndexPacks,
         englishVocabularyPacks,
       }),
-      totalEntries: countChineseEntries(chineseDictionaryPacks),
+      totalEntries,
       word: result.status === 'found' ? result.word : committedQuery || '仓鼠词典',
     };
   }
@@ -111,7 +111,7 @@ export function createDictionaryView({
       englishInflectionIndexPacks,
       englishVocabularyPacks,
     }),
-    totalEntries: countEnglishChineseEntries(englishVocabularyPacks),
+    totalEntries,
     word: result.status === 'found' ? result.word : committedQuery || '仓鼠词典',
   };
 }

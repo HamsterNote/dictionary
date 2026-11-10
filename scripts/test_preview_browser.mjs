@@ -86,6 +86,19 @@ try {
   const bounds = await secondPreview.boundingBox();
   assert.ok(bounds && bounds.x >= 0 && bounds.y >= 0);
   assert.ok(bounds.x + bounds.width <= 390 && bounds.y + bounds.height <= 844);
+  await page.keyboard.press('Escape');
+  const resolvedAnchor = await nextButtons.nth(0).elementHandle();
+  assert.ok(resolvedAnchor);
+  await input.fill('心脏病');
+  await page.waitForTimeout(100);
+  assert.ok(
+    await resolvedAnchor.evaluate((element) => element.isConnected),
+    'typing must preserve the resolved reader instead of rebuilding its provider/session',
+  );
+  await input.fill('心脏');
+  await page.getByRole('button', { name: '删除系统纠错 note', exact: true }).click();
+  await page.getByRole('button', { name: '恢复系统纠错 (1)', exact: true }).click();
+  await page.getByRole('button', { name: '删除系统纠错 note', exact: true }).waitFor();
   await page.screenshot({
     path: new URL('../artifacts/dictionary-preview-mobile.png', import.meta.url).pathname,
     fullPage: true,

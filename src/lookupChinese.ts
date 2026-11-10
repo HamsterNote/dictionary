@@ -1,4 +1,5 @@
 import type { ChineseDictionaryEntry, ChineseDictionaryPack } from './chineseDictionaryPack';
+import { chineseSuggestionHeadwords } from './chineseDictionaryPack';
 import type { DictionaryEntrySummary } from './dictionaryEntrySummary';
 
 export interface ChineseMeaning {
@@ -59,7 +60,7 @@ export function suggestChinese(
   const suggestions: string[] = [];
   const seen = new Set<string>();
   for (const dictionaryPack of dictionaryPacks) {
-    for (const headword of dictionaryPack.entries.keys()) {
+    for (const headword of chineseSuggestionHeadwords(dictionaryPack, normalizedQuery)) {
       if (!headword.startsWith(normalizedQuery) || seen.has(headword)) continue;
       seen.add(headword);
       suggestions.push(headword);

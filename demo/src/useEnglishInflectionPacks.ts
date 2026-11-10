@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import type { EnglishInflectionFormsPack, EnglishInflectionIndexPack } from '../../src';
 import { loadInflectionFormsPack, loadInflectionIndexPack } from './dictionaryPackLoaders';
 import type { SupplementOptionId } from './dictionaryPacks';
@@ -21,10 +21,13 @@ export function useEnglishInflectionPacks(enabledSupplements: ReadonlySet<Supple
       : loadInflectionIndexPack().then(setIndexPack);
   }, []);
 
-  return {
-    formsPacks: enabledSupplements.has('supplements:inflections') && formsPack ? [formsPack] : [],
-    indexPacks:
-      enabledSupplements.has('supplements:inflection-index') && indexPack ? [indexPack] : [],
-    load,
-  };
+  return useMemo(
+    () => ({
+      formsPacks: enabledSupplements.has('supplements:inflections') && formsPack ? [formsPack] : [],
+      indexPacks:
+        enabledSupplements.has('supplements:inflection-index') && indexPack ? [indexPack] : [],
+      load,
+    }),
+    [enabledSupplements, formsPack, indexPack, load],
+  );
 }

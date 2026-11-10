@@ -1,4 +1,5 @@
 import type { DictionaryEntrySummary } from './dictionaryEntrySummary';
+import { enqueueDictionaryIdleJob } from './dictionaryIdleQueue';
 
 const TOKEN_PATTERN =
   /[\p{Script=Han}]+|[\p{Script=Latin}]+(?:['’-][\p{Script=Latin}]+)*(?:\([\p{Script=Latin}]+\))?/gu;
@@ -25,12 +26,16 @@ export type AsyncDictionaryEntryResolver = (
 ) => Promise<DictionaryEntrySummary | undefined>;
 
 export function extractDictionaryTextTokens(text: string): readonly DictionaryTextToken[] {
-  return Array.from(text.matchAll(TOKEN_PATTERN), (match) => {
+  return Array.from(iterateDictionaryTextTokens(text));
+}
+
+function* iterateDictionaryTextTokens(text: string): Generator<DictionaryTextToken> {
+  for (const match of text.matchAll(TOKEN_PATTERN)) {
     const token = match[0];
     const isHanToken = /^\p{Script=Han}+$/u.test(token);
     const lookupToken = isHanToken ? token : token.replace(LATIN_QUALIFIER_PATTERN, '');
     const hanCharacterCount = Array.from(token).length;
-    return {
+    yield {
       index: match.index,
       lookupToken,
       semanticWords:
@@ -39,7 +44,7 @@ export function extractDictionaryTextTokens(text: string): readonly DictionaryTe
           : [lookupToken],
       token,
     };
-  });
+  }
 }
 
 export function resolveChineseText(
@@ -82,35 +87,55 @@ export function resolveChineseText(
   return segments;
 }
 
-export async function resolveDictionaryTextEntries(
-  text: string,
-  resolveEntry: AsyncDictionaryEntryResolver,
-  signal?: AbortSignal,
-): Promise<ReadonlyMap<string, DictionaryEntrySummary>> {
-  const candidates = new Set<string>();
-  for (const token of extractDictionaryTextTokens(text)) {
+// Internal iterator: candidates are generated in the same idle slices as lookups.
+export function* iterateDictionaryTextCandidates(text: string): Generator<string> {
+  for (const token of iterateDictionaryTextTokens(text)) {
     for (const semanticWord of token.semanticWords) {
       if (!/^\p{Script=Han}+$/u.test(semanticWord)) {
-        candidates.add(semanticWord);
+        yield semanticWord;
         continue;
       }
       for (let cursor = 0; cursor < semanticWord.length; cursor += 1) {
         const maximumLength = Math.min(MAX_CHINESE_WORD_LENGTH, semanticWord.length - cursor);
         for (let length = 1; length <= maximumLength; length += 1) {
-          candidates.add(semanticWord.slice(cursor, cursor + length));
+          yield semanticWord.slice(cursor, cursor + length);
         }
       }
     }
   }
+}
 
+export async function resolveDictionaryTextEntries(
+  text: string,
+  resolveEntry: AsyncDictionaryEntryResolver,
+  signal?: AbortSignal,
+): Promise<ReadonlyMap<string, DictionaryEntrySummary>> {
+  return resolveDictionaryTextTask(text, resolveEntry, signal);
+}
+
+export async function resolveDictionaryTextTask(
+  text: string,
+  resolveEntry: AsyncDictionaryEntryResolver,
+  signal?: AbortSignal,
+  priority?: () => number,
+): Promise<ReadonlyMap<string, DictionaryEntrySummary>> {
+  const candidates = iterateDictionaryTextCandidates(text);
+  const seen = new Set<string>();
   const resolved = new Map<string, DictionaryEntrySummary>();
-  await Promise.all(
-    [...candidates].map(async (word) => {
+  await enqueueDictionaryIdleJob(
+    async () => {
       signal?.throwIfAborted();
-      const entry = await resolveEntry(word, signal);
-      if (entry !== undefined) resolved.set(word, entry);
-    }),
+      const next = candidates.next();
+      if (next.done) return true;
+      if (seen.has(next.value)) return false;
+      seen.add(next.value);
+      const entry = await resolveEntry(next.value, signal);
+      signal?.throwIfAborted();
+      if (entry !== undefined) resolved.set(next.value, entry);
+      return false;
+    },
+    signal,
+    priority,
   );
-  signal?.throwIfAborted();
   return resolved;
 }

@@ -1,4 +1,5 @@
 import { DictionaryLicenseInfo } from './DictionaryLicenseInfo';
+import { memo } from 'react';
 import { getDictionaryLicenseInfo } from './dictionaryLicenseInfo';
 
 export interface VocabularyPackOption {
@@ -33,7 +34,7 @@ function formatKilobytes(bytes: number): string {
   return `${Math.round(bytes / 1024).toLocaleString('zh-CN')} kB`;
 }
 
-export function VocabularyPackPicker({
+export const VocabularyPackPicker = memo(function VocabularyPackPicker({
   activeIds,
   errorMessage,
   estimatedGzipBytes,
@@ -118,4 +119,4 @@ export function VocabularyPackPicker({
       <p className="vocabulary-picker__note">快照估算，不等同于构建后 JS 块大小。</p>
     </fieldset>
   );
-}
+});

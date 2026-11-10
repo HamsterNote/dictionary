@@ -1,0 +1,101 @@
+{
+  "cpuThrottle": 4,
+  "viewport": {
+    "width": 390,
+    "height": 844
+  },
+  "sourceEntries": 617747,
+  "resource": {
+    "bytes": 1925954,
+    "id": "indexes/chinese-dictionary-words.tsv.gz",
+    "recordCount": 304196,
+    "sha256": "4252f941b32e7665d608921766ff98ed69cedbb93f2bcbbd452e96504f00698c",
+    "uncompressedBytes": 5535203,
+    "uncompressedSha256": "448bb4f96a5787631357bea27b4a9222efe926a9d31b9aea38321af0025f4e7b"
+  },
+  "operations": [
+    {
+      "name": "sha256(raw 5535203 bytes)",
+      "maxMs": 351.5,
+      "medianMs": 333.19999980926514,
+      "values": [
+        333.19999980926514, 341.69999980926514, 343.30000019073486, 351.5, 324.19999980926514, 331,
+        332.4000005722046
+      ]
+    },
+    {
+      "name": "gunzipSync(indexes/chinese-dictionary-words.tsv.gz)",
+      "maxMs": 295.19999980926514,
+      "medianMs": 207,
+      "values": [
+        295.19999980926514, 228.19999980926514, 216.39999961853027, 207, 206.10000038146973,
+        189.19999980926514, 206.60000038146973
+      ]
+    },
+    {
+      "name": "countChineseEntries(4 packs)",
+      "maxMs": 252.30000019073486,
+      "medianMs": 207.30000019073486,
+      "values": [
+        252.30000019073486, 207.30000019073486, 245.30000019073486, 171.5, 249, 182.69999980926514,
+        159.5
+      ]
+    },
+    {
+      "name": "sha256(compressed indexes/chinese-dictionary-words.tsv.gz; 1925954 bytes)",
+      "maxMs": 161.30000019073486,
+      "medianMs": 120.19999980926514,
+      "values": [
+        125.90000057220459, 106, 111.19999980926514, 126.5, 161.30000019073486, 120.19999980926514,
+        118.80000019073486
+      ]
+    },
+    {
+      "name": "TextDecoder.decode(5535203 bytes)",
+      "maxMs": 95.69999980926514,
+      "medianMs": 73.5,
+      "values": [
+        60.19999980926514, 78.09999942779541, 92.20000076293945, 95.69999980926514,
+        64.30000019073486, 73.5, 73
+      ]
+    },
+    {
+      "name": "resolveChineseText(行; cached Map lookup)",
+      "maxMs": 16.600000381469727,
+      "medianMs": 3,
+      "values": [
+        16.600000381469727, 11.299999237060547, 2.6000003814697266, 5.199999809265137, 3,
+        2.8000001907348633, 2.6999998092651367
+      ]
+    },
+    {
+      "name": "extractDictionaryTextTokens(行 full definition)",
+      "maxMs": 7.800000190734863,
+      "medianMs": 0.5,
+      "values": [
+        7.800000190734863, 0.19999980926513672, 0.8000001907348633, 0.3000001907348633, 0.5, 0.5, 0
+      ]
+    },
+    {
+      "name": "suggestChinese(行; 617747 source entries)",
+      "maxMs": 4.09999942779541,
+      "medianMs": 1.2999992370605469,
+      "values": [
+        2.799999237060547, 0.9000005722045898, 4.09999942779541, 1.3000001907348633, 0.5,
+        0.40000057220458984, 1.2999992370605469
+      ]
+    },
+    {
+      "name": "resolveChineseEntry(行)",
+      "maxMs": 0.5,
+      "medianMs": 0,
+      "values": [0.5, 0, 0, 0, 0, 0, 0]
+    },
+    {
+      "name": "findEnglishInflectionSources(went)",
+      "maxMs": 0.5,
+      "medianMs": 0,
+      "values": [0.5, 0, 0, 0, 0, 0, 0]
+    }
+  ]
+}

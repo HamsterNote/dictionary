@@ -7,9 +7,8 @@ import { gunzipSync, gzipSync } from 'fflate';
 const server = await createServer({ logLevel: 'error', server: { middlewareMode: true } });
 
 try {
-  const { OfflineDictionaryResourceStore } = await server.ssrLoadModule(
-    '/src/offline-resources/index.ts',
-  );
+  const { OfflineDictionaryResourceStore, OFFLINE_DICTIONARY_PACKAGE_VERSION } =
+    await server.ssrLoadModule('/src/offline-resources/index.ts');
   const { lookupChinese } = await server.ssrLoadModule('/src/lookupChinese.ts');
   const { getDetail, search } = await server.ssrLoadModule('/src/dictionaryData.ts');
   const { createDictionaryProvider } = await server.ssrLoadModule('/src/dictionaryProvider.ts');
@@ -18,6 +17,15 @@ try {
   );
   const manifest = JSON.parse(
     await readFile(new URL('../resources/dictionary/manifest.json', import.meta.url), 'utf8'),
+  );
+  const packageJson = JSON.parse(
+    await readFile(new URL('../package.json', import.meta.url), 'utf8'),
+  );
+  assert.equal(manifest.packageVersion, packageJson.version, 'manifest must match the npm package');
+  assert.equal(
+    OFFLINE_DICTIONARY_PACKAGE_VERSION,
+    packageJson.version,
+    'runtime resource version must match the npm package',
   );
   const fixture = JSON.parse(
     await readFile(new URL('./fixtures/offline-query-baseline.json', import.meta.url), 'utf8'),

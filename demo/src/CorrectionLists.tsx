@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { memo, useState } from 'react';
 import type { DictionaryCorrectionMap } from '../../src';
 import './correctionLists.css';
 
@@ -11,7 +11,7 @@ interface CorrectionListsProps {
   readonly removedCount: number;
 }
 
-export function CorrectionLists(props: CorrectionListsProps) {
+export const CorrectionLists = memo(function CorrectionLists(props: CorrectionListsProps) {
   const [error, setError] = useState('');
   const [status, setStatus] = useState('');
   const run = (action: () => void, message: string) => {
@@ -105,4 +105,4 @@ export function CorrectionLists(props: CorrectionListsProps) {
       {error ? <p role="alert">{error}</p> : null}
     </section>
   );
-}
+});
