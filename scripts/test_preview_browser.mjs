@@ -27,10 +27,7 @@ try {
   await page.locator('.dictionary-popover__word').filter({ hasText: /^心$/u }).waitFor();
   await page.locator('.dictionary-inline-resolution').waitFor({ state: 'hidden' });
 
-  const heartButton = page
-    .locator('.dictionary-popover__inline-word')
-    .filter({ hasText: /^心脏$/u })
-    .first();
+  const heartButton = page.getByRole('button', { name: '心脏', exact: true }).first();
   await heartButton.waitFor();
   const mainQueryBeforePreview = await input.inputValue();
   await heartButton.click();
@@ -47,7 +44,7 @@ try {
 
   const nextButtons = page.locator('.demo-popover-slot .dictionary-popover__inline-word');
   assert.ok((await nextButtons.count()) > 0);
-  const firstWord = await nextButtons.nth(0).textContent();
+  const firstWord = (await nextButtons.nth(0).textContent())?.replaceAll('\u2060', '');
   assert.ok(firstWord);
   await nextButtons.nth(0).click();
   const secondPreview = page.getByRole('dialog', { name: firstWord });
@@ -56,7 +53,9 @@ try {
   await page.keyboard.press('Escape');
   await secondPreview.waitFor({ state: 'hidden' });
   assert.equal(
-    await page.evaluate(() => globalThis.document.activeElement?.textContent),
+    await page.evaluate(() =>
+      globalThis.document.activeElement?.textContent?.replaceAll('\u2060', ''),
+    ),
     firstWord,
   );
 
@@ -66,7 +65,7 @@ try {
   await secondPreview.waitFor({ state: 'hidden' });
 
   if ((await nextButtons.count()) > 1) {
-    const secondWord = await nextButtons.nth(1).textContent();
+    const secondWord = (await nextButtons.nth(1).textContent())?.replaceAll('\u2060', '');
     assert.ok(secondWord);
     await nextButtons.nth(0).click();
     await nextButtons.nth(1).click();

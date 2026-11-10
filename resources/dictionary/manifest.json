@@ -1,6 +1,6 @@
 {
   "formatVersion": 1,
-  "packageVersion": "0.1.1-beta.8",
+  "packageVersion": "0.1.1-beta.9-ham200.2",
   "packs": [
     {
       "entryCount": 3500,
@@ -17,10 +17,7 @@
       "kind": "chinese",
       "label": "chinese-dictionary",
       "legacyId": "chinese-dictionary",
-      "licenseFiles": [
-        "LICENSES/MAPULL-MIT.txt",
-        "LICENSES/CC-BY-SA-4.0.txt"
-      ],
+      "licenseFiles": ["LICENSES/MAPULL-MIT.txt", "LICENSES/CC-BY-SA-4.0.txt"],
       "recordCount": 3500,
       "rowOrder": "source",
       "shards": [
@@ -84,10 +81,7 @@
       "kind": "chinese",
       "label": "chinese-dictionary",
       "legacyId": "chinese-dictionary-words",
-      "licenseFiles": [
-        "LICENSES/MAPULL-MIT.txt",
-        "LICENSES/CC-BY-SA-4.0.txt"
-      ],
+      "licenseFiles": ["LICENSES/MAPULL-MIT.txt", "LICENSES/CC-BY-SA-4.0.txt"],
       "recordCount": 304196,
       "rowOrder": "source",
       "shards": [
@@ -1069,9 +1063,7 @@
       "kind": "chinese",
       "label": "chinese-xinhua 上游整理",
       "legacyId": "chinese-xinhua",
-      "licenseFiles": [
-        "LICENSES/CHINESE-XINHUA-MIT.txt"
-      ],
+      "licenseFiles": ["LICENSES/CHINESE-XINHUA-MIT.txt"],
       "recordCount": 45705,
       "rowOrder": "source",
       "shards": [
@@ -1549,9 +1541,7 @@
       "kind": "chinese",
       "label": "chinese-xinhua 词语",
       "legacyId": "chinese-xinhua-words",
-      "licenseFiles": [
-        "LICENSES/CHINESE-XINHUA-MIT.txt"
-      ],
+      "licenseFiles": ["LICENSES/CHINESE-XINHUA-MIT.txt"],
       "recordCount": 264346,
       "rowOrder": "source",
       "shards": [
@@ -2281,9 +2271,7 @@
       "kind": "synonyms",
       "label": "高频核心近义词",
       "legacyId": "core",
-      "licenseFiles": [
-        "LICENSES/WORDNET-3.1.txt"
-      ],
+      "licenseFiles": ["LICENSES/WORDNET-3.1.txt"],
       "recordCount": 4380,
       "rowOrder": "source",
       "shards": [
@@ -2330,9 +2318,7 @@
       "kind": "synonyms",
       "label": "中考近义词",
       "legacyId": "zk",
-      "licenseFiles": [
-        "LICENSES/WORDNET-3.1.txt"
-      ],
+      "licenseFiles": ["LICENSES/WORDNET-3.1.txt"],
       "recordCount": 117,
       "rowOrder": "source",
       "shards": [
@@ -2370,9 +2356,7 @@
       "kind": "synonyms",
       "label": "高考近义词",
       "legacyId": "gk",
-      "licenseFiles": [
-        "LICENSES/WORDNET-3.1.txt"
-      ],
+      "licenseFiles": ["LICENSES/WORDNET-3.1.txt"],
       "recordCount": 690,
       "rowOrder": "source",
       "shards": [
@@ -2410,9 +2394,7 @@
       "kind": "synonyms",
       "label": "CET-4近义词",
       "legacyId": "cet4",
-      "licenseFiles": [
-        "LICENSES/WORDNET-3.1.txt"
-      ],
+      "licenseFiles": ["LICENSES/WORDNET-3.1.txt"],
       "recordCount": 980,
       "rowOrder": "source",
       "shards": [
@@ -2450,9 +2432,7 @@
       "kind": "synonyms",
       "label": "CET-6近义词",
       "legacyId": "cet6",
-      "licenseFiles": [
-        "LICENSES/WORDNET-3.1.txt"
-      ],
+      "licenseFiles": ["LICENSES/WORDNET-3.1.txt"],
       "recordCount": 2206,
       "rowOrder": "source",
       "shards": [
@@ -2490,9 +2470,7 @@
       "kind": "synonyms",
       "label": "考研近义词",
       "legacyId": "ky",
-      "licenseFiles": [
-        "LICENSES/WORDNET-3.1.txt"
-      ],
+      "licenseFiles": ["LICENSES/WORDNET-3.1.txt"],
       "recordCount": 1651,
       "rowOrder": "source",
       "shards": [
@@ -2530,9 +2508,7 @@
       "kind": "synonyms",
       "label": "IELTS近义词",
       "legacyId": "ielts",
-      "licenseFiles": [
-        "LICENSES/WORDNET-3.1.txt"
-      ],
+      "licenseFiles": ["LICENSES/WORDNET-3.1.txt"],
       "recordCount": 2087,
       "rowOrder": "source",
       "shards": [
@@ -2570,9 +2546,7 @@
       "kind": "synonyms",
       "label": "TOEFL近义词",
       "legacyId": "toefl",
-      "licenseFiles": [
-        "LICENSES/WORDNET-3.1.txt"
-      ],
+      "licenseFiles": ["LICENSES/WORDNET-3.1.txt"],
       "recordCount": 4028,
       "rowOrder": "source",
       "shards": [
@@ -2610,9 +2584,7 @@
       "kind": "synonyms",
       "label": "GRE近义词",
       "legacyId": "gre",
-      "licenseFiles": [
-        "LICENSES/WORDNET-3.1.txt"
-      ],
+      "licenseFiles": ["LICENSES/WORDNET-3.1.txt"],
       "recordCount": 5460,
       "rowOrder": "source",
       "shards": [
@@ -2659,9 +2631,7 @@
       "kind": "synonyms",
       "label": "BNC近义词",
       "legacyId": "bnc",
-      "licenseFiles": [
-        "LICENSES/WORDNET-3.1.txt"
-      ],
+      "licenseFiles": ["LICENSES/WORDNET-3.1.txt"],
       "recordCount": 21770,
       "rowOrder": "source",
       "shards": [
@@ -2726,9 +2696,7 @@
       "kind": "roots",
       "label": "高频核心派生词根",
       "legacyId": "core",
-      "licenseFiles": [
-        "LICENSES/CC-BY-SA-3.0.txt"
-      ],
+      "licenseFiles": ["LICENSES/CC-BY-SA-3.0.txt"],
       "recordCount": 1865,
       "rowOrder": "source",
       "shards": [
@@ -2766,9 +2734,7 @@
       "kind": "roots",
       "label": "中考派生词根",
       "legacyId": "zk",
-      "licenseFiles": [
-        "LICENSES/CC-BY-SA-3.0.txt"
-      ],
+      "licenseFiles": ["LICENSES/CC-BY-SA-3.0.txt"],
       "recordCount": 50,
       "rowOrder": "source",
       "shards": [
@@ -2806,9 +2772,7 @@
       "kind": "roots",
       "label": "高考派生词根",
       "legacyId": "gk",
-      "licenseFiles": [
-        "LICENSES/CC-BY-SA-3.0.txt"
-      ],
+      "licenseFiles": ["LICENSES/CC-BY-SA-3.0.txt"],
       "recordCount": 385,
       "rowOrder": "source",
       "shards": [
@@ -2846,9 +2810,7 @@
       "kind": "roots",
       "label": "CET-4派生词根",
       "legacyId": "cet4",
-      "licenseFiles": [
-        "LICENSES/CC-BY-SA-3.0.txt"
-      ],
+      "licenseFiles": ["LICENSES/CC-BY-SA-3.0.txt"],
       "recordCount": 458,
       "rowOrder": "source",
       "shards": [
@@ -2886,9 +2848,7 @@
       "kind": "roots",
       "label": "CET-6派生词根",
       "legacyId": "cet6",
-      "licenseFiles": [
-        "LICENSES/CC-BY-SA-3.0.txt"
-      ],
+      "licenseFiles": ["LICENSES/CC-BY-SA-3.0.txt"],
       "recordCount": 1094,
       "rowOrder": "source",
       "shards": [
@@ -2926,9 +2886,7 @@
       "kind": "roots",
       "label": "考研派生词根",
       "legacyId": "ky",
-      "licenseFiles": [
-        "LICENSES/CC-BY-SA-3.0.txt"
-      ],
+      "licenseFiles": ["LICENSES/CC-BY-SA-3.0.txt"],
       "recordCount": 619,
       "rowOrder": "source",
       "shards": [
@@ -2966,9 +2924,7 @@
       "kind": "roots",
       "label": "IELTS派生词根",
       "legacyId": "ielts",
-      "licenseFiles": [
-        "LICENSES/CC-BY-SA-3.0.txt"
-      ],
+      "licenseFiles": ["LICENSES/CC-BY-SA-3.0.txt"],
       "recordCount": 824,
       "rowOrder": "source",
       "shards": [
@@ -3006,9 +2962,7 @@
       "kind": "roots",
       "label": "TOEFL派生词根",
       "legacyId": "toefl",
-      "licenseFiles": [
-        "LICENSES/CC-BY-SA-3.0.txt"
-      ],
+      "licenseFiles": ["LICENSES/CC-BY-SA-3.0.txt"],
       "recordCount": 2295,
       "rowOrder": "source",
       "shards": [
@@ -3046,9 +3000,7 @@
       "kind": "roots",
       "label": "GRE派生词根",
       "legacyId": "gre",
-      "licenseFiles": [
-        "LICENSES/CC-BY-SA-3.0.txt"
-      ],
+      "licenseFiles": ["LICENSES/CC-BY-SA-3.0.txt"],
       "recordCount": 2357,
       "rowOrder": "source",
       "shards": [
@@ -3086,9 +3038,7 @@
       "kind": "roots",
       "label": "BNC派生词根",
       "legacyId": "bnc",
-      "licenseFiles": [
-        "LICENSES/CC-BY-SA-3.0.txt"
-      ],
+      "licenseFiles": ["LICENSES/CC-BY-SA-3.0.txt"],
       "recordCount": 17082,
       "rowOrder": "source",
       "shards": [

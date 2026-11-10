@@ -1,15 +1,29 @@
 interface FeatureOptionsProps {
+  readonly definitionWordPreviewEnabled: boolean;
+  readonly onDefinitionWordPreviewToggle: (enabled: boolean) => void;
   readonly pronunciationEnabled: boolean;
   readonly onPronunciationToggle: (enabled: boolean) => void;
 }
 
 export function FeatureOptions({
+  definitionWordPreviewEnabled,
+  onDefinitionWordPreviewToggle,
   pronunciationEnabled,
   onPronunciationToggle,
 }: FeatureOptionsProps) {
   return (
     <fieldset className="feature-options">
       <legend>可选功能</legend>
+      <label className="feature-options__option">
+        <input
+          type="checkbox"
+          checked={definitionWordPreviewEnabled}
+          onChange={(event) => {
+            onDefinitionWordPreviewToggle(event.currentTarget.checked);
+          }}
+        />
+        <span className="feature-options__name">支持解释内点词汇</span>
+      </label>
       <label className="feature-options__option">
         <input
           checked={pronunciationEnabled}

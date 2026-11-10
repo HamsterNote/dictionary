@@ -17,6 +17,30 @@ try {
       await page.goto(`http://127.0.0.1:${address.port}/benchmark`);
       await page.waitForFunction(() => typeof globalThis.resolutionHarness === 'object');
     };
+    await reset();
+    for (const word of ['cold-disabled', 'replacement-disabled']) {
+      await page.evaluate((word) => globalThis.resolutionHarness.render(word, false), word);
+      await expect(page.locator('.dictionary-popover__word')).toHaveText(word);
+      await page.waitForTimeout(100);
+      assert.equal(await page.evaluate(() => globalThis.resolutionStats().calls), 0);
+      await expect(page.locator('.dictionary-popover__inline-word')).toHaveCount(0);
+    }
+    await page.evaluate(() => globalThis.resolutionHarness.renderSync(true, false));
+    await page.waitForTimeout(100);
+    assert.equal(await page.evaluate(() => globalThis.resolutionStats().syncCalls), 0);
+    await reset();
+    await page.evaluate(() => {
+      globalThis.resolutionHarness.hold();
+      globalThis.resolutionHarness.render('cancel-toggle');
+    });
+    await page.waitForFunction(() => globalThis.resolutionStats().calls === 1);
+    await page.evaluate(() => globalThis.resolutionHarness.render('cancel-toggle', false));
+    await expect(page.locator('.dictionary-inline-resolution')).toHaveCount(0);
+    await page.evaluate(() => globalThis.resolutionHarness.release());
+    await page.waitForTimeout(150);
+    assert.equal(await page.evaluate(() => globalThis.resolutionStats().calls), 1);
+    await expect(page.locator('.dictionary-popover__inline-word')).toHaveCount(0);
+    await page.evaluate(() => globalThis.resolutionHarness.unmount());
     for (const fallback of [false, true]) {
       await reset();
       await page.evaluate((fallback) => {
@@ -35,7 +59,7 @@ try {
         globalThis.resolutionHarness.release();
       });
       await expect(
-        page.locator('.dictionary-popover__definition').last().locator('button'),
+        page.locator('.dictionary-popover__definition').last().locator('[role=button]'),
       ).toHaveCount(24);
       const stats = await page.evaluate(() => globalThis.resolutionStats());
       assert.equal(stats.concurrency, 1);

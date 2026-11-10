@@ -17,8 +17,11 @@ let hold = false;
 let fail = false;
 let release: (() => void) | undefined;
 let syncReady = false;
-const syncResolver = (word: string) =>
-  syncReady ? { word, definition: 'Sync fixture' } : undefined;
+let syncCalls = 0;
+const syncResolver = (word: string) => {
+  syncCalls++;
+  return syncReady ? { word, definition: 'Sync fixture' } : undefined;
+};
 const trace: string[] = [];
 const provider: DictionaryProvider = {
   search: () => Promise.resolve([]),
@@ -48,17 +51,22 @@ const provider: DictionaryProvider = {
   },
 };
 
-Object.assign(globalThis, { resolutionStats: () => ({ calls, concurrency, trace }) });
+Object.assign(globalThis, { resolutionStats: () => ({ calls, syncCalls, concurrency, trace }) });
 const container = document.getElementById('root');
 const startButton = document.getElementById('start');
 if (!container || !startButton) throw new Error('Missing fixture containers');
 const root = createRoot(container);
 Object.assign(globalThis, {
   resolutionHarness: {
-    renderSync: (ready: boolean) => {
+    renderSync: (ready: boolean, enabled = true) => {
       syncReady = ready;
       root.render(
-        <DictionarySearchContent word="sync" meanings={paragraphs} resolveEntry={syncResolver} />,
+        <DictionarySearchContent
+          definitionWordPreviewEnabled={enabled}
+          word="sync"
+          meanings={paragraphs}
+          resolveEntry={syncResolver}
+        />,
       );
     },
     hold: () => {
@@ -71,9 +79,14 @@ Object.assign(globalThis, {
     fail: () => {
       fail = true;
     },
-    render: (word: string) => {
+    render: (word: string, enabled = true) => {
       root.render(
-        <DictionarySearchContent word={word} meanings={paragraphs} provider={provider} />,
+        <DictionarySearchContent
+          definitionWordPreviewEnabled={enabled}
+          word={word}
+          meanings={paragraphs}
+          provider={provider}
+        />,
       );
     },
     unmount: () => {

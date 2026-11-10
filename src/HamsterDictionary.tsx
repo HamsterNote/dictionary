@@ -34,6 +34,7 @@ export function HamsterDictionary({
   'aria-label': ariaLabel,
   'aria-labelledby': ariaLabelledBy,
   className,
+  definitionWordPreviewEnabled = true,
   corrections,
   defaultPosition,
   emptyMessage,
@@ -170,6 +171,7 @@ export function HamsterDictionary({
         </Button>
       ) : null}
       <DictionarySearchContent
+        definitionWordPreviewEnabled={definitionWordPreviewEnabled}
         {...(corrections === undefined ? {} : { corrections })}
         {...(emptyMessage === undefined ? {} : { emptyMessage })}
         {...(getDetail ? { getDetail } : {})}

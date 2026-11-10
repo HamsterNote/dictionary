@@ -10,7 +10,7 @@ interface DictionarySourceResultsProps {
   readonly changes?: readonly DictionaryCorrectedField[];
   readonly onDeleteCorrection?: (() => void) | undefined;
   readonly onOpenPreview:
-    ((entry: DictionaryEntrySummary, anchor: HTMLButtonElement) => void) | undefined;
+    ((entry: DictionaryEntrySummary, anchor: HTMLElement) => void) | undefined;
   readonly resolveEntry: ((word: string) => DictionaryEntrySummary | undefined) | undefined;
   readonly sources: readonly DictionarySource[];
   readonly themeStyle?: CSSProperties | undefined;
@@ -24,7 +24,7 @@ function InteractiveContent({
 }: {
   readonly children: ReactNode;
   readonly onOpenPreview:
-    ((entry: DictionaryEntrySummary, anchor: HTMLButtonElement) => void) | undefined;
+    ((entry: DictionaryEntrySummary, anchor: HTMLElement) => void) | undefined;
   readonly resolveEntry: ((word: string) => DictionaryEntrySummary | undefined) | undefined;
 }) {
   if (typeof children !== 'string') return children;

@@ -1,6 +1,6 @@
 {
   "name": "@hamster-note/dictionary",
-  "version": "0.1.1-beta.8",
+  "version": "0.1.1-beta.9-ham200.2",
   "description": "仓鼠笔记的 React 词典悬浮窗组件",
   "type": "module",
   "license": "MIT",
@@ -249,7 +249,7 @@
     "audit:pronunciations": "node scripts/audit_ecdict_pronunciations.mjs --write",
     "test:chinese": "python3 scripts/test_generate_chinese_dictionaries.py",
     "test:offline-resources": "python3 scripts/test_generate_offline_dictionary_resources.py && node scripts/test_offline_dictionary_resources.mjs && node scripts/test_offline_decoder_browser.mjs",
-    "test:dictionary-text": "node scripts/test_dictionary_text_candidates.mjs && node scripts/test_dictionary_idle_queue.mjs",
+    "test:dictionary-text": "node scripts/test_dictionary_preferences.mjs && node scripts/test_dictionary_text_candidates.mjs && node scripts/test_dictionary_idle_queue.mjs",
     "test:dictionary-text-browser": "node scripts/test_dictionary_text_browser.mjs",
     "benchmark:dictionary-text": "node scripts/benchmark_dictionary_text.mjs",
     "test:preview-browser": "node scripts/test_preview_browser.mjs",
@@ -274,7 +274,8 @@
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "prepack": "yarn build:package && node scripts/check_package_versions.mjs",
-    "check": "yarn test:chinese && yarn test:offline-resources && yarn test:dictionary-text && yarn test:examples && yarn test:inflections && yarn test:synonyms && yarn test:roots && yarn test:phonetics && yarn test:result-sources && yarn test:chinese-suggestions && yarn test:dictionary-candidates && yarn test:dictionary-data && yarn test:dictionary-corrections && yarn test:pronunciation-audit && yarn test:pronunciation-audio && yarn test:kokoro && yarn format:check && yarn lint && yarn typecheck && yarn build"
+    "check": "yarn test:chinese && yarn test:offline-resources && yarn test:dictionary-text && yarn test:examples && yarn test:inflections && yarn test:synonyms && yarn test:roots && yarn test:phonetics && yarn test:result-sources && yarn test:chinese-suggestions && yarn test:dictionary-candidates && yarn test:dictionary-data && yarn test:dictionary-corrections && yarn test:pronunciation-audit && yarn test:pronunciation-audio && yarn test:kokoro && yarn format:check && yarn lint && yarn typecheck && yarn build",
+    "test:definition-layout": "node scripts/measure_definition_layout.mjs after && node scripts/test_definition_states.mjs && node scripts/test_definition_interactions.mjs && node scripts/test_dictionary_preferences_browser.mjs"
   },
   "peerDependencies": {
     "react": ">=19.0.0 <20.0.0",

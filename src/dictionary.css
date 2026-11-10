@@ -589,26 +589,20 @@
 }
 
 .dictionary-popover__inline-word {
-  position: relative;
   display: inline;
-  padding: 0 1px;
+  margin: 0;
+  padding: 0;
+  border: 0;
   color: inherit;
   font: inherit;
-  line-height: inherit;
-  text-align: inherit;
-  white-space: nowrap;
+  letter-spacing: inherit;
+  word-spacing: inherit;
+  white-space: inherit;
+  text-wrap: inherit;
   cursor: pointer;
-  background: linear-gradient(var(--dictionary-accent-soft), var(--dictionary-accent-soft)) 0 100% /
-    100% 1px no-repeat;
-  border: 0;
-  border-radius: 3px;
-  transition:
-    color 120ms ease-out,
-    background-color 120ms ease-out;
-}
-
-.dictionary-popover__semantic-word {
-  white-space: nowrap;
+  text-decoration: underline;
+  text-decoration-color: var(--dictionary-accent-soft);
+  text-underline-offset: 2px;
 }
 
 .dictionary-popover__inline-word:hover {
@@ -784,7 +778,18 @@
   margin-top: 8px;
 }
 
+.dictionary-inline-resolution-slot {
+  position: relative;
+  height: 52px;
+}
+
 .dictionary-inline-resolution {
+  position: absolute;
+  inset: 0;
+  z-index: 100;
+  max-width: calc(100vw - 16px);
+  padding: 4px 8px;
+  background: var(--dictionary-surface, Canvas);
   display: flex;
   align-items: center;
   justify-content: space-between;

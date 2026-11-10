@@ -9,6 +9,15 @@ export function createTextResolutionServer() {
       {
         name: 'text-resolution-fixture',
         configureServer(server) {
+          server.middlewares.use('/layout', async (_request, response) => {
+            response.setHeader('Content-Type', 'text/html');
+            response.end(
+              await server.transformIndexHtml(
+                '/layout',
+                '<div id="root" style="max-width:680px;margin:auto"></div><script type="module" src="/scripts/fixtures/layout.tsx"></script>',
+              ),
+            );
+          });
           server.middlewares.use('/benchmark', async (_request, response) => {
             response.setHeader('Content-Type', 'text/html');
             response.end(

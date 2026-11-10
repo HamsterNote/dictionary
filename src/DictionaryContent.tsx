@@ -45,13 +45,14 @@ interface DictionaryContentStyle extends CSSProperties {
 }
 
 export interface DictionaryContentProps extends Omit<HTMLAttributes<HTMLElement>, 'color'> {
+  readonly definitionWordPreviewEnabled?: boolean;
   readonly corrections?: DictionaryCorrectionsControl;
   readonly emptyMessage?: ReactNode;
   readonly getDetail?: DictionaryGetDetail;
   readonly headingId?: string;
   readonly keyword: string;
   readonly meanings?: readonly DictionaryMeaning[];
-  readonly onOpenPreview?: (entry: DictionaryEntrySummary, anchor: HTMLButtonElement) => void;
+  readonly onOpenPreview?: (entry: DictionaryEntrySummary, anchor: HTMLElement) => void;
   readonly phonetic?: string;
   readonly pronunciationOverlay?: ReactNode;
   readonly pronunciationCandidates?: ReactNode;
@@ -69,6 +70,7 @@ export interface DictionaryContentProps extends Omit<HTMLAttributes<HTMLElement>
 }
 
 export function DictionaryContent({
+  definitionWordPreviewEnabled = true,
   className,
   corrections,
   emptyMessage = (
@@ -322,8 +324,8 @@ export function DictionaryContent({
           <DictionarySourceResults
             changes={resolvedContent.changes.filter((change) => change.field !== 'phonetic')}
             onDeleteCorrection={deleteUserCorrection}
-            onOpenPreview={openPreview}
-            resolveEntry={interactiveResolver}
+            onOpenPreview={definitionWordPreviewEnabled ? openPreview : undefined}
+            resolveEntry={definitionWordPreviewEnabled ? interactiveResolver : undefined}
             sources={
               resolvedContent.sources ?? [
                 { id: 'dictionary', label: '词典', meanings: resolvedContent.meanings },

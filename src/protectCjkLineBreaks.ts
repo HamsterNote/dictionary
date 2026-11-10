@@ -3,6 +3,8 @@ import type { ReactNode } from 'react';
 const WORD_JOINER = '\u2060';
 const CHINESE_WORD_SEGMENTER = new Intl.Segmenter('zh-CN', { granularity: 'word' });
 
+export function protectCjkLineBreaks(definition: string): string;
+export function protectCjkLineBreaks(definition: ReactNode): ReactNode;
 export function protectCjkLineBreaks(definition: ReactNode): ReactNode {
   if (typeof definition !== 'string') return definition;
 

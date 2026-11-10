@@ -51,9 +51,11 @@ try {
         testCase.text,
       ),
     );
-    const resolvedSegments = [...markup.matchAll(/<button[^>]*>([^<]*)<\/button>/gu)].map(
-      (match) => match[1],
-    );
+    const resolvedSegments = [
+      ...markup.matchAll(
+        /<span[^>]*class="dictionary-popover__inline-word"[^>]*>([^<]*)<\/span>/gu,
+      ),
+    ].map((match) => match[1].replaceAll('\u2060', ''));
     assert.deepEqual(resolvedSegments, testCase.resolvedSegments, testCase.id);
   }
 

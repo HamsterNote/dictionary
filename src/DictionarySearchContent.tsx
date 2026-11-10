@@ -1,6 +1,6 @@
 import { Button } from '@hamster-note/components/button';
 import type { ReactNode } from 'react';
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { DictionaryContent } from './DictionaryContent';
 import { DictionarySearch } from './DictionarySearch';
 import { DictionaryWordPreview, type DictionaryWordPreviewStatus } from './DictionaryWordPreview';
@@ -21,6 +21,7 @@ import { useDictionaryTextResolution } from './useDictionaryTextResolution';
 import { DictionaryTextResolutionContext } from './dictionaryTextResolutionSession';
 
 export interface DictionarySearchContentProps {
+  readonly definitionWordPreviewEnabled?: boolean;
   readonly corrections?: DictionaryCorrectionsControl;
   readonly emptyMessage?: ReactNode;
   readonly getDetail?: DictionaryGetDetail;
@@ -45,7 +46,7 @@ export interface DictionarySearchContentProps {
 }
 
 interface PreviewState {
-  readonly anchor: HTMLButtonElement;
+  readonly anchor: HTMLElement;
   readonly contextWord: string;
   readonly entry: DictionaryEntrySummary;
   readonly originalWord: string;
@@ -53,6 +54,7 @@ interface PreviewState {
 }
 
 export function DictionarySearchContent({
+  definitionWordPreviewEnabled = true,
   corrections,
   emptyMessage,
   getDetail,
@@ -75,13 +77,25 @@ export function DictionarySearchContent({
   word,
 }: DictionarySearchContentProps) {
   const [preview, setPreview] = useState<PreviewState | undefined>(undefined);
+  const [wasEnabled, setWasEnabled] = useState(definitionWordPreviewEnabled);
+  if (wasEnabled !== definitionWordPreviewEnabled) {
+    setWasEnabled(definitionWordPreviewEnabled);
+    if (!definitionWordPreviewEnabled) setPreview(undefined);
+  }
+  const scopeRef = useRef<HTMLDivElement>(null);
+  const focusedWordRef = useRef<HTMLElement | null>(null);
   const previewSequenceRef = useRef(0);
   const previewAbortRef = useRef<AbortController | undefined>(undefined);
   const resolvedCorrections = useDictionaryCorrections(corrections);
   const resolvedSuggestions = suggestions ?? (query === undefined ? [] : (search?.(query) ?? []));
   const resolutionDetail =
     sources === undefined && meanings === undefined ? getDetail?.(word) : undefined;
+  const enabledRef = useRef(definitionWordPreviewEnabled);
+  useLayoutEffect(() => {
+    enabledRef.current = definitionWordPreviewEnabled;
+  });
   const textResolution = useDictionaryTextResolution({
+    enabled: definitionWordPreviewEnabled,
     meanings,
     provider,
     resolveEntry,
@@ -109,8 +123,27 @@ export function DictionarySearchContent({
     previewAbortRef.current = undefined;
   }, [word]);
 
+  useLayoutEffect(() => {
+    if (!definitionWordPreviewEnabled) {
+      const focused = document.activeElement;
+      const oldWord = focusedWordRef.current;
+      if (
+        (oldWord && !oldWord.isConnected && (focused === document.body || focused === null)) ||
+        (focused instanceof HTMLElement && focused.closest('.dictionary-word-preview'))
+      ) {
+        scopeRef.current
+          ?.querySelector<HTMLElement>('.dictionary-content')
+          ?.focus({ preventScroll: true });
+      }
+      focusedWordRef.current = null;
+      previewSequenceRef.current += 1;
+      previewAbortRef.current?.abort();
+    }
+  }, [definitionWordPreviewEnabled]);
+
   const openPreview = useCallback(
-    (entry: DictionaryEntrySummary, anchor: HTMLButtonElement) => {
+    (entry: DictionaryEntrySummary, anchor: HTMLElement) => {
+      if (!enabledRef.current || !anchor.isConnected) return;
       previewAbortRef.current?.abort();
       const abortController = new AbortController();
       previewAbortRef.current = abortController;
@@ -127,7 +160,12 @@ export function DictionarySearchContent({
       void provider
         .resolveEntry(originalWord, abortController.signal)
         .then((resolvedEntry) => {
-          if (sequence !== previewSequenceRef.current) return;
+          if (
+            !enabledRef.current ||
+            abortController.signal.aborted ||
+            sequence !== previewSequenceRef.current
+          )
+            return;
           setPreview((current) => {
             if (current?.originalWord !== originalWord) return current;
             return resolvedEntry === undefined
@@ -144,7 +182,15 @@ export function DictionarySearchContent({
   );
 
   return (
-    <>
+    <div
+      ref={scopeRef}
+      style={{ display: 'contents' }}
+      onFocusCapture={(event) => {
+        const target = event.target;
+        if (target instanceof HTMLElement && target.matches('.dictionary-popover__inline-word'))
+          focusedWordRef.current = target;
+      }}
+    >
       {query === undefined ? null : (
         <DictionarySearch
           corrections={resolvedCorrections}
@@ -156,12 +202,13 @@ export function DictionarySearchContent({
           suggestions={resolvedSuggestions}
         />
       )}
-      {preview?.contextWord === word ? (
+      {definitionWordPreviewEnabled && preview?.contextWord === word ? (
         <DictionaryWordPreview
           anchor={preview.anchor}
           entry={applyDictionaryCorrectionToSummary(preview.entry, resolvedCorrections).summary}
           onClose={closePreview}
           onExpand={() => {
+            if (!enabledRef.current) return;
             const originalWord = preview.originalWord;
             closePreview();
             onSearch?.(originalWord);
@@ -174,25 +221,29 @@ export function DictionarySearchContent({
         />
       ) : null}
 
-      {textResolution.status === 'ready' ? null : (
-        <div
-          className="dictionary-inline-resolution"
-          role={textResolution.status === 'error' ? 'alert' : 'status'}
-        >
-          {textResolution.status === 'error' ? (
-            <>
-              <span>释义点词暂时不可用，正文仍可阅读。</span>
-              <Button ghost size="small" onClick={textResolution.retry}>
-                重试点词加载
-              </Button>
-            </>
-          ) : (
-            <span>正在准备释义点词…</span>
-          )}
-        </div>
-      )}
+      <div className="dictionary-inline-resolution-slot">
+        {!definitionWordPreviewEnabled || textResolution.status === 'ready' ? null : (
+          <div
+            className="dictionary-inline-resolution"
+            role={textResolution.status === 'error' ? 'alert' : 'status'}
+          >
+            {textResolution.status === 'error' ? (
+              <>
+                <span>释义点词暂时不可用，正文仍可阅读。</span>
+                <Button ghost size="small" onClick={textResolution.retry}>
+                  重试点词加载
+                </Button>
+              </>
+            ) : (
+              <span>正在准备释义点词…</span>
+            )}
+          </div>
+        )}
+      </div>
       <DictionaryTextResolutionContext.Provider value={textResolution.session}>
         <DictionaryContent
+          definitionWordPreviewEnabled={definitionWordPreviewEnabled}
+          tabIndex={-1}
           {...(corrections === undefined ? {} : { corrections })}
           {...(emptyMessage === undefined ? {} : { emptyMessage })}
           {...(getDetail ? { getDetail } : {})}
@@ -210,6 +261,6 @@ export function DictionarySearchContent({
           {...(sources ? { sources } : {})}
         />
       </DictionaryTextResolutionContext.Provider>
-    </>
+    </div>
   );
 }

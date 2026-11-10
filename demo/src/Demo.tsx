@@ -1,6 +1,7 @@
 import { type ThemeAccentPreset, ThemeProvider } from '@hamster-note/components/theme';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
+  createBrowserDictionaryPreferencesStore,
   createDictionaryProvider,
   countChineseEntries,
   countEnglishChineseEntries,
@@ -33,6 +34,31 @@ const HAN_CHARACTER_PATTERN = /\p{Script=Han}/u;
 
 export function Demo() {
   const corrections = useDemoCorrections();
+  const [preferences, setPreferences] = useState({
+    status: 'loading',
+    enabled: true,
+    unsaved: false,
+    error: undefined as string | undefined,
+  });
+  const preferencesStore = useRef<
+    ReturnType<typeof createBrowserDictionaryPreferencesStore> | undefined
+  >(undefined);
+  useEffect(() => {
+    const store = createBrowserDictionaryPreferencesStore();
+    preferencesStore.current = store;
+    const update = () => {
+      const state = store.getSnapshot();
+      setPreferences({ ...state, error: state.error });
+    };
+    const unsubscribe = store.subscribe(update);
+    update();
+    return () => {
+      unsubscribe();
+      store.dispose();
+      preferencesStore.current = undefined;
+    };
+  }, []);
+  const definitionWordPreviewEnabled = preferences.status === 'ready' && preferences.enabled;
   const [isOpen, setIsOpen] = useState(true);
   const [isPronunciationEnabled, setIsPronunciationEnabled] = useState(false);
   const [pronunciation] = useState(createPronunciationBrowserController);
@@ -271,6 +297,7 @@ export function Demo() {
               独立文字内容
             </p>
             <DictionaryContent
+              definitionWordPreviewEnabled={definitionWordPreviewEnabled}
               corrections={corrections.control}
               getDetail={getDetail}
               keyword="note"
@@ -289,9 +316,27 @@ export function Demo() {
             supplementImpacts={supplementImpacts}
           />
           <FeatureOptions
+            definitionWordPreviewEnabled={definitionWordPreviewEnabled}
+            onDefinitionWordPreviewToggle={(enabled) => {
+              void preferencesStore.current?.setEnabled(enabled);
+            }}
             onPronunciationToggle={togglePronunciation}
             pronunciationEnabled={isPronunciationEnabled}
           />
+          {preferences.error || preferences.unsaved ? (
+            <div role="status">
+              {preferences.error ?? '正在保存设置…'}
+              {preferences.error ? (
+                <button
+                  onClick={() => {
+                    void preferencesStore.current?.retry();
+                  }}
+                >
+                  重试设置
+                </button>
+              ) : null}
+            </div>
+          ) : null}
           <ThemeColorSettings accent={themeAccent} onAccentChange={setThemeAccent} />
           <CorrectionLists
             system={corrections.control.system}
@@ -326,6 +371,7 @@ export function Demo() {
 
           <div className="demo-popover-slot">
             <HamsterDictionary
+              definitionWordPreviewEnabled={definitionWordPreviewEnabled}
               corrections={corrections.control}
               emptyMessage={dictionaryView.emptyMessage}
               getDetail={getDetail}

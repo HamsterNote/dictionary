@@ -26,6 +26,7 @@
   },
   "include": [
     "src",
+    "scripts/fixtures/layout.tsx",
     "demo",
     "scripts/fixtures/pronunciation-overlay.tsx",
     "scripts/fixtures/text-resolution.tsx",
