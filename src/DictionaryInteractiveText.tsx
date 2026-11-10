@@ -6,6 +6,7 @@ import {
   resolveChineseText,
   type DictionaryEntryResolver,
 } from './dictionaryTextCandidates';
+import { selectPreviewFragment } from './dictionaryPreviewLayout';
 import { protectCjkLineBreaks } from './protectCjkLineBreaks';
 import {
   DictionaryTextResolutionContext,
@@ -105,14 +106,9 @@ function DictionaryInteractiveTextRenderer({
             className="dictionary-popover__inline-word"
             key={`${String(index)}-${nodes.length.toString()}-${String(segmentIndex)}`}
             onClick={(event) => {
-              const fragments = Array.from(event.currentTarget.getClientRects());
-              event.currentTarget.dataset['previewFragment'] = String(
-                Math.max(
-                  0,
-                  fragments.findIndex(
-                    (rect) => event.clientY >= rect.top && event.clientY <= rect.bottom,
-                  ),
-                ),
+              selectPreviewFragment(
+                event.currentTarget,
+                event.detail === 0 ? undefined : { x: event.clientX, y: event.clientY },
               );
               onOpen(entry, event.currentTarget);
             }}
@@ -121,7 +117,7 @@ function DictionaryInteractiveTextRenderer({
             onKeyDown={(event) => {
               if (event.key === 'Enter' || event.key === ' ') {
                 event.preventDefault();
-                event.currentTarget.dataset['previewFragment'] = '0';
+                selectPreviewFragment(event.currentTarget);
                 onOpen(entry, event.currentTarget);
               }
             }}

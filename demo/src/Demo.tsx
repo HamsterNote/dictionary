@@ -359,6 +359,7 @@ export function Demo() {
               Capture each useful <mark>note</mark> before the context disappears. Small
               observations become{' '}
               <HamsterDictionaryPopover
+                getDetail={getDetail}
                 corrections={corrections.control}
                 entry={inlineDemoEntry}
                 onExpand={openInlineWord}

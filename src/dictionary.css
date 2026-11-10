@@ -697,13 +697,16 @@
   --hn-popover-background: var(--dictionary-surface);
   --hn-popover-border: var(--dictionary-border);
 
-  display: block;
+  display: flex;
   box-sizing: border-box;
   width: min(280px, calc(100vw - 16px));
-  max-height: min(180px, 32dvh);
+  flex-direction: column;
+  gap: 12px;
+  max-height: none;
   padding: 16px;
   margin: 0;
-  overflow-y: auto;
+  overflow: hidden;
+  transform: none;
   color: var(--dictionary-text-primary);
   font-family:
     ui-sans-serif,
@@ -719,6 +722,10 @@
 }
 
 .dictionary-word-preview__heading {
+  flex: 0 0 auto;
+  max-height: 50%;
+  overflow: auto;
+  overflow-wrap: anywhere;
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
@@ -834,13 +841,43 @@
 @keyframes dictionary-preview-enter {
   from {
     opacity: 0;
-    transform: translateY(4px) scale(0.98);
   }
-
   to {
     opacity: 1;
-    transform: translateY(0) scale(1);
   }
+}
+
+.dictionary-word-preview__body {
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  overflow-wrap: anywhere;
+  font-size: 14px;
+  line-height: 1.55;
+}
+.dictionary-word-preview__group h4 {
+  margin: 0 0 6px;
+  color: var(--dictionary-part-of-speech);
+}
+.dictionary-word-preview__group + .dictionary-word-preview__group {
+  margin-top: 14px;
+}
+.dictionary-word-preview__group ol {
+  margin: 0;
+  padding-left: 22px;
+}
+.dictionary-word-preview__group li + li {
+  margin-top: 8px;
+}
+.dictionary-word-preview__group small {
+  color: var(--dictionary-text-secondary);
+}
+.dictionary-preview-notice {
+  position: fixed;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
 }
 
 @media (prefers-color-scheme: dark) {

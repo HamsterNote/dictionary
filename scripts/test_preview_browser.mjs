@@ -61,7 +61,8 @@ try {
 
   await nextButtons.nth(0).click();
   await secondPreview.waitFor();
-  await page.locator('.demo-popover-slot .dictionary-popover__word').click();
+  // Full details can legitimately cover the main heading; click exposed outside space.
+  await page.mouse.click(8, 8);
   await secondPreview.waitFor({ state: 'hidden' });
 
   if ((await nextButtons.count()) > 1) {

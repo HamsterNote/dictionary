@@ -1,7 +1,11 @@
 import { Button } from '@hamster-note/components/button';
 import { Icon } from '@hamster-note/components/icon';
 import { Popover } from '@hamster-note/components/popover';
-import { useCallback, useEffect, useId, useRef, useLayoutEffect, useState } from 'react';
+import { useEffect, useId } from 'react';
+import { createPortal } from 'react-dom';
+import type { DictionaryDetail } from './dictionaryData';
+import { groupDictionaryPreviewMeanings } from './dictionaryPreviewGroups';
+import { useDictionaryPreviewLayout } from './useDictionaryPreviewLayout';
 import type { PointerEvent as ReactPointerEvent } from 'react';
 import type { DictionaryEntrySummary } from './dictionaryEntrySummary';
 import { protectCjkLineBreaks } from './protectCjkLineBreaks';
@@ -11,6 +15,8 @@ export type DictionaryWordPreviewStatus = 'error' | 'loading' | 'not-found' | 'r
 
 interface DictionaryWordPreviewProps {
   readonly anchor: HTMLElement;
+  readonly detail?: DictionaryDetail | undefined;
+  readonly onUnavailable?: () => void;
   readonly entry: DictionaryEntrySummary;
   readonly focusOnMount?: boolean;
   readonly onClose: () => void;
@@ -26,6 +32,8 @@ interface DictionaryWordPreviewProps {
 
 export function DictionaryWordPreview({
   anchor,
+  detail,
+  onUnavailable,
   entry,
   focusOnMount = true,
   onClose,
@@ -38,41 +46,13 @@ export function DictionaryWordPreview({
   status = 'ready',
 }: DictionaryWordPreviewProps) {
   const headingId = useId();
-  const [positionAnchor, setPositionAnchor] = useState<HTMLElement | null>(null);
-  useLayoutEffect(() => {
-    const marker = positionAnchor;
-    if (!marker) return;
-    const update = () => {
-      const fragments = Array.from(anchor.getClientRects());
-      const index = Number(anchor.dataset['previewFragment'] ?? 0);
-      const rect =
-        fragments[index] ??
-        fragments.find((rect) => rect.bottom > 0 && rect.top < window.innerHeight) ??
-        anchor.getBoundingClientRect();
-      Object.assign(marker.style, {
-        left: `${String(rect.x)}px`,
-        top: `${String(rect.y)}px`,
-        width: `${String(rect.width)}px`,
-        height: `${String(rect.height)}px`,
-      });
-    };
-    update();
-    window.addEventListener('scroll', update, true);
-    window.addEventListener('resize', update);
-    return () => {
-      window.removeEventListener('scroll', update, true);
-      window.removeEventListener('resize', update);
-    };
-  }, [anchor, positionAnchor]);
-  const previewRef = useRef<HTMLDivElement>(null);
-  const focusPreview = useCallback(
-    (element: HTMLDivElement | null) => {
-      previewRef.current = element;
-      if (focusOnMount) element?.focus();
-    },
-    [focusOnMount],
+  const previewRef = useDictionaryPreviewLayout(
+    anchor,
+    onClose,
+    onUnavailable ?? onClose,
+    focusOnMount,
   );
-
+  const groups = groupDictionaryPreviewMeanings(detail);
   useEffect(() => {
     const closeOnOutsideInteraction = (event: PointerEvent): void => {
       const target = event.target;
@@ -93,49 +73,39 @@ export function DictionaryWordPreview({
       document.removeEventListener('pointerdown', closeOnOutsideInteraction);
       document.removeEventListener('keydown', closeOnEscape);
     };
-  }, [anchor, onClose]);
+  }, [anchor, onClose, previewRef]);
 
-  return (
+  return createPortal(
     <>
-      <span
-        aria-hidden="true"
-        ref={setPositionAnchor}
-        style={{
-          position: 'fixed',
-          pointerEvents: 'none',
-          visibility: 'hidden',
-          margin: 0,
-          padding: 0,
-          border: 0,
-        }}
-      />
       <Popover
-        anchor={positionAnchor ?? anchor}
-        anchorOffset={6}
         aria-busy={status === 'loading'}
         aria-labelledby={headingId}
         className="dictionary-word-preview"
         onPointerEnter={onPointerEnter}
         onPointerLeave={onPointerLeave}
         orientation="vertical"
-        placement="bottom-start"
-        ref={focusPreview}
+        ref={previewRef}
+        style={{ position: 'fixed', visibility: 'hidden', zIndex: 1000 }}
         role="dialog"
         tabIndex={-1}
-        viewportMargin={8}
       >
         <div className="dictionary-word-preview__heading">
           <div>
-            <h3 id={headingId}>{entry.word}</h3>
-            {entry.phonetic ? (
-              <p>{formatDictionaryPhonetic(originalWord ?? entry.word, entry.phonetic)}</p>
+            <h3 id={headingId}>{detail?.word ?? entry.word}</h3>
+            {(detail?.phonetic ?? entry.phonetic) ? (
+              <p>
+                {formatDictionaryPhonetic(
+                  originalWord ?? entry.word,
+                  detail?.phonetic ?? entry.phonetic ?? '',
+                )}
+              </p>
             ) : null}
           </div>
           {showExpandButton ? (
             <Button
               aria-label={`在主窗口打开 ${originalWord ?? entry.word}`}
               className="dictionary-word-preview__expand"
-              disabled={status !== 'ready'}
+              disabled={!entry.word}
               ghost
               onClick={() => {
                 onExpand(originalWord ?? entry.word);
@@ -147,29 +117,52 @@ export function DictionaryWordPreview({
             </Button>
           ) : null}
         </div>
-        {status === 'loading' ? (
-          <p className="dictionary-word-preview__definition" role="status">
-            正在加载词条摘要…
-          </p>
-        ) : status === 'error' ? (
-          <div className="dictionary-word-preview__definition" role="alert">
-            <p>摘要加载失败，请重试。</p>
-            {onRetry ? (
-              <Button ghost size="small" onClick={onRetry}>
-                重新加载摘要
-              </Button>
-            ) : null}
-          </div>
-        ) : status === 'not-found' ? (
-          <p className="dictionary-word-preview__definition" role="status">
-            未找到该词条的摘要。
-          </p>
-        ) : (
-          <p className="dictionary-word-preview__definition">
-            {protectCjkLineBreaks(entry.definition)}
-          </p>
-        )}
+        <div className="dictionary-word-preview__body">
+          {status === 'loading' ? (
+            <p className="dictionary-word-preview__definition" role="status">
+              正在加载完整释义…
+            </p>
+          ) : status === 'error' ? (
+            <div className="dictionary-word-preview__definition" role="alert">
+              <p>释义加载失败，请重试。</p>
+              {onRetry ? (
+                <Button ghost size="small" onClick={onRetry}>
+                  重新加载释义
+                </Button>
+              ) : null}
+            </div>
+          ) : null}
+          {status === 'ready' && groups.length > 0 ? (
+            groups.map((group) => (
+              <section className="dictionary-word-preview__group" key={group.partOfSpeech}>
+                <h4>{group.partOfSpeech}</h4>
+                <ol>
+                  {group.meanings.map((meaning, index) => (
+                    <li key={`${meaning.sourceId}-${meaning.id}-${String(index)}`}>
+                      <div>
+                        {typeof meaning.definition === 'string'
+                          ? protectCjkLineBreaks(meaning.definition)
+                          : meaning.definition}
+                      </div>
+                      <small>{meaning.sourceLabel}</small>
+                    </li>
+                  ))}
+                </ol>
+              </section>
+            ))
+          ) : entry.definition.trim() ? (
+            <div className="dictionary-word-preview__definition">
+              <p>
+                {status === 'ready' || status === 'not-found' ? '摘要（暂无完整释义）' : '摘要'}
+              </p>
+              <p>{protectCjkLineBreaks(entry.definition)}</p>
+            </div>
+          ) : status === 'ready' || status === 'not-found' ? (
+            <p>暂无释义</p>
+          ) : null}
+        </div>
       </Popover>
-    </>
+    </>,
+    anchor.ownerDocument.body,
   );
 }

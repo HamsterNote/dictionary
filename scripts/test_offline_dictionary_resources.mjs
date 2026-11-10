@@ -83,6 +83,23 @@ try {
     offlineResources: store,
   });
   for (const testCase of fixture.cases) {
+    const kinds = {
+      'ecdict-inflections': 'inflections',
+      oanc: 'examples',
+      wordnet: 'synonyms',
+      unimorph: 'roots',
+    };
+    const expectedDetail =
+      testCase.detail === null
+        ? null
+        : {
+            ...testCase.detail,
+            sources: testCase.detail.sources.map((source) => ({
+              ...source,
+              kind: kinds[source.id] ?? 'definitions',
+            })),
+          };
+
     const isChinese = /\p{Script=Han}/u.test(testCase.query);
     const expectedSuggestions = search(testCase.query, searchOptions);
     if (isChinese) {
@@ -105,12 +122,12 @@ try {
         englishSynonymPacks: await store.getSynonymPacks(testCase.query),
         englishVocabularyPacks: vocabularyPacks,
       });
-      assert.deepEqual(actualDetail ?? null, testCase.detail, testCase.id);
+      assert.deepEqual(actualDetail ?? null, expectedDetail, testCase.id);
     }
     assert.deepEqual(await provider.search(testCase.query), testCase.suggestions, testCase.id);
     assert.deepEqual(
       (await provider.getDetail(testCase.query)) ?? null,
-      testCase.detail,
+      expectedDetail,
       `${testCase.id} 异步 provider 详情`,
     );
     assert.deepEqual(

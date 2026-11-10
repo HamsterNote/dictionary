@@ -5,13 +5,17 @@ import { DictionaryContent } from './DictionaryContent';
 import { DictionarySearch } from './DictionarySearch';
 import { DictionaryWordPreview, type DictionaryWordPreviewStatus } from './DictionaryWordPreview';
 import type {
+  DictionaryDetail,
   DictionaryGetDetail,
   DictionaryMeaning,
   DictionarySearch as DictionarySearchFunction,
   DictionarySource,
 } from './dictionaryData';
 import type { DictionaryCorrectionsControl } from './dictionaryCorrections';
-import { applyDictionaryCorrectionToSummary } from './dictionaryCorrectionApply';
+import {
+  applyDictionaryCorrectionToDetail,
+  applyDictionaryCorrectionToSummary,
+} from './dictionaryCorrectionApply';
 import type { DictionaryEntrySummary } from './dictionaryEntrySummary';
 import type { DictionaryProvider } from './dictionaryProvider';
 import type { PronunciationPlaybackController } from './pronunciation-audio/controller';
@@ -48,6 +52,7 @@ export interface DictionarySearchContentProps {
 interface PreviewState {
   readonly anchor: HTMLElement;
   readonly contextWord: string;
+  readonly detail?: DictionaryDetail | undefined;
   readonly entry: DictionaryEntrySummary;
   readonly originalWord: string;
   readonly status: DictionaryWordPreviewStatus;
@@ -77,6 +82,7 @@ export function DictionarySearchContent({
   word,
 }: DictionarySearchContentProps) {
   const [preview, setPreview] = useState<PreviewState | undefined>(undefined);
+  const [previewNotice, setPreviewNotice] = useState('');
   const [wasEnabled, setWasEnabled] = useState(definitionWordPreviewEnabled);
   if (wasEnabled !== definitionWordPreviewEnabled) {
     setWasEnabled(definitionWordPreviewEnabled);
@@ -149,36 +155,41 @@ export function DictionarySearchContent({
       previewAbortRef.current = abortController;
       const sequence = ++previewSequenceRef.current;
       const originalWord = entry.word;
+      setPreviewNotice('');
       setPreview({
         anchor,
         contextWord: word,
         entry,
         originalWord,
-        status: provider ? 'loading' : 'ready',
+        status: provider || getDetail ? 'loading' : 'ready',
       });
-      if (!provider) return;
-      void provider
-        .resolveEntry(originalWord, abortController.signal)
-        .then((resolvedEntry) => {
+      if (!provider && !getDetail) return;
+      void Promise.resolve()
+        .then(() => {
+          abortController.signal.throwIfAborted();
+          return provider
+            ? provider.getDetail(originalWord, abortController.signal)
+            : getDetail?.(originalWord);
+        })
+        .then((detail) => {
           if (
             !enabledRef.current ||
             abortController.signal.aborted ||
             sequence !== previewSequenceRef.current
           )
             return;
-          setPreview((current) => {
-            if (current?.originalWord !== originalWord) return current;
-            return resolvedEntry === undefined
-              ? { ...current, status: 'not-found' }
-              : { ...current, entry: resolvedEntry, status: 'ready' };
-          });
+          setPreview((current) =>
+            current?.originalWord === originalWord
+              ? { ...current, detail, status: 'ready' }
+              : current,
+          );
         })
         .catch(() => {
           if (abortController.signal.aborted || sequence !== previewSequenceRef.current) return;
           setPreview((current) => (current ? { ...current, status: 'error' } : current));
         });
     },
-    [provider, word],
+    [provider, getDetail, word],
   );
 
   return (
@@ -202,9 +213,21 @@ export function DictionarySearchContent({
           suggestions={resolvedSuggestions}
         />
       )}
+      <span className="dictionary-preview-notice" role="status">
+        {previewNotice}
+      </span>
       {definitionWordPreviewEnabled && preview?.contextWord === word ? (
         <DictionaryWordPreview
           anchor={preview.anchor}
+          detail={
+            preview.detail
+              ? applyDictionaryCorrectionToDetail(preview.detail, resolvedCorrections).detail
+              : undefined
+          }
+          onUnavailable={() => {
+            closePreview();
+            setPreviewNotice('可用空间不足，请调整视图后重新打开词条。');
+          }}
           entry={applyDictionaryCorrectionToSummary(preview.entry, resolvedCorrections).summary}
           onClose={closePreview}
           onExpand={() => {

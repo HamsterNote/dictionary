@@ -31,6 +31,7 @@
     "scripts/fixtures/pronunciation-overlay.tsx",
     "scripts/fixtures/text-resolution.tsx",
     "scripts/fixtures/pronunciation-audio.tsx",
-    "scripts/fixtures/pronunciation-audio-real.tsx"
+    "scripts/fixtures/pronunciation-audio-real.tsx",
+    "scripts/fixtures/preview-contract.tsx"
   ]
 }

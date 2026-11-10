@@ -40,6 +40,7 @@ export interface DictionaryDataSource extends Omit<DictionarySource, 'meanings'>
 }
 
 export interface DictionarySource {
+  readonly kind?: 'definitions' | 'inflections' | 'examples' | 'synonyms' | 'roots';
   readonly examples?: readonly string[];
   readonly heading?: string;
   readonly href?: string | undefined;
@@ -91,6 +92,7 @@ export function createChineseDictionaryDetail(
       {
         ...(href === undefined ? {} : { href }),
         id: result.sourceId,
+        kind: 'definitions',
         label: result.sourceLabel,
         meanings: result.meanings,
       },
