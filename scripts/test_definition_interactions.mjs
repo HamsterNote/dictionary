@@ -21,13 +21,27 @@ try {
     const candidates = await page.evaluate(() => {
       const words = [...document.querySelectorAll('.dictionary-popover__inline-word')];
       return words
-        .map((word, index) => ({
-          index,
-          name: word.getAttribute('aria-label'),
-          rect: word.getClientRects()[0]?.toJSON(),
-        }))
+        .map((word, index) => {
+          const paragraph = word.closest('.dictionary-popover__definition');
+          const range = document.createRange();
+          range.selectNodeContents(paragraph);
+          range.setEnd(word, 0);
+          return {
+            index,
+            name: word.getAttribute('aria-label'),
+            paragraphIndex: [
+              ...document.querySelectorAll('.dictionary-popover__definition'),
+            ].indexOf(paragraph),
+            sourceOffset: range.toString().replaceAll('\u2060', '').length,
+            rect: word.getClientRects()[0]?.toJSON(),
+          };
+        })
         .filter((w) => w.rect && w.rect.y > 0 && w.rect.bottom < innerHeight - 80)
         .sort((a, b) => b.rect.right - a.rect.right)
+        .filter(
+          (word, index, words) =>
+            words.findIndex((other) => Math.abs(other.rect.y - word.rect.y) < 0.1) === index,
+        )
         .slice(0, 3);
     });
     assert.equal(candidates.length, 3);
@@ -56,6 +70,8 @@ try {
         records.push({
           width,
           target: target.name,
+          paragraphIndex: target.paragraphIndex,
+          sourceOffset: target.sourceOffset,
           x,
           y,
           attempt: i,

@@ -1,0 +1,115 @@
+{
+  "packageVersion": "0.1.1-beta.8",
+  "commit": "cb7cbc6aa328abdf843089bfa11e2fa9b7089251",
+  "browser": "156.0.8078.4",
+  "results": [
+    {
+      "width": 1440,
+      "theme": "light",
+      "run": 1,
+      "cls": 0.008450445816186557,
+      "maxDelta": 576.984375,
+      "lineChanges": 81,
+      "calls": 199
+    },
+    {
+      "width": 1440,
+      "theme": "light",
+      "run": 2,
+      "cls": 0.008450445816186557,
+      "maxDelta": 576.984375,
+      "lineChanges": 81,
+      "calls": 199
+    },
+    {
+      "width": 1440,
+      "theme": "light",
+      "run": 3,
+      "cls": 0.008450445816186557,
+      "maxDelta": 576.984375,
+      "lineChanges": 81,
+      "calls": 199
+    },
+    {
+      "width": 1440,
+      "theme": "dark",
+      "run": 1,
+      "cls": 0.008450445816186557,
+      "maxDelta": 576.984375,
+      "lineChanges": 81,
+      "calls": 199
+    },
+    {
+      "width": 1440,
+      "theme": "dark",
+      "run": 2,
+      "cls": 0.008450445816186557,
+      "maxDelta": 576.984375,
+      "lineChanges": 81,
+      "calls": 199
+    },
+    {
+      "width": 1440,
+      "theme": "dark",
+      "run": 3,
+      "cls": 0.008450445816186557,
+      "maxDelta": 576.984375,
+      "lineChanges": 81,
+      "calls": 199
+    },
+    {
+      "width": 390,
+      "theme": "light",
+      "run": 1,
+      "cls": 0.02926184646945636,
+      "maxDelta": 262.5,
+      "lineChanges": 81,
+      "calls": 199
+    },
+    {
+      "width": 390,
+      "theme": "light",
+      "run": 2,
+      "cls": 0.02926184646945636,
+      "maxDelta": 262.5,
+      "lineChanges": 81,
+      "calls": 199
+    },
+    {
+      "width": 390,
+      "theme": "light",
+      "run": 3,
+      "cls": 0.02926184646945636,
+      "maxDelta": 262.5,
+      "lineChanges": 84,
+      "calls": 199
+    },
+    {
+      "width": 390,
+      "theme": "dark",
+      "run": 1,
+      "cls": 0.02926184646945636,
+      "maxDelta": 262.5,
+      "lineChanges": 84,
+      "calls": 199
+    },
+    {
+      "width": 390,
+      "theme": "dark",
+      "run": 2,
+      "cls": 0.02926184646945636,
+      "maxDelta": 262.5,
+      "lineChanges": 83,
+      "calls": 199
+    },
+    {
+      "width": 390,
+      "theme": "dark",
+      "run": 3,
+      "cls": 0.02926184646945636,
+      "maxDelta": 262.5,
+      "lineChanges": 83,
+      "calls": 199
+    }
+  ]
+}
