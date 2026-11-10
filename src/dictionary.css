@@ -701,6 +701,7 @@
   box-sizing: border-box;
   width: min(280px, calc(100vw - 16px));
   flex-direction: column;
+  align-items: stretch;
   gap: 12px;
   max-height: none;
   padding: 16px;
@@ -732,6 +733,11 @@
   gap: 12px;
 }
 
+.dictionary-word-preview__heading > div {
+  flex: 1;
+  min-width: 0;
+}
+
 .dictionary-word-preview h3,
 .dictionary-word-preview p {
   margin: 0;
@@ -755,7 +761,7 @@
   width: 44px;
   height: 44px;
   padding: 0;
-  margin: -8px -8px 0 0;
+  margin: 0;
   color: var(--dictionary-accent);
   cursor: pointer;
   background: transparent;

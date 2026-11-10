@@ -1,6 +1,6 @@
 # HAM-200 小窗追加验收
 
-共享版本 `0.1.1-beta.9-ham200.3`，产品实现提交 `13d2e5948e949db5e3ab5091617699e8f3a1785d`。继续 PR #14；native PR #19 消费同一 vendor 包。原几何/偏好键与 HAM-195 队列及 session 核心未变。
+当前共享版本 `0.1.1-beta.9-ham200.4`（头部对齐修复见下文）。以下定位/全量释义追加验收采样于 `0.1.1-beta.9-ham200.3`，产品实现提交 `13d2e5948e949db5e3ab5091617699e8f3a1785d`。继续 PR #14；native PR #19 消费同一 vendor 包。原几何/偏好键与 HAM-195 队列及 session 核心未变。
 
 ## 根因与实现
 
@@ -39,3 +39,21 @@ yarn test:definition-layout
 共享功能检查通过；完整 `yarn run check` 仍在 49 个历史格式文件停止；全量 lint 的 4 个历史错误在原基线已复现。变更文件 lint、类型和包构建通过。原有正文、设置持久化、关闭零新增解析、固定坐标点词、空闲串行和取消检查继续通过。
 
 iOS/Android 真机仍未执行：Linux 环境无 xcrun/adb/emulator，移动 Chromium/200%缩放不等价于设备验证。OpenSpec 5.3 与含设备要求的 8.3 保持未勾选。
+
+## 头部对齐修复（ham200.4）
+
+Popover 组件库的 `.hn-popover` 默认 `align-items: center`；垂直布局下头部以内容宽度居中，`justify-content: space-between` 没有可分配空间。不存在隐藏发音按钮占位。小窗现在明确 `align-items: stretch`，头部文字列 `flex: 1; min-width: 0`，长词/音标可换行；放大按钮移除原有 `-8px` 外边距，保持 44×44px 点击区域并对齐内容右边界。不修改锚点与定位计算。
+
+Chromium 156、DPR 1，1440×900 / 390×844、亮暗主题；受控 `it` + 音标 + 两组义项样本，另测长词长音标、无放大按钮、右下边缘上翻。每阶段 16 组、192 个可见帧：
+
+| 指标（相对 16px 内边距后的内容边界） | .3          | .4  |
+| ------------------------------------ | ----------- | --- |
+| `it` 词头/音标左侧额外空白           | 72.546875px | 0px |
+| 头部右侧额外空白                     | 72.546875px | 0px |
+| 放大按钮盒子右侧额外空白             | 64.546875px | 0px |
+| header 横向溢出                      | 8px         | 0px |
+| 所有样本锚点间距                     | 4px         | 4px |
+
+修复后长词、无按钮样本同样两侧对齐，header/body 横向溢出 0px；右下边缘仍上翻，最小视口边距 8px。截图与逐帧 `metrics.json` 随 HAM-200 的 `HAM-200-header-alignment-evidence.zip` 交付；其中测量脚本与 fixture 可复制回 `scripts/` 和 `scripts/fixtures/` 复测（HTML 路径 `artifacts/header-alignment/index.html`）。这组受控样本验证盒模型，未替代之前真实 provider 与真机验收。
+
+验证：`yarn test:preview-contract`（193 条原有浏览器矩阵）、`yarn build:types`、`yarn build:lib`、包/manifest/runtime 版本一致性以及变更文件 Prettier 检查通过。
