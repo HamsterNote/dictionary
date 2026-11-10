@@ -156,3 +156,16 @@ export {
   resolveDictionaryCorrectionsControl,
   useDictionaryCorrections,
 } from './useDictionaryCorrections';
+export {
+  DICTIONARY_PREFERENCES_KEY,
+  DEFAULT_DICTIONARY_PREFERENCES,
+  decodeDictionaryPreferences,
+  serializeDictionaryPreferences,
+  createDictionaryPreferencesStore,
+  createBrowserDictionaryPreferencesStore,
+} from './dictionaryPreferences';
+export type {
+  DictionaryPreferences,
+  DictionaryPreferencesSnapshot,
+  DictionaryPreferencesStorage,
+} from './dictionaryPreferences';

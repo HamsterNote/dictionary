@@ -9,6 +9,33 @@ export function createTextResolutionServer() {
       {
         name: 'text-resolution-fixture',
         configureServer(server) {
+          server.middlewares.use('/main-scroll', async (_request, response) => {
+            response.setHeader('Content-Type', 'text/html');
+            response.end(
+              await server.transformIndexHtml(
+                '/main-scroll',
+                '<style>body{margin:0}#root{padding:16px}</style><div id="root"></div><script type="module" src="/scripts/fixtures/main-scroll.tsx"></script>',
+              ),
+            );
+          });
+          server.middlewares.use('/preview-contract', async (_request, response) => {
+            response.setHeader('Content-Type', 'text/html');
+            response.end(
+              await server.transformIndexHtml(
+                '/preview-contract',
+                '<div id="scroller" style="position:fixed;inset:0;overflow:auto"><div id="host" style="position:absolute;left:80px;top:120px;transform:translate(25px,35px);width:280px"><div id="root"></div></div></div><script type="module" src="/scripts/fixtures/preview-contract.tsx"></script>',
+              ),
+            );
+          });
+          server.middlewares.use('/layout', async (_request, response) => {
+            response.setHeader('Content-Type', 'text/html');
+            response.end(
+              await server.transformIndexHtml(
+                '/layout',
+                '<div id="root" style="max-width:680px;margin:auto"></div><script type="module" src="/scripts/fixtures/layout.tsx"></script>',
+              ),
+            );
+          });
           server.middlewares.use('/benchmark', async (_request, response) => {
             response.setHeader('Content-Type', 'text/html');
             response.end(

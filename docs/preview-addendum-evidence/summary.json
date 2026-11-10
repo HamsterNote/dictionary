@@ -1,0 +1,146 @@
+{
+  "beforePackageVersion": "0.1.1-beta.9-ham200.2",
+  "afterPackageVersion": "0.1.1-beta.9-ham200.3",
+  "implementationCommit": "13d2e5948e949db5e3ab5091617699e8f3a1785d",
+  "packageSha256": "c73331ad9786c704c7936ac5a3366255411cdc316ab8e2dab7e45d37dfef366d",
+  "browser": "Chromium 156.0.8078.4 / Linux",
+  "dpr": 1,
+  "matrixRecords": 193,
+  "measuredVisibleFrames": 2987,
+  "gapRange": [4, 4],
+  "minimumViewportMargin": 8,
+  "fullMeaningCount": 29,
+  "groupOrder": ["v.", "n.", "adj.", "未标注词性"],
+  "standaloneVariants": [
+    {
+      "variant": "legacy",
+      "passed": true
+    },
+    {
+      "variant": "sync",
+      "passed": true
+    },
+    {
+      "variant": "blank&empty",
+      "passed": true
+    },
+    {
+      "variant": "corrected",
+      "passed": true
+    },
+    {
+      "variant": "standalone",
+      "passed": true
+    }
+  ],
+  "before": [
+    {
+      "width": 1440,
+      "theme": "light",
+      "anchor": {
+        "x": 156,
+        "y": 315.59375,
+        "width": 36.4375,
+        "height": 17,
+        "top": 315.59375,
+        "right": 192.4375,
+        "bottom": 332.59375,
+        "left": 156
+      },
+      "preview": {
+        "x": 261,
+        "y": 493.59375,
+        "width": 280,
+        "height": 91.6875,
+        "top": 493.59375,
+        "right": 541,
+        "bottom": 585.28125,
+        "left": 261
+      },
+      "gap": 161,
+      "detailCalls": [],
+      "text": "probefullscreen摘⁠要 probe"
+    },
+    {
+      "width": 1440,
+      "theme": "dark",
+      "anchor": {
+        "x": 156,
+        "y": 315.59375,
+        "width": 36.4375,
+        "height": 17,
+        "top": 315.59375,
+        "right": 192.4375,
+        "bottom": 332.59375,
+        "left": 156
+      },
+      "preview": {
+        "x": 261,
+        "y": 493.59375,
+        "width": 280,
+        "height": 91.6875,
+        "top": 493.59375,
+        "right": 541,
+        "bottom": 585.28125,
+        "left": 261
+      },
+      "gap": 161,
+      "detailCalls": [],
+      "text": "probefullscreen摘⁠要 probe"
+    },
+    {
+      "width": 390,
+      "theme": "light",
+      "anchor": {
+        "x": 156,
+        "y": 315.59375,
+        "width": 36.4375,
+        "height": 17,
+        "top": 315.59375,
+        "right": 192.4375,
+        "bottom": 332.59375,
+        "left": 156
+      },
+      "preview": {
+        "x": 102,
+        "y": 493.59375,
+        "width": 280,
+        "height": 91.6875,
+        "top": 493.59375,
+        "right": 382,
+        "bottom": 585.28125,
+        "left": 102
+      },
+      "gap": 161,
+      "detailCalls": [],
+      "text": "probefullscreen摘⁠要 probe"
+    },
+    {
+      "width": 390,
+      "theme": "dark",
+      "anchor": {
+        "x": 156,
+        "y": 315.59375,
+        "width": 36.4375,
+        "height": 17,
+        "top": 315.59375,
+        "right": 192.4375,
+        "bottom": 332.59375,
+        "left": 156
+      },
+      "preview": {
+        "x": 102,
+        "y": 493.59375,
+        "width": 280,
+        "height": 91.6875,
+        "top": 493.59375,
+        "right": 382,
+        "bottom": 585.28125,
+        "left": 102
+      },
+      "gap": 161,
+      "detailCalls": [],
+      "text": "probefullscreen摘⁠要 probe"
+    }
+  ]
+}

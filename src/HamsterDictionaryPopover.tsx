@@ -1,7 +1,12 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import type { ReactNode } from 'react';
 import type { DictionaryCorrectionsControl } from './dictionaryCorrections';
-import { applyDictionaryCorrectionToSummary } from './dictionaryCorrectionApply';
+import type { DictionaryDetail } from './dictionaryData';
+import { selectPreviewFragment } from './dictionaryPreviewLayout';
+import {
+  applyDictionaryCorrectionToDetail,
+  applyDictionaryCorrectionToSummary,
+} from './dictionaryCorrectionApply';
 import type { DictionaryEntrySummary } from './dictionaryEntrySummary';
 import { DictionaryWordPreview } from './DictionaryWordPreview';
 import { useDictionaryCorrections } from './useDictionaryCorrections';
@@ -13,6 +18,10 @@ export interface HamsterDictionaryPopoverProps {
   /** 词条纠错配置；缺省使用本机 localStorage 持久化。 */
   readonly corrections?: DictionaryCorrectionsControl;
   readonly entry: DictionaryEntrySummary;
+  readonly getDetail?: (
+    word: string,
+    signal?: AbortSignal,
+  ) => DictionaryDetail | undefined | Promise<DictionaryDetail | undefined>;
   /** 点击“放大到主窗口”或（悬停模式下）点击触发词时回调，通常用于打开主窗。 */
   readonly onExpand: (word: string) => void;
   /** 是否显示预览中的“放大到主窗口”按钮，默认 true。 */
@@ -29,6 +38,7 @@ export function HamsterDictionaryPopover({
   children,
   corrections,
   entry,
+  getDetail,
   onExpand,
   showExpandButton = true,
   trigger = 'hover',
@@ -36,6 +46,32 @@ export function HamsterDictionaryPopover({
   const closeTimerRef = useRef<ReturnType<typeof setTimeout>>(undefined);
   const [anchor, setAnchor] = useState<HTMLButtonElement | null>(null);
   const [isOpen, setIsOpen] = useState(false);
+  const [previewNotice, setPreviewNotice] = useState('');
+  const [retry, setRetry] = useState(0);
+  const [detailState, setDetailState] = useState<{
+    detail?: DictionaryDetail | undefined;
+    word?: string;
+    status: 'loading' | 'ready' | 'error';
+  }>({ status: 'loading' });
+  useEffect(() => {
+    if (!isOpen || !getDetail) return;
+    const controller = new AbortController();
+    void Promise.resolve()
+      .then(() => {
+        controller.signal.throwIfAborted();
+        return getDetail(entry.word, controller.signal);
+      })
+      .then((detail) => {
+        if (!controller.signal.aborted)
+          setDetailState({ detail, word: entry.word, status: 'ready' });
+      })
+      .catch(() => {
+        if (!controller.signal.aborted) setDetailState({ word: entry.word, status: 'error' });
+      });
+    return () => {
+      controller.abort();
+    };
+  }, [entry.word, getDetail, isOpen, retry]);
   const resolvedCorrections = useDictionaryCorrections(corrections);
   const displayEntry = applyDictionaryCorrectionToSummary(entry, resolvedCorrections).summary;
   const cancelScheduledClose = useCallback(() => {
@@ -46,8 +82,12 @@ export function HamsterDictionaryPopover({
 
   const open = useCallback(() => {
     cancelScheduledClose();
-    setIsOpen(true);
-  }, [cancelScheduledClose]);
+    setPreviewNotice('');
+    if (!isOpen) {
+      setDetailState({ status: 'loading' });
+      setIsOpen(true);
+    }
+  }, [cancelScheduledClose, isOpen]);
 
   const scheduleClose = useCallback(() => {
     cancelScheduledClose();
@@ -75,16 +115,34 @@ export function HamsterDictionaryPopover({
       onExpand(entry.word);
       return;
     }
+    setPreviewNotice('');
+    setDetailState({ status: 'loading' });
     setIsOpen((previous) => !previous);
   };
   return (
     <>
+      <span role="status" className="dictionary-preview-notice">
+        {previewNotice}
+      </span>
       <button
         aria-expanded={isOpen}
         aria-haspopup="dialog"
         className="hamster-dictionary-popover__trigger"
-        onClick={handleClick}
-        onPointerEnter={trigger === 'hover' ? open : undefined}
+        onClick={(event) => {
+          selectPreviewFragment(
+            event.currentTarget,
+            event.detail === 0 ? undefined : { x: event.clientX, y: event.clientY },
+          );
+          handleClick();
+        }}
+        onPointerEnter={
+          trigger === 'hover'
+            ? (event) => {
+                selectPreviewFragment(event.currentTarget, { x: event.clientX, y: event.clientY });
+                open();
+              }
+            : undefined
+        }
         onPointerLeave={trigger === 'hover' ? scheduleClose : undefined}
         ref={setAnchor}
         type="button"
@@ -94,6 +152,22 @@ export function HamsterDictionaryPopover({
       {isOpen && anchor !== null ? (
         <DictionaryWordPreview
           anchor={anchor}
+          detail={
+            detailState.word === entry.word && detailState.detail
+              ? applyDictionaryCorrectionToDetail(detailState.detail, resolvedCorrections).detail
+              : undefined
+          }
+          status={
+            getDetail ? (detailState.word === entry.word ? detailState.status : 'loading') : 'ready'
+          }
+          onRetry={() => {
+            setDetailState({ status: 'loading' });
+            setRetry((value) => value + 1);
+          }}
+          onUnavailable={() => {
+            setIsOpen(false);
+            setPreviewNotice('可用空间不足，请调整视图后重新打开词条。');
+          }}
           entry={displayEntry}
           focusOnMount={trigger === 'click'}
           onClose={() => {

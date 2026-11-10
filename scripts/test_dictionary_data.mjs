@@ -36,6 +36,7 @@ try {
     sources: [
       {
         id: 'dictionary-data-fixture',
+        kind: 'definitions',
         label: '详情数据测试词库',
         meanings: [{ definition: '内心', id: '心-1', partOfSpeech: '汉字' }],
       },

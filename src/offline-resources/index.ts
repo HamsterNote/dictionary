@@ -9,4 +9,4 @@ export type {
   OfflineDictionaryShard,
 } from './types';
 
-export const OFFLINE_DICTIONARY_PACKAGE_VERSION = '0.1.1-beta.8';
+export const OFFLINE_DICTIONARY_PACKAGE_VERSION = '0.1.1-beta.9-ham200.5';

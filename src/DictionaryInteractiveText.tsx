@@ -6,6 +6,7 @@ import {
   resolveChineseText,
   type DictionaryEntryResolver,
 } from './dictionaryTextCandidates';
+import { selectPreviewFragment } from './dictionaryPreviewLayout';
 import { protectCjkLineBreaks } from './protectCjkLineBreaks';
 import {
   DictionaryTextResolutionContext,
@@ -14,7 +15,7 @@ import {
 
 interface DictionaryInteractiveTextProps {
   readonly children: ReactNode;
-  readonly onOpen: (entry: DictionaryEntrySummary, anchor: HTMLButtonElement) => void;
+  readonly onOpen: (entry: DictionaryEntrySummary, anchor: HTMLElement) => void;
   readonly resolveEntry: DictionaryEntryResolver;
 }
 
@@ -33,6 +34,18 @@ function DictionaryInteractiveTextRenderer({
     readonly entries: ReadonlyMap<string, DictionaryEntrySummary>;
   }>();
   const ready = !session || (resolved?.session === session && resolved.text === children);
+  const display = useMemo(() => {
+    if (typeof children !== 'string') return { text: '', offsets: [0] };
+    const text = protectCjkLineBreaks(children);
+    const offsets = [0];
+    let cursor = 0;
+    for (const character of children.split('')) {
+      while (text[cursor] !== character) cursor += 1;
+      cursor += 1;
+      offsets.push(cursor);
+    }
+    return { text, offsets };
+  }, [children]);
   const tokens = useMemo(
     () => (ready && typeof children === 'string' ? extractDictionaryTextTokens(children) : []),
     [children, ready],
@@ -68,29 +81,51 @@ function DictionaryInteractiveTextRenderer({
   const nodes: ReactNode[] = [];
   let cursor = 0;
   for (const { index, token, semanticWords } of tokens) {
-    if (index > cursor) nodes.push(protectCjkLineBreaks(children.slice(cursor, index)));
+    if (index > cursor)
+      nodes.push(display.text.slice(display.offsets[cursor], display.offsets[index]));
 
+    let segmentOffset = index;
     for (const semanticWord of semanticWords) {
       const segments = /^\p{Script=Han}+$/u.test(semanticWord)
         ? resolveChineseText(semanticWord, lookup)
         : [{ entry: lookup(semanticWord), text: token }];
-      const segmentNodes = segments.map((segment, segmentIndex) => {
-        if (segment.entry === undefined) return protectCjkLineBreaks(segment.text);
+      const segmentNodes: ReactNode[] = [];
+      for (const [segmentIndex, segment] of segments.entries()) {
+        const start = segmentOffset;
+        segmentOffset += segment.text.length;
+        const text = display.text.slice(display.offsets[start], display.offsets[segmentOffset]);
+        if (segment.entry === undefined) {
+          segmentNodes.push(text);
+          continue;
+        }
         const entry = segment.entry;
-        return (
-          <button
+        segmentNodes.push(
+          <span
+            aria-label={segment.text}
             aria-haspopup="dialog"
             className="dictionary-popover__inline-word"
             key={`${String(index)}-${nodes.length.toString()}-${String(segmentIndex)}`}
             onClick={(event) => {
+              selectPreviewFragment(
+                event.currentTarget,
+                event.detail === 0 ? undefined : { x: event.clientX, y: event.clientY },
+              );
               onOpen(entry, event.currentTarget);
             }}
-            type="button"
+            role="button"
+            tabIndex={0}
+            onKeyDown={(event) => {
+              if (event.key === 'Enter' || event.key === ' ') {
+                event.preventDefault();
+                selectPreviewFragment(event.currentTarget);
+                onOpen(entry, event.currentTarget);
+              }
+            }}
           >
-            {segment.text}
-          </button>
+            {text}
+          </span>,
         );
-      });
+      }
       nodes.push(
         <span
           className="dictionary-popover__semantic-word"
@@ -102,7 +137,7 @@ function DictionaryInteractiveTextRenderer({
     }
     cursor = index + token.length;
   }
-  if (cursor < children.length) nodes.push(protectCjkLineBreaks(children.slice(cursor)));
+  if (cursor < children.length) nodes.push(display.text.slice(display.offsets[cursor]));
   return session ? <span ref={ref}>{nodes}</span> : nodes;
 }
 

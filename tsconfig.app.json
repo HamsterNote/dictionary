@@ -26,10 +26,13 @@
   },
   "include": [
     "src",
+    "scripts/fixtures/layout.tsx",
+    "scripts/fixtures/main-scroll.tsx",
     "demo",
     "scripts/fixtures/pronunciation-overlay.tsx",
     "scripts/fixtures/text-resolution.tsx",
     "scripts/fixtures/pronunciation-audio.tsx",
-    "scripts/fixtures/pronunciation-audio-real.tsx"
+    "scripts/fixtures/pronunciation-audio-real.tsx",
+    "scripts/fixtures/preview-contract.tsx"
   ]
 }

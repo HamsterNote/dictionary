@@ -1,10 +1,11 @@
-import { useEffect, useMemo, useState, useSyncExternalStore } from 'react';
+import { useLayoutEffect, useMemo, useState, useSyncExternalStore } from 'react';
 import type { DictionaryMeaning, DictionarySource } from './dictionaryData';
 import type { DictionaryProvider } from './dictionaryProvider';
 import type { DictionaryEntryResolver } from './dictionaryTextCandidates';
 import { DictionaryTextResolutionSession } from './dictionaryTextResolutionSession';
 
 interface DictionaryTextResolutionOptions {
+  readonly enabled?: boolean;
   readonly meanings?: readonly DictionaryMeaning[] | undefined;
   readonly provider?: DictionaryProvider | undefined;
   readonly resolveEntry?: DictionaryEntryResolver | undefined;
@@ -33,6 +34,7 @@ function contentKey(
 }
 
 export function useDictionaryTextResolution({
+  enabled = true,
   meanings,
   provider,
   resolveEntry,
@@ -40,26 +42,27 @@ export function useDictionaryTextResolution({
   word,
 }: DictionaryTextResolutionOptions) {
   const [retrySequence, setRetrySequence] = useState(0);
-  const text = contentKey(meanings, sources);
+  const text = enabled ? contentKey(meanings, sources) : '';
   // Content identity defines the lifetime of a reader, including corrections/retry.
   const session = useMemo(
-    () => (provider ? new DictionaryTextResolutionSession(provider.resolveEntry) : undefined),
+    () =>
+      enabled && provider ? new DictionaryTextResolutionSession(provider.resolveEntry) : undefined,
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [provider, word, text, retrySequence],
+    [enabled, provider, word, text, retrySequence],
   );
   const status = useSyncExternalStore(
     session?.subscribe ?? subscribeEmpty,
     session?.getSnapshot ?? ready,
     ready,
   );
-  useEffect(
+  useLayoutEffect(
     () => () => {
       session?.cancel();
     },
     [session],
   );
   return {
-    resolveEntry: provider ? unresolved : resolveEntry,
+    resolveEntry: enabled ? (provider ? unresolved : resolveEntry) : undefined,
     retry: () => {
       setRetrySequence((value) => value + 1);
     },

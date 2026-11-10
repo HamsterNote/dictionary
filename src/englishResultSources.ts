@@ -12,6 +12,7 @@ export function createEnglishResultSources(
   return [
     {
       ...ECDICT_SOURCE,
+      kind: 'definitions',
       label: matchingLabels ? `ECDICT · 命中：${matchingLabels}` : ECDICT_SOURCE.label,
       meanings: result.meanings,
     },
@@ -20,6 +21,7 @@ export function createEnglishResultSources(
           {
             ...ECDICT_SOURCE,
             heading: '变形',
+            kind: 'inflections' as const,
             id: 'ecdict-inflections',
             meanings: result.inflections.map((inflection, index) => ({
               definition: inflection.form,
@@ -30,12 +32,21 @@ export function createEnglishResultSources(
         ]
       : []),
     ...(result.examples.length > 0
-      ? [{ ...OANC_SOURCE, examples: result.examples, heading: '例句', meanings: [] }]
+      ? [
+          {
+            ...OANC_SOURCE,
+            kind: 'examples' as const,
+            examples: result.examples,
+            heading: '例句',
+            meanings: [],
+          },
+        ]
       : []),
     ...(result.synonyms.length > 0
       ? [
           {
             ...WORDNET_SOURCE,
+            kind: 'synonyms' as const,
             heading: '近义词',
             meanings: [
               {
@@ -51,6 +62,7 @@ export function createEnglishResultSources(
       ? [
           {
             ...UNIMORPH_SOURCE,
+            kind: 'roots' as const,
             heading: '派生基词',
             meanings: result.roots.map((root, index) => ({
               definition: `${root.base} ${root.affix}`,
